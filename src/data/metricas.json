@@ -1,0 +1,6 @@
+[
+  { "label": "Años en producción", "value": "8", "sufijo": "+" },
+  { "label": "Proyectos entregados", "value": "40", "sufijo": "+" },
+  { "label": "Clientes PyME", "value": "12", "sufijo": "" },
+  { "label": "Stack principal", "value": "Astro · TS · Tailwind", "sufijo": "" }
+]

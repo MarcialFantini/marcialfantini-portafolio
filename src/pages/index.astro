@@ -1,0 +1,21 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Hero from "../components/Hero.astro";
+import SobreMi from "../components/SobreMi.astro";
+import Metricas from "../components/Metricas.astro";
+import Servicios from "../components/Servicios.astro";
+import Proyectos from "../components/Proyectos.astro";
+import BlogPreview from "../components/BlogPreview.astro";
+import Contacto from "../components/Contacto.astro";
+import site from "../data/site.json";
+---
+
+<Layout description={site.description}>
+  <Hero />
+  <SobreMi />
+  <Metricas />
+  <Servicios />
+  <Proyectos />
+  <BlogPreview />
+  <Contacto />
+</Layout>

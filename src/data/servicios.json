@@ -1,0 +1,58 @@
+[
+  {
+    "titulo": "Producto web a medida",
+    "descripcion": "Sitios que cargan rápido, posicionan en Google y convierten visitas en consultas o ventas. Desde landing pages hasta SaaS simples.",
+    "queIncluye": [
+      "Diseño mobile-first",
+      "Desarrollo en Astro + TypeScript",
+      "SEO técnico y on-page",
+      "Analytics y búsqueda de conversiones",
+      "Deploy y hosting incluido 90 días"
+    ],
+    "idealPara": "PyMEs que necesitan presencia digital seria para captar clientes o vender online.",
+    "precioOrientativo": "USD 800 – 4.000",
+    "cta": "Quiero un presupuesto"
+  },
+  {
+    "titulo": "E-commerce con pasarela",
+    "descripcion": "Tiendas online con Mercado Pago o Stripe integradas, catálogo administrable, checkout optimizado para que la gente termine la compra.",
+    "queIncluye": [
+      "Catálogo autogestionable",
+      "Integración Mercado Pago / Stripe",
+      "Checkout en 2 pasos",
+      "Panel de pedidos",
+      "Carrito persistente"
+    ],
+    "idealPara": "Marcas que ya venden por WhatsApp y quieren automatizar sin perder el toque personal.",
+    "precioOrientativo": "USD 1.500 – 5.000",
+    "cta": "Quiero vender online"
+  },
+  {
+    "titulo": "Optimización de performance",
+    "descripcion": "Auditoría completa de un sitio existente y reescritura de lo que esté frenando conversiones. Core Web Vitals verdes.",
+    "queIncluye": [
+      "Auditoría Lighthouse + Search Console",
+      "Reescritura de cuellos de botella",
+      "Optimización de imágenes",
+      "Lazy loading y code splitting",
+      "Reporte antes/después con métricas"
+    ],
+    "idealPara": "Negocios cuyo sitio web tarda más de 3 segundos en cargar y pierden ventas por eso.",
+    "precioOrientativo": "USD 600 – 2.500",
+    "cta": "Quiero auditar mi sitio"
+  },
+  {
+    "titulo": "Integraciones y automatizaciones",
+    "descripcion": "Conecto sistemas que hoy se comunican a mano: CRM, ERP, hojas de cálculo, APIs externas. Lo que se pueda automatizar, se automatiza.",
+    "queIncluye": [
+      "Mapeo de flujos actuales",
+      "Webhooks y APIs a medida",
+      "ETL liviano entre sistemas",
+      "Notificaciones automáticas",
+      "Documentación para tu equipo"
+    ],
+    "idealPara": "Equipos que pierden horas por semana copiando datos entre sistemas que deberían hablar solos.",
+    "precioOrientativo": "USD 1.000 – 4.500",
+    "cta": "Quiero automatizar algo"
+  }
+]

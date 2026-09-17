@@ -1,0 +1,26 @@
+---
+import metricas from "../data/metricas.json";
+---
+
+<section
+  class="py-16 md:py-20 bg-[var(--color-ink)] text-[var(--color-blanco-humo)]"
+  aria-label="Métricas destacadas"
+>
+  <div class="container-page">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-6">
+      {
+        metricas.map((m) => (
+          <div class="border-l border-[var(--color-dorado)] pl-4 md:pl-6">
+            <p class="font-mono text-xs uppercase tracking-widest text-[var(--color-blanco-humo)]/50 mb-2">
+              {m.label}
+            </p>
+            <p class="font-display text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-[var(--color-blanco)]">
+              {m.value}
+              <span class="text-[var(--color-dorado)]">{m.sufijo}</span>
+            </p>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>

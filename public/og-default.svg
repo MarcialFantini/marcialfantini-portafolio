@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#F5F5F4"/>
+      <stop offset="100%" stop-color="#EAE7E1"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#bg)"/>
+
+  <rect x="60" y="60" width="60" height="60" rx="10" fill="#18181B"/>
+  <text x="90" y="103" font-family="system-ui, -apple-system, sans-serif" font-size="32" font-weight="700" fill="#F5F5F4" text-anchor="middle">MF</text>
+
+  <rect x="60" y="500" width="180" height="3" fill="#C8A24E"/>
+
+  <text x="60" y="290" font-family="system-ui, -apple-system, sans-serif" font-size="74" font-weight="700" fill="#18181B" letter-spacing="-2">Marcial Fantini</text>
+
+  <text x="60" y="360" font-family="system-ui, -apple-system, sans-serif" font-size="34" font-weight="500" fill="#1E40AF" letter-spacing="-0.5">Software que entrega resultados medibles.</text>
+
+  <text x="60" y="430" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="20" fill="#3F3F46">
+    <tspan x="60" dy="0">Astro + TypeScript + Tailwind · Córdoba, Argentina</tspan>
+    <tspan x="60" dy="32" fill="#71717A">8+ años en producción · 40+ proyectos</tspan>
+  </text>
+
+  <text x="1140" y="590" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="16" fill="#71717A" text-anchor="end">marcialfantini.com</text>
+</svg>

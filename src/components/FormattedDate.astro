@@ -1,0 +1,29 @@
+---
+interface Props {
+  date: Date;
+  format?: 'long' | 'short' | 'iso';
+  class?: string;
+}
+
+const { date, format = 'long', class: className = '' } = Astro.props;
+
+const formatted = (() => {
+  if (format === 'iso') return date.toISOString().slice(0, 10);
+  if (format === 'short') {
+    return date.toLocaleDateString('es-AR', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+    });
+  }
+  return date.toLocaleDateString('es-AR', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  });
+})();
+
+const isoDate = date.toISOString().slice(0, 10);
+---
+
+<time datetime={isoDate} class={`font-mono text-sm ${className}`}>{formatted}</time>

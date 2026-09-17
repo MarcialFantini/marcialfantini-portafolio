@@ -1,0 +1,41 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import ProyectoCard from "../../components/ProyectoCard.astro";
+import { getCollection } from "astro:content";
+
+const allProyectos = await getCollection("proyectos");
+const proyectos = allProyectos.sort(
+  (a, b) => b.data.fecha.getTime() - a.data.fecha.getTime()
+);
+---
+
+<Layout
+  title="Proyectos — Marcial Fantini"
+  description="Casos donde mis decisiones importaron: cada proyecto con problema, solución, resultado y métricas concretas."
+>
+  <section class="pt-16 md:pt-24 pb-12 border-b border-[var(--color-border)]">
+    <div class="container-page max-w-4xl">
+      <p
+        class="font-mono text-xs uppercase tracking-[0.25em] text-[var(--color-mute)] mb-6 flex items-center gap-3"
+      >
+        <span class="inline-block w-8 h-px bg-[var(--color-dorado)]"></span>
+        Proyectos
+      </p>
+      <h1 class="font-display font-bold text-[var(--color-ink)] tracking-tight mb-6">
+        Casos donde mis decisiones importaron.
+      </h1>
+      <p class="text-xl text-[var(--color-ink-soft)] leading-relaxed max-w-3xl">
+        Cada proyecto con problema, solución, resultado y métricas concretas. Sin animar
+        capturas: los repos hablan por sí mismos.
+      </p>
+    </div>
+  </section>
+
+  <section class="py-12 md:py-16">
+    <div class="container-page">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+        {proyectos.map((p) => <ProyectoCard proyecto={p} />)}
+      </div>
+    </div>
+  </section>
+</Layout>

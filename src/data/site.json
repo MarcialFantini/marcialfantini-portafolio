@@ -1,0 +1,14 @@
+{
+  "name": "Marcial Fantini",
+  "shortName": "MF",
+  "tagline": "Software que entrega resultados medibles",
+  "description": "Desarrollador freelance especializado en construir productos digitales que generan impacto real en el negocio. Full-stack, Astro + TypeScript + integraciones a medida.",
+  "location": "Córdoba, Argentina",
+  "email": "hola@marcialfantini.com",
+  "availability": "Disponible para proyectos a partir de febrero 2026",
+  "social": {
+    "github": "https://github.com/MarcialFantini",
+    "linkedin": "https://www.linkedin.com/in/marcial-fantini",
+    "twitter": "https://twitter.com/marcialfantini"
+  }
+}

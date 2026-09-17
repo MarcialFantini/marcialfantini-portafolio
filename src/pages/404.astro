@@ -1,0 +1,81 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout
+  title="404 — Página no encontrada"
+  description="La página que buscás no existe. Volvé al inicio o escribime si pensás que fue un error."
+>
+  <section class="min-h-[60vh] flex items-center">
+    <div class="container-page max-w-2xl">
+      <p
+        class="font-mono text-xs uppercase tracking-[0.25em] text-[var(--color-mute)] mb-6 flex items-center gap-3"
+      >
+        <span class="inline-block w-8 h-px bg-[var(--color-dorado)]"></span>
+        Error 404
+      </p>
+      <h1 class="font-display font-bold text-[var(--color-ink)] tracking-tight mb-6">
+        Esta página no existe.
+      </h1>
+      <p class="text-lg text-[var(--color-ink-soft)] leading-relaxed mb-10 max-w-xl">
+        Si llegaste acá desde un link, decime y lo corrijo. Si llegaste escribiendo a mano,
+        probablemente escribiste mal la URL.
+      </p>
+
+      <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 mb-14">
+        <a
+          href="/"
+          class="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-md bg-[var(--color-ink)] text-[var(--color-blanco-humo)] font-medium hover:bg-[var(--color-azul)] transition-colors"
+        >
+          Volver al inicio
+          <span aria-hidden="true">→</span>
+        </a>
+        <a
+          href="/contacto"
+          class="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-md border border-[var(--color-border)] bg-[var(--color-blanco)] text-[var(--color-ink)] font-medium hover:border-[var(--color-dorado)] hover:text-[var(--color-dorado)] transition-colors"
+        >
+          Escribirme
+        </a>
+      </div>
+
+      <div class="max-w-md">
+        <label for="search-404" class="block font-mono text-xs uppercase tracking-widest text-[var(--color-mute)] mb-2">
+          Buscar en el sitio
+        </label>
+        <form
+          id="search-form"
+          class="flex gap-2"
+          aria-label="Búsqueda en el sitio"
+        >
+          <input
+            type="search"
+            id="search-404"
+            name="q"
+            placeholder="Qué buscás..."
+            class="flex-1 px-3.5 py-2.5 rounded-md border border-[var(--color-border)] bg-[var(--color-blanco)] text-[var(--color-ink)] focus:border-[var(--color-azul)] focus:outline-none focus:ring-2 focus:ring-[var(--color-azul)]/20"
+          />
+          <button
+            type="submit"
+            class="px-5 py-2.5 rounded-md bg-[var(--color-ink)] text-[var(--color-blanco-humo)] font-medium hover:bg-[var(--color-azul)] transition-colors"
+          >
+            Buscar
+          </button>
+        </form>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<script>
+  const form = document.getElementById('search-form');
+  if (form instanceof HTMLFormElement) {
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const data = new FormData(form);
+      const q = String(data.get('q') ?? '').trim();
+      if (q.length > 0) {
+        window.location.href = `https://www.google.com/search?q=${encodeURIComponent(`site:marcialfantini.com ${q}`)}`;
+      }
+    });
+  }
+</script>

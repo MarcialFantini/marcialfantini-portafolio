@@ -1,0 +1,48 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import PostCard from "../../components/PostCard.astro";
+import { getCollection } from "astro:content";
+
+const posts = (await getCollection("blog")).sort(
+  (a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime()
+);
+---
+
+<Layout
+  title="Blog — Marcial Fantini"
+  description="Ensayos sobre freelance, producto, código y decisiones que aprendí trabajando con PyMEs."
+>
+  <section class="pt-16 md:pt-24 pb-12 border-b border-[var(--color-border)]">
+    <div class="container-page max-w-4xl">
+      <p
+        class="font-mono text-xs uppercase tracking-[0.25em] text-[var(--color-mute)] mb-6 flex items-center gap-3"
+      >
+        <span class="inline-block w-8 h-px bg-[var(--color-dorado)]"></span>
+        Blog
+      </p>
+      <h1 class="font-display font-bold text-[var(--color-ink)] tracking-tight mb-6">
+        Lo que aprendí en el camino.
+      </h1>
+      <p class="text-xl text-[var(--color-ink-soft)] leading-relaxed max-w-3xl">
+        Ensayos sobre freelance, producto, código y todo lo que me hubiera gustado leer cuando
+        arranqué. Sin tutoriales, sin copywriting, con el costo y el beneficio claros.
+      </p>
+    </div>
+  </section>
+
+  <section class="py-12 md:py-16">
+    <div class="container-page">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+        {posts.map((post) => <PostCard post={post} />)}
+      </div>
+
+      {posts.length === 0 && (
+        <div class="text-center py-20">
+          <p class="text-[var(--color-ink-soft)]">
+            Todavía no hay posts publicados. Vuelve pronto.
+          </p>
+        </div>
+      )}
+    </div>
+  </section>
+</Layout>

@@ -1,0 +1,34 @@
+# Build output
+dist/
+.output/
+
+# Dependencies
+node_modules/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Environment variables
+.env
+.env.production
+.env.development
+.env.local
+
+# MacOS-specific files
+.DS_Store
+
+# Editor directories and files
+.vscode/
+.idea/
+
+# Astro-specific
+.astro/
+
+# Vercel
+.vercel
+
+# Misc
+*.swp

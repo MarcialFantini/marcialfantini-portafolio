@@ -1,0 +1,205 @@
+---
+import site from "../data/site.json";
+
+// Pre-armar mailto con servicio seleccionado si viene en query
+const servicioParam = Astro.url.searchParams.get("servicio");
+const initialSubject = servicioParam
+  ? `Consulta sobre ${servicioParam}`
+  : "Consulta desde marcialfantini.com";
+const initialBody = servicioParam
+  ? `Hola Marcial,\n\nQuiero conversar sobre el servicio "${servicioParam}".\n\nMi nombre:\nMi empresa/negocio:\nQué necesito resolver:\n\nGracias.`
+  : "Hola Marcial,\n\nQuiero conversar sobre un proyecto.\n\nMi nombre:\nMi empresa/negocio:\nQué necesito resolver:\n\nGracias.";
+---
+
+<section id="contacto" class="py-20 md:py-28 bg-[var(--color-blanco-humo)]">
+  <div class="container-page">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
+      <div>
+        <p class="font-mono text-xs uppercase tracking-[0.25em] text-[var(--color-mute)] mb-4 flex items-center gap-3">
+          <span class="inline-block w-6 h-px bg-[var(--color-dorado)]"></span>
+          Contacto
+        </p>
+        <h2 class="font-display font-bold tracking-tight mb-6">
+          Hablemos sobre tu proyecto.
+        </h2>
+        <p class="text-lg text-[var(--color-ink-soft)] leading-relaxed mb-10">
+          Si tenés una PyME que necesita presencia digital seria o un producto a medida, mandame
+          un mensaje. Respondo en menos de 24h hábiles con una primera lectura y, si tiene
+          sentido, agendamos una llamada de 30 minutos.
+        </p>
+
+        <div class="space-y-5 text-base">
+          <div>
+            <p class="font-mono text-xs uppercase tracking-widest text-[var(--color-mute)] mb-1">
+              Email
+            </p>
+            <a
+              href={`mailto:${site.email}`}
+              class="text-[var(--color-azul)] font-medium hover:text-[var(--color-dorado)]"
+            >
+              {site.email}
+            </a>
+          </div>
+          <div>
+            <p class="font-mono text-xs uppercase tracking-widest text-[var(--color-mute)] mb-1">
+              Ubicación
+            </p>
+            <p class="text-[var(--color-ink)]">{site.location}</p>
+          </div>
+          <div>
+            <p class="font-mono text-xs uppercase tracking-widest text-[var(--color-mute)] mb-1">
+              Redes
+            </p>
+            <ul class="flex flex-col gap-1 text-sm">
+              <li>
+                <a
+                  href={site.social.github}
+                  class="hover:text-[var(--color-dorado)]"
+                  rel="noopener noreferrer"
+                  target="_blank">GitHub →</a>
+              </li>
+              <li>
+                <a
+                  href={site.social.linkedin}
+                  class="hover:text-[var(--color-dorado)]"
+                  rel="noopener noreferrer"
+                  target="_blank">LinkedIn →</a>
+              </li>
+              <li>
+                <a
+                  href={site.social.twitter}
+                  class="hover:text-[var(--color-dorado)]"
+                  rel="noopener noreferrer"
+                  target="_blank">Twitter →</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <form
+        id="contact-form"
+        class="border border-[var(--color-border)] rounded-lg bg-[var(--color-blanco)] p-7 md:p-9"
+        aria-label="Formulario de contacto"
+      >
+        <div class="space-y-5">
+          <div>
+            <label for="name" class="block text-sm font-medium text-[var(--color-ink)] mb-1.5">
+              Nombre
+            </label>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              required
+              autocomplete="name"
+              class="w-full px-3.5 py-2.5 rounded-md border border-[var(--color-border)] bg-[var(--color-blanco)] text-[var(--color-ink)] focus:border-[var(--color-azul)] focus:outline-none focus:ring-2 focus:ring-[var(--color-azul)]/20"
+            />
+          </div>
+
+          <div>
+            <label for="email" class="block text-sm font-medium text-[var(--color-ink)] mb-1.5">
+              Email
+            </label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              required
+              autocomplete="email"
+              class="w-full px-3.5 py-2.5 rounded-md border border-[var(--color-border)] bg-[var(--color-blanco)] text-[var(--color-ink)] focus:border-[var(--color-azul)] focus:outline-none focus:ring-2 focus:ring-[var(--color-azul)]/20"
+            />
+          </div>
+
+          <div>
+            <label for="servicio" class="block text-sm font-medium text-[var(--color-ink)] mb-1.5">
+              Servicio que te interesa
+            </label>
+            <select
+              id="servicio"
+              name="servicio"
+              class="w-full px-3.5 py-2.5 rounded-md border border-[var(--color-border)] bg-[var(--color-blanco)] text-[var(--color-ink)] focus:border-[var(--color-azul)] focus:outline-none focus:ring-2 focus:ring-[var(--color-azul)]/20"
+            >
+              <option value="">Elegí uno (opcional)</option>
+              <option value="Producto web a medida" selected={servicioParam === 'Producto web a medida'}>
+                Producto web a medida
+              </option>
+              <option value="E-commerce con pasarela" selected={servicioParam === 'E-commerce con pasarela'}>
+                E-commerce con pasarela
+              </option>
+              <option value="Optimización de performance" selected={servicioParam === 'Optimización de performance'}>
+                Optimización de performance
+              </option>
+              <option
+                value="Integraciones y automatizaciones"
+                selected={servicioParam === 'Integraciones y automatizaciones'}>
+                Integraciones y automatizaciones
+              </option>
+              <option value="Otro">Otro / no estoy seguro</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="message" class="block text-sm font-medium text-[var(--color-ink)] mb-1.5">
+              Contame brevemente qué necesitás
+            </label>
+            <textarea
+              id="message"
+              name="message"
+              required
+              rows={5}
+              class="w-full px-3.5 py-2.5 rounded-md border border-[var(--color-border)] bg-[var(--color-blanco)] text-[var(--color-ink)] resize-y focus:border-[var(--color-azul)] focus:outline-none focus:ring-2 focus:ring-[var(--color-azul)]/20"
+            ></textarea>
+          </div>
+
+          <button
+            type="submit"
+            class="w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-md bg-[var(--color-ink)] text-[var(--color-blanco-humo)] font-medium hover:bg-[var(--color-azul)] transition-colors"
+          >
+            Abrir email con este mensaje
+            <span aria-hidden="true">→</span>
+          </button>
+
+          <p class="text-xs text-[var(--color-mute)] font-mono leading-relaxed">
+            Sin backend: este formulario abre tu cliente de email con el mensaje pre-armado.
+            También podés escribirme directo a <a href={`mailto:${site.email}`} class="underline hover:text-[var(--color-dorado)]">{site.email}</a>.
+          </p>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<script is:inline
+  define:vars={{
+    toEmail: site.email,
+    initialSubject,
+    initialBody,
+  }}
+>
+  const form = document.getElementById('contact-form');
+  if (form instanceof HTMLFormElement) {
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const data = new FormData(form);
+      const name = String(data.get('name') ?? '');
+      const email = String(data.get('email') ?? '');
+      const servicio = String(data.get('servicio') ?? '');
+      const message = String(data.get('message') ?? '');
+
+      const subject = servicio
+        ? `[${servicio}] Mensaje de ${name || 'contacto'}`
+        : initialSubject;
+
+      const body =
+        `${message}\n\n` +
+        `---\n` +
+        `Nombre: ${name}\n` +
+        `Email: ${email}\n` +
+        `Servicio: ${servicio || 'no especificado'}\n`;
+
+      const mailto = `mailto:${toEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+      window.location.href = mailto;
+    });
+  }
+</script>

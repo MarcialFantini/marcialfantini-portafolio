@@ -1,0 +1,33 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Contacto from "../components/Contacto.astro";
+import Servicios from "../components/Servicios.astro";
+import site from "../data/site.json";
+---
+
+<Layout
+  title={`Contacto — ${site.name}`}
+  description={`Escribime a ${site.email} o usá el formulario. Respondo en menos de 24h hábiles con una primera lectura de tu proyecto.`}
+>
+  <section class="pt-16 md:pt-24 pb-12 border-b border-[var(--color-border)]">
+    <div class="container-page max-w-4xl">
+      <p
+        class="font-mono text-xs uppercase tracking-[0.25em] text-[var(--color-mute)] mb-6 flex items-center gap-3"
+      >
+        <span class="inline-block w-8 h-px bg-[var(--color-dorado)]"></span>
+        Contacto
+      </p>
+      <h1 class="font-display font-bold text-[var(--color-ink)] tracking-tight mb-6">
+        Empecemos por una conversación.
+      </h1>
+      <p class="text-xl text-[var(--color-ink-soft)] leading-relaxed max-w-3xl">
+        Antes de hablar de presupuesto necesito entender qué problema querés resolver. Cuando
+        me escribas, contame brevemente tres cosas: qué negocio tenés, qué duele hoy, y por
+        qué ahora. Con eso puedo devolverte una primera lectura seria.
+      </p>
+    </div>
+  </section>
+
+  <Servicios />
+  <Contacto />
+</Layout>

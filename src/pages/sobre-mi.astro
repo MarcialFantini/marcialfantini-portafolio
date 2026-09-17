@@ -1,0 +1,240 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Contacto from "../components/Contacto.astro";
+import site from "../data/site.json";
+
+const process = [
+  {
+    title: "Auditoría gratuita",
+    description:
+      "Reviso tu sitio actual o la idea que tengas y te devuelvo un diagnóstico concreto en 30 minutos: qué falla, qué falta, qué sobra. Sin compromiso.",
+    duration: "30 min",
+  },
+  {
+    title: "Propuesta cerrada",
+    description:
+      "Te envío un PDF con alcance, precio cerrado, hitos y KPI. Si firman, cobro 40% de anticipo y arranco. Si no encaja, te recomiendo otro freelance.",
+    duration: "5-7 días",
+  },
+  {
+    title: "Construcción iterativa",
+    description:
+      "Trabajo en ciclos semanales con demos en vivo cada viernes. Ves progreso real, no PowerPoint. El feedback se incorpora en cada vuelta.",
+    duration: "según alcance",
+  },
+  {
+    title: "Entrega + medición",
+    description:
+      "Entrego, deployo y mido por 90 días. Si las métricas pactadas no se cumplen, devuelvo plata. Es la única garantía que importa.",
+    duration: "90 días post",
+  },
+];
+
+const stack = [
+  "Astro",
+  "TypeScript",
+  "Tailwind v4",
+  "Next.js",
+  "React",
+  "Node.js",
+  "PostgreSQL",
+  "SQLite",
+  "Stripe",
+  "Mercado Pago",
+  "HubSpot",
+  "Cal.com",
+  "Vercel",
+  "Cloudflare",
+];
+
+const principios = [
+  {
+    title: "Outcome > output",
+    description: "Mido éxito en resultados de negocio, no en pantallas entregadas.",
+  },
+  {
+    title: "Stack simple",
+    description:
+      "Elijo la herramienta más aburrida que resuelva. Menos partes móviles = menos roturas.",
+  },
+  {
+    title: "Comunicación directa",
+    description: "Respondo en menos de 24h hábiles. Si me trabo, lo digo antes de que me preguntes.",
+  },
+  {
+    title: "Transparencia total",
+    description:
+      "Horas invertidas, decisiones tomadas, costos asociados. Todo en una planilla compartida.",
+  },
+];
+---
+
+<Layout
+  title={`Sobre mí — ${site.name}`}
+  description={`Bio extendida, principios y proceso de trabajo de ${site.name}, desarrollador freelance full-stack desde Córdoba, Argentina.`}
+>
+  <!-- Hero -->
+  <section class="pt-16 md:pt-24 pb-16 md:pb-20 border-b border-[var(--color-border)]">
+    <div class="container-page">
+      <p
+        class="font-mono text-xs uppercase tracking-[0.25em] text-[var(--color-mute)] mb-6 flex items-center gap-3"
+      >
+        <span class="inline-block w-8 h-px bg-[var(--color-dorado)]"></span>
+        Sobre mí
+      </p>
+      <h1 class="font-display font-bold text-[var(--color-ink)] max-w-4xl tracking-tight mb-8">
+        Construyo software para que tu PyME cierre más ventas y deje de depender de mi.
+      </h1>
+      <p class="text-xl text-[var(--color-ink-soft)] max-w-3xl leading-relaxed">
+        Soy Marcial Fantini. Desarrollo freelance desde 2017, especializado en productos
+        digitales para PyMEs argentinas. No quiero clientes cautivos: quiero clientes que
+        aprendan a medir su canal online y eventualmente prescindan de mí.
+      </p>
+    </div>
+  </section>
+
+  <!-- Bio -->
+  <section class="py-16 md:py-24 border-b border-[var(--color-border)]">
+    <div class="container-page">
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-10">
+        <div class="md:col-span-3">
+          <div
+            class="w-32 h-32 md:w-40 md:h-40 rounded-lg bg-[var(--color-ink)] text-[var(--color-blanco)] font-display font-bold text-5xl flex items-center justify-center tracking-tight"
+            aria-label="Avatar con iniciales MF"
+          >
+            MF
+          </div>
+          <p class="mt-4 font-mono text-sm text-[var(--color-mute)] leading-relaxed">
+            Córdoba, Argentina<br />
+            8+ años en producción<br />
+            40+ proyectos entregados
+          </p>
+        </div>
+
+        <div class="md:col-span-9 space-y-5 text-[var(--color-ink-soft)] text-lg leading-relaxed max-w-3xl">
+          <p>
+            Mi historia es la clásica del freelance que arrancó por necesidad y se quedó por
+            preferencia. En 2017 hice mi primer sitio cobrando USD 80. Hoy mis tickets van de USD
+            2.500 a USD 12.000, no porque me haya vuelto mejor codero (también), sino porque
+            aprendí a vender resultados en vez de horas.
+          </p>
+          <p>
+            Trabajo casi exclusivamente con PyMEs: estudios, distribuidoras, marcas de producto,
+            consultorías, e-commerce incipientes. Son clientes que tienen presupuesto limitado y
+            necesitan que cada peso cuente. Esa restricción me obligó a elegir bien el stack, no
+            a usar la herramienta de moda. Hoy, eso significa que el 90% de mis proyectos son
+            en <strong class="text-[var(--color-ink)]">Astro + TypeScript + Tailwind</strong> con deploy en
+            Vercel o Cloudflare.
+          </p>
+          <p>
+            Lo que más disfruto del trabajo freelance no es la libertad horaria (que existe) ni
+            la escala de los proyectos (que no es enorme). Es esa llamada post-entrega donde el
+            cliente me dice "cerré tres ventas esta semana atribuibles al sitio nuevo". Eso es
+            lo que me paga la hipoteca, no la pantalla a 1280px.
+          </p>
+          <p>
+            Si tu PyME necesita presencia digital seria y querés hablar con alguien que piense en
+            números antes que en tendencias, empezá por la auditoría gratuita. Es 30 minutos, sin
+            compromiso, y suele ser el primer paso hacia algo concreto.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Principios -->
+  <section class="py-16 md:py-24 border-b border-[var(--color-border)] bg-[var(--color-blanco)]">
+    <div class="container-page">
+      <div class="max-w-2xl mb-12">
+        <p
+          class="font-mono text-xs uppercase tracking-[0.25em] text-[var(--color-mute)] mb-4 flex items-center gap-3"
+        >
+          <span class="inline-block w-6 h-px bg-[var(--color-dorado)]"></span>
+          Principios
+        </p>
+        <h2 class="font-display font-bold tracking-tight">Cómo pienso el trabajo</h2>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+        {
+          principios.map((p, i) => (
+            <article class="border border-[var(--color-border)] rounded-md p-6 md:p-8">
+              <p class="font-mono text-xs text-[var(--color-mute)] mb-3">
+                {String(i + 1).padStart(2, "0")}
+              </p>
+              <h3 class="font-display font-semibold text-xl tracking-tight mb-3 text-[var(--color-ink)]">
+                {p.title}
+              </h3>
+              <p class="text-[var(--color-ink-soft)] leading-relaxed">{p.description}</p>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- Proceso -->
+  <section class="py-16 md:py-24 border-b border-[var(--color-border)]">
+    <div class="container-page">
+      <div class="max-w-2xl mb-14">
+        <p
+          class="font-mono text-xs uppercase tracking-[0.25em] text-[var(--color-mute)] mb-4 flex items-center gap-3"
+        >
+          <span class="inline-block w-6 h-px bg-[var(--color-dorado)]"></span>
+          Cómo trabajo
+        </p>
+        <h2 class="font-display font-bold tracking-tight">De la primera llamada al sitio en producción</h2>
+      </div>
+
+      <ol class="space-y-0">
+        {
+          process.map((step, i) => (
+            <li class="grid grid-cols-[40px_1fr] md:grid-cols-[60px_1fr_auto] gap-4 md:gap-8 py-7 border-b border-[var(--color-border)] first:border-t last:border-b-0 items-start">
+              <span class="font-mono text-3xl md:text-4xl font-light text-[var(--color-dorado)]">
+                {String(i + 1).padStart(2, "0")}
+              </span>
+              <div>
+                <h3 class="font-display font-semibold text-xl tracking-tight text-[var(--color-ink)] mb-2">
+                  {step.title}
+                </h3>
+                <p class="text-[var(--color-ink-soft)] leading-relaxed max-w-2xl">
+                  {step.description}
+                </p>
+              </div>
+              <span class="font-mono text-xs uppercase tracking-widest text-[var(--color-mute)] pt-2 hidden md:inline">
+                {step.duration}
+              </span>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <!-- Stack -->
+  <section class="py-16 md:py-24 border-b border-[var(--color-border)] bg-[var(--color-blanco)]">
+    <div class="container-page">
+      <div class="max-w-2xl mb-12">
+        <p
+          class="font-mono text-xs uppercase tracking-[0.25em] text-[var(--color-mute)] mb-4 flex items-center gap-3"
+        >
+          <span class="inline-block w-6 h-px bg-[var(--color-dorado)]"></span>
+          Stack
+        </p>
+        <h2 class="font-display font-bold tracking-tight">Las herramientas que conozco</h2>
+      </div>
+
+      <ul class="flex flex-wrap gap-2">
+        {
+          stack.map((s) => (
+            <li class="font-mono text-sm px-3.5 py-2 rounded-md border border-[var(--color-border)] bg-[var(--color-blanco-humo)] text-[var(--color-ink-soft)]">
+              {s}
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <Contacto />
+</Layout>

@@ -1,0 +1,48 @@
+---
+import site from "../data/site.json";
+---
+
+<section class="py-20 md:py-28 border-b border-[var(--color-border)]">
+  <div class="container-page">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
+      <div class="lg:col-span-4">
+        <p class="font-mono text-xs uppercase tracking-[0.25em] text-[var(--color-mute)] mb-4 flex items-center gap-3">
+          <span class="inline-block w-6 h-px bg-[var(--color-dorado)]"></span>
+          Sobre mí
+        </p>
+        <h2 class="font-display font-bold tracking-tight">
+          Construyo software para que tu negocio cierre más ventas.
+        </h2>
+        <p class="mt-6 font-mono text-sm text-[var(--color-mute)]">
+          Córdoba, Argentina · En producción desde 2017
+        </p>
+      </div>
+
+      <div class="lg:col-span-8 lg:pt-3">
+        <div class="space-y-5 text-[var(--color-ink-soft)] text-lg leading-relaxed">
+          <p>
+            Soy <strong class="text-[var(--color-ink)]">{site.name}</strong>, desarrollador
+            freelance full-stack. Arrancé haciendo sitios web en 2017, y desde entonces trabajo
+            con PyMEs argentinas que necesitan presencia digital seria o un producto a medida que
+            no encuentran en Shopify/Wix/WordPress.
+          </p>
+          <p>
+            Lo que entrego no es "una página web": es un activo digital que rinde. Un sitio que
+            carga rápido, posiciona en Google, convierte visitas en consultas o ventas, y se mide
+            con números reales. Cobro por proyecto con KPI pactado, no por hora. Mis clientes
+            suelen quedarse entre 18 y 36 meses y derivar colegas.
+          </p>
+          <p>
+            Si tu negocio necesita ganar claridad en su canal online y querés hablar con alguien
+            que piense en términos de retorno, charlemos.
+            <a
+              href="/sobre-mi"
+              class="text-[var(--color-azul)] font-medium hover:text-[var(--color-dorado)] ml-1"
+              >Conocé más →</a
+            >
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

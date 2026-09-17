@@ -1,0 +1,77 @@
+---
+import site from "../data/site.json";
+
+const year = new Date().getFullYear();
+
+const socials = [
+  { href: site.social.github, label: "GitHub" },
+  { href: site.social.linkedin, label: "LinkedIn" },
+  { href: site.social.twitter, label: "Twitter" },
+  { href: `mailto:${site.email}`, label: "Email" },
+];
+---
+
+<footer class="border-t border-[var(--color-border)] mt-24 bg-[var(--color-blanco-humo)]">
+  <div class="container-page py-12 md:py-16">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+      <div>
+        <a href="/" class="flex items-center gap-2 mb-3">
+          <span class="inline-flex items-center justify-center w-9 h-9 rounded-md bg-[var(--color-ink)] text-[var(--color-blanco)] font-display font-bold text-sm">
+            MF
+          </span>
+          <span class="font-display font-semibold tracking-tight">{site.name}</span>
+        </a>
+        <p class="text-sm text-[var(--color-ink-soft)] max-w-xs leading-relaxed">
+          {site.description}
+        </p>
+      </div>
+
+      <div>
+        <h3 class="font-mono text-xs uppercase tracking-widest text-[var(--color-mute)] mb-4">
+          Navegación
+        </h3>
+        <ul class="space-y-2 text-sm">
+          <li><a href="/sobre-mi" class="hover:text-[var(--color-dorado)]">Sobre mí</a></li>
+          <li><a href="/proyectos" class="hover:text-[var(--color-dorado)]">Proyectos</a></li>
+          <li><a href="/blog" class="hover:text-[var(--color-dorado)]">Blog</a></li>
+          <li><a href="/contacto" class="hover:text-[var(--color-dorado)]">Contacto</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h3 class="font-mono text-xs uppercase tracking-widest text-[var(--color-mute)] mb-4">
+          Contacto directo
+        </h3>
+        <ul class="space-y-2 text-sm">
+          <li>
+            <a href={`mailto:${site.email}`} class="hover:text-[var(--color-dorado)]">
+              {site.email}
+            </a>
+          </li>
+          <li class="text-[var(--color-ink-soft)]">{site.location}</li>
+        </ul>
+        <div class="mt-4 flex gap-3 text-sm">
+          {socials.map((s) => (
+            <a
+              href={s.href}
+              class="text-[var(--color-ink-soft)] hover:text-[var(--color-dorado)]"
+              rel="noopener noreferrer"
+              target={s.href.startsWith('http') ? '_blank' : undefined}
+            >
+              {s.label}
+            </a>
+          ))}
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-12 pt-6 border-t border-[var(--color-border)] flex flex-col md:flex-row items-start md:items-center justify-between gap-3">
+      <p class="text-xs text-[var(--color-mute)] font-mono">
+        © {year} {site.name} · Construido en Córdoba, Argentina
+      </p>
+      <p class="text-xs text-[var(--color-mute)] font-mono">
+        v0.1 · Astro 7 · TypeScript · Tailwind v4
+      </p>
+    </div>
+  </div>
+</footer>

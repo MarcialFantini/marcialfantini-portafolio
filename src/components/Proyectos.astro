@@ -1,0 +1,36 @@
+---
+import { getCollection } from "astro:content";
+import ProyectoCard from "./ProyectoCard.astro";
+
+const allProyectos = await getCollection("proyectos");
+const featured = allProyectos
+  .filter((p) => p.data.featured)
+  .sort((a, b) => b.data.fecha.getTime() - a.data.fecha.getTime())
+  .slice(0, 3);
+---
+
+<section class="py-20 md:py-28 border-b border-[var(--color-border)]">
+  <div class="container-page">
+    <div class="flex items-end justify-between flex-wrap gap-4 mb-12">
+      <div class="max-w-xl">
+        <p class="font-mono text-xs uppercase tracking-[0.25em] text-[var(--color-mute)] mb-4 flex items-center gap-3">
+          <span class="inline-block w-6 h-px bg-[var(--color-dorado)]"></span>
+          Proyectos
+        </p>
+        <h2 class="font-display font-bold tracking-tight">
+          Algunos casos donde mis decisiones importaron
+        </h2>
+      </div>
+      <a
+        href="/proyectos"
+        class="text-sm font-medium text-[var(--color-azul)] hover:text-[var(--color-dorado)] inline-flex items-center gap-1.5"
+      >
+        Ver todos los proyectos <span aria-hidden="true">→</span>
+      </a>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+      {featured.map((p) => <ProyectoCard proyecto={p} />)}
+    </div>
+  </div>
+</section>

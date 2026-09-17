@@ -1,0 +1,104 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import FormattedDate from "../../components/FormattedDate.astro";
+import PostCard from "../../components/PostCard.astro";
+import { getCollection, render } from "astro:content";
+import type { GetStaticPaths } from "astro";
+
+export const getStaticPaths = (async () => {
+  const posts = await getCollection("blog");
+  return posts.map((post) => ({
+    params: { slug: post.id },
+    props: { post },
+  }));
+}) satisfies GetStaticPaths;
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+
+const allPosts = await getCollection("blog");
+const related = allPosts
+  .filter(
+    (p) => p.id !== post.id && (p.data.category === post.data.category || p.data.tags.some((t) => post.data.tags.includes(t)))
+  )
+  .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime())
+  .slice(0, 3);
+
+const { title, description, pubDate, category, readingTime, tags } = post.data;
+---
+
+<Layout
+  title={`${title} — Marcial Fantini`}
+  description={description}
+  pageType="article"
+>
+  <article>
+    <header class="pt-12 md:pt-20 pb-10 md:pb-14 border-b border-[var(--color-border)]">
+      <div class="container-page max-w-3xl">
+        <a
+          href="/blog"
+          class="inline-flex items-center gap-1.5 text-sm text-[var(--color-mute)] hover:text-[var(--color-azul)] mb-8 font-mono"
+        >
+          <span aria-hidden="true">←</span> Volver al blog
+        </a>
+
+        <div class="flex items-center gap-3 mb-6 text-xs font-mono text-[var(--color-mute)]">
+          <span class="text-[var(--color-azul)]">{category}</span>
+          <span class="w-1 h-1 rounded-full bg-[var(--color-border)]"></span>
+          <FormattedDate date={pubDate} format="short" />
+          <span class="w-1 h-1 rounded-full bg-[var(--color-border)]"></span>
+          <span>{readingTime} min lectura</span>
+        </div>
+
+        <h1 class="font-display font-bold text-[var(--color-ink)] tracking-tight mb-6">
+          {title}
+        </h1>
+        <p class="text-xl text-[var(--color-ink-soft)] leading-relaxed">
+          {description}
+        </p>
+
+        {tags.length > 0 && (
+          <div class="mt-8 flex flex-wrap gap-2">
+            {tags.map((t) => (
+              <span class="font-mono text-xs px-2.5 py-1 rounded border border-[var(--color-border)] text-[var(--color-ink-soft)]">
+                #{t}
+              </span>
+            ))}
+          </div>
+        )}
+      </div>
+    </header>
+
+    <div class="container-page py-12 md:py-16">
+      <div class="prose-editorial mx-auto">
+        <Content />
+      </div>
+    </div>
+  </article>
+
+  {related.length > 0 && (
+    <section class="py-16 md:py-24 border-t border-[var(--color-border)] bg-[var(--color-blanco)]">
+      <div class="container-page">
+        <h2 class="font-display font-bold text-[var(--color-ink)] tracking-tight mb-10">
+          Posts relacionados
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+          {related.map((p) => <PostCard post={p} />)}
+        </div>
+
+        <div class="mt-14 text-center">
+          <p class="font-mono text-xs uppercase tracking-widest text-[var(--color-mute)] mb-3">
+            ¿Tenés un proyecto en mente?
+          </p>
+          <a
+            href="/contacto"
+            class="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-md bg-[var(--color-ink)] text-[var(--color-blanco-humo)] font-medium hover:bg-[var(--color-azul)] transition-colors"
+          >
+            Hablemos
+            <span aria-hidden="true">→</span>
+          </a>
+        </div>
+      </div>
+    </section>
+  )}
+</Layout>

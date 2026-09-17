@@ -1,0 +1,35 @@
+---
+import { getCollection } from "astro:content";
+import PostCard from "./PostCard.astro";
+
+const allPosts = await getCollection("blog");
+const posts = allPosts
+  .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime())
+  .slice(0, 3);
+---
+
+<section class="py-20 md:py-28 border-b border-[var(--color-border)] bg-[var(--color-blanco)]">
+  <div class="container-page">
+    <div class="flex items-end justify-between flex-wrap gap-4 mb-12">
+      <div class="max-w-xl">
+        <p class="font-mono text-xs uppercase tracking-[0.25em] text-[var(--color-mute)] mb-4 flex items-center gap-3">
+          <span class="inline-block w-6 h-px bg-[var(--color-dorado)]"></span>
+          Blog
+        </p>
+        <h2 class="font-display font-bold tracking-tight">
+          Lo que aprendí en el camino
+        </h2>
+      </div>
+      <a
+        href="/blog"
+        class="text-sm font-medium text-[var(--color-azul)] hover:text-[var(--color-dorado)] inline-flex items-center gap-1.5"
+      >
+        Ver todos los posts <span aria-hidden="true">→</span>
+      </a>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+      {posts.map((post) => <PostCard post={post} />)}
+    </div>
+  </div>
+</section>
