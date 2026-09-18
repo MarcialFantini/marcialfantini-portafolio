@@ -1,25 +1,59 @@
 ---
 import metricas from "../data/metricas.json";
+
+const isNumeric = (v: string) => /^[+\d.,kKmM\s%]+$/.test(v.trim());
 ---
 
 <section
-  class="py-16 md:py-20 bg-[var(--color-ink)] text-[var(--color-blanco-humo)]"
+  class="relative py-20 md:py-28 bg-[var(--color-ink)] text-[var(--color-blanco-humo)] border-y-[8px] border-[var(--color-azul)] overflow-hidden isolate"
   aria-label="Métricas destacadas"
 >
-  <div class="container-page reveal">
+  <div aria-hidden="true" class="absolute inset-0 pointer-events-none">
+    <div
+      class="brush-stroke brush-stroke-2"
+      style="top: 18%; left: -4%; transform: rotate(2deg); filter: invert(1);"
+    ></div>
+    <div
+      class="brush-stroke brush-stroke-4"
+      style="bottom: 6%; right: -2%; transform: rotate(-12deg); filter: invert(1);"
+    ></div>
+  </div>
+
+  <div class="container-page relative z-[1] reveal">
+    <div class="flex items-center gap-4 mb-10 md:mb-14">
+      <span class="sticker sticker-yellow" style="--sticker-size: 72px;">
+        <span class="sticker__label">KPI</span>
+      </span>
+      <p
+        class="font-mono text-[11px] md:text-xs uppercase tracking-[0.22em] text-[var(--color-azul)] flex items-center gap-3"
+      >
+        <span class="tick-gold"></span>
+        Resultados acumulados
+      </p>
+    </div>
+
     <dl class="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-6">
       {
-        metricas.map((m) => (
-          <div class="border-l border-[var(--color-dorado)] pl-4 md:pl-6">
-            <dt class="font-mono text-[11px] uppercase tracking-widest text-[var(--color-blanco-humo)]/60 mb-3 leading-tight">
-              {m.label}
-            </dt>
-            <dd class="font-display text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-[var(--color-blanco)] leading-none">
-              {m.value}
-              <span class="text-[var(--color-dorado)]">{m.sufijo}</span>
-            </dd>
-          </div>
-        ))
+        metricas.map((m) => {
+          const numeric = isNumeric(m.value);
+          return (
+            <div class="border-l-4 border-[var(--color-dorado)] pl-4 md:pl-6">
+              <dt class="font-mono text-[11px] uppercase tracking-widest text-[var(--color-blanco-humo)]/70 mb-3 leading-tight">
+                {m.label}
+              </dt>
+              {numeric ? (
+                <dd class="font-impact text-[clamp(2.75rem,7vw,5.5rem)] text-[var(--color-azul)] leading-[0.95] uppercase tabular-nums">
+                  {m.value}
+                  <span class="text-[var(--color-dorado)]">{m.sufijo}</span>
+                </dd>
+              ) : (
+                <dd class="font-mono text-base md:text-lg font-semibold text-[var(--color-azul)] leading-tight break-words">
+                  {m.value}
+                </dd>
+              )}
+            </div>
+          );
+        })
       }
     </dl>
   </div>

@@ -41,12 +41,12 @@ const posts = (await getCollection("blog")).sort(
                 >
                   <div class="font-mono text-xs text-[var(--color-mute)] whitespace-nowrap pt-1 flex flex-col gap-1">
                     <FormattedDate date={post.data.pubDate} format="short" />
-                    <span class="text-[var(--color-azul)] uppercase tracking-wider text-[10px]">
-                      {post.data.category}
-                    </span>
-                  </div>
-                  <div class="min-w-0">
-                    <h2 class="font-display font-semibold text-xl md:text-2xl tracking-tight text-[var(--color-ink)] group-hover:text-[var(--color-azul)] leading-tight">
+<span class="text-[var(--color-dorado)] uppercase tracking-wider text-[10px] font-semibold">
+                        {post.data.category}
+                      </span>
+                    </div>
+                    <div class="min-w-0">
+                      <h2 class="font-display font-semibold text-xl md:text-2xl tracking-tight text-[var(--color-ink)] group-hover:text-[var(--color-dorado)] leading-tight">
                       {post.data.title}
                     </h2>
                     <p class="mt-2 text-sm md:text-base text-[var(--color-ink-soft)] leading-snug max-w-2xl line-clamp-2">
@@ -58,7 +58,7 @@ const posts = (await getCollection("blog")).sort(
                   </span>
                   <span
                     aria-hidden="true"
-                    class="hidden md:inline text-[var(--color-mute)] group-hover:text-[var(--color-azul)] group-hover:translate-x-1 transition-transform"
+                    class="hidden md:inline text-[var(--color-mute)] group-hover:text-[var(--color-dorado)] group-hover:translate-x-1 transition-transform"
                   >
                     →
                   </span>

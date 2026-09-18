@@ -18,11 +18,11 @@ const { title, description, pubDate, category, readingTime } = post.data;
   <div class="flex items-center gap-3 mb-4 text-xs font-mono text-[var(--color-mute)]">
     <FormattedDate date={pubDate} format="short" />
     <span class="w-1 h-1 rounded-full bg-[var(--color-border)]"></span>
-    <span class="text-[var(--color-azul)]">{category}</span>
+    <span class="text-[var(--color-dorado)] font-semibold">{category}</span>
   </div>
 
   <h3
-    class="font-display font-semibold tracking-tight text-[var(--color-ink)] group-hover:text-[var(--color-azul)] transition-colors leading-snug"
+    class="font-display font-semibold tracking-tight text-[var(--color-ink)] group-hover:text-[var(--color-dorado)] transition-colors leading-snug"
   >
     {title}
   </h3>

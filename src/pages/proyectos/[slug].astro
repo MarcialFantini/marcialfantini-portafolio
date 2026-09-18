@@ -41,7 +41,7 @@ const related = allProyectos
         </a>
 
         <div class="flex items-center flex-wrap gap-3 mb-5 text-xs font-mono text-[var(--color-mute)]">
-          <span class="text-[var(--color-azul)]">{cliente}</span>
+          <span class="text-[var(--color-dorado)] font-semibold">{cliente}</span>
           <span class="w-1 h-1 rounded-full bg-[var(--color-border)]"></span>
           <FormattedDate date={fecha} format="long" />
           <span class="w-1 h-1 rounded-full bg-[var(--color-border)]"></span>
@@ -74,7 +74,7 @@ const related = allProyectos
           <dl class="grid grid-cols-2 md:grid-cols-4 gap-6">
             {metricas.map((m) => (
               <div class="border-l border-[var(--color-dorado)] pl-4">
-                <dd class="font-display font-bold text-3xl md:text-4xl text-[var(--color-blanco)] tracking-tight leading-none">
+                <dd class="font-impact text-3xl md:text-4xl text-[var(--color-blanco)] uppercase tabular-nums tracking-tight leading-none">
                   {m.value}
                 </dd>
                 <dt class="font-mono text-[10px] uppercase tracking-widest text-[var(--color-blanco-humo)]/60 mt-2 leading-tight block">
@@ -131,7 +131,7 @@ const related = allProyectos
                     href={url}
                     rel="noopener noreferrer"
                     target="_blank"
-                    class="tactile text-[var(--color-azul)] hover:text-[var(--color-dorado)] inline-flex items-center gap-1"
+                    class="tactile text-[var(--color-dorado)] hover:text-[var(--color-ink)] inline-flex items-center gap-1"
                   >
                     Ver sitio en vivo <span aria-hidden="true">↗</span>
                   </a>
@@ -141,7 +141,7 @@ const related = allProyectos
                     href={repo}
                     rel="noopener noreferrer"
                     target="_blank"
-                    class="tactile text-[var(--color-azul)] hover:text-[var(--color-dorado)] inline-flex items-center gap-1"
+                    class="tactile text-[var(--color-dorado)] hover:text-[var(--color-ink)] inline-flex items-center gap-1"
                   >
                     Repositorio en GitHub <span aria-hidden="true">↗</span>
                   </a>
@@ -182,7 +182,7 @@ const related = allProyectos
           <div class="pt-2 border-t border-[var(--color-border)]">
             <a
               href="/contacto"
-              class="tactile inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-md bg-[var(--color-ink)] text-[var(--color-blanco-humo)] font-medium hover:bg-[var(--color-azul)]"
+              class="tactile inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-md bg-[var(--color-ink)] text-[var(--color-azul)] font-semibold hover:bg-[var(--color-dorado)] hover:text-[var(--color-blanco)] border-2 border-[var(--color-ink)] hover:border-[var(--color-dorado)]"
             >
               Hablemos de un proyecto similar
               <span aria-hidden="true">→</span>

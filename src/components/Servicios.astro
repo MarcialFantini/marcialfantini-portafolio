@@ -2,19 +2,36 @@
 import servicios from "../data/servicios.json";
 ---
 
-<section id="servicios" class="py-20 md:py-28 border-b border-[var(--color-border)]">
-  <div class="container-page">
+<section id="servicios" class="relative py-20 md:py-28 border-b border-[var(--color-border)] overflow-hidden isolate">
+  <div aria-hidden="true" class="absolute inset-0 pointer-events-none">
+    <div
+      class="sun-bg"
+      style="top: -35%; right: -10%; width: clamp(360px, 55vw, 620px); height: clamp(360px, 55vw, 620px); opacity: 0.35;"
+    ></div>
+  </div>
+
+  <div class="container-page relative z-[1]">
     <div class="max-w-2xl mb-14 reveal">
-      <h2 class="font-display font-bold tracking-tight text-[var(--color-ink)]">
-        Qué puedo hacer por tu negocio.
+      <div class="flex items-center gap-3 mb-6">
+        <span class="sticker sticker-yellow" style="--sticker-size: 56px;">
+          <span class="sticker__label">Servicios</span>
+        </span>
+        <p class="font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--color-mute)]">
+          {String(servicios.length).padStart(2, "0")} ofertas fijas
+        </p>
+      </div>
+
+      <h2 class="font-impact text-[clamp(2rem,5vw,4rem)] uppercase leading-[0.95] text-[var(--color-ink)]">
+        Qué puedo hacer <span class="text-[var(--color-dorado)]">por tu negocio.</span>
       </h2>
+
       <p class="mt-5 text-[var(--color-ink-soft)] text-lg leading-relaxed">
         Cuatro servicios con precio orientativo y entregable definido. Sin paquetes misteriosos,
         sin upsell, sin retainer obligatorio.
       </p>
     </div>
 
-    <ol class="border-t border-[var(--color-border)] reveal-stagger">
+    <ol class="border-t-2 border-[var(--color-ink)] reveal-stagger">
       {
         servicios.map((s, i) => (
           <li class="group border-b border-[var(--color-border)]">
@@ -23,22 +40,22 @@ import servicios from "../data/servicios.json";
               class="tactile grid grid-cols-[auto_1fr_auto] md:grid-cols-[3rem_1fr_auto_auto] items-baseline gap-5 md:gap-8 py-6 md:py-7"
             >
               <span class="font-mono text-xs text-[var(--color-mute)] tabular-nums pt-1">
-                {String(i + 1).padStart(2, "0")} <span class="text-[var(--color-border)]">/</span> 04
+                {String(i + 1).padStart(2, "0")} <span class="text-[var(--color-border)]">/</span> {String(servicios.length).padStart(2, "0")}
               </span>
               <div class="min-w-0">
-                <h3 class="font-display font-semibold text-xl md:text-2xl tracking-tight text-[var(--color-ink)] group-hover:text-[var(--color-azul)] leading-tight">
+                <h3 class="font-display font-semibold text-xl md:text-2xl tracking-tight text-[var(--color-ink)] group-hover:text-[var(--color-dorado)] leading-tight">
                   {s.titulo}
                 </h3>
                 <p class="mt-1.5 text-sm md:text-base text-[var(--color-ink-soft)] leading-snug max-w-2xl">
                   {s.descripcion}
                 </p>
               </div>
-              <p class="font-mono text-sm md:text-base text-[var(--color-azul)] font-medium tabular-nums whitespace-nowrap">
+              <p class="font-mono text-sm md:text-base text-[var(--color-ink)] font-semibold tabular-nums whitespace-nowrap">
                 {s.precioOrientativo}
               </p>
               <span
                 aria-hidden="true"
-                class="hidden md:inline text-[var(--color-mute)] group-hover:text-[var(--color-azul)] group-hover:translate-x-1 transition-transform"
+                class="hidden md:inline text-[var(--color-mute)] group-hover:text-[var(--color-dorado)] group-hover:translate-x-1 transition-transform"
               >
                 →
               </span>

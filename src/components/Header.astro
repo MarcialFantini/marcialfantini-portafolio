@@ -22,7 +22,7 @@ const pathname = Astro.url.pathname;
       aria-label={`${site.name} - ir al inicio`}
     >
       <span
-        class="tactile inline-flex items-center justify-center w-9 h-9 rounded-md bg-[var(--color-ink)] text-[var(--color-blanco)] font-display font-bold text-sm group-hover:bg-[var(--color-azul)]"
+        class="tactile inline-flex items-center justify-center w-9 h-9 rounded-md bg-[var(--color-ink)] text-[var(--color-azul)] font-impact text-sm uppercase tracking-wide group-hover:bg-[var(--color-azul)] group-hover:text-[var(--color-ink)] border-2 border-[var(--color-ink)] group-hover:border-[var(--color-ink)]"
       >
         MF
       </span>
@@ -44,7 +44,7 @@ const pathname = Astro.url.pathname;
               class:list={[
                 "tactile text-sm font-medium tracking-tight",
                 active
-                  ? "text-[var(--color-azul)]"
+                  ? "text-[var(--color-dorado)] underline underline-offset-[6px] decoration-2"
                   : "text-[var(--color-ink-soft)] hover:text-[var(--color-ink)]",
               ]}
               aria-current={active ? "page" : undefined}
@@ -56,7 +56,7 @@ const pathname = Astro.url.pathname;
       }
       <a
         href="/contacto"
-        class="tactile inline-flex items-center justify-center px-4 py-2 rounded-md bg-[var(--color-ink)] text-[var(--color-blanco-humo)] text-sm font-medium hover:bg-[var(--color-azul)]"
+        class="tactile inline-flex items-center justify-center px-4 py-2 rounded-md bg-[var(--color-ink)] text-[var(--color-azul)] text-sm font-semibold hover:bg-[var(--color-azul)] hover:text-[var(--color-ink)] border-2 border-[var(--color-ink)]"
       >
         Hablemos
       </a>
@@ -84,7 +84,7 @@ const pathname = Astro.url.pathname;
         navItems.map((item) => (
           <a
             href={item.href}
-            class="tactile py-3 text-base font-medium text-[var(--color-ink-soft)] hover:text-[var(--color-azul)] border-b border-[var(--color-border)] last:border-b-0"
+            class="tactile py-3 text-base font-medium text-[var(--color-ink-soft)] hover:text-[var(--color-ink)] border-b border-[var(--color-border)] last:border-b-0"
           >
             {item.label}
           </a>
@@ -92,7 +92,7 @@ const pathname = Astro.url.pathname;
       }
       <a
         href="/contacto"
-        class="tactile mt-3 inline-flex items-center justify-center px-4 py-3 rounded-md bg-[var(--color-ink)] text-[var(--color-blanco-humo)] text-base font-medium"
+        class="tactile mt-3 inline-flex items-center justify-center px-4 py-3 rounded-md bg-[var(--color-ink)] text-[var(--color-azul)] text-base font-semibold border-2 border-[var(--color-ink)]"
       >
         Hablemos
       </a>

@@ -43,7 +43,7 @@ const { title, description, pubDate, category, readingTime, tags } = post.data;
         </a>
 
         <div class="flex items-center flex-wrap gap-3 mb-6 text-xs font-mono text-[var(--color-mute)]">
-          <span class="text-[var(--color-azul)]">{category}</span>
+          <span class="text-[var(--color-dorado)] font-semibold">{category}</span>
           <span class="w-1 h-1 rounded-full bg-[var(--color-border)]"></span>
           <FormattedDate date={pubDate} format="short" />
           <span class="w-1 h-1 rounded-full bg-[var(--color-border)]"></span>
@@ -92,7 +92,7 @@ const { title, description, pubDate, category, readingTime, tags } = post.data;
           </p>
           <a
             href="/contacto"
-            class="tactile inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-md bg-[var(--color-ink)] text-[var(--color-blanco-humo)] font-medium hover:bg-[var(--color-azul)]"
+            class="tactile inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-md bg-[var(--color-ink)] text-[var(--color-azul)] font-semibold hover:bg-[var(--color-azul)] hover:text-[var(--color-ink)] border-2 border-[var(--color-ink)]"
           >
             Hablemos
             <span aria-hidden="true">→</span>

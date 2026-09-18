@@ -2,12 +2,25 @@
 import site from "../data/site.json";
 ---
 
-<section class="py-20 md:py-28 border-b border-[var(--color-border)]">
-  <div class="container-page reveal">
+<section class="relative py-20 md:py-28 border-b border-[var(--color-border)] overflow-hidden isolate">
+  <div aria-hidden="true" class="absolute inset-0 pointer-events-none">
+    <div
+      class="brush-stroke brush-stroke-2"
+      style="top: 8%; right: -6%; transform: rotate(-8deg);"
+    ></div>
+  </div>
+
+  <div class="container-page relative z-[1] reveal">
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
       <div class="lg:col-span-4">
-        <h2 class="font-display font-bold tracking-tight text-[var(--color-ink)] max-w-md">
-          Construyo software para que tu negocio cierre más ventas.
+        <p
+          class="font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--color-mute)] mb-5 flex items-center gap-3"
+        >
+          <span class="tick-gold"></span>
+          Sobre mí
+        </p>
+        <h2 class="font-impact text-[clamp(2rem,5vw,4rem)] uppercase leading-[0.95] text-[var(--color-ink)] max-w-md">
+          Construyo software que <span class="text-[var(--color-dorado)]">cierra más ventas.</span>
         </h2>
       </div>
 
@@ -20,7 +33,14 @@ import site from "../data/site.json";
             encuentran en Shopify, Wix ni WordPress.
           </p>
 
-          <blockquote class="my-8 pl-5 border-l-2 border-[var(--color-dorado)]">
+          <blockquote class="relative my-8 pl-5 border-l-4 border-[var(--color-dorado)]">
+            <span
+              class="absolute -top-2 -left-2 sticker sticker-red"
+              style="--sticker-size: 44px;"
+              aria-hidden="true"
+            >
+              <span class="sticker__label" style="font-size: 0.55rem;">100%</span>
+            </span>
             <p class="text-[var(--color-ink)] text-xl md:text-2xl leading-snug tracking-tight font-display font-medium">
               Cobro por proyecto con KPI pactado, no por hora. Mis clientes suelen quedarse entre
               18 y 36 meses y derivar colegas.
@@ -36,7 +56,7 @@ import site from "../data/site.json";
           <p>
             Si tu negocio necesita ganar claridad en su canal online y querés hablar con alguien
             que piense en retorno,
-            <a href="/sobre-mi" class="text-[var(--color-azul)] font-medium hover:text-[var(--color-dorado)]">
+            <a href="/sobre-mi" class="text-[var(--color-azul-deep)] font-medium underline underline-offset-4 decoration-[var(--color-azul)] hover:text-[var(--color-dorado)] hover:decoration-[var(--color-dorado)]">
               conocé mi proceso de trabajo
             </a>
             <span aria-hidden="true"> →</span>

@@ -8,21 +8,28 @@ const posts = allPosts
   .slice(0, 3);
 ---
 
-<section class="py-20 md:py-28 border-b border-[var(--color-border)] bg-[var(--color-blanco)]">
-  <div class="container-page">
+<section class="relative py-20 md:py-28 border-b border-[var(--color-border)] bg-[var(--color-blanco)] overflow-hidden isolate">
+  <div aria-hidden="true" class="absolute inset-0 pointer-events-none">
+    <div
+      class="brush-stroke brush-stroke-3"
+      style="bottom: 16%; left: -6%; transform: rotate(-6deg);"
+    ></div>
+  </div>
+
+  <div class="container-page relative z-[1]">
     <div class="flex items-end justify-between flex-wrap gap-4 mb-12 reveal">
-      <h2 class="font-display font-bold tracking-tight text-[var(--color-ink)] max-w-xl">
-        Lo que aprendí en el camino.
+      <h2 class="font-impact text-[clamp(2rem,5vw,4rem)] uppercase leading-[0.95] text-[var(--color-ink)] max-w-xl">
+        Lo que aprendí <span class="text-[var(--color-dorado)]">en el camino.</span>
       </h2>
       <a
         href="/blog"
-        class="tactile text-sm font-medium text-[var(--color-ink-soft)] hover:text-[var(--color-azul)] inline-flex items-center gap-1.5"
+        class="tactile text-sm font-medium text-[var(--color-ink)] hover:text-[var(--color-dorado)] inline-flex items-center gap-1.5"
       >
         Ver todos los posts <span aria-hidden="true">→</span>
       </a>
     </div>
 
-    <ol class="border-t border-[var(--color-border)] reveal-stagger">
+    <ol class="border-t-2 border-[var(--color-ink)] reveal-stagger">
       {
         posts.map((post) => (
           <li class="border-b border-[var(--color-border)]">
@@ -32,12 +39,12 @@ const posts = allPosts
             >
               <div class="font-mono text-xs text-[var(--color-mute)] whitespace-nowrap pt-1 flex flex-col gap-1">
                 <FormattedDate date={post.data.pubDate} format="short" />
-                <span class="text-[var(--color-azul)] uppercase tracking-wider text-[10px]">
+                <span class="text-[var(--color-dorado)] uppercase tracking-wider text-[10px] font-semibold">
                   {post.data.category}
                 </span>
               </div>
               <div class="min-w-0">
-                <h3 class="font-display font-semibold text-xl md:text-2xl tracking-tight text-[var(--color-ink)] group-hover:text-[var(--color-azul)] leading-tight">
+                <h3 class="font-display font-semibold text-xl md:text-2xl tracking-tight text-[var(--color-ink)] group-hover:text-[var(--color-dorado)] leading-tight">
                   {post.data.title}
                 </h3>
                 <p class="mt-2 text-sm md:text-base text-[var(--color-ink-soft)] leading-snug max-w-2xl line-clamp-2">
@@ -49,7 +56,7 @@ const posts = allPosts
               </span>
               <span
                 aria-hidden="true"
-                class="hidden md:inline text-[var(--color-mute)] group-hover:text-[var(--color-azul)] group-hover:translate-x-1 transition-transform"
+                class="hidden md:inline text-[var(--color-mute)] group-hover:text-[var(--color-dorado)] group-hover:translate-x-1 transition-transform"
               >
                 →
               </span>

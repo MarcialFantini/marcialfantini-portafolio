@@ -31,25 +31,25 @@ const [hero, ...rest] = proyectos;
         <div class="container-page py-10 md:py-14">
           <a
             href={`/proyectos/${hero.id}`}
-            class="tactile group block border border-[var(--color-border)] rounded-lg bg-[var(--color-blanco)] hover:border-[var(--color-azul)] p-7 md:p-10 reveal"
+            class="tactile group block border-2 border-[var(--color-ink)] rounded-lg bg-[var(--color-ink)] text-[var(--color-blanco-humo)] hover:bg-[var(--color-azul)] hover:text-[var(--color-ink)] p-7 md:p-10 reveal"
           >
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
               <div>
-                <p class="font-mono text-[11px] uppercase tracking-widest text-[var(--color-mute)] mb-3">
+                <p class="font-mono text-[11px] uppercase tracking-widest text-[var(--color-azul)] group-hover:text-[var(--color-ink)] mb-3 transition-colors">
                   {hero.data.cliente}
                 </p>
-                <p class="font-display text-5xl md:text-7xl font-bold tracking-tighter text-[var(--color-azul)] leading-none">
+                <p class="font-impact text-[clamp(3rem,7vw,6rem)] uppercase text-[var(--color-azul)] group-hover:text-[var(--color-ink)] leading-[0.95] tabular-nums transition-colors">
                   {hero.data.metricas[0]?.value}
                 </p>
-                <p class="font-mono text-[11px] uppercase tracking-widest text-[var(--color-mute)] mt-3 leading-tight max-w-[180px]">
+                <p class="font-mono text-[11px] uppercase tracking-widest text-[var(--color-blanco-humo)]/70 group-hover:text-[var(--color-ink)]/70 mt-3 leading-tight max-w-[180px] transition-colors">
                   {hero.data.metricas[0]?.label}
                 </p>
               </div>
               <div class="lg:col-span-2">
-                <h2 class="font-display font-semibold text-2xl md:text-3xl tracking-tight text-[var(--color-ink)] group-hover:text-[var(--color-azul)] leading-tight mb-4">
+                <h2 class="font-impact text-[clamp(1.5rem,3vw,2.5rem)] uppercase leading-[1] text-[var(--color-blanco-humo)] group-hover:text-[var(--color-ink)] tracking-tight mb-4 transition-colors">
                   {hero.data.title}
                 </h2>
-                <p class="text-[var(--color-ink-soft)] leading-relaxed">
+                <p class="text-[var(--color-blanco-humo)]/85 group-hover:text-[var(--color-ink)]/85 leading-relaxed transition-colors">
                   {hero.data.descripcion}
                 </p>
               </div>
@@ -75,7 +75,7 @@ const [hero, ...rest] = proyectos;
                   {p.data.metricas[0]?.value}
                 </span>
                 <div class="min-w-0">
-                  <h3 class="font-display font-semibold text-lg tracking-tight text-[var(--color-ink)] group-hover:text-[var(--color-azul)] leading-tight">
+                  <h3 class="font-display font-semibold text-lg tracking-tight text-[var(--color-ink)] group-hover:text-[var(--color-dorado)] leading-tight">
                     {p.data.title}
                   </h3>
                   <p class="mt-1 text-sm text-[var(--color-ink-soft)] leading-snug truncate">
@@ -87,7 +87,7 @@ const [hero, ...rest] = proyectos;
                 </span>
                 <span
                   aria-hidden="true"
-                  class="hidden md:inline text-[var(--color-mute)] group-hover:text-[var(--color-azul)] group-hover:translate-x-1 transition-transform"
+                  class="hidden md:inline text-[var(--color-mute)] group-hover:text-[var(--color-dorado)] group-hover:translate-x-1 transition-transform"
                 >
                   →
                 </span>

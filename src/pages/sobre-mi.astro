@@ -63,16 +63,22 @@ const principios = [
   description={`Bio extendida, principios y proceso de trabajo de ${site.name}, desarrollador freelance full-stack desde Córdoba, Argentina.`}
 >
   <!-- Hero -->
-  <section class="pt-16 md:pt-24 pb-16 md:pb-20 border-b border-[var(--color-border)]">
-    <div class="container-page max-w-4xl reveal">
+  <section class="relative pt-16 md:pt-24 pb-16 md:pb-20 border-b border-[var(--color-border)] overflow-hidden isolate">
+    <div aria-hidden="true" class="absolute inset-0 pointer-events-none">
+      <div
+        class="brush-stroke brush-stroke-2"
+        style="top: 8%; right: -4%; transform: rotate(-6deg);"
+      ></div>
+    </div>
+    <div class="container-page max-w-4xl reveal relative z-[1]">
       <p
         class="font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--color-mute)] mb-6 flex items-center gap-3"
       >
         <span class="tick-gold"></span>
         Sobre mí
       </p>
-      <h1 class="font-display font-bold text-[var(--color-ink)] tracking-tight mb-8">
-        Construyo software para que tu PyME cierre más ventas y deje de depender de mí.
+      <h1 class="font-impact text-[clamp(2.25rem,5.5vw,4.75rem)] uppercase leading-[0.95] text-[var(--color-ink)] tracking-tight mb-8">
+        Construyo software para que tu PyME cierre más ventas <span class="text-[var(--color-dorado)]">y deje de depender de mí.</span>
       </h1>
       <p class="text-xl text-[var(--color-ink-soft)] leading-relaxed max-w-3xl">
         Soy Marcial Fantini. Desarrollo freelance desde 2017, especializado en productos digitales
@@ -132,10 +138,16 @@ const principios = [
   </section>
 
   <!-- Principios -->
-  <section class="py-16 md:py-24 border-b border-[var(--color-border)] bg-[var(--color-blanco)]">
-    <div class="container-page">
-      <h2 class="font-display font-bold tracking-tight max-w-xl mb-12 reveal">
-        Cómo pienso el trabajo.
+  <section class="relative py-16 md:py-24 border-b border-[var(--color-border)] bg-[var(--color-blanco)] overflow-hidden isolate">
+    <div aria-hidden="true" class="absolute inset-0 pointer-events-none">
+      <div
+        class="brush-stroke brush-stroke-1"
+        style="bottom: 12%; right: -4%; transform: rotate(10deg);"
+      ></div>
+    </div>
+    <div class="container-page relative z-[1]">
+      <h2 class="font-impact text-[clamp(1.75rem,4vw,3.25rem)] uppercase leading-[0.95] text-[var(--color-ink)] tracking-tight max-w-xl mb-12 reveal">
+        Cómo pienso <span class="text-[var(--color-dorado)]">el trabajo.</span>
       </h2>
 
       <ol class="grid grid-cols-1 sm:grid-cols-2 gap-5 reveal-stagger">
@@ -161,16 +173,21 @@ const principios = [
   <!-- Proceso -->
   <section class="py-16 md:py-24 border-b border-[var(--color-border)]">
     <div class="container-page">
-      <div class="max-w-2xl mb-14 reveal">
-        <p
-          class="font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--color-mute)] mb-4 flex items-center gap-3"
-        >
-          <span class="tick-gold"></span>
-          Cómo trabajo
-        </p>
-        <h2 class="font-display font-bold tracking-tight">
-          De la primera llamada al sitio en producción.
-        </h2>
+      <div class="max-w-2xl mb-14 reveal flex items-center gap-4">
+        <span class="sticker sticker-yellow" style="--sticker-size: 64px;">
+          <span class="sticker__label">Proceso</span>
+        </span>
+        <div>
+          <p
+            class="font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--color-mute)] mb-3 flex items-center gap-3"
+          >
+            <span class="tick-gold"></span>
+            Cómo trabajo
+          </p>
+          <h2 class="font-impact text-[clamp(1.75rem,4vw,3.25rem)] uppercase leading-[0.95] text-[var(--color-ink)] tracking-tight">
+            De la primera llamada al sitio <span class="text-[var(--color-dorado)]">en producción.</span>
+          </h2>
+        </div>
       </div>
 
       <ol class="reveal-stagger">
@@ -199,10 +216,16 @@ const principios = [
   </section>
 
   <!-- Stack -->
-  <section class="py-16 md:py-24 border-b border-[var(--color-border)] bg-[var(--color-blanco)]">
-    <div class="container-page">
-      <h2 class="font-display font-bold tracking-tight max-w-xl mb-10 reveal">
-        Las herramientas que conozco.
+  <section class="relative py-16 md:py-24 border-b border-[var(--color-border)] bg-[var(--color-blanco)] overflow-hidden isolate">
+    <div aria-hidden="true" class="absolute inset-0 pointer-events-none">
+      <div
+        class="sun-bg"
+        style="top: -50%; left: -15%; width: clamp(280px, 45vw, 540px); height: clamp(280px, 45vw, 540px); opacity: 0.45;"
+      ></div>
+    </div>
+    <div class="container-page relative z-[1]">
+      <h2 class="font-impact text-[clamp(1.75rem,4vw,3.25rem)] uppercase leading-[0.95] text-[var(--color-ink)] tracking-tight max-w-xl mb-10 reveal">
+        Las herramientas <span class="text-[var(--color-dorado)]">que conozco.</span>
       </h2>
 
       <ul class="flex flex-wrap gap-2 reveal-stagger">
