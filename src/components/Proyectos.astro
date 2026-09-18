@@ -1,6 +1,8 @@
 ---
 import { getCollection } from "astro:content";
 import FormattedDate from "./FormattedDate.astro";
+import CornerBrackets from "./CornerBrackets.astro";
+import SectionAnchor from "./SectionAnchor.astro";
 
 const allProyectos = await getCollection("proyectos");
 const featured = allProyectos
@@ -13,14 +15,12 @@ const rows = rest.slice(0, 2);
 const gradients = ["warm", "cool", "vivid"] as const;
 ---
 
-<section class="relative py-20 md:py-28 border-b border-[var(--color-border)] overflow-hidden">
+<section class="relative py-20 md:py-28 border-b-2 border-[var(--color-ink)] overflow-hidden">
   <div class="container-page">
     <div class="flex items-end justify-between flex-wrap gap-6 mb-12 reveal">
       <div>
-        <span class="section-indicator text-[var(--color-mute)]">
-          Featured · Casos
-        </span>
-        <h2 class="font-impact text-[clamp(2rem,5vw,4rem)] uppercase leading-[0.95] text-[var(--color-ink)] mt-4 max-w-3xl">
+        <SectionAnchor number="04" label="CASOS" />
+        <h2 class="font-impact text-[clamp(2rem,5vw,4rem)] uppercase leading-[0.95] text-[var(--color-ink)] mt-2 max-w-3xl">
           Algunos casos donde <span class="text-[var(--color-azul)]">mis decisiones</span> importaron.
         </h2>
       </div>
@@ -36,8 +36,9 @@ const gradients = ["warm", "cool", "vivid"] as const;
       hero && (
         <a
           href={`/proyectos/${hero.id}`}
-          class="group tactile block rounded-2xl bg-[var(--color-blanco)] shadow-lg border border-[var(--color-border)] hover:-translate-y-1 hover:shadow-xl transition-all duration-200 overflow-hidden reveal"
+          class="group relative tactile block rounded-2xl bg-[var(--color-blanco)] shadow-lg border-2 border-[var(--color-ink)] hover:-translate-y-1 hover:shadow-xl transition-all duration-200 overflow-hidden reveal p-1.5"
         >
+          <CornerBrackets color="var(--color-azul)" size={22} offset={10} />
           <div
             class={`placeholder-image placeholder-image--${gradients[0]} relative image-scrim overflow-hidden`}
             aria-hidden="true"
@@ -116,7 +117,7 @@ const gradients = ["warm", "cool", "vivid"] as const;
             <li>
               <a
                 href={`/proyectos/${p.id}`}
-                class="tactile group block rounded-xl bg-[var(--color-blanco)] shadow-sm border border-[var(--color-border)] hover:-translate-y-0.5 hover:shadow-md hover:border-[var(--color-dorado)] transition-all overflow-hidden"
+                class="tactile group block rounded-xl bg-[var(--color-blanco)] shadow-sm border-2 border-[var(--color-ink)] hover:-translate-y-0.5 hover:shadow-md hover:border-[var(--color-azul)] transition-all overflow-hidden relative p-1"
               >
                 <div
                   class={`placeholder-image placeholder-image--${gradients[(i + 1) % gradients.length]} h-32 relative overflow-hidden`}

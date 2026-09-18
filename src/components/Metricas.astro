@@ -1,5 +1,6 @@
 ---
 import metricas from "../data/metricas.json";
+import SectionAnchor from "./SectionAnchor.astro";
 
 const isNumeric = (v: string) => /^[+\d.,kKmM\s%]+$/.test(v.trim());
 ---
@@ -11,10 +12,8 @@ const isNumeric = (v: string) => /^[+\d.,kKmM\s%]+$/.test(v.trim());
   <div class="container-page relative z-[1]">
     <div class="flex items-end justify-between flex-wrap gap-6 mb-12 md:mb-16 reveal">
       <div>
-        <span class="section-indicator text-[var(--color-azul)]">
-          KPI · Track record
-        </span>
-        <h2 class="font-impact text-[clamp(2rem,5vw,4rem)] uppercase leading-[0.95] text-[var(--color-blanco-humo)] max-w-xl mt-4">
+        <SectionAnchor number="02" label="TRACK RECORD" />
+        <h2 class="font-impact text-[clamp(2rem,5vw,4rem)] uppercase leading-[0.95] text-[var(--color-blanco-humo)] max-w-xl mt-2">
           Resultados <span class="text-[var(--color-azul)]">medibles</span> en producción.
         </h2>
       </div>

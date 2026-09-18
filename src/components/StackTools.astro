@@ -7,6 +7,7 @@ import VercelIcon from "./icons/Vercel.astro";
 import GitHubIcon from "./icons/GitHub.astro";
 import NodeIcon from "./icons/Node.astro";
 import PnpmIcon from "./icons/pnpm.astro";
+import SectionAnchor from "./SectionAnchor.astro";
 
 const tools = [
   { name: "Astro",        role: "Framework", Icon: AstroIcon },
@@ -22,17 +23,15 @@ const tools = [
 
 <section
   id="stack"
-  class="relative py-20 md:py-28 border-b border-[var(--color-border)] overflow-hidden"
+  class="relative py-20 md:py-28 border-b-2 border-[var(--color-ink)] overflow-hidden"
   aria-label="Stack y herramientas"
 >
   <div class="container-page">
     <div class="flex items-end justify-between flex-wrap gap-6 mb-12 md:mb-14 reveal">
       <div>
-        <span class="section-indicator text-[var(--color-mute)] mb-4">
-          Stack · Tools
-        </span>
-        <h2 class="font-impact text-[clamp(2rem,5vw,4rem)] uppercase leading-[0.95] text-[var(--color-ink)] max-w-xl mt-3">
-          Stack &amp; tools I work with.
+        <SectionAnchor number="05" label="STACK" />
+        <h2 class="font-impact text-[clamp(2rem,5vw,4rem)] uppercase leading-[0.95] text-[var(--color-ink)] max-w-xl mt-2">
+          Stack & tools I work with.
         </h2>
       </div>
       <p class="font-mono text-xs text-[var(--color-mute)] uppercase tracking-[0.18em] max-w-xs leading-relaxed">

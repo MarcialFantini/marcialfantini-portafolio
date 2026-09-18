@@ -1,0 +1,30 @@
+---
+interface Props {
+  color?: string;
+  size?: number;
+  offset?: number;
+}
+
+const { color = "currentColor", size = 14, offset = -1 } = Astro.props;
+---
+
+<span
+  class="pointer-events-none absolute"
+  style={`top: ${offset}px; left: ${offset}px; width: ${size}px; height: ${size}px; border-top: 2px solid ${color}; border-left: 2px solid ${color};`}
+  aria-hidden="true"
+></span>
+<span
+  class="pointer-events-none absolute"
+  style={`top: ${offset}px; right: ${offset}px; width: ${size}px; height: ${size}px; border-top: 2px solid ${color}; border-right: 2px solid ${color};`}
+  aria-hidden="true"
+></span>
+<span
+  class="pointer-events-none absolute"
+  style={`bottom: ${offset}px; left: ${offset}px; width: ${size}px; height: ${size}px; border-bottom: 2px solid ${color}; border-left: 2px solid ${color};`}
+  aria-hidden="true"
+></span>
+<span
+  class="pointer-events-none absolute"
+  style={`bottom: ${offset}px; right: ${offset}px; width: ${size}px; height: ${size}px; border-bottom: 2px solid ${color}; border-right: 2px solid ${color};`}
+  aria-hidden="true"
+></span>

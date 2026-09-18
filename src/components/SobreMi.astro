@@ -1,10 +1,12 @@
 ---
 import site from "../data/site.json";
+import SectionAnchor from "./SectionAnchor.astro";
 ---
 
-<section class="relative py-20 md:py-28 border-b border-[var(--color-border)] overflow-hidden">
+<section class="relative py-20 md:py-28 border-b-2 border-[var(--color-ink)] overflow-hidden">
   <div class="container-page reveal">
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
+    <SectionAnchor number="01" label="SOBRE MÍ" />
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start mt-2">
       <div class="lg:col-span-4 relative">
         <span class="absolute -top-4 -left-2 md:-left-4 sticker sticker-orange z-10" style="--sticker-size: 72px;" aria-hidden="true">
           <span class="sticker__label">About<br />me</span>
@@ -25,10 +27,7 @@ import site from "../data/site.json";
       </div>
 
       <div class="lg:col-span-8 lg:pt-2">
-        <span class="section-indicator text-[var(--color-mute)]">
-          Sobre mí
-        </span>
-        <h2 class="font-impact text-[clamp(2rem,5vw,4rem)] uppercase leading-[0.95] text-[var(--color-ink)] mt-4 max-w-2xl">
+        <h2 class="font-impact text-[clamp(2rem,5vw,4rem)] uppercase leading-[0.95] text-[var(--color-ink)] mt-2 max-w-2xl">
           Construyo software que <span class="text-[var(--color-azul)]">cierra más ventas.</span>
         </h2>
 

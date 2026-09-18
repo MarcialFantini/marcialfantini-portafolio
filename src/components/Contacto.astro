@@ -1,5 +1,6 @@
 ---
 import site from "../data/site.json";
+import SectionAnchor from "./SectionAnchor.astro";
 
 const servicioParam = Astro.url.searchParams.get("servicio");
 const initialSubject = servicioParam
@@ -21,10 +22,8 @@ const initialBody = servicioParam
 
   <div class="container-page relative z-[1]">
     <div class="max-w-3xl mb-14 reveal">
-      <span class="section-indicator text-[var(--color-ink)]">
-        Contacto
-      </span>
-      <h2 class="font-impact text-[clamp(2.5rem,7vw,6rem)] uppercase leading-[0.92] text-[var(--color-ink)] mt-5 mb-6 [text-shadow:_0_2px_12px_rgba(0,0,0,0.18)]">
+      <SectionAnchor number="07" label="CONTACTO" />
+      <h2 class="font-impact text-[clamp(2.5rem,7vw,6rem)] uppercase leading-[0.92] text-[var(--color-ink)] mt-3 mb-6 [text-shadow:_0_2px_12px_rgba(0,0,0,0.18)]">
         Hablemos sobre <span class="text-white">tu proyecto.</span>
       </h2>
       <p class="text-lg text-[var(--color-ink)] leading-relaxed max-w-2xl font-medium">
@@ -93,7 +92,7 @@ const initialBody = servicioParam
 
       <form
         id="contact-form"
-        class="rounded-2xl bg-[var(--color-blanco)] shadow-lg p-7 md:p-10 text-[var(--color-ink)]"
+        class="relative rounded-2xl bg-[var(--color-blanco)] shadow-lg border-2 border-[var(--color-ink)] p-7 md:p-10 text-[var(--color-ink)]"
         aria-label="Formulario de contacto"
       >
         <div class="space-y-5">

@@ -1,9 +1,10 @@
 ---
 import site from "../data/site.json";
+import CornerBrackets from "./CornerBrackets.astro";
 ---
 
 <section
-  class="relative pt-16 md:pt-24 pb-28 md:pb-40 overflow-hidden bg-gradient-warm border-b border-[var(--color-ink)] isolate hero-scrim"
+  class="relative pt-16 md:pt-24 pb-28 md:pb-40 overflow-hidden bg-gradient-warm border-b-2 border-[var(--color-ink)] isolate hero-scrim"
   aria-label="Hero"
 >
   <img
@@ -19,7 +20,8 @@ import site from "../data/site.json";
   </span>
 
   <div class="container-page relative z-[1]">
-    <div class="max-w-5xl reveal-stagger">
+    <div class="relative max-w-5xl reveal-stagger p-6 md:p-10" style="color: var(--color-ink);">
+      <CornerBrackets color="var(--color-azul)" size={24} offset={-4} />
       <p class="font-mono text-[11px] md:text-xs uppercase tracking-[0.22em] text-[var(--color-ink)] mb-7 md:mb-9 flex items-center gap-3">
         <span class="tick-orange"></span>
         {site.location} · {site.availability}

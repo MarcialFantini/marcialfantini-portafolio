@@ -1,5 +1,6 @@
 ---
 import servicios from "../data/servicios.json";
+import SectionAnchor from "./SectionAnchor.astro";
 
 const categoryByTitle: Record<string, string> = {
   "Producto web a medida": "LANDING",
@@ -9,14 +10,12 @@ const categoryByTitle: Record<string, string> = {
 };
 ---
 
-<section id="servicios" class="relative py-20 md:py-28 border-b border-[var(--color-border)] overflow-hidden">
+<section id="servicios" class="relative py-20 md:py-28 border-b-2 border-[var(--color-ink)] overflow-hidden">
   <div class="container-page">
     <div class="flex items-end justify-between flex-wrap gap-6 mb-12 md:mb-16 reveal">
       <div class="max-w-2xl">
-        <span class="section-indicator text-[var(--color-mute)]">
-          {String(servicios.length).padStart(2, "0")} servicios fijos
-        </span>
-        <h2 class="font-impact text-[clamp(2rem,5vw,4rem)] uppercase leading-[0.95] text-[var(--color-ink)] mt-4">
+        <SectionAnchor number="03" label="SERVICIOS" />
+        <h2 class="font-impact text-[clamp(2rem,5vw,4rem)] uppercase leading-[0.95] text-[var(--color-ink)] mt-2">
           Qué puedo hacer <span class="text-[var(--color-azul)]">por tu negocio.</span>
         </h2>
       </div>
