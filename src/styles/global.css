@@ -225,6 +225,69 @@
     transform: translateY(1px);
   }
 
+  .card-pop {
+    will-change: transform;
+  }
+  .card-pop:hover {
+    transform: translateY(-4px) scale(1.015);
+    box-shadow:
+      0 2px 4px rgba(0, 0, 0, 0.06),
+      0 18px 40px rgba(0, 0, 0, 0.10);
+  }
+  .card-pop:active {
+    transform: translateY(-2px) scale(1.005);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .placeholder-image {
+      transform: scale(0.96);
+      transition: transform 720ms var(--ease-out-expo);
+    }
+    .reveal-stagger[data-revealed="in"] .placeholder-image {
+      transform: scale(1);
+      transition: transform 720ms var(--ease-out-expo) 80ms;
+    }
+    .group:hover .placeholder-image {
+      transform: scale(1.04);
+      transition: transform 380ms var(--ease-out-expo);
+    }
+  }
+
+  .float-bob {
+    animation: float-bob-translate 3s ease-in-out infinite alternate;
+    will-change: translate;
+  }
+  .float-bob--rotate-neg3 {
+    transform: rotate(-3deg);
+  }
+  .float-bob--rotate-2 {
+    transform: rotate(2deg);
+  }
+  @keyframes float-bob-translate {
+    from { translate: 0 0; }
+    to   { translate: 0 -4px; }
+  }
+
+  .tactile[aria-current="page"] {
+    position: relative;
+  }
+  .tactile[aria-current="page"]::before {
+    content: "";
+    display: inline-block;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background-color: var(--color-azul);
+    margin-right: 0.5rem;
+    vertical-align: middle;
+    animation: nav-dot-pulse 1.6s ease-in-out infinite;
+    transform-origin: center;
+  }
+  @keyframes nav-dot-pulse {
+    0%, 100% { opacity: 0.5;  transform: scale(1); }
+    50%      { opacity: 1;    transform: scale(1.4); }
+  }
+
   /* ---------------------------------------------------------
      Decoration System — Orvika-inspired visual language.
      Sin imágenes externas. Todo inline.

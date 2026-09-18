@@ -3,6 +3,13 @@ import metricas from "../data/metricas.json";
 import SectionAnchor from "./SectionAnchor.astro";
 
 const isNumeric = (v: string) => /^[+\d.,kKmM\s%]+$/.test(v.trim());
+
+const parseCount = (v: string): number | null => {
+  if (!isNumeric(v)) return null;
+  const cleaned = v.replace(/[^\d.]/g, "");
+  const n = parseFloat(cleaned);
+  return Number.isFinite(n) ? n : null;
+};
 ---
 
 <section
@@ -34,6 +41,7 @@ const isNumeric = (v: string) => /^[+\d.,kKmM\s%]+$/.test(v.trim());
       {
         metricas.map((m) => {
           const numeric = isNumeric(m.value);
+          const count = parseCount(m.value);
           return (
             <div class="stat-ticket">
               <span class="stat-ticket__dot" aria-hidden="true"></span>
@@ -42,7 +50,11 @@ const isNumeric = (v: string) => /^[+\d.,kKmM\s%]+$/.test(v.trim());
               </dt>
               {numeric ? (
                 <dd class="font-impact text-[clamp(2.75rem,7vw,5.5rem)] text-[var(--color-blanco-humo)] leading-[0.92] uppercase tabular-nums tracking-[-0.02em]">
-                  {m.value}
+                  {count !== null ? (
+                    <span class="stat-count" data-value={String(count)}>{m.value}</span>
+                  ) : (
+                    <span>{m.value}</span>
+                  )}
                   <span class="text-[var(--color-azul)]">{m.sufijo}</span>
                 </dd>
               ) : (
@@ -57,3 +69,60 @@ const isNumeric = (v: string) => /^[+\d.,kKmM\s%]+$/.test(v.trim());
     </dl>
   </div>
 </section>
+
+<script>
+  (function () {
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var stats = Array.from(document.querySelectorAll('.stat-count[data-value]')) as HTMLElement[];
+
+    if (reduce) {
+      stats.forEach(function (el) {
+        var raw = el.dataset.value ?? '';
+        var n = parseFloat(raw);
+        el.textContent = Number.isFinite(n) ? String(Math.round(n)) : el.textContent;
+      });
+      return;
+    }
+
+    function easeOutCubic(t: number) {
+      return 1 - Math.pow(1 - t, 3);
+    }
+
+    function animate(el: HTMLElement) {
+      var raw = el.dataset.value ?? '';
+      var target = parseFloat(raw);
+      if (!Number.isFinite(target)) return;
+      var duration = 1200;
+      var start = performance.now();
+
+      function tick(now: number) {
+        var t = Math.min((now - start) / duration, 1);
+        var v = Math.round(target * easeOutCubic(t));
+        el.textContent = String(v);
+        if (t < 1) {
+          requestAnimationFrame(tick);
+        } else {
+          el.textContent = String(Math.round(target));
+        }
+      }
+
+      requestAnimationFrame(tick);
+    }
+
+    var io = new IntersectionObserver(
+      function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            animate(entry.target as HTMLElement);
+            io.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.5 }
+    );
+
+    stats.forEach(function (el) {
+      io.observe(el);
+    });
+  })();
+</script>
