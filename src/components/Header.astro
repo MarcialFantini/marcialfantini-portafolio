@@ -67,12 +67,12 @@ const pathname = Astro.url.pathname;
     <button
       type="button"
       id="mobile-menu-trigger"
-      class="tactile md:hidden p-2 -mr-2 text-[var(--color-ink)]"
+      class="tactile md:hidden flex items-center justify-center w-11 h-11 -mr-2 text-[var(--color-ink)] rounded-md"
       aria-label="Abrir menú"
       aria-controls="mobile-menu"
       aria-expanded="false"
     >
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
         <line x1="3" y1="7" x2="21" y2="7" />
         <line x1="3" y1="12" x2="21" y2="12" />
         <line x1="3" y1="17" x2="21" y2="17" />
@@ -80,13 +80,17 @@ const pathname = Astro.url.pathname;
     </button>
   </div>
 
-  <div id="mobile-menu" class="hidden md:hidden border-t border-[var(--color-border)] bg-[var(--color-blanco-humo)]">
-    <nav aria-label="Móvil" class="container-page flex flex-col py-4">
+  <div
+    id="mobile-menu"
+    class="hidden md:hidden border-t-2 border-[var(--color-ink)] bg-[var(--color-blanco-humo)] mobile-menu-slide"
+    hidden
+  >
+    <nav aria-label="Móvil" class="container-page flex flex-col py-3">
       {
         navItems.map((item) => (
           <a
             href={item.href}
-            class="tactile py-3 font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-ink-soft)] hover:text-[var(--color-ink)] border-b border-[var(--color-border)] last:border-b-0"
+            class="tactile mobile-menu-link flex items-center min-h-[48px] py-3 font-mono text-[12px] uppercase tracking-[0.18em] text-[var(--color-ink-soft)] hover:text-[var(--color-ink)] border-b border-[var(--color-border)] last:border-b-0"
           >
             {item.label}
           </a>
@@ -94,7 +98,7 @@ const pathname = Astro.url.pathname;
       }
       <a
         href="/contacto"
-        class="tactile mt-4 inline-flex items-center justify-center gap-2 px-5 py-3 rounded-full bg-[var(--color-azul)] text-[var(--color-blanco-humo)] font-mono text-[11px] uppercase tracking-[0.18em] font-semibold"
+        class="tactile mt-4 mb-2 inline-flex items-center justify-center gap-2 min-h-[48px] px-5 py-3 rounded-full bg-[var(--color-azul)] text-[var(--color-blanco-humo)] font-mono text-[11px] uppercase tracking-[0.18em] font-semibold hover:bg-[var(--color-azul-deep)]"
       >
         Hablemos
         <span aria-hidden="true">→</span>
@@ -104,12 +108,59 @@ const pathname = Astro.url.pathname;
 </header>
 
 <script>
-  const trigger = document.getElementById('mobile-menu-trigger');
-  const menu = document.getElementById('mobile-menu');
-  if (trigger && menu) {
+  (function () {
+    const trigger = document.getElementById('mobile-menu-trigger');
+    const menu = document.getElementById('mobile-menu');
+    if (!trigger || !menu) return;
+
+    const openMenu = () => {
+      menu.classList.remove('hidden');
+      menu.removeAttribute('hidden');
+      // Forzar reflow para que la animación corra desde hidden
+      void menu.offsetWidth;
+      menu.classList.add('mobile-menu--open');
+      trigger.setAttribute('aria-expanded', 'true');
+      trigger.setAttribute('aria-label', 'Cerrar menú');
+      document.body.style.overflow = 'hidden';
+    };
+
+    const closeMenu = () => {
+      menu.classList.remove('mobile-menu--open');
+      trigger.setAttribute('aria-expanded', 'false');
+      trigger.setAttribute('aria-label', 'Abrir menú');
+      document.body.style.overflow = '';
+      // Esperar a que termine la animación de cierre
+      setTimeout(() => {
+        if (trigger.getAttribute('aria-expanded') === 'false') {
+          menu.classList.add('hidden');
+          menu.setAttribute('hidden', '');
+        }
+      }, 280);
+    };
+
     trigger.addEventListener('click', () => {
-      const open = menu.classList.toggle('hidden') === false;
-      trigger.setAttribute('aria-expanded', String(open));
+      const isOpen = trigger.getAttribute('aria-expanded') === 'true';
+      if (isOpen) closeMenu();
+      else openMenu();
     });
-  }
+
+    // Cerrar al hacer click en cualquier link del menú
+    menu.querySelectorAll('a').forEach((link) => {
+      link.addEventListener('click', closeMenu);
+    });
+
+    // Cerrar con Escape
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && trigger.getAttribute('aria-expanded') === 'true') {
+        closeMenu();
+        trigger.focus();
+      }
+    });
+
+    // Cerrar al volver a desktop
+    const mq = window.matchMedia('(min-width: 768px)');
+    mq.addEventListener('change', (e) => {
+      if (e.matches) closeMenu();
+    });
+  })();
 </script>
