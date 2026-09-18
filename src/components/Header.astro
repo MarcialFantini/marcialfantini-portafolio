@@ -13,25 +13,25 @@ const pathname = Astro.url.pathname;
 ---
 
 <header
-  class="sticky top-0 z-50 backdrop-blur-md bg-[var(--color-blanco-humo)]/80 dark:bg-[var(--color-blanco-humo)]/70 border-b border-[var(--color-border)]"
+  class="sticky top-0 z-50 backdrop-blur-md bg-[var(--color-blanco-humo)]/80 border-b border-[var(--color-border)]"
 >
-  <div class="container-page flex items-center justify-between h-16 md:h-[68px]">
+  <div class="container-page flex items-center justify-between h-16 md:h-[72px] gap-6">
     <a
       href="/"
-      class="flex items-center gap-2.5 group"
-      aria-label={`${site.name} - ir al inicio`}
+      class="flex items-center gap-1.5 group shrink-0"
+      aria-label={`${site.name} — ir al inicio`}
     >
-      <span
-        class="tactile inline-flex items-center justify-center w-9 h-9 rounded-md bg-[var(--color-ink)] text-[var(--color-azul)] font-impact text-sm uppercase tracking-wide group-hover:bg-[var(--color-azul)] group-hover:text-[var(--color-ink)] border-2 border-[var(--color-ink)] group-hover:border-[var(--color-ink)]"
-      >
-        MF
+      <span class="font-impact text-[22px] md:text-[26px] leading-none uppercase text-[var(--color-ink)] tracking-[-0.02em]">
+        M<span class="text-[var(--color-azul)]">F</span>
       </span>
-      <span class="font-display font-semibold text-[var(--color-ink)] text-[15px] hidden sm:inline tracking-tight">
-        {site.shortName}<span class="text-[var(--color-mute)]">.dev</span>
+      <span aria-hidden="true" class="font-impact text-[22px] md:text-[26px] leading-none text-[var(--color-border)]">[</span>
+      <span class="font-mono text-[10px] md:text-[11px] uppercase tracking-[0.22em] text-[var(--color-mute)] hidden sm:inline">
+        dev
       </span>
+      <span aria-hidden="true" class="font-impact text-[22px] md:text-[26px] leading-none text-[var(--color-border)] hidden sm:inline">]</span>
     </a>
 
-    <nav aria-label="Principal" class="hidden md:flex items-center gap-7">
+    <nav aria-label="Principal" class="hidden md:flex items-center gap-1">
       {
         navItems.map((item) => {
           const active =
@@ -42,10 +42,10 @@ const pathname = Astro.url.pathname;
             <a
               href={item.href}
               class:list={[
-                "tactile text-sm font-medium tracking-tight",
+                "tactile font-mono text-[11px] uppercase tracking-[0.18em] px-3 py-2 rounded-md",
                 active
-                  ? "text-[var(--color-dorado)] underline underline-offset-[6px] decoration-2"
-                  : "text-[var(--color-ink-soft)] hover:text-[var(--color-ink)]",
+                  ? "text-[var(--color-ink)] bg-[var(--color-border)]/40"
+                  : "text-[var(--color-ink-soft)] hover:text-[var(--color-ink)] hover:bg-[var(--color-border)]/30",
               ]}
               aria-current={active ? "page" : undefined}
             >
@@ -54,13 +54,15 @@ const pathname = Astro.url.pathname;
           );
         })
       }
-      <a
-        href="/contacto"
-        class="tactile inline-flex items-center justify-center px-4 py-2 rounded-md bg-[var(--color-ink)] text-[var(--color-azul)] text-sm font-semibold hover:bg-[var(--color-azul)] hover:text-[var(--color-ink)] border-2 border-[var(--color-ink)]"
-      >
-        Hablemos
-      </a>
     </nav>
+
+    <a
+      href="/contacto"
+      class="tactile hidden md:inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[var(--color-azul)] text-[var(--color-blanco-humo)] text-[11px] font-mono uppercase tracking-[0.18em] font-semibold hover:bg-[var(--color-azul-deep)]"
+    >
+      Hablemos
+      <span aria-hidden="true">→</span>
+    </a>
 
     <button
       type="button"
@@ -70,7 +72,7 @@ const pathname = Astro.url.pathname;
       aria-controls="mobile-menu"
       aria-expanded="false"
     >
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
         <line x1="3" y1="7" x2="21" y2="7" />
         <line x1="3" y1="12" x2="21" y2="12" />
         <line x1="3" y1="17" x2="21" y2="17" />
@@ -84,7 +86,7 @@ const pathname = Astro.url.pathname;
         navItems.map((item) => (
           <a
             href={item.href}
-            class="tactile py-3 text-base font-medium text-[var(--color-ink-soft)] hover:text-[var(--color-ink)] border-b border-[var(--color-border)] last:border-b-0"
+            class="tactile py-3 font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-ink-soft)] hover:text-[var(--color-ink)] border-b border-[var(--color-border)] last:border-b-0"
           >
             {item.label}
           </a>
@@ -92,9 +94,10 @@ const pathname = Astro.url.pathname;
       }
       <a
         href="/contacto"
-        class="tactile mt-3 inline-flex items-center justify-center px-4 py-3 rounded-md bg-[var(--color-ink)] text-[var(--color-azul)] text-base font-semibold border-2 border-[var(--color-ink)]"
+        class="tactile mt-4 inline-flex items-center justify-center gap-2 px-5 py-3 rounded-full bg-[var(--color-azul)] text-[var(--color-blanco-humo)] font-mono text-[11px] uppercase tracking-[0.18em] font-semibold"
       >
         Hablemos
+        <span aria-hidden="true">→</span>
       </a>
     </nav>
   </div>

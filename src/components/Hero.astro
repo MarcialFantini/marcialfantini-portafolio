@@ -3,54 +3,33 @@ import site from "../data/site.json";
 ---
 
 <section
-  class="relative pt-14 md:pt-20 pb-20 md:pb-28 overflow-hidden bg-[var(--color-azul)] border-b-[8px] border-[var(--color-ink)] isolate"
+  class="relative pt-16 md:pt-24 pb-28 md:pb-40 overflow-hidden bg-gradient-warm border-b border-[var(--color-ink)] isolate hero-scrim"
   aria-label="Hero"
 >
-  <div aria-hidden="true" class="absolute inset-0 pointer-events-none">
-    <div
-      class="sun-bg"
-      style="top: -22%; right: -18%; width: clamp(380px, 70vw, 780px); height: clamp(380px, 70vw, 780px);"
-    ></div>
-    <div
-      class="brush-stroke brush-stroke-3"
-      style="top: 8%; left: -3%;"
-    ></div>
-    <div
-      class="brush-stroke brush-stroke-1"
-      style="bottom: 14%; right: -4%; transform: rotate(8deg);"
-    ></div>
-  </div>
-
-  <div class="absolute top-6 right-6 md:top-10 md:right-10 z-10">
-    <div
-      class="sticker sticker-black"
-      style="--sticker-size: clamp(96px, 13vw, 138px);"
-    >
-      <span class="sticker__label">
-        Disponible<br />Q1 2026
-      </span>
-    </div>
-  </div>
+  <span class="section-indicator absolute top-6 left-6 md:top-10 md:left-10 text-[var(--color-ink)]/70 z-[3]" aria-hidden="true">
+    Since 2016 · Córdoba AR
+  </span>
 
   <div class="container-page relative z-[1]">
     <div class="max-w-5xl reveal-stagger">
-      <p
-        class="font-mono text-[11px] md:text-xs uppercase tracking-[0.22em] text-[var(--color-ink)] mb-7 md:mb-9 flex items-center gap-3"
-      >
-        <span class="tick-gold"></span>
+      <p class="font-mono text-[11px] md:text-xs uppercase tracking-[0.22em] text-[var(--color-ink)] mb-7 md:mb-9 flex items-center gap-3">
+        <span class="tick-orange"></span>
         {site.location} · {site.availability}
       </p>
 
-      <h1 class="font-impact text-[var(--color-ink)] leading-[0.9] tracking-[-0.01em] uppercase">
+      <h1 class="font-impact text-white leading-[0.88] tracking-[-0.02em] uppercase [text-shadow:_0_2px_12px_rgba(0,0,0,0.35)]">
         <span class="block text-[clamp(2.75rem,8vw,6.5rem)]">Software que entrega</span>
-        <span class="block text-[clamp(4rem,12vw,10rem)] mt-1">resultados medibles.</span>
+        <span class="block text-[clamp(3.5rem,11vw,9rem)] mt-1">
+          <span class="text-[var(--color-ink)]">resultados</span>
+          <span class="text-[var(--color-ink)]">.</span>
+        </span>
       </h1>
 
-      <p class="mt-8 md:mt-10 font-mono text-sm md:text-base text-[var(--color-ink)] max-w-2xl leading-relaxed">
+      <p class="mt-8 md:mt-10 font-mono text-sm md:text-base text-white max-w-2xl leading-relaxed [text-shadow:_0_1px_6px_rgba(0,0,0,0.4)]">
         Construyo ese software para PyMEs argentinas.
       </p>
 
-      <p class="mt-5 text-base md:text-lg text-[var(--color-ink-soft)] max-w-2xl leading-relaxed">
+      <p class="mt-5 text-base md:text-lg text-[var(--color-ink)] max-w-2xl leading-relaxed font-medium">
         Hola, soy <strong class="text-[var(--color-ink)] font-semibold">{site.name}</strong>. Desarrollo
         freelance full-stack. Si tu proyecto mueve la aguja del negocio, estás en el lugar correcto.
       </p>
@@ -58,33 +37,56 @@ import site from "../data/site.json";
       <div class="mt-9 md:mt-11 flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-6">
         <a
           href="/proyectos"
-          class="tactile inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-md bg-[var(--color-ink)] text-[var(--color-azul)] font-medium hover:bg-[var(--color-azul)] hover:text-[var(--color-ink)] border-2 border-[var(--color-ink)]"
+          class="tactile inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full bg-[var(--color-ink)] text-[var(--color-blanco-humo)] font-medium hover:bg-[var(--color-azul)] border-2 border-[var(--color-ink)] hover:border-[var(--color-azul)]"
         >
           Ver proyectos
           <span aria-hidden="true">→</span>
         </a>
         <a
           href="/contacto"
-          class="tactile inline-flex items-center gap-1.5 text-sm font-medium text-[var(--color-ink)] hover:text-[var(--color-ink-soft)]"
+          class="tactile inline-flex items-center gap-2 text-sm font-mono uppercase tracking-[0.18em] text-[var(--color-ink)] hover:text-[var(--color-azul-deep)]"
         >
-          Hablemos
+          Hablemos de tu proyecto
           <span aria-hidden="true">→</span>
         </a>
       </div>
-
-      <ul class="mt-14 md:mt-16 pt-6 border-t-2 border-[var(--color-ink)] grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-8 max-w-3xl">
-        <li class="flex items-baseline gap-3">
-          <span class="font-impact text-3xl md:text-4xl text-[var(--color-ink)] leading-none tabular-nums uppercase">8+</span>
-          <span class="font-mono text-[11px] uppercase tracking-widest text-[var(--color-ink)]/80">Años en producción</span>
-        </li>
-        <li class="flex items-baseline gap-3 sm:border-l sm:border-[var(--color-ink)] sm:pl-8">
-          <span class="font-impact text-3xl md:text-4xl text-[var(--color-ink)] leading-none tabular-nums uppercase">40+</span>
-          <span class="font-mono text-[11px] uppercase tracking-widest text-[var(--color-ink)]/80">Proyectos</span>
-        </li>
-        <li class="flex items-baseline gap-3 sm:border-l sm:border-[var(--color-ink)] sm:pl-8">
-          <span class="font-mono text-[11px] uppercase tracking-widest text-[var(--color-ink)]/80 leading-none">Astro · TS · Tailwind</span>
-        </li>
-      </ul>
     </div>
+  </div>
+
+  <div
+    class="float-card hidden lg:flex items-center gap-3"
+    style="top: clamp(60px, 10vh, 100px); right: clamp(20px, 5vw, 60px); transform: rotate(-3deg);"
+    aria-label="Watch reel — preview"
+  >
+    <span
+      class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-[var(--color-gradient-cool)] text-white shrink-0"
+      aria-hidden="true"
+    >
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor">
+        <path d="M3 1.5L12 7L3 12.5V1.5Z" />
+      </svg>
+    </span>
+    <div class="leading-tight">
+      <p class="font-mono text-[10px] uppercase tracking-[0.18em] text-[var(--color-mute)]">
+        Watch reel
+      </p>
+      <p class="font-display font-semibold text-sm text-[var(--color-ink)]">
+        90 segundos
+      </p>
+    </div>
+  </div>
+
+  <div
+    class="float-card float-card--orange hidden lg:flex items-center gap-3 px-5 py-4"
+    style="bottom: clamp(20px, 5vh, 60px); right: clamp(20px, 5vw, 80px); transform: rotate(2deg);"
+    aria-label="CTA — hablemos"
+  >
+    <a
+      href="/contacto"
+      class="inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.18em] font-semibold text-[var(--color-blanco-humo)]"
+    >
+      Hablemos de tu proyecto
+      <span aria-hidden="true" class="text-base">→</span>
+    </a>
   </div>
 </section>

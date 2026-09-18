@@ -2,30 +2,32 @@
 import site from "../data/site.json";
 ---
 
-<section class="relative py-20 md:py-28 border-b border-[var(--color-border)] overflow-hidden isolate">
-  <div aria-hidden="true" class="absolute inset-0 pointer-events-none">
-    <div
-      class="brush-stroke brush-stroke-2"
-      style="top: 8%; right: -6%; transform: rotate(-8deg);"
-    ></div>
-  </div>
-
-  <div class="container-page relative z-[1] reveal">
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
-      <div class="lg:col-span-4">
-        <p
-          class="font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--color-mute)] mb-5 flex items-center gap-3"
+<section class="relative py-20 md:py-28 border-b border-[var(--color-border)] overflow-hidden">
+  <div class="container-page reveal">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
+      <div class="lg:col-span-4 relative">
+        <span class="absolute -top-4 -left-2 md:-left-4 sticker sticker-orange z-10" style="--sticker-size: 72px;" aria-hidden="true">
+          <span class="sticker__label">About<br />me</span>
+        </span>
+        <div
+          class="placeholder-image placeholder-image--warm w-full aspect-square max-w-xs rounded-xl flex items-center justify-center"
+          aria-label="Avatar con iniciales MF"
         >
-          <span class="tick-gold"></span>
-          Sobre mí
-        </p>
-        <h2 class="font-impact text-[clamp(2rem,5vw,4rem)] uppercase leading-[0.95] text-[var(--color-ink)] max-w-md">
-          Construyo software que <span class="text-[var(--color-dorado)]">cierra más ventas.</span>
-        </h2>
+          <span class="font-impact text-[clamp(4rem,8vw,6rem)] uppercase text-white [text-shadow:_0_2px_12px_rgba(0,0,0,0.4)]">
+            MF
+          </span>
+        </div>
       </div>
 
-      <div class="lg:col-span-8 lg:pt-3">
-        <div class="space-y-5 text-[var(--color-ink-soft)] text-lg leading-relaxed max-w-3xl">
+      <div class="lg:col-span-8 lg:pt-2">
+        <span class="section-indicator text-[var(--color-mute)]">
+          Sobre mí
+        </span>
+        <h2 class="font-impact text-[clamp(2rem,5vw,4rem)] uppercase leading-[0.95] text-[var(--color-ink)] mt-4 max-w-2xl">
+          Construyo software que <span class="text-[var(--color-azul)]">cierra más ventas.</span>
+        </h2>
+
+        <div class="mt-8 space-y-5 text-[var(--color-ink-soft)] text-lg leading-relaxed max-w-3xl">
           <p>
             Soy <strong class="text-[var(--color-ink)] font-semibold">{site.name}</strong>, desarrollador
             freelance full-stack. Arrancé haciendo sitios web en 2017 y desde entonces trabajo con
@@ -33,14 +35,7 @@ import site from "../data/site.json";
             encuentran en Shopify, Wix ni WordPress.
           </p>
 
-          <blockquote class="relative my-8 pl-5 border-l-4 border-[var(--color-dorado)]">
-            <span
-              class="absolute -top-2 -left-2 sticker sticker-red"
-              style="--sticker-size: 44px;"
-              aria-hidden="true"
-            >
-              <span class="sticker__label" style="font-size: 0.55rem;">100%</span>
-            </span>
+          <blockquote class="relative my-8 pl-5 border-l-4 border-[var(--color-azul)]">
             <p class="text-[var(--color-ink)] text-xl md:text-2xl leading-snug tracking-tight font-display font-medium">
               Cobro por proyecto con KPI pactado, no por hora. Mis clientes suelen quedarse entre
               18 y 36 meses y derivar colegas.

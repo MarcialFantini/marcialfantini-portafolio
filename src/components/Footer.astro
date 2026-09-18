@@ -18,32 +18,36 @@ const links = [
 ];
 ---
 
-<footer class="relative border-t-[8px] border-[var(--color-ink)] mt-24 bg-[var(--color-azul)] text-[var(--color-ink)] overflow-hidden isolate">
-  <div aria-hidden="true" class="absolute inset-0 pointer-events-none">
-    <div
-      class="brush-stroke brush-stroke-1"
-      style="top: 12%; right: -4%; transform: rotate(4deg);"
-    ></div>
-  </div>
+<footer class="relative bg-[var(--color-ink)] text-[var(--color-blanco-humo)] overflow-hidden">
+  <div class="container-page py-14 md:py-20">
+    <div class="mb-10 md:mb-14 reveal">
+      <p class="font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-azul)] mb-3">
+        {site.location} · {year}
+      </p>
+      <a
+        href="/"
+        class="block font-impact uppercase leading-[0.85] tracking-[-0.03em] text-[var(--color-blanco-humo)] hover:text-[var(--color-azul)] transition-colors text-[clamp(3rem,12vw,9rem)]"
+        aria-label={`${site.name} — ir al inicio`}
+      >
+        Marcial Fantini
+      </a>
+    </div>
 
-  <div class="container-page py-14 md:py-16 relative z-[1]">
-    <div class="grid grid-cols-1 md:grid-cols-[2fr_1fr_1fr] gap-12 md:gap-10 mb-14">
-      <div class="max-w-md">
-        <a href="/" class="inline-flex items-center gap-2.5 mb-4 group">
-          <span class="tactile inline-flex items-center justify-center w-10 h-10 rounded-md bg-[var(--color-ink)] text-[var(--color-azul)] font-impact text-base uppercase tracking-wide group-hover:bg-[var(--color-azul)] group-hover:text-[var(--color-ink)] border-2 border-[var(--color-ink)]">
-            MF
-          </span>
-          <span class="font-impact text-[clamp(1.5rem,2.5vw,2.25rem)] uppercase leading-none tracking-tight text-[var(--color-ink)]">
-            {site.name}
-          </span>
-        </a>
-        <p class="text-sm text-[var(--color-ink-soft)] leading-relaxed">
+    <div class="grid grid-cols-2 md:grid-cols-[2fr_1fr_1fr_1fr] gap-10 md:gap-8 mb-12">
+      <div class="col-span-2 md:col-span-1 max-w-md">
+        <p class="text-sm text-[var(--color-blanco-humo)]/80 leading-relaxed">
           {site.description}
         </p>
+        <a
+          href={`mailto:${site.email}`}
+          class="mt-5 inline-flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-[0.18em] font-semibold text-[var(--color-azul)] hover:text-[var(--color-blanco-humo)]"
+        >
+          {site.email} <span aria-hidden="true">→</span>
+        </a>
       </div>
 
       <div>
-        <p class="font-mono text-[11px] uppercase tracking-widest text-[var(--color-ink)] mb-4">
+        <p class="font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-mute)] mb-4">
           Navegación
         </p>
         <ul class="space-y-2.5 text-sm">
@@ -52,7 +56,7 @@ const links = [
               <li>
                 <a
                   href={l.href}
-                  class="tactile text-[var(--color-ink)]/80 hover:text-[var(--color-ink)] font-medium">
+                  class="tactile text-[var(--color-blanco-humo)]/85 hover:text-[var(--color-azul)] font-medium">
                   {l.label}
                 </a>
               </li>
@@ -62,7 +66,7 @@ const links = [
       </div>
 
       <div>
-        <p class="font-mono text-[11px] uppercase tracking-widest text-[var(--color-ink)] mb-4">
+        <p class="font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-mute)] mb-4">
           Conectá
         </p>
         <ul class="space-y-2.5 text-sm">
@@ -73,7 +77,7 @@ const links = [
                   href={s.href}
                   rel={s.href.startsWith('http') ? 'noopener noreferrer' : undefined}
                   target={s.href.startsWith('http') ? '_blank' : undefined}
-                  class="tactile text-[var(--color-ink)]/80 hover:text-[var(--color-ink)] font-medium inline-flex items-center gap-1"
+                  class="tactile text-[var(--color-blanco-humo)]/85 hover:text-[var(--color-azul)] font-medium inline-flex items-center gap-1"
                 >
                   {s.label}
                   <span aria-hidden="true">↗</span>
@@ -83,14 +87,24 @@ const links = [
           }
         </ul>
       </div>
+
+      <div>
+        <p class="font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-mute)] mb-4">
+          Stack
+        </p>
+        <p class="font-mono text-sm text-[var(--color-blanco-humo)]/80 leading-relaxed">
+          Astro · TypeScript<br />
+          Tailwind v4 · Vercel
+        </p>
+      </div>
     </div>
 
-    <div class="pt-6 border-t-2 border-[var(--color-ink)] flex flex-col md:flex-row items-start md:items-center justify-between gap-3">
-      <p class="text-xs text-[var(--color-ink)] font-mono font-semibold">
+    <div class="pt-6 border-t border-[var(--color-blanco-humo)]/15 flex flex-col md:flex-row items-start md:items-center justify-between gap-3">
+      <p class="font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-mute)]">
         © {year} {site.name} · Córdoba, Argentina
       </p>
-      <p class="text-xs text-[var(--color-ink)] font-mono font-semibold">
-        Astro · TypeScript · Tailwind v4
+      <p class="font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-mute)]">
+        Hecho en casa · Sin frameworks de moda
       </p>
     </div>
   </div>

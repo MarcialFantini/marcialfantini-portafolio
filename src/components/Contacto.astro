@@ -10,80 +10,74 @@ const initialBody = servicioParam
   : "Hola Marcial,\n\nQuiero conversar sobre un proyecto.\n\nMi nombre:\nMi empresa/negocio:\nQué necesito resolver:\n\nGracias.";
 ---
 
-<section id="contacto" class="relative py-20 md:py-28 bg-[var(--color-ink)] text-[var(--color-blanco-humo)] border-y-[8px] border-[var(--color-azul)] overflow-hidden isolate">
-  <div aria-hidden="true" class="absolute inset-0 pointer-events-none">
-    <div
-      class="brush-stroke brush-stroke-4"
-      style="top: 8%; right: -3%; transform: rotate(-10deg); filter: invert(1);"
-    ></div>
-    <div
-      class="brush-stroke brush-stroke-2"
-      style="bottom: 12%; left: -4%; transform: rotate(6deg); filter: invert(1);"
-    ></div>
-  </div>
+<section
+  id="contacto"
+  class="relative py-20 md:py-28 bg-gradient-cool border-y border-[var(--color-ink)] overflow-hidden isolate"
+  aria-label="Contacto"
+>
+  <span class="section-indicator absolute top-6 right-6 md:top-10 md:right-10 text-[var(--color-ink)] z-[3]" aria-hidden="true">
+    Get in touch
+  </span>
 
   <div class="container-page relative z-[1]">
     <div class="max-w-3xl mb-14 reveal">
-      <p
-        class="font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--color-azul)] mb-5 flex items-center gap-3"
-      >
-        <span class="tick-gold"></span>
+      <span class="section-indicator text-[var(--color-ink)]">
         Contacto
-      </p>
-      <h2 class="font-impact text-[clamp(2.25rem,6vw,5rem)] uppercase leading-[0.95] text-[var(--color-blanco-humo)] mb-5">
-        Hablemos sobre <span class="text-[var(--color-azul)]">tu proyecto.</span>
+      </span>
+      <h2 class="font-impact text-[clamp(2.5rem,7vw,6rem)] uppercase leading-[0.92] text-[var(--color-ink)] mt-5 mb-6 [text-shadow:_0_2px_12px_rgba(0,0,0,0.18)]">
+        Hablemos sobre <span class="text-white">tu proyecto.</span>
       </h2>
-      <p class="text-lg text-[var(--color-blanco-humo)]/80 leading-relaxed">
+      <p class="text-lg text-[var(--color-ink)] leading-relaxed max-w-2xl font-medium">
         Si tenés una PyME que necesita presencia digital seria o un producto a medida, mandame un
         mensaje. Respondo en menos de 24h hábiles con una primera lectura y, si tiene sentido,
         agendamos una llamada de 30 minutos.
       </p>
     </div>
 
-    <div class="grid grid-cols-1 lg:grid-cols-[1fr_1.5fr] gap-12 lg:gap-20 reveal">
+    <div class="grid grid-cols-1 lg:grid-cols-[1fr_1.5fr] gap-8 lg:gap-12 reveal">
       <div class="space-y-8">
-        <div>
-          <p class="font-mono text-[11px] uppercase tracking-widest text-[var(--color-azul)] mb-2">
+        <div class="rounded-2xl bg-[var(--color-blanco)] shadow-lg p-7">
+          <p class="font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-mute)] mb-3">
             Email directo
           </p>
           <a
             href={`mailto:${site.email}`}
-            class="font-display text-xl md:text-2xl font-semibold tracking-tight text-[var(--color-blanco-humo)] hover:text-[var(--color-azul)] break-all"
+            class="font-display text-xl md:text-2xl font-semibold tracking-tight text-[var(--color-azul)] hover:text-[var(--color-azul-deep)] break-all"
           >
             {site.email}
           </a>
         </div>
 
         <div>
-          <p class="font-mono text-[11px] uppercase tracking-widest text-[var(--color-azul)] mb-2">
+          <p class="font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-ink)] mb-2">
             Ubicación
           </p>
-          <p class="text-[var(--color-blanco-humo)]">{site.location}</p>
+          <p class="text-[var(--color-ink)] font-medium">{site.location}</p>
         </div>
 
         <div>
-          <p class="font-mono text-[11px] uppercase tracking-widest text-[var(--color-azul)] mb-3">
+          <p class="font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-ink)] mb-3">
             Redes
           </p>
           <ul class="flex flex-col gap-2 text-sm">
             <li>
               <a
                 href={site.social.github}
-                class="tactile text-[var(--color-blanco-humo)]/85 hover:text-[var(--color-azul)] inline-flex items-center gap-1.5"
+                class="tactile text-[var(--color-ink)] hover:text-[var(--color-azul)] inline-flex items-center gap-1.5 font-medium"
                 rel="noopener noreferrer"
                 target="_blank">GitHub <span aria-hidden="true">↗</span></a>
             </li>
             <li>
               <a
                 href={site.social.linkedin}
-                class="tactile text-[var(--color-blanco-humo)]/85 hover:text-[var(--color-azul)] inline-flex items-center gap-1.5"
+                class="tactile text-[var(--color-ink)] hover:text-[var(--color-azul)] inline-flex items-center gap-1.5 font-medium"
                 rel="noopener noreferrer"
                 target="_blank">LinkedIn <span aria-hidden="true">↗</span></a>
             </li>
             <li>
               <a
                 href={site.social.twitter}
-                class="tactile text-[var(--color-blanco-humo)]/85 hover:text-[var(--color-azul)] inline-flex items-center gap-1.5"
+                class="tactile text-[var(--color-ink)] hover:text-[var(--color-azul)] inline-flex items-center gap-1.5 font-medium"
                 rel="noopener noreferrer"
                 target="_blank">Twitter <span aria-hidden="true">↗</span></a>
             </li>
@@ -91,7 +85,7 @@ const initialBody = servicioParam
         </div>
 
         <div>
-          <span class="sticker sticker-yellow" style="--sticker-size: 88px;">
+          <span class="sticker sticker-orange" style="--sticker-size: 96px;">
             <span class="sticker__label">Reply<br />&lt;24h</span>
           </span>
         </div>
@@ -99,7 +93,7 @@ const initialBody = servicioParam
 
       <form
         id="contact-form"
-        class="border-2 border-[var(--color-blanco-humo)]/30 rounded-lg bg-[var(--color-blanco)] text-[var(--color-ink)] p-7 md:p-9"
+        class="rounded-2xl bg-[var(--color-blanco)] shadow-lg p-7 md:p-10 text-[var(--color-ink)]"
         aria-label="Formulario de contacto"
       >
         <div class="space-y-5">
@@ -113,7 +107,7 @@ const initialBody = servicioParam
               name="name"
               required
               autocomplete="name"
-              class="w-full px-3.5 py-2.5 rounded-md border border-[var(--color-border)] bg-[var(--color-blanco)] text-[var(--color-ink)] placeholder:text-[var(--color-mute)] focus:border-[var(--color-azul)] focus:outline-none focus:ring-2 focus:ring-[var(--color-azul)]/30"
+              class="w-full px-4 py-3 rounded-lg border border-[var(--color-border)] bg-[var(--color-blanco)] text-[var(--color-ink)] placeholder:text-[var(--color-mute)] focus:border-[var(--color-azul)] focus:outline-none focus:ring-4 focus:ring-[var(--color-azul)]/20 transition-colors"
             />
           </div>
 
@@ -127,7 +121,7 @@ const initialBody = servicioParam
               name="email"
               required
               autocomplete="email"
-              class="w-full px-3.5 py-2.5 rounded-md border border-[var(--color-border)] bg-[var(--color-blanco)] text-[var(--color-ink)] placeholder:text-[var(--color-mute)] focus:border-[var(--color-azul)] focus:outline-none focus:ring-2 focus:ring-[var(--color-azul)]/30"
+              class="w-full px-4 py-3 rounded-lg border border-[var(--color-border)] bg-[var(--color-blanco)] text-[var(--color-ink)] placeholder:text-[var(--color-mute)] focus:border-[var(--color-azul)] focus:outline-none focus:ring-4 focus:ring-[var(--color-azul)]/20 transition-colors"
             />
           </div>
 
@@ -138,7 +132,7 @@ const initialBody = servicioParam
             <select
               id="servicio"
               name="servicio"
-              class="w-full px-3.5 py-2.5 rounded-md border border-[var(--color-border)] bg-[var(--color-blanco)] text-[var(--color-ink)] focus:border-[var(--color-azul)] focus:outline-none focus:ring-2 focus:ring-[var(--color-azul)]/30"
+              class="w-full px-4 py-3 rounded-lg border border-[var(--color-border)] bg-[var(--color-blanco)] text-[var(--color-ink)] focus:border-[var(--color-azul)] focus:outline-none focus:ring-4 focus:ring-[var(--color-azul)]/20 transition-colors"
             >
               <option value="">Elegí uno (opcional)</option>
               <option value="Producto web a medida" selected={servicioParam === 'Producto web a medida'}>
@@ -168,15 +162,15 @@ const initialBody = servicioParam
               name="message"
               required
               rows={5}
-              class="w-full px-3.5 py-2.5 rounded-md border border-[var(--color-border)] bg-[var(--color-blanco)] text-[var(--color-ink)] placeholder:text-[var(--color-mute)] resize-y focus:border-[var(--color-azul)] focus:outline-none focus:ring-2 focus:ring-[var(--color-azul)]/30"
+              class="w-full px-4 py-3 rounded-lg border border-[var(--color-border)] bg-[var(--color-blanco)] text-[var(--color-ink)] placeholder:text-[var(--color-mute)] resize-y focus:border-[var(--color-azul)] focus:outline-none focus:ring-4 focus:ring-[var(--color-azul)]/20 transition-colors"
             ></textarea>
           </div>
 
           <button
             type="submit"
-            class="tactile w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-md bg-[var(--color-azul)] text-[var(--color-ink)] font-semibold hover:bg-[var(--color-blanco-humo)] border-2 border-[var(--color-azul)] hover:border-[var(--color-blanco-humo)]"
+            class="tactile w-full inline-flex items-center justify-center gap-2 px-6 py-4 rounded-full bg-[var(--color-azul)] text-[var(--color-blanco-humo)] font-mono text-[11px] uppercase tracking-[0.18em] font-semibold hover:bg-[var(--color-azul-deep)]"
           >
-            Abrir email con este mensaje
+            Enviar mensaje
             <span aria-hidden="true">→</span>
           </button>
 
@@ -185,7 +179,7 @@ const initialBody = servicioParam
             podés escribirme directo a{" "}
             <a
               href={`mailto:${site.email}`}
-              class="text-[var(--color-ink-soft)] underline hover:text-[var(--color-azul-deep)]">
+              class="text-[var(--color-ink-soft)] underline hover:text-[var(--color-azul)]">
               {site.email}
             </a>.
           </p>

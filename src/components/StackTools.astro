@@ -1,0 +1,68 @@
+---
+import AstroIcon from "./icons/Astro.astro";
+import ReactIcon from "./icons/React.astro";
+import TailwindIcon from "./icons/Tailwind.astro";
+import TypeScriptIcon from "./icons/TypeScript.astro";
+import VercelIcon from "./icons/Vercel.astro";
+import GitHubIcon from "./icons/GitHub.astro";
+import NodeIcon from "./icons/Node.astro";
+import PnpmIcon from "./icons/pnpm.astro";
+
+const tools = [
+  { name: "Astro",        role: "Framework", Icon: AstroIcon },
+  { name: "TypeScript",   role: "Lenguaje",  Icon: TypeScriptIcon },
+  { name: "Tailwind",     role: "CSS",       Icon: TailwindIcon },
+  { name: "React",        role: "UI lib",    Icon: ReactIcon },
+  { name: "Node.js",      role: "Runtime",   Icon: NodeIcon },
+  { name: "pnpm",         role: "Pkg mgr",   Icon: PnpmIcon },
+  { name: "Vercel",       role: "Deploy",    Icon: VercelIcon },
+  { name: "GitHub",       role: "Source",    Icon: GitHubIcon },
+];
+---
+
+<section
+  id="stack"
+  class="relative py-20 md:py-28 border-b border-[var(--color-border)] overflow-hidden"
+  aria-label="Stack y herramientas"
+>
+  <div class="container-page">
+    <div class="flex items-end justify-between flex-wrap gap-6 mb-12 md:mb-14 reveal">
+      <div>
+        <span class="section-indicator text-[var(--color-mute)] mb-4">
+          Stack · Tools
+        </span>
+        <h2 class="font-impact text-[clamp(2rem,5vw,4rem)] uppercase leading-[0.95] text-[var(--color-ink)] max-w-xl mt-3">
+          Stack &amp; tools I work with.
+        </h2>
+      </div>
+      <p class="font-mono text-xs text-[var(--color-mute)] uppercase tracking-[0.18em] max-w-xs leading-relaxed">
+        08 herramientas reales. Sin buzzwords, sin frameworks de moda que abandone en 6 meses.
+      </p>
+    </div>
+
+    <ul
+      class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-px bg-[var(--color-border)] border border-[var(--color-border)] rounded-xl overflow-hidden reveal-stagger"
+    >
+      {tools.map(({ name, role, Icon }) => (
+        <li class="group bg-[var(--color-blanco-humo)] tactile">
+          <div class="h-full p-6 md:p-8 flex flex-col gap-4 transition-colors duration-200 group-hover:bg-[var(--color-blanco)]">
+            <div class="flex items-center justify-between">
+              <Icon
+                size={36}
+                class="text-[var(--color-azul)] transition-colors duration-200 group-hover:text-[var(--color-dorado)] group-hover:scale-110 origin-left"
+              />
+              <span class="font-mono text-[10px] uppercase tracking-[0.18em] text-[var(--color-mute)]">
+                {role}
+              </span>
+            </div>
+            <div>
+              <p class="font-impact text-xl md:text-2xl uppercase leading-none text-[var(--color-ink)] tracking-tight">
+                {name}
+              </p>
+            </div>
+          </div>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>

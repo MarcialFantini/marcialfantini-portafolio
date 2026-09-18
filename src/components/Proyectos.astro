@@ -9,26 +9,26 @@ const featured = allProyectos
 
 const [hero, ...rest] = featured.slice(0, 3);
 const rows = rest.slice(0, 2);
+
+const gradients = ["warm", "cool", "vivid"] as const;
 ---
 
-<section class="relative py-20 md:py-28 border-b border-[var(--color-border)] overflow-hidden isolate">
-  <div aria-hidden="true" class="absolute inset-0 pointer-events-none">
-    <div
-      class="brush-stroke brush-stroke-1"
-      style="top: 12%; right: -8%; transform: rotate(14deg);"
-    ></div>
-  </div>
-
-  <div class="container-page relative z-[1]">
-    <div class="flex items-end justify-between flex-wrap gap-4 mb-12 reveal">
-      <h2 class="font-impact text-[clamp(2rem,5vw,4rem)] uppercase leading-[0.95] text-[var(--color-ink)] max-w-xl">
-        Algunos casos donde <span class="text-[var(--color-dorado)]">mis decisiones</span> importaron.
-      </h2>
+<section class="relative py-20 md:py-28 border-b border-[var(--color-border)] overflow-hidden">
+  <div class="container-page">
+    <div class="flex items-end justify-between flex-wrap gap-6 mb-12 reveal">
+      <div>
+        <span class="section-indicator text-[var(--color-mute)]">
+          Featured · Casos
+        </span>
+        <h2 class="font-impact text-[clamp(2rem,5vw,4rem)] uppercase leading-[0.95] text-[var(--color-ink)] mt-4 max-w-3xl">
+          Algunos casos donde <span class="text-[var(--color-azul)]">mis decisiones</span> importaron.
+        </h2>
+      </div>
       <a
         href="/proyectos"
-        class="tactile text-sm font-medium text-[var(--color-ink)] hover:text-[var(--color-dorado)] inline-flex items-center gap-1.5"
+        class="tactile font-mono text-[11px] uppercase tracking-[0.18em] font-semibold text-[var(--color-ink)] hover:text-[var(--color-azul)] inline-flex items-center gap-1.5"
       >
-        Ver todos los proyectos <span aria-hidden="true">→</span>
+        Ver todos <span aria-hidden="true">→</span>
       </a>
     </div>
 
@@ -36,24 +36,32 @@ const rows = rest.slice(0, 2);
       hero && (
         <a
           href={`/proyectos/${hero.id}`}
-          class="group tactile block border-2 border-[var(--color-ink)] rounded-lg bg-[var(--color-ink)] text-[var(--color-blanco-humo)] hover:bg-[var(--color-azul)] hover:text-[var(--color-ink)] transition-colors overflow-hidden reveal"
+          class="group tactile block rounded-2xl bg-[var(--color-blanco)] shadow-lg border border-[var(--color-border)] hover:-translate-y-1 hover:shadow-xl transition-all duration-200 overflow-hidden reveal"
         >
+          <div
+            class={`placeholder-image placeholder-image--${gradients[0]} relative`}
+            aria-hidden="true"
+          >
+            <div class="absolute inset-0 flex items-end p-6 md:p-8">
+              <p class="font-mono text-[11px] uppercase tracking-[0.18em] text-white/90 [text-shadow:_0_1px_4px_rgba(0,0,0,0.4)]">
+                {hero.data.cliente} · Featured
+              </p>
+            </div>
+          </div>
+
           <div class="grid grid-cols-1 lg:grid-cols-[1fr_2fr] gap-8 lg:gap-10 p-7 md:p-10">
             <div class="flex flex-col justify-between gap-6">
               <div>
-                <p class="font-mono text-xs uppercase tracking-widest text-[var(--color-azul)] group-hover:text-[var(--color-ink)] mb-3 transition-colors">
-                  {hero.data.cliente}
-                </p>
-                <p class="font-impact text-[clamp(3rem,8vw,7rem)] text-[var(--color-azul)] group-hover:text-[var(--color-ink)] leading-none uppercase tabular-nums">
+                <p class="font-impact text-[clamp(3rem,8vw,7rem)] text-[var(--color-azul)] leading-[0.9] uppercase tabular-nums">
                   {hero.data.metricas[0]?.value}
                 </p>
-                <p class="font-mono text-[11px] uppercase tracking-widest text-[var(--color-blanco-humo)] group-hover:text-[var(--color-ink)]/70 mt-3 leading-tight max-w-[160px] transition-colors">
+                <p class="font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-mute)] mt-2 leading-tight max-w-[160px]">
                   {hero.data.metricas[0]?.label}
                 </p>
               </div>
               <div class="flex flex-wrap gap-1.5">
                 {hero.data.stack.slice(0, 3).map((s) => (
-                  <span class="font-mono text-[11px] px-2 py-0.5 rounded bg-[var(--color-ink)] border border-[var(--color-blanco-humo)]/40 group-hover:bg-[var(--color-ink)] group-hover:border-[var(--color-ink)] text-[var(--color-blanco-humo)] group-hover:text-[var(--color-ink)] transition-colors">
+                  <span class="font-mono text-[11px] px-2.5 py-1 rounded-md bg-[var(--color-blanco-humo)] border border-[var(--color-border)] text-[var(--color-ink-soft)]">
                     {s}
                   </span>
                 ))}
@@ -61,21 +69,21 @@ const rows = rest.slice(0, 2);
             </div>
 
             <div class="flex flex-col">
-              <h3 class="font-impact text-[clamp(1.5rem,3vw,2.5rem)] uppercase leading-[1] tracking-tight text-[var(--color-blanco-humo)] group-hover:text-[var(--color-ink)] transition-colors mb-4">
+              <h3 class="font-impact text-[clamp(1.5rem,3vw,2.5rem)] uppercase leading-[1] tracking-tight text-[var(--color-ink)] group-hover:text-[var(--color-azul)] transition-colors mb-4">
                 {hero.data.title}
               </h3>
-              <p class="text-[var(--color-blanco-humo)]/85 group-hover:text-[var(--color-ink)]/80 leading-relaxed mb-6 transition-colors">
+              <p class="text-[var(--color-ink-soft)] leading-relaxed mb-6">
                 {hero.data.descripcion}
               </p>
 
               {hero.data.metricas.length > 1 && (
-                <dl class="grid grid-cols-3 gap-4 mt-auto pt-6 border-t border-[var(--color-blanco-humo)]/30 group-hover:border-[var(--color-ink)]/40 transition-colors">
+                <dl class="grid grid-cols-3 gap-4 mt-auto pt-6 border-t border-[var(--color-border)]">
                   {hero.data.metricas.slice(1, 4).map((m) => (
                     <div>
-                      <dd class="font-impact text-xl md:text-2xl text-[var(--color-azul)] group-hover:text-[var(--color-ink)] leading-none uppercase tabular-nums transition-colors">
+                      <dd class="font-impact text-xl md:text-2xl text-[var(--color-ink)] leading-none uppercase tabular-nums">
                         {m.value}
                       </dd>
-                      <dt class="font-mono text-[10px] uppercase tracking-widest text-[var(--color-blanco-humo)]/70 group-hover:text-[var(--color-ink)]/70 mt-2 leading-tight transition-colors">
+                      <dt class="font-mono text-[10px] uppercase tracking-[0.18em] text-[var(--color-mute)] mt-2 leading-tight">
                         {m.label}
                       </dt>
                     </div>
@@ -83,9 +91,9 @@ const rows = rest.slice(0, 2);
                 </dl>
               )}
 
-              <div class="mt-7 flex items-center justify-between font-mono text-xs text-[var(--color-blanco-humo)] group-hover:text-[var(--color-ink)] transition-colors">
+              <div class="mt-7 flex items-center justify-between font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-mute)]">
                 <span><FormattedDate date={hero.data.fecha} format="short" /> · {hero.data.duracion}</span>
-                <span class="opacity-0 group-hover:opacity-100 transition-opacity">
+                <span class="text-[var(--color-azul)] font-semibold opacity-80 group-hover:opacity-100 transition-opacity">
                   Ver caso →
                 </span>
               </div>
@@ -97,34 +105,37 @@ const rows = rest.slice(0, 2);
 
     {
       rows.length > 0 && (
-        <ul class="mt-5 border-t-2 border-[var(--color-ink)] reveal-stagger">
-          {rows.map((p) => (
-            <li class="border-b border-[var(--color-border)]">
+        <ul class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-5 reveal-stagger">
+          {rows.map((p, i) => (
+            <li>
               <a
                 href={`/proyectos/${p.id}`}
-                class="tactile group grid grid-cols-[auto_1fr_auto] md:grid-cols-[3rem_1fr_auto_auto] items-baseline gap-5 md:gap-8 py-6"
+                class="tactile group block rounded-xl bg-[var(--color-blanco)] shadow-sm border border-[var(--color-border)] hover:-translate-y-0.5 hover:shadow-md hover:border-[var(--color-dorado)] transition-all overflow-hidden"
               >
-                <span class="font-mono text-xs text-[var(--color-mute)] pt-1 tabular-nums">
-                  <span class="inline-block w-6 h-px bg-[var(--color-border)] mr-2 align-middle"></span>
-                  {p.data.metricas[0]?.value}
-                </span>
-                <div class="min-w-0">
-                  <h3 class="font-display font-semibold text-lg tracking-tight text-[var(--color-ink)] group-hover:text-[var(--color-dorado)] leading-tight">
+                <div
+                  class={`placeholder-image placeholder-image--${gradients[(i + 1) % gradients.length]} h-32`}
+                  aria-hidden="true"
+                ></div>
+                <div class="p-6">
+                  <div class="flex items-center justify-between mb-3">
+                    <span class="font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-mute)]">
+                      {p.data.cliente}
+                    </span>
+                    <span class="font-impact text-[var(--color-dorado)] text-xl uppercase tabular-nums">
+                      {p.data.metricas[0]?.value}
+                    </span>
+                  </div>
+                  <h3 class="font-impact text-xl md:text-2xl uppercase leading-[1] tracking-tight text-[var(--color-ink)] group-hover:text-[var(--color-dorado)] transition-colors mb-2">
                     {p.data.title}
                   </h3>
-                  <p class="mt-1 text-sm text-[var(--color-ink-soft)] leading-snug truncate">
-                    {p.data.cliente} · {p.data.descripcion}
+                  <p class="text-sm text-[var(--color-ink-soft)] leading-snug line-clamp-2 mb-4">
+                    {p.data.descripcion}
                   </p>
+                  <div class="flex items-center justify-between font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-mute)] pt-4 border-t border-[var(--color-border)]">
+                    <span><FormattedDate date={p.data.fecha} format="short" /></span>
+                    <span class="text-[var(--color-dorado)] font-semibold">Ver →</span>
+                  </div>
                 </div>
-                <span class="font-mono text-xs text-[var(--color-mute)] whitespace-nowrap hidden md:inline">
-                  <FormattedDate date={p.data.fecha} format="short" />
-                </span>
-                <span
-                  aria-hidden="true"
-                  class="hidden md:inline text-[var(--color-mute)] group-hover:text-[var(--color-dorado)] group-hover:translate-x-1 transition-transform"
-                >
-                  →
-                </span>
               </a>
             </li>
           ))}

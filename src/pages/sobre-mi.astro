@@ -62,23 +62,13 @@ const principios = [
   title={`Sobre mí — ${site.name}`}
   description={`Bio extendida, principios y proceso de trabajo de ${site.name}, desarrollador freelance full-stack desde Córdoba, Argentina.`}
 >
-  <!-- Hero -->
-  <section class="relative pt-16 md:pt-24 pb-16 md:pb-20 border-b border-[var(--color-border)] overflow-hidden isolate">
-    <div aria-hidden="true" class="absolute inset-0 pointer-events-none">
-      <div
-        class="brush-stroke brush-stroke-2"
-        style="top: 8%; right: -4%; transform: rotate(-6deg);"
-      ></div>
-    </div>
+  <section class="relative pt-16 md:pt-24 pb-16 md:pb-20 border-b border-[var(--color-border)] overflow-hidden">
     <div class="container-page max-w-4xl reveal relative z-[1]">
-      <p
-        class="font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--color-mute)] mb-6 flex items-center gap-3"
-      >
-        <span class="tick-gold"></span>
+      <span class="section-indicator text-[var(--color-mute)]">
         Sobre mí
-      </p>
-      <h1 class="font-impact text-[clamp(2.25rem,5.5vw,4.75rem)] uppercase leading-[0.95] text-[var(--color-ink)] tracking-tight mb-8">
-        Construyo software para que tu PyME cierre más ventas <span class="text-[var(--color-dorado)]">y deje de depender de mí.</span>
+      </span>
+      <h1 class="font-impact text-[clamp(2.25rem,5.5vw,4.75rem)] uppercase leading-[0.95] text-[var(--color-ink)] tracking-tight mt-5 mb-8">
+        Construyo software para que tu PyME cierre más ventas <span class="text-[var(--color-azul)]">y deje de depender de mí.</span>
       </h1>
       <p class="text-xl text-[var(--color-ink-soft)] leading-relaxed max-w-3xl">
         Soy Marcial Fantini. Desarrollo freelance desde 2017, especializado en productos digitales
@@ -88,16 +78,17 @@ const principios = [
     </div>
   </section>
 
-  <!-- Bio -->
   <section class="py-16 md:py-24 border-b border-[var(--color-border)]">
     <div class="container-page">
       <div class="grid grid-cols-1 md:grid-cols-12 gap-10 reveal">
         <div class="md:col-span-3">
           <div
-            class="w-32 h-32 md:w-40 md:h-40 rounded-lg bg-[var(--color-ink)] text-[var(--color-blanco)] font-display font-bold text-5xl flex items-center justify-center tracking-tighter"
+            class="placeholder-image placeholder-image--warm w-32 h-32 md:w-40 md:h-40 rounded-xl flex items-center justify-center"
             aria-label="Avatar con iniciales MF"
           >
-            MF
+            <span class="font-impact text-5xl md:text-6xl uppercase text-white [text-shadow:_0_2px_12px_rgba(0,0,0,0.4)]">
+              MF
+            </span>
           </div>
           <p class="mt-4 font-mono text-sm text-[var(--color-mute)] leading-relaxed">
             Córdoba, Argentina<br />
@@ -137,24 +128,17 @@ const principios = [
     </div>
   </section>
 
-  <!-- Principios -->
-  <section class="relative py-16 md:py-24 border-b border-[var(--color-border)] bg-[var(--color-blanco)] overflow-hidden isolate">
-    <div aria-hidden="true" class="absolute inset-0 pointer-events-none">
-      <div
-        class="brush-stroke brush-stroke-1"
-        style="bottom: 12%; right: -4%; transform: rotate(10deg);"
-      ></div>
-    </div>
+  <section class="relative py-16 md:py-24 border-b border-[var(--color-border)] bg-[var(--color-blanco)] overflow-hidden">
     <div class="container-page relative z-[1]">
       <h2 class="font-impact text-[clamp(1.75rem,4vw,3.25rem)] uppercase leading-[0.95] text-[var(--color-ink)] tracking-tight max-w-xl mb-12 reveal">
-        Cómo pienso <span class="text-[var(--color-dorado)]">el trabajo.</span>
+        Cómo pienso <span class="text-[var(--color-azul)]">el trabajo.</span>
       </h2>
 
       <ol class="grid grid-cols-1 sm:grid-cols-2 gap-5 reveal-stagger">
         {
           principios.map((p, i) => (
-            <li class="border-t border-[var(--color-border)] pt-5">
-              <p class="font-mono text-xs text-[var(--color-mute)] mb-4 tabular-nums">
+            <li class="rounded-xl border border-[var(--color-border)] bg-[var(--color-blanco-humo)] p-6 tactile transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md hover:border-[var(--color-azul)]">
+              <p class="font-impact text-3xl md:text-4xl text-[var(--color-azul)] tabular-nums mb-4">
                 {String(i + 1).padStart(2, "0")}
               </p>
               <h3 class="font-display font-semibold text-xl tracking-tight mb-3 text-[var(--color-ink)]">
@@ -170,22 +154,18 @@ const principios = [
     </div>
   </section>
 
-  <!-- Proceso -->
   <section class="py-16 md:py-24 border-b border-[var(--color-border)]">
     <div class="container-page">
       <div class="max-w-2xl mb-14 reveal flex items-center gap-4">
-        <span class="sticker sticker-yellow" style="--sticker-size: 64px;">
+        <span class="sticker sticker-orange" style="--sticker-size: 72px;">
           <span class="sticker__label">Proceso</span>
         </span>
         <div>
-          <p
-            class="font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--color-mute)] mb-3 flex items-center gap-3"
-          >
-            <span class="tick-gold"></span>
+          <span class="section-indicator text-[var(--color-mute)]">
             Cómo trabajo
-          </p>
-          <h2 class="font-impact text-[clamp(1.75rem,4vw,3.25rem)] uppercase leading-[0.95] text-[var(--color-ink)] tracking-tight">
-            De la primera llamada al sitio <span class="text-[var(--color-dorado)]">en producción.</span>
+          </span>
+          <h2 class="font-impact text-[clamp(1.75rem,4vw,3.25rem)] uppercase leading-[0.95] text-[var(--color-ink)] tracking-tight mt-3">
+            De la primera llamada al sitio <span class="text-[var(--color-azul)]">en producción.</span>
           </h2>
         </div>
       </div>
@@ -194,7 +174,7 @@ const principios = [
         {
           process.map((step, i) => (
             <li class="grid grid-cols-[40px_1fr] md:grid-cols-[60px_1fr_auto] gap-4 md:gap-8 py-7 border-b border-[var(--color-border)] first:border-t last:border-b-0 items-start">
-              <span class="font-mono text-3xl md:text-4xl font-light text-[var(--color-dorado)] tabular-nums">
+              <span class="font-mono text-3xl md:text-4xl font-light text-[var(--color-azul)] tabular-nums">
                 {String(i + 1).padStart(2, "0")}
               </span>
               <div>
@@ -205,7 +185,7 @@ const principios = [
                   {step.description}
                 </p>
               </div>
-              <span class="font-mono text-xs uppercase tracking-widest text-[var(--color-mute)] pt-2 hidden md:inline whitespace-nowrap">
+              <span class="font-mono text-xs uppercase tracking-[0.18em] text-[var(--color-mute)] pt-2 hidden md:inline whitespace-nowrap">
                 {step.duration}
               </span>
             </li>
@@ -215,17 +195,10 @@ const principios = [
     </div>
   </section>
 
-  <!-- Stack -->
-  <section class="relative py-16 md:py-24 border-b border-[var(--color-border)] bg-[var(--color-blanco)] overflow-hidden isolate">
-    <div aria-hidden="true" class="absolute inset-0 pointer-events-none">
-      <div
-        class="sun-bg"
-        style="top: -50%; left: -15%; width: clamp(280px, 45vw, 540px); height: clamp(280px, 45vw, 540px); opacity: 0.45;"
-      ></div>
-    </div>
+  <section class="relative py-16 md:py-24 border-b border-[var(--color-border)] bg-[var(--color-blanco)] overflow-hidden">
     <div class="container-page relative z-[1]">
       <h2 class="font-impact text-[clamp(1.75rem,4vw,3.25rem)] uppercase leading-[0.95] text-[var(--color-ink)] tracking-tight max-w-xl mb-10 reveal">
-        Las herramientas <span class="text-[var(--color-dorado)]">que conozco.</span>
+        Las herramientas <span class="text-[var(--color-azul)]">que conozco.</span>
       </h2>
 
       <ul class="flex flex-wrap gap-2 reveal-stagger">

@@ -14,34 +14,31 @@ const heroMetric = metricas[0];
 
 <a
   href={`/proyectos/${proyecto.id}`}
-  class="group block border border-[var(--color-border)] rounded-md bg-[var(--color-blanco)] hover:border-[var(--color-dorado)] transition-colors h-full overflow-hidden"
+  class="group block rounded-xl bg-[var(--color-blanco)] shadow-sm border border-[var(--color-border)] tactile transition-all duration-200 hover:-translate-y-1 hover:shadow-lg hover:border-[var(--color-azul)] h-full overflow-hidden"
 >
   <div
-    class="px-6 pt-6 pb-5 border-b border-[var(--color-border)] flex items-start justify-between gap-3"
-  >
-    <div>
-      <p class="font-mono text-xs uppercase tracking-widest text-[var(--color-mute)] mb-1">
-        {cliente}
-      </p>
-      <h3
-        class="font-display font-semibold text-xl tracking-tight text-[var(--color-ink)] group-hover:text-[var(--color-dorado)] transition-colors leading-snug"
-      >
-        {title}
-      </h3>
-    </div>
-    {heroMetric && (
-      <div class="shrink-0 text-right">
-        <p class="font-impact text-[var(--color-dorado)] text-2xl uppercase tabular-nums leading-none">
-          {heroMetric.value}
-        </p>
-        <p class="font-mono text-[10px] uppercase tracking-widest text-[var(--color-mute)] mt-1 leading-tight max-w-[80px]">
-          {heroMetric.label}
-        </p>
-      </div>
-    )}
-  </div>
+    class="placeholder-image placeholder-image--cool h-32 md:h-40"
+    aria-hidden="true"
+  ></div>
 
   <div class="p-6">
+    <div class="flex items-start justify-between gap-3 mb-3">
+      <p class="font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-mute)]">
+        {cliente}
+      </p>
+      {heroMetric && (
+        <p class="font-impact text-[var(--color-azul)] text-2xl uppercase tabular-nums leading-none shrink-0">
+          {heroMetric.value}
+        </p>
+      )}
+    </div>
+
+    <h3
+      class="font-impact text-xl md:text-2xl uppercase leading-[1] tracking-tight text-[var(--color-ink)] group-hover:text-[var(--color-azul)] transition-colors mb-2"
+    >
+      {title}
+    </h3>
+
     {!compact && (
       <p class="text-sm text-[var(--color-ink-soft)] leading-relaxed line-clamp-3 mb-5">
         {descripcion}
@@ -50,15 +47,15 @@ const heroMetric = metricas[0];
 
     <div class="flex flex-wrap gap-1.5 mb-5">
       {stack.slice(0, 4).map((s) => (
-        <span class="font-mono text-[11px] px-2 py-0.5 rounded bg-[var(--color-blanco-humo)] border border-[var(--color-border)] text-[var(--color-ink-soft)]">
+        <span class="font-mono text-[10px] px-2 py-0.5 rounded bg-[var(--color-blanco-humo)] border border-[var(--color-border)] text-[var(--color-ink-soft)] uppercase tracking-wider">
           {s}
         </span>
       ))}
     </div>
 
-    <div class="flex items-center justify-between text-xs font-mono text-[var(--color-mute)]">
+    <div class="flex items-center justify-between font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-mute)] pt-4 border-t border-[var(--color-border)]">
       <FormattedDate date={fecha} format="short" />
-      <span class="opacity-0 group-hover:opacity-100 text-[var(--color-dorado)] transition-opacity">
+      <span class="text-[var(--color-azul)] font-semibold opacity-80 group-hover:opacity-100">
         Ver caso →
       </span>
     </div>

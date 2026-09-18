@@ -6,84 +6,45 @@ import Layout from "../layouts/Layout.astro";
   title="404 — Página no encontrada"
   description="La página que buscás no existe. Volvé al inicio o escribime si pensás que fue un error."
 >
-  <section class="relative min-h-[60vh] flex items-center py-20 bg-[var(--color-azul)] border-y-[8px] border-[var(--color-ink)] overflow-hidden isolate">
-    <div aria-hidden="true" class="absolute inset-0 pointer-events-none">
-      <div
-        class="sun-bg"
-        style="top: -30%; right: -20%; width: clamp(360px, 60vw, 700px); height: clamp(360px, 60vw, 700px);"
-      ></div>
-      <div
-        class="brush-stroke brush-stroke-3"
-        style="bottom: 12%; left: -6%; transform: rotate(-6deg);"
-      ></div>
-    </div>
+  <section class="relative min-h-[80vh] flex items-center py-20 bg-gradient-vivid overflow-hidden isolate">
+    <span class="section-indicator absolute top-6 left-6 md:top-10 md:left-10 text-[var(--color-ink)] z-[3]" aria-hidden="true">
+      Error · 404
+    </span>
 
-    <div class="container-page max-w-2xl reveal relative z-[1]">
-      <h1 class="font-impact text-[clamp(7rem,28vw,18rem)] text-[var(--color-ink)] uppercase leading-[0.85] tracking-tight mb-4">
+    <div class="container-page max-w-3xl relative z-[1] reveal">
+      <h1 class="font-impact uppercase leading-[0.85] tracking-[-0.03em] text-[var(--color-ink)] text-[clamp(8rem,30vw,22rem)] [text-shadow:_0_4px_24px_rgba(0,0,0,0.2)]">
         404.
       </h1>
-      <p class="font-impact text-[clamp(1.5rem,4vw,2.75rem)] uppercase leading-[0.95] text-[var(--color-ink)] tracking-tight mb-6">
+
+      <div class="flex items-center gap-3 mb-6">
+        <span class="inline-flex items-center px-3 py-1.5 rounded-full bg-[var(--color-azul)] text-[var(--color-blanco-humo)] font-mono text-[11px] uppercase tracking-[0.18em] font-semibold">
+          Page not found
+        </span>
+      </div>
+
+      <p class="font-impact text-[clamp(1.5rem,4vw,2.75rem)] uppercase leading-[0.98] text-[var(--color-ink)] tracking-tight mb-6 [text-shadow:_0_1px_6px_rgba(0,0,0,0.3)]">
         Esta página no existe.
       </p>
-      <p class="text-lg text-[var(--color-ink)]/85 leading-relaxed mb-10 max-w-xl">
+      <p class="text-lg text-[var(--color-ink)] leading-relaxed mb-10 max-w-xl font-medium [text-shadow:_0_1px_4px_rgba(0,0,0,0.25)]">
         Si llegaste acá desde un link, decime y lo corrijo. Si llegaste escribiendo a mano,
         probablemente escribiste mal la URL.
       </p>
 
-      <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 mb-14">
+      <div class="flex flex-col sm:flex-row gap-3 sm:gap-4">
         <a
           href="/"
-          class="tactile inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-md bg-[var(--color-ink)] text-[var(--color-azul)] font-semibold hover:bg-[var(--color-blanco-humo)] border-2 border-[var(--color-ink)]"
+          class="tactile inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full bg-[var(--color-blanco)] text-[var(--color-ink)] font-mono text-[11px] uppercase tracking-[0.18em] font-semibold hover:bg-[var(--color-ink)] hover:text-[var(--color-blanco-humo)] border-2 border-[var(--color-ink)]"
         >
           Volver al inicio
           <span aria-hidden="true">→</span>
         </a>
         <a
           href="/contacto"
-          class="tactile inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-md border-2 border-[var(--color-ink)] bg-transparent text-[var(--color-ink)] font-semibold hover:bg-[var(--color-ink)] hover:text-[var(--color-azul)]"
+          class="tactile inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full border-2 border-[var(--color-ink)] bg-transparent text-[var(--color-ink)] font-mono text-[11px] uppercase tracking-[0.18em] font-semibold hover:bg-[var(--color-ink)] hover:text-[var(--color-blanco-humo)]"
         >
           Escribirme
         </a>
       </div>
-
-      <div class="max-w-md">
-        <label for="search-404" class="block font-mono text-[11px] uppercase tracking-widest text-[var(--color-ink)] mb-2">
-          Buscar en el sitio
-        </label>
-        <form
-          id="search-form"
-          class="flex gap-2"
-          aria-label="Búsqueda en el sitio"
-        >
-          <input
-            type="search"
-            id="search-404"
-            name="q"
-            placeholder="Qué buscás..."
-            class="flex-1 px-3.5 py-2.5 rounded-md border-2 border-[var(--color-ink)] bg-[var(--color-azul)] text-[var(--color-ink)] placeholder:text-[var(--color-ink)]/50 focus:border-[var(--color-ink)] focus:outline-none focus:ring-2 focus:ring-[var(--color-ink)]/30"
-          />
-          <button
-            type="submit"
-            class="tactile px-5 py-2.5 rounded-md bg-[var(--color-ink)] text-[var(--color-azul)] font-semibold hover:bg-[var(--color-blanco-humo)] border-2 border-[var(--color-ink)]"
-          >
-            Buscar
-          </button>
-        </form>
-      </div>
     </div>
   </section>
 </Layout>
-
-<script>
-  const form = document.getElementById('search-form');
-  if (form instanceof HTMLFormElement) {
-    form.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const data = new FormData(form);
-      const q = String(data.get('q') ?? '').trim();
-      if (q.length > 0) {
-        window.location.href = `https://www.google.com/search?q=${encodeURIComponent(`site:marcialfantini.com ${q}`)}`;
-      }
-    });
-  }
-</script>

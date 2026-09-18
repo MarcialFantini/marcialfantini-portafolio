@@ -1,68 +1,72 @@
 ---
 import servicios from "../data/servicios.json";
+
+const categoryByTitle: Record<string, string> = {
+  "Producto web a medida": "LANDING",
+  "E-commerce con pasarela": "ECOMMERCE",
+  "Optimización de performance": "PERFORMANCE",
+  "Integraciones y automatizaciones": "AUTOMATION",
+};
 ---
 
-<section id="servicios" class="relative py-20 md:py-28 border-b border-[var(--color-border)] overflow-hidden isolate">
-  <div aria-hidden="true" class="absolute inset-0 pointer-events-none">
-    <div
-      class="sun-bg"
-      style="top: -35%; right: -10%; width: clamp(360px, 55vw, 620px); height: clamp(360px, 55vw, 620px); opacity: 0.35;"
-    ></div>
-  </div>
-
-  <div class="container-page relative z-[1]">
-    <div class="max-w-2xl mb-14 reveal">
-      <div class="flex items-center gap-3 mb-6">
-        <span class="sticker sticker-yellow" style="--sticker-size: 56px;">
-          <span class="sticker__label">Servicios</span>
+<section id="servicios" class="relative py-20 md:py-28 border-b border-[var(--color-border)] overflow-hidden">
+  <div class="container-page">
+    <div class="flex items-end justify-between flex-wrap gap-6 mb-12 md:mb-16 reveal">
+      <div class="max-w-2xl">
+        <span class="section-indicator text-[var(--color-mute)]">
+          {String(servicios.length).padStart(2, "0")} servicios fijos
         </span>
-        <p class="font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--color-mute)]">
-          {String(servicios.length).padStart(2, "0")} ofertas fijas
-        </p>
+        <h2 class="font-impact text-[clamp(2rem,5vw,4rem)] uppercase leading-[0.95] text-[var(--color-ink)] mt-4">
+          Qué puedo hacer <span class="text-[var(--color-azul)]">por tu negocio.</span>
+        </h2>
       </div>
-
-      <h2 class="font-impact text-[clamp(2rem,5vw,4rem)] uppercase leading-[0.95] text-[var(--color-ink)]">
-        Qué puedo hacer <span class="text-[var(--color-dorado)]">por tu negocio.</span>
-      </h2>
-
-      <p class="mt-5 text-[var(--color-ink-soft)] text-lg leading-relaxed">
-        Cuatro servicios con precio orientativo y entregable definido. Sin paquetes misteriosos,
-        sin upsell, sin retainer obligatorio.
+      <p class="font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-mute)] max-w-xs leading-relaxed">
+        Precio orientativo · entregable definido · sin retainer obligatorio.
       </p>
     </div>
 
-    <ol class="border-t-2 border-[var(--color-ink)] reveal-stagger">
+    <ul class="grid grid-cols-1 sm:grid-cols-2 gap-5 reveal-stagger">
       {
         servicios.map((s, i) => (
-          <li class="group border-b border-[var(--color-border)]">
+          <li class="group relative rounded-xl bg-[var(--color-blanco)] shadow-md border border-[var(--color-border)] tactile transition-all duration-200 hover:-translate-y-1 hover:shadow-xl hover:border-[var(--color-azul)] overflow-hidden">
+            <div class="h-1.5 bg-[var(--color-azul)]" aria-hidden="true"></div>
             <a
               href={`/contacto?servicio=${encodeURIComponent(s.titulo)}`}
-              class="tactile grid grid-cols-[auto_1fr_auto] md:grid-cols-[3rem_1fr_auto_auto] items-baseline gap-5 md:gap-8 py-6 md:py-7"
+              class="block p-7 md:p-9"
             >
-              <span class="font-mono text-xs text-[var(--color-mute)] tabular-nums pt-1">
-                {String(i + 1).padStart(2, "0")} <span class="text-[var(--color-border)]">/</span> {String(servicios.length).padStart(2, "0")}
-              </span>
-              <div class="min-w-0">
-                <h3 class="font-display font-semibold text-xl md:text-2xl tracking-tight text-[var(--color-ink)] group-hover:text-[var(--color-dorado)] leading-tight">
-                  {s.titulo}
-                </h3>
-                <p class="mt-1.5 text-sm md:text-base text-[var(--color-ink-soft)] leading-snug max-w-2xl">
-                  {s.descripcion}
-                </p>
+              <div class="flex items-start justify-between gap-3 mb-5">
+                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[var(--color-azul-soft)] text-[var(--color-azul-deep)] font-mono text-[10px] uppercase tracking-[0.18em] font-semibold">
+                  <span class="w-1 h-1 rounded-full bg-[var(--color-azul)]" aria-hidden="true"></span>
+                  {categoryByTitle[s.titulo] ?? "SERVICE"}
+                </span>
+                <span class="font-mono text-xs text-[var(--color-mute)] tabular-nums">
+                  {String(i + 1).padStart(2, "0")} / {String(servicios.length).padStart(2, "0")}
+                </span>
               </div>
-              <p class="font-mono text-sm md:text-base text-[var(--color-ink)] font-semibold tabular-nums whitespace-nowrap">
-                {s.precioOrientativo}
+
+              <h3 class="font-impact text-[clamp(1.5rem,2.5vw,2.25rem)] uppercase leading-[0.98] text-[var(--color-ink)] tracking-tight mb-3">
+                {s.titulo}
+              </h3>
+
+              <p class="text-sm md:text-base text-[var(--color-ink-soft)] leading-relaxed mb-6">
+                {s.descripcion}
               </p>
-              <span
-                aria-hidden="true"
-                class="hidden md:inline text-[var(--color-mute)] group-hover:text-[var(--color-dorado)] group-hover:translate-x-1 transition-transform"
-              >
-                →
-              </span>
+
+              <div class="flex items-center justify-between pt-5 border-t border-[var(--color-border)]">
+                <p class="font-mono text-sm md:text-base text-[var(--color-ink)] font-semibold tabular-nums">
+                  {s.precioOrientativo}
+                </p>
+                <span
+                  aria-hidden="true"
+                  class="font-mono text-[11px] uppercase tracking-[0.18em] font-semibold text-[var(--color-azul)] inline-flex items-center gap-1.5 group-hover:translate-x-1 transition-transform"
+                >
+                  Pedir presupuesto →
+                </span>
+              </div>
             </a>
           </li>
         ))
       }
-    </ol>
+    </ul>
   </div>
 </section>

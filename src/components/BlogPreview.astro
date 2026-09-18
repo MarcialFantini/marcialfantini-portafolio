@@ -6,64 +6,65 @@ const allPosts = await getCollection("blog");
 const posts = allPosts
   .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime())
   .slice(0, 3);
+
+const gradients = ["warm", "cool", "vivid"] as const;
 ---
 
-<section class="relative py-20 md:py-28 border-b border-[var(--color-border)] bg-[var(--color-blanco)] overflow-hidden isolate">
-  <div aria-hidden="true" class="absolute inset-0 pointer-events-none">
-    <div
-      class="brush-stroke brush-stroke-3"
-      style="bottom: 16%; left: -6%; transform: rotate(-6deg);"
-    ></div>
-  </div>
-
-  <div class="container-page relative z-[1]">
-    <div class="flex items-end justify-between flex-wrap gap-4 mb-12 reveal">
-      <h2 class="font-impact text-[clamp(2rem,5vw,4rem)] uppercase leading-[0.95] text-[var(--color-ink)] max-w-xl">
-        Lo que aprendí <span class="text-[var(--color-dorado)]">en el camino.</span>
-      </h2>
+<section class="relative py-20 md:py-28 border-b border-[var(--color-border)] bg-[var(--color-blanco)] overflow-hidden">
+  <div class="container-page">
+    <div class="flex items-end justify-between flex-wrap gap-6 mb-12 reveal">
+      <div>
+        <span class="section-indicator text-[var(--color-mute)]">
+          Ensayo · Notas
+        </span>
+        <h2 class="font-impact text-[clamp(2rem,5vw,4rem)] uppercase leading-[0.95] text-[var(--color-ink)] mt-4 max-w-xl">
+          Lo que aprendí <span class="text-[var(--color-azul)]">en el camino.</span>
+        </h2>
+      </div>
       <a
         href="/blog"
-        class="tactile text-sm font-medium text-[var(--color-ink)] hover:text-[var(--color-dorado)] inline-flex items-center gap-1.5"
+        class="tactile font-mono text-[11px] uppercase tracking-[0.18em] font-semibold text-[var(--color-ink)] hover:text-[var(--color-azul)] inline-flex items-center gap-1.5"
       >
-        Ver todos los posts <span aria-hidden="true">→</span>
+        Ver todos <span aria-hidden="true">→</span>
       </a>
     </div>
 
-    <ol class="border-t-2 border-[var(--color-ink)] reveal-stagger">
+    <ul class="grid grid-cols-1 md:grid-cols-3 gap-5 reveal-stagger">
       {
-        posts.map((post) => (
-          <li class="border-b border-[var(--color-border)]">
+        posts.map((post, i) => (
+          <li>
             <a
               href={`/blog/${post.id}`}
-              class="tactile group grid grid-cols-[auto_1fr_auto] md:grid-cols-[7rem_1fr_auto_auto] items-baseline gap-5 md:gap-8 py-6 md:py-7"
+              class="group tactile block rounded-xl bg-[var(--color-blanco-humo)] shadow-sm border border-[var(--color-border)] transition-all duration-200 hover:-translate-y-1 hover:shadow-lg hover:border-[var(--color-azul)] h-full overflow-hidden"
             >
-              <div class="font-mono text-xs text-[var(--color-mute)] whitespace-nowrap pt-1 flex flex-col gap-1">
-                <FormattedDate date={post.data.pubDate} format="short" />
-                <span class="text-[var(--color-dorado)] uppercase tracking-wider text-[10px] font-semibold">
-                  {post.data.category}
-                </span>
-              </div>
-              <div class="min-w-0">
-                <h3 class="font-display font-semibold text-xl md:text-2xl tracking-tight text-[var(--color-ink)] group-hover:text-[var(--color-dorado)] leading-tight">
+              <div
+                class={`placeholder-image placeholder-image--${gradients[i % gradients.length]} h-40`}
+                aria-hidden="true"
+              ></div>
+              <div class="p-6">
+                <div class="flex items-center gap-3 mb-4 font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-mute)]">
+                  <FormattedDate date={post.data.pubDate} format="short" />
+                  <span class="w-1 h-1 rounded-full bg-[var(--color-border)]" aria-hidden="true"></span>
+                  <span class="text-[var(--color-azul)] font-semibold">{post.data.category}</span>
+                </div>
+
+                <h3 class="font-impact text-xl md:text-2xl uppercase leading-[1] tracking-tight text-[var(--color-ink)] group-hover:text-[var(--color-azul)] transition-colors mb-3">
                   {post.data.title}
                 </h3>
-                <p class="mt-2 text-sm md:text-base text-[var(--color-ink-soft)] leading-snug max-w-2xl line-clamp-2">
+
+                <p class="text-sm text-[var(--color-ink-soft)] leading-snug line-clamp-3 mb-5">
                   {post.data.description}
                 </p>
+
+                <div class="flex items-center justify-between font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-mute)] pt-4 border-t border-[var(--color-border)]">
+                  <span>{post.data.readingTime} min</span>
+                  <span class="text-[var(--color-azul)] font-semibold">Leer →</span>
+                </div>
               </div>
-              <span class="font-mono text-xs text-[var(--color-mute)] whitespace-nowrap hidden md:inline pt-1">
-                {post.data.readingTime} min
-              </span>
-              <span
-                aria-hidden="true"
-                class="hidden md:inline text-[var(--color-mute)] group-hover:text-[var(--color-dorado)] group-hover:translate-x-1 transition-transform"
-              >
-                →
-              </span>
             </a>
           </li>
         ))
       }
-    </ol>
+    </ul>
   </div>
 </section>

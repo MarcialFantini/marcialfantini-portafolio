@@ -5,46 +5,46 @@ const isNumeric = (v: string) => /^[+\d.,kKmM\s%]+$/.test(v.trim());
 ---
 
 <section
-  class="relative py-20 md:py-28 bg-[var(--color-ink)] text-[var(--color-blanco-humo)] border-y-[8px] border-[var(--color-azul)] overflow-hidden isolate"
+  class="relative py-20 md:py-28 bg-[var(--color-ink)] text-[var(--color-blanco-humo)] border-y border-[var(--color-ink)] overflow-hidden isolate"
   aria-label="Métricas destacadas"
 >
-  <div aria-hidden="true" class="absolute inset-0 pointer-events-none">
-    <div
-      class="brush-stroke brush-stroke-2"
-      style="top: 18%; left: -4%; transform: rotate(2deg); filter: invert(1);"
-    ></div>
-    <div
-      class="brush-stroke brush-stroke-4"
-      style="bottom: 6%; right: -2%; transform: rotate(-12deg); filter: invert(1);"
-    ></div>
-  </div>
-
-  <div class="container-page relative z-[1] reveal">
-    <div class="flex items-center gap-4 mb-10 md:mb-14">
-      <span class="sticker sticker-yellow" style="--sticker-size: 72px;">
-        <span class="sticker__label">KPI</span>
-      </span>
-      <p
-        class="font-mono text-[11px] md:text-xs uppercase tracking-[0.22em] text-[var(--color-azul)] flex items-center gap-3"
-      >
-        <span class="tick-gold"></span>
-        Resultados acumulados
+  <div class="container-page relative z-[1]">
+    <div class="flex items-end justify-between flex-wrap gap-6 mb-12 md:mb-16 reveal">
+      <div>
+        <span class="section-indicator text-[var(--color-azul)]">
+          KPI · Track record
+        </span>
+        <h2 class="font-impact text-[clamp(2rem,5vw,4rem)] uppercase leading-[0.95] text-[var(--color-blanco-humo)] max-w-xl mt-4">
+          Resultados <span class="text-[var(--color-azul)]">medibles</span> en producción.
+        </h2>
+      </div>
+      <p class="font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-blanco-humo)]/60 max-w-xs leading-relaxed">
+        Números acumulados. Sin vanity metrics, sin inflar.
       </p>
     </div>
 
-    <dl class="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-6">
+    <div class="timeline-line text-[var(--color-azul)] mb-12 md:mb-16" aria-hidden="true">
+      <span class="timeline-line__dot" style="margin-left: 0;"></span>
+      <span class="timeline-line__dot"></span>
+      <span class="timeline-line__dot"></span>
+      <span class="timeline-line__dot"></span>
+      <span class="timeline-line__dot" style="margin-right: 0;"></span>
+    </div>
+
+    <dl class="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-10 reveal-stagger">
       {
         metricas.map((m) => {
           const numeric = isNumeric(m.value);
           return (
-            <div class="border-l-4 border-[var(--color-dorado)] pl-4 md:pl-6">
-              <dt class="font-mono text-[11px] uppercase tracking-widest text-[var(--color-blanco-humo)]/70 mb-3 leading-tight">
+            <div class="stat-ticket">
+              <span class="stat-ticket__dot" aria-hidden="true"></span>
+              <dt class="font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-blanco-humo)]/70 mb-4 leading-tight">
                 {m.label}
               </dt>
               {numeric ? (
-                <dd class="font-impact text-[clamp(2.75rem,7vw,5.5rem)] text-[var(--color-azul)] leading-[0.95] uppercase tabular-nums">
+                <dd class="font-impact text-[clamp(2.75rem,7vw,5.5rem)] text-[var(--color-blanco-humo)] leading-[0.92] uppercase tabular-nums tracking-[-0.02em]">
                   {m.value}
-                  <span class="text-[var(--color-dorado)]">{m.sufijo}</span>
+                  <span class="text-[var(--color-azul)]">{m.sufijo}</span>
                 </dd>
               ) : (
                 <dd class="font-mono text-base md:text-lg font-semibold text-[var(--color-azul)] leading-tight break-words">

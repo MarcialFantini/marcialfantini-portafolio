@@ -1,6 +1,7 @@
 /* =========================================================
    Marcial Fantini — Personal Brand
-   Global Styles · Indie hacker mood · Bonanza energy
+   Global Styles · Orvika-inspired creative agency adaptation.
+   White base + orange signature + multi-stop gradients.
    ========================================================= */
 
 @import "tailwindcss";
@@ -11,33 +12,23 @@
 @import "@fontsource/anton/400.css";
 
 /* ---------------------------------------------------------
-   Design Tokens — Bonanza-inspired editorial rebrand.
-   60-30-10 sobre cream "aged paper":
-   - Yellow #FFE43A  → firma visual (reemplaza al azul conde)
-   - Cream  #F5F0E1  → base editorial (default body bg)
-   - Black  #0A0A0A  → bloques de contraste (Métricas, Contacto)
-   - White  #FFFFFF  → cards y superficies limpias
-   - Red    #E63946  → 10% acento (stickers / highlights)
+   Design Tokens — Orvika-inspired rebrand.
+   Base principal: WHITE puro. Accent principal: ORANGE.
+   Gradientes multicolores para hero, contacto y 404.
+   Cobalt como highlight secundario (sparingly).
 
-   Tokens semánticos preservados para compatibilidad:
-   --color-azul            → ahora controla Yellow (rol "signature")
-   --color-blanco-humo     → ahora controla Cream (default bg)
-   --color-azul-deep       → variante deep del accent (más oscuro)
-   --color-azul-soft       → variante soft (tono de fondo del accent)
-   --color-dorado          → ahora controla Red accent
-   --color-dorado-soft     → variante soft del red
-   --color-blanco          → white поверхности (cards, form bg)
-   --color-ink             → texto principal (negro)
-   --color-ink-soft        → texto secundario
-   --color-mute            → metadata
-   --color-border          → border cálido #E0D9C4 (armoniza cream)
+   Tokens semánticos preservados para compatibilidad con
+   el código existente; ahora controlan roles nuevos:
+   --color-azul          → ahora controla ORANGE (CTA accent)
+   --color-azul-deep     → ahora controla ORANGE-DEEP (hover)
+   --color-blanco-humo   → ahora controla WHITE (body bg)
+   --color-blanco        → white surface (cards)
+   --color-dorado        → ahora controla COBALT (highlight)
+   --color-ink           → ahora controla BLACK (texto + bloques)
+   --color-border        → neutral light
 
-   Textura noise sigue aplicando con mix-blend-mode soft-light,
-   ahora más visible sobre cream como grano de papel envejecido.
-
-   Dark mode (auto + .dark): superficies invierten preservando
-   identidad. El amarillo se vuelve #FFD60A (más caliente) para
-   sostener AA sobre negro #0A0A0A. Ink pasa a cream.
+   Dark mode (.dark): superficies invierten preservando la
+   identidad. Black sections se mantienen en dark mode.
    --------------------------------------------------------- */
 @theme {
   /* Typography — three voices */
@@ -45,18 +36,23 @@
   --font-mono: "JetBrains Mono Variable", "JetBrains Mono", ui-monospace, "SFMono-Regular", "Menlo", "Consolas", monospace;
   --font-impact: "Anton", impact, "Arial Narrow", sans-serif;
 
-  /* Brand palette — Bonanza editorial (60-30-10) */
-  --color-azul: #FFE43A;
-  --color-azul-deep: #FFCE00;
-  --color-azul-soft: #FFF4B0;
-  --color-dorado: #E63946;
-  --color-dorado-soft: #FBD7DA;
-  --color-blanco-humo: #F5F0E1;
+  /* Brand palette — Orvika white + orange + multicolor */
+  --color-azul: #FF5722;
+  --color-azul-deep: #E64A19;
+  --color-azul-soft: #FFE9DF;
+  --color-dorado: #3B5BFF;
+  --color-dorado-soft: #DCE1FF;
+  --color-blanco-humo: #FFFFFF;
   --color-blanco: #FFFFFF;
   --color-ink: #0A0A0A;
-  --color-ink-soft: #3F3F46;
-  --color-mute: #71717A;
-  --color-border: #E0D9C4;
+  --color-ink-soft: #404040;
+  --color-mute: #737373;
+  --color-border: #E5E5E5;
+
+  /* Brand gradients — full-bleed wallpapers */
+  --color-gradient-warm: linear-gradient(135deg, #FF6B9D 0%, #FFA45C 50%, #FFD93D 100%);
+  --color-gradient-cool: linear-gradient(135deg, #B983FF 0%, #FF6B9D 100%);
+  --color-gradient-vivid: linear-gradient(135deg, #FF6B9D 0%, #B983FF 35%, #3B5BFF 70%, #00C896 100%);
 
   /* Radius — esquinas apenas redondeadas */
   --radius-sm: 6px;
@@ -67,29 +63,28 @@
   --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
 
-  /* Decoration SVGs (data URLs, sin requests) */
-  --brush-1: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 40'%3E%3Cpath d='M5,30 C18,8 28,6 42,22 C56,38 70,32 84,12 C90,5 94,4 96,6' fill='none' stroke='%230A0A0A' stroke-width='9' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-  --brush-2: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 40'%3E%3Cpath d='M4,22 Q14,4 24,22 T44,22 T64,22 T96,22' fill='none' stroke='%230A0A0A' stroke-width='8' stroke-linecap='round'/%3E%3C/svg%3E");
-  --brush-3: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 40'%3E%3Cpath d='M6,32 C20,18 32,40 48,28 C64,16 78,38 94,26' fill='none' stroke='%230A0A0A' stroke-width='10' stroke-linecap='round'/%3E%3C/svg%3E");
-  --brush-4: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 40'%3E%3Cpath d='M4,18 L20,34 L34,12 L52,32 L70,14 L86,30 L96,22' fill='none' stroke='%230A0A0A' stroke-width='9' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  /* Sticker starburst — para badges circulares */
   --starburst: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M50,0 L60.87,9.43 L75,6.7 L79.7,20.3 L93.3,25 L90.57,39.13 L100,50 L90.57,60.87 L93.3,75 L79.7,79.7 L75,93.3 L60.87,90.57 L50,100 L39.13,90.57 L25,93.3 L20.3,79.7 L6.7,75 L9.43,60.87 L0,50 L9.43,39.13 L6.7,25 L20.3,20.3 L25,6.7 L39.13,9.43 Z'/%3E%3C/svg%3E");
 }
 
 /* ---------------------------------------------------------
    Dark mode — token swap, scoped to .dark root class.
+   El orange pasa a #FF7043 (más claro para AA sobre #0A0A0A).
+   Black sections (Métricas, Footer) preservan #0A0A0A en dark
+   porque son "high contrast blocks" intencionales.
    --------------------------------------------------------- */
 .dark {
-  --color-azul: #FFD60A;
-  --color-azul-deep: #E8C200;
-  --color-azul-soft: #2A2406;
-  --color-dorado: #E63946;
-  --color-dorado-soft: #3A181B;
+  --color-azul: #FF7043;
+  --color-azul-deep: #FF5722;
+  --color-azul-soft: #2A1A0F;
+  --color-dorado: #5B7BFF;
+  --color-dorado-soft: #1A1F3D;
   --color-blanco-humo: #0A0A0A;
   --color-blanco: #18181B;
-  --color-ink: #F5F0E1;
-  --color-ink-soft: #B8B0A0;
-  --color-mute: #71717A;
-  --color-border: #2A2620;
+  --color-ink: #FFFFFF;
+  --color-ink-soft: #B8B8B8;
+  --color-mute: #737373;
+  --color-border: #2A2A2E;
 }
 
 /* ---------------------------------------------------------
@@ -111,25 +106,6 @@
     font-feature-settings: "kern", "liga", "calt";
     font-weight: 400;
     line-height: 1.55;
-  }
-
-  /* Grain texture — SVG inline, 0 deps. mix-blend-mode soft-light
-     para que el grano se vea tanto en cream como en dark mode. */
-  body::before {
-    content: "";
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    z-index: 9999;
-    background-image: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 240 240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.5 0 0 0 0 0.5 0 0 0 0 0.5 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-    background-repeat: repeat;
-    background-size: 240px 240px;
-    opacity: 0.07;
-    mix-blend-mode: soft-light;
-  }
-
-  @media (prefers-reduced-motion: no-preference) {
-    body::before { transition: opacity 200ms var(--ease-out-quart); }
   }
 
   /* Display / Headlines — display sans */
@@ -156,12 +132,12 @@
     transition: color 150ms var(--ease-out-quart);
   }
   a:hover {
-    color: var(--color-dorado);
+    color: var(--color-ink);
   }
 
   ::selection {
     background-color: var(--color-azul);
-    color: var(--color-ink);
+    color: var(--color-blanco);
   }
 
   :focus-visible {
@@ -231,68 +207,127 @@
       transform 120ms var(--ease-out-quart),
       background-color 200ms var(--ease-out-quart),
       border-color 200ms var(--ease-out-quart),
-      color 200ms var(--ease-out-quart);
+      color 200ms var(--ease-out-quart),
+      box-shadow 200ms var(--ease-out-quart);
   }
   .tactile:active {
     transform: translateY(1px);
   }
 
   /* ---------------------------------------------------------
-     Decoration system — Bonanza energy, sin imágenes externas.
-
-     .brush-stroke-N — garabato orgánico negro detrás de texto.
-       Cada variante tiene un path distinto. Override --bs-rot
-       para ajustar rotación por elemento.
-
-     .sun-bg — círculo gigante amarillo (utilizar DETRÁS de un
-       headline). El wrapper padre debe ser relative + isolate.
-
-     .sticker + .sticker-{yellow|black|red} — circular badge
-       con borde serrado (sun-burst, 12 puntas). El padre
-       controla color de fondo (currentColor del path via
-       mask), el label controla color de texto.
+     Decoration System — Orvika-inspired visual language.
+     Sin imágenes externas. Todo inline.
      --------------------------------------------------------- */
 
-  .brush-stroke {
-    position: absolute;
-    pointer-events: none;
-    background-repeat: no-repeat;
-    background-size: contain;
-    z-index: 0;
+  /* Full-bleed gradients */
+  .bg-gradient-warm {
+    background: var(--color-gradient-warm);
   }
-  .brush-stroke-1 {
-    background-image: var(--brush-1);
-    width: clamp(180px, 28vw, 320px);
-    height: clamp(70px, 11vw, 120px);
-    transform: rotate(-12deg);
+  .bg-gradient-cool {
+    background: var(--color-gradient-cool);
   }
-  .brush-stroke-2 {
-    background-image: var(--brush-2);
-    width: clamp(160px, 24vw, 280px);
-    height: clamp(60px, 9vw, 100px);
-    transform: rotate(6deg);
-  }
-  .brush-stroke-3 {
-    background-image: var(--brush-3);
-    width: clamp(200px, 30vw, 360px);
-    height: clamp(80px, 12vw, 140px);
-    transform: rotate(-4deg);
-  }
-  .brush-stroke-4 {
-    background-image: var(--brush-4);
-    width: clamp(140px, 22vw, 260px);
-    height: clamp(60px, 9vw, 100px);
-    transform: rotate(10deg);
+  .bg-gradient-vivid {
+    background: var(--color-gradient-vivid);
   }
 
-  .sun-bg {
+  /* Floating card — para hero floating elements.
+     Position absolute; tamaño y rotación vía inline style. */
+  .float-card {
     position: absolute;
-    border-radius: 9999px;
-    background: var(--color-azul-deep);
-    pointer-events: none;
-    z-index: 0;
+    background: var(--color-blanco);
+    color: var(--color-ink);
+    border-radius: 14px;
+    box-shadow:
+      0 1px 2px rgba(0,0,0,0.06),
+      0 10px 30px rgba(0,0,0,0.12),
+      0 30px 60px rgba(0,0,0,0.08);
+    padding: 1rem 1.25rem;
+    z-index: 2;
+  }
+  .float-card--ink {
+    background: var(--color-ink);
+    color: var(--color-blanco-humo);
+  }
+  .float-card--orange {
+    background: var(--color-azul);
+    color: var(--color-blanco-humo);
   }
 
+  /* Timeline line — línea horizontal con dots decorativos (Orvika stats).
+     SVG inline 100% width; hereda color de texto (currentColor). */
+  .timeline-line {
+    position: relative;
+    width: 100%;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: var(--color-azul);
+  }
+  .timeline-line::before,
+  .timeline-line::after {
+    content: "";
+    flex: 1;
+    height: 2px;
+    background-color: currentColor;
+    opacity: 0.5;
+  }
+  .timeline-line__dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background-color: currentColor;
+    flex-shrink: 0;
+    box-shadow: 0 0 0 4px var(--color-ink);
+  }
+
+  /* Section indicator — small text "OUR-UI-UX-DESIGN →" style page
+     indicator para corners de sección. Mono uppercase tracking. */
+  .section-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: inherit;
+  }
+  .section-indicator::after {
+    content: "→";
+    font-family: var(--font-display);
+    font-size: 0.95rem;
+    letter-spacing: 0;
+  }
+
+  /* Stat ticket — number card estilo ticket con dot decorativo
+     arriba (línea horizontal + dot + big number Anton). */
+  .stat-ticket {
+    position: relative;
+    padding-top: 1.5rem;
+  }
+  .stat-ticket::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background-color: currentColor;
+    opacity: 0.3;
+  }
+  .stat-ticket__dot {
+    position: absolute;
+    top: -5px;
+    left: 0;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: var(--color-azul);
+    box-shadow: 0 0 0 3px var(--color-ink);
+  }
+
+  /* Sticker badge — sun-burst con texto rotado (preservado). */
   .sticker {
     display: inline-grid;
     place-items: center;
@@ -310,9 +345,10 @@
     mask-position: center;
     flex-shrink: 0;
   }
-  .sticker-yellow { color: var(--color-azul); }
+  .sticker-orange { color: var(--color-azul); }
+  .sticker-cobalt { color: var(--color-dorado); }
   .sticker-black { color: var(--color-ink); }
-  .sticker-red { color: var(--color-dorado); }
+  .sticker-white { color: var(--color-blanco-humo); }
 
   .sticker__label {
     font-family: var(--font-impact);
@@ -325,9 +361,43 @@
     color: var(--color-ink);
     transform: rotate(-3deg);
   }
-  .sticker-black .sticker__label { color: var(--color-azul); }
-  .sticker-red .sticker__label { color: var(--color-blanco); }
-  .sticker-yellow .sticker__label { color: var(--color-ink); }
+  .sticker-black .sticker__label,
+  .sticker-orange .sticker__label,
+  .sticker-cobalt .sticker__label { color: var(--color-blanco-humo); }
+  .sticker-white .sticker__label { color: var(--color-ink); }
+
+  /* Decorative placeholder gradient — para imágenes de proyectos
+     y posts sin assets reales. Tres variantes. */
+  .placeholder-image {
+    position: relative;
+    overflow: hidden;
+    border-radius: 12px;
+    aspect-ratio: 16 / 9;
+  }
+  .placeholder-image--warm { background: var(--color-gradient-warm); }
+  .placeholder-image--cool { background: var(--color-gradient-cool); }
+  .placeholder-image--vivid { background: var(--color-gradient-vivid); }
+  .placeholder-image--ink { background: var(--color-ink); color: var(--color-blanco-humo); }
+
+  /* Hero scrim — sutil overlay oscuro detrás del headline para
+     garantizar AA sobre el warm gradient sin sacrificar el gradient. */
+  .hero-scrim {
+    position: relative;
+    isolation: isolate;
+  }
+  .hero-scrim::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: radial-gradient(
+      ellipse 80% 60% at 35% 45%,
+      rgba(0,0,0,0.32) 0%,
+      rgba(0,0,0,0.18) 45%,
+      rgba(0,0,0,0) 75%
+    );
+    pointer-events: none;
+  }
 }
 
 /* ---------------------------------------------------------
@@ -349,11 +419,11 @@
     border: 0;
   }
 
-  .tick-gold {
+  .tick-orange {
     display: inline-block;
     width: 1.75rem;
     height: 1px;
-    background-color: var(--color-dorado);
+    background-color: var(--color-azul);
     vertical-align: middle;
   }
 
@@ -403,11 +473,11 @@
   .prose-editorial ul { list-style: disc; }
   .prose-editorial ol { list-style: decimal; }
   .prose-editorial li + li { margin-top: 0.35rem; }
-  .prose-editorial ul li::marker { color: var(--color-dorado); }
+  .prose-editorial ul li::marker { color: var(--color-azul); }
   .prose-editorial ol li::marker { color: var(--color-mute); font-family: var(--font-mono); font-size: 0.95em; }
 
   .prose-editorial blockquote {
-    border-left: 2px solid var(--color-dorado);
+    border-left: 2px solid var(--color-azul);
     padding: 0.25rem 0 0.25rem 1.25rem;
     font-style: normal;
     color: var(--color-ink);
@@ -417,7 +487,7 @@
   .prose-editorial code {
     font-family: var(--font-mono);
     font-size: 0.92em;
-    background-color: var(--color-blanco-humo);
+    background-color: var(--color-blanco);
     padding: 0.15rem 0.4rem;
     border-radius: 4px;
     border: 1px solid var(--color-border);
@@ -435,7 +505,7 @@
     left: -9999px;
     top: 0;
     background: var(--color-azul);
-    color: var(--color-ink);
+    color: var(--color-blanco);
     padding: 0.75rem 1rem;
     border-radius: 4px;
     z-index: 100;
