@@ -11,10 +11,11 @@ import CornerBrackets from "./CornerBrackets.astro";
     src="https://picsum.photos/seed/marcial-workspace-hero/1920/1080"
     alt=""
     role="presentation"
-    class="cover-image"
+    class="cover-image cover-image--hero"
     loading="eager"
     decoding="async"
   />
+  <div class="hero-warm-tint" aria-hidden="true"></div>
   <span class="section-indicator absolute top-6 left-6 md:top-10 md:left-10 text-[var(--color-ink)]/70 z-[3]" aria-hidden="true">
     Since 2016 · Córdoba AR
   </span>
@@ -27,20 +28,19 @@ import CornerBrackets from "./CornerBrackets.astro";
         {site.location} · {site.availability}
       </p>
 
-      <h1 class="font-impact text-white leading-[0.88] tracking-[-0.02em] uppercase [text-shadow:_0_2px_12px_rgba(0,0,0,0.35)]">
+      <h1 class="font-impact text-white leading-[0.88] tracking-[-0.02em] uppercase [text-shadow:_0_2px_16px_rgba(0,0,0,0.6)]">
         <span class="block text-[clamp(2.75rem,8vw,6.5rem)]">Software que entrega</span>
-        <span class="block text-[clamp(3.5rem,11vw,9rem)] mt-1">
-          <span class="text-[var(--color-ink)]">resultados</span>
-          <span class="text-[var(--color-ink)]">.</span>
+        <span class="block text-[clamp(3.5rem,11vw,9rem)] mt-1 text-[var(--color-azul)]">
+          resultados<span>.</span>
         </span>
       </h1>
 
-      <p class="mt-8 md:mt-10 font-mono text-sm md:text-base text-[var(--color-ink)] max-w-2xl leading-relaxed [text-shadow:_0_1px_4px_rgba(255,255,255,0.5)]">
+      <p class="mt-8 md:mt-10 font-mono text-sm md:text-base text-white max-w-2xl leading-relaxed [text-shadow:_0_1px_8px_rgba(0,0,0,0.7)]">
         Construyo ese software para PyMEs argentinas.
       </p>
 
-      <p class="mt-5 text-base md:text-lg text-[var(--color-ink)] max-w-2xl leading-relaxed font-medium [text-shadow:_0_1px_2px_rgba(255,255,255,0.4)]">
-        Hola, soy <strong class="text-[var(--color-ink)] font-semibold">{site.name}</strong>. Desarrollo
+      <p class="mt-5 text-base md:text-lg text-white max-w-2xl leading-relaxed font-medium [text-shadow:_0_1px_6px_rgba(0,0,0,0.65)]">
+        Hola, soy <strong class="text-white font-semibold">{site.name}</strong>. Desarrollo
         freelance full-stack. Si tu proyecto mueve la aguja del negocio, estás en el lugar correcto.
       </p>
 

@@ -456,6 +456,26 @@
     z-index: 0;
   }
 
+  /* Hero image — blurred + darkened para moody/abstract backdrop.
+     Scale up para que los bordes del blur no se vean. */
+  .cover-image--hero {
+    filter: blur(14px) brightness(0.42) saturate(0.55) contrast(1.05);
+    transform: scale(1.18);
+    transform-origin: center center;
+  }
+
+  /* Warm gradient overlay sobre hero image — devuelve calidez
+     después del desaturar. */
+  .hero-warm-tint {
+    position: absolute;
+    inset: 0;
+    background: var(--color-gradient-warm);
+    opacity: 0.28;
+    mix-blend-mode: overlay;
+    z-index: 0;
+    pointer-events: none;
+  }
+
   /* Dot grid overlay — textura sutil para placeholder editorial
      de proyectos y posts. Sin imágenes externas. */
   .dots-overlay {
