@@ -1,0 +1,196 @@
+---
+import Layout from "../layouts/Layout.astro";
+
+const beneficios = [
+  "5 pasos exactos que aplico en cada proyecto para que tu sitio cargue en menos de 1 segundo",
+  "El checklist de Core Web Vitals que reviso antes de hacer deploy",
+  "3 errores que veo en 9 de cada 10 sitios PyME (y cómo los evito)",
+  "Las herramientas gratis que uso para auditar tu sitio en 10 minutos",
+];
+
+const bullets = [
+  { texto: "Auditoría 15min en vivo de tu sitio actual", done: true },
+  { texto: "PDF descargable: 'El checklist de performance'", done: true },
+  { texto: "Acceso a WhatsApp directo conmigo", done: false },
+  { texto: "Reporte priorizado de qué arreglar primero", done: true },
+];
+---
+
+<Layout
+  title="Recurso gratis: Checklist de performance — Marcial Fantini"
+  description="5 pasos para que tu sitio cargue en menos de 1 segundo. Auditoría 15min gratis + PDF descargable."
+>
+  <section class="relative py-16 md:py-24 overflow-hidden">
+    <div class="container-page">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-start max-w-6xl">
+        <div>
+          <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[var(--color-azul-soft)] text-[var(--color-azul-deep)] font-mono text-[10px] uppercase tracking-[0.18em] font-semibold mb-6">
+            <span class="w-1.5 h-1.5 rounded-full bg-[var(--color-azul)] animate-pulse" aria-hidden="true"></span>
+            Recurso gratis · Sin compromiso
+          </div>
+
+          <h1 class="font-impact text-[clamp(2rem,5vw,3.75rem)] uppercase leading-[0.95] text-[var(--color-ink)] mb-6">
+            Hacé que tu sitio cargue en <span class="text-[var(--color-azul)]">menos de 1 segundo.</span>
+          </h1>
+
+          <p class="text-lg md:text-xl text-[var(--color-ink-soft)] leading-relaxed mb-8 max-w-xl">
+            Auditoría 15min en vivo + checklist descargable. Te muestro los 5 pasos exactos que aplico en cada proyecto para que tu sitio web cargue rápido, posicione mejor en Google y convierta más.
+          </p>
+
+          <ul class="space-y-3 mb-10">
+            {beneficios.map((b) => (
+              <li class="flex items-start gap-3 text-base text-[var(--color-ink)] leading-relaxed">
+                <svg class="w-5 h-5 mt-1 shrink-0 text-[var(--color-azul)]" fill="none" viewBox="0 0 20 20" aria-hidden="true">
+                  <path d="M4 10l4 4 8-8" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+                <span>{b}</span>
+              </li>
+            ))}
+          </ul>
+
+          <div class="flex flex-col sm:flex-row gap-4 text-sm font-mono uppercase tracking-[0.18em] text-[var(--color-mute)]">
+            <div class="flex items-center gap-2">
+              <svg class="w-4 h-4" fill="none" viewBox="0 0 20 20" aria-hidden="true">
+                <circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="1.5" />
+                <path d="M10 5v5l3 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+              </svg>
+              <span>15min de auditoría</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <svg class="w-4 h-4" fill="none" viewBox="0 0 20 20" aria-hidden="true">
+                <path d="M3 6h14M3 10h14M3 14h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+              </svg>
+              <span>PDF descargable</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <svg class="w-4 h-4" fill="none" viewBox="0 0 20 20" aria-hidden="true">
+                <path d="M2 8l8 5 8-5M2 8v8h16V8M2 8l8-5 8 5" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" fill="none" />
+              </svg>
+              <span>Email de entrega inmediato</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="lg:sticky lg:top-8">
+          <form
+            id="recurso-form"
+            class="relative rounded-2xl bg-[var(--color-blanco)] shadow-xl border-2 border-[var(--color-ink)] p-7 md:p-10"
+            aria-label="Formulario de captura del recurso"
+          >
+            <div class="absolute -top-3 left-7 px-3 py-1 rounded-full bg-[var(--color-ink)] text-[var(--color-blanco-humo)] font-mono text-[10px] uppercase tracking-[0.22em] font-bold">
+              100% gratis
+            </div>
+
+            <h2 class="font-impact text-2xl md:text-3xl uppercase leading-[0.95] text-[var(--color-ink)] mb-2">
+              Reservá tu auditoría.
+            </h2>
+            <p class="text-sm text-[var(--color-mute)] mb-7 font-mono uppercase tracking-[0.18em]">
+              Sin compromiso · Te respondo en menos de 24h hábiles
+            </p>
+
+            <div class="space-y-4">
+              <div>
+                <label for="recurso-nombre" class="block text-sm font-medium text-[var(--color-ink)] mb-1.5">
+                  Nombre
+                </label>
+                <input
+                  type="text"
+                  id="recurso-nombre"
+                  name="nombre"
+                  required
+                  autocomplete="name"
+                  class="w-full px-4 py-3 rounded-lg border border-[var(--color-border)] bg-[var(--color-blanco)] text-[var(--color-ink)] placeholder:text-[var(--color-mute)] focus:border-[var(--color-azul)] focus:outline-none focus:ring-4 focus:ring-[var(--color-azul)]/15 transition-colors"
+                  placeholder="Tu nombre"
+                />
+              </div>
+              <div>
+                <label for="recurso-email" class="block text-sm font-medium text-[var(--color-ink)] mb-1.5">
+                  Email
+                </label>
+                <input
+                  type="email"
+                  id="recurso-email"
+                  name="email"
+                  required
+                  autocomplete="email"
+                  class="w-full px-4 py-3 rounded-lg border border-[var(--color-border)] bg-[var(--color-blanco)] text-[var(--color-ink)] placeholder:text-[var(--color-mute)] focus:border-[var(--color-azul)] focus:outline-none focus:ring-4 focus:ring-[var(--color-azul)]/15 transition-colors"
+                  placeholder="tu@empresa.com"
+                />
+              </div>
+              <div>
+                <label for="recurso-url" class="block text-sm font-medium text-[var(--color-ink)] mb-1.5">
+                  URL de tu sitio (opcional)
+                </label>
+                <input
+                  type="url"
+                  id="recurso-url"
+                  name="url"
+                  autocomplete="url"
+                  class="w-full px-4 py-3 rounded-lg border border-[var(--color-border)] bg-[var(--color-blanco)] text-[var(--color-ink)] placeholder:text-[var(--color-mute)] focus:border-[var(--color-azul)] focus:outline-none focus:ring-4 focus:ring-[var(--color-azul)]/15 transition-colors"
+                  placeholder="https://tusitio.com"
+                />
+                <p class="mt-1.5 text-xs text-[var(--color-mute)]">
+                  Si me pasás la URL, miro el sitio antes de la auditoría y arrancamos 5min adelantados.
+                </p>
+              </div>
+
+              <button
+                type="submit"
+                class="tactile w-full inline-flex items-center justify-center gap-2 px-6 py-4 rounded-full bg-[var(--color-azul)] text-[var(--color-ink)] font-mono text-[11px] uppercase tracking-[0.18em] font-bold hover:bg-[var(--color-azul-deep)] mt-2"
+              >
+                Reservar mi auditoría gratis
+                <span aria-hidden="true">→</span>
+              </button>
+
+              <p class="text-xs text-[var(--color-mute)] leading-relaxed text-center pt-2">
+                Te envío el PDF al toque y agendamos la auditoría por mail. Sin newsletters, sin spam.
+              </p>
+            </div>
+          </form>
+
+          <div class="mt-6 px-7 md:px-10">
+            <p class="font-mono text-[10px] uppercase tracking-[0.22em] text-[var(--color-mute)] text-center mb-3 font-semibold">
+              Vas a recibir
+            </p>
+            <ul class="space-y-2">
+              {bullets.map((b) => (
+                <li class="flex items-start gap-2 text-sm text-[var(--color-ink-soft)] leading-relaxed">
+                  <svg class={`w-4 h-4 mt-0.5 shrink-0 ${b.done ? "text-[var(--color-azul)]" : "text-[var(--color-mute)]"}`} fill="none" viewBox="0 0 16 16" aria-hidden="true">
+                    {b.done ? (
+                      <path d="M3 8l3 3 7-7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+                    ) : (
+                      <circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="2" />
+                    )}
+                  </svg>
+                  <span>{b.texto}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<script>
+  const form = document.getElementById("recurso-form") as HTMLFormElement | null;
+  if (form) {
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+      const data = new FormData(form);
+      const nombre = String(data.get("nombre") ?? "");
+      const email = String(data.get("email") ?? "");
+      const url = String(data.get("url") ?? "");
+      const subject = "Quiero la auditoría gratis 15min";
+      const body =
+        `Hola Marcial,\n\n` +
+        `Quiero reservar mi auditoría gratis de 15 minutos.\n\n` +
+        `Nombre: ${nombre}\n` +
+        `Email: ${email}\n` +
+        (url ? `Sitio: ${url}\n` : "") +
+        `\nGracias.`;
+      window.location.href = `mailto:hola@marcialfantini.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    });
+  }
+</script>

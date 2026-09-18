@@ -36,35 +36,41 @@ import SectionAnchor from "./SectionAnchor.astro";
           Construyo software que <span class="text-[var(--color-azul)]">cierra más ventas.</span>
         </h2>
 
-        <div class="mt-8 space-y-5 text-[var(--color-ink-soft)] text-lg leading-relaxed max-w-3xl">
-          <p>
-            Soy <strong class="text-[var(--color-ink)] font-semibold">{site.name}</strong>, desarrollador
-            freelance full-stack. Arrancé haciendo sitios web en 2017 y desde entonces trabajo con
-            PyMEs argentinas que necesitan presencia digital seria o un producto a medida que no
-            encuentran en Shopify, Wix ni WordPress.
+        <div class="mt-6 grid gap-5 max-w-3xl">
+          <p class="text-xl md:text-2xl text-[var(--color-ink)] leading-snug font-display font-medium border-l-4 border-[var(--color-azul)] pl-5">
+            Soy <strong>{site.name}</strong>, desarrollador full-stack basado en Córdoba, Argentina.
           </p>
+          <p class="text-xl md:text-2xl text-[var(--color-ink)] leading-snug font-display font-medium border-l-4 border-[var(--color-azul)] pl-5">
+            Trabajo con <strong>PyMEs argentinas de e-commerce, servicios profesionales y retail</strong> que necesitan presencia digital seria o un producto a medida que no encuentran en Shopify, Wix ni WordPress.
+          </p>
+          <p class="text-xl md:text-2xl text-[var(--color-ink)] leading-snug font-display font-medium border-l-4 border-[var(--color-azul)] pl-5">
+            Lo que entrego <strong>cobra por proyecto con KPI pactado, no por hora</strong> — y mis clientes suelen quedarse entre 18 y 36 meses derivando colegas.
+          </p>
+        </div>
 
-          <blockquote class="relative my-8 pl-5 border-l-4 border-[var(--color-azul)]">
-            <p class="text-[var(--color-ink)] text-xl md:text-2xl leading-snug tracking-tight font-display font-medium">
-              Cobro por proyecto con KPI pactado, no por hora. Mis clientes suelen quedarse entre
-              18 y 36 meses y derivar colegas.
-            </p>
-          </blockquote>
-
-          <p>
+        <div class="mt-8 max-w-3xl">
+          <p class="text-[var(--color-ink-soft)] text-lg leading-relaxed">
             Lo que entrego no es <em class="not-italic text-[var(--color-ink)] font-semibold">"una página web"</em>:
             es un activo digital que rinde. Carga rápido, posiciona en Google, convierte visitas en
             consultas o ventas, y se mide con números reales.
           </p>
+        </div>
 
-          <p>
-            Si tu negocio necesita ganar claridad en su canal online y querés hablar con alguien
-            que piense en retorno,
-            <a href="/sobre-mi" class="text-[var(--color-azul-deep)] font-medium underline underline-offset-4 decoration-[var(--color-azul)] hover:text-[var(--color-dorado)] hover:decoration-[var(--color-dorado)]">
-              conocé mi proceso de trabajo
-            </a>
-            <span aria-hidden="true"> →</span>
-          </p>
+        <div class="mt-8 flex flex-col sm:flex-row gap-4 sm:gap-6">
+          <a
+            href="/sobre-mi"
+            class="tactile inline-flex items-center gap-2 text-sm font-mono uppercase tracking-[0.18em] text-[var(--color-ink)] hover:text-[var(--color-azul)] border-b border-[var(--color-ink)] hover:border-[var(--color-azul)] pb-1"
+          >
+            Conocé mi proceso de trabajo
+            <span aria-hidden="true">→</span>
+          </a>
+          <a
+            href="#servicios"
+            class="tactile inline-flex items-center gap-2 text-sm font-mono uppercase tracking-[0.18em] text-[var(--color-ink)] hover:text-[var(--color-azul)] border-b border-[var(--color-ink)] hover:border-[var(--color-azul)] pb-1"
+          >
+            Ver servicios y precios
+            <span aria-hidden="true">→</span>
+          </a>
         </div>
       </div>
     </div>

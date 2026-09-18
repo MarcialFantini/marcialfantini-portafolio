@@ -1,58 +1,82 @@
 [
   {
-    "titulo": "Producto web a medida",
-    "descripcion": "Sitios que cargan rápido, posicionan en Google y convierten visitas en consultas o ventas. Desde landing pages hasta SaaS simples.",
+    "id": "sistema-ventas-online",
+    "titulo": "Sistema de Ventas Online",
+    "subtitulo": "Tu sitio web como vendedor 24/7",
+    "descripcion": "Un sitio diseñado alrededor de un solo objetivo: que te contacten o te compren. Mobile-first, posicionamiento en Google, formulario de captura o pasarela de pago. Nada de 'páginas web bonitas'.",
+    "resultadoCuantificado": "Sitios que convierten entre 2% y 8% de visitas en consultas o ventas (mediana del sector: 0.5%).",
     "queIncluye": [
-      "Diseño mobile-first",
-      "Desarrollo en Astro + TypeScript",
-      "SEO técnico y on-page",
-      "Analytics y búsqueda de conversiones",
-      "Deploy y hosting incluido 90 días"
+      "Diseño mobile-first orientado a conversión",
+      "Desarrollo en Astro + TypeScript (carga <1s)",
+      "SEO técnico + on-page para Google",
+      "Analytics + búsqueda de conversiones",
+      "Deploy + hosting incluido 90 días",
+      "Garantía: si en 60 días no sube el tráfico orgánico un +20%, te devuelvo 30% del proyecto"
     ],
-    "idealPara": "PyMEs que necesitan presencia digital seria para captar clientes o vender online.",
-    "precioOrientativo": "USD 800 – 4.000",
-    "cta": "Quiero un presupuesto"
+    "idealPara": "PyMEs argentinas con servicio local que necesitan presencia digital seria para captar clientes o vender online.",
+    "duracion": "3 a 8 semanas",
+    "precioOrientativo": "USD 1.200 – 4.500",
+    "cta": "Quiero un sistema de ventas",
+    "badge": "MÁS POPULAR"
   },
   {
-    "titulo": "E-commerce con pasarela",
-    "descripcion": "Tiendas online con Mercado Pago o Stripe integradas, catálogo administrable, checkout optimizado para que la gente termine la compra.",
+    "id": "tienda-express",
+    "titulo": "Tienda Express 30d",
+    "subtitulo": "E-commerce funcionando en 30 días, no en 6 meses",
+    "descripcion": "Tienda online con Mercado Pago o Stripe integrada, catálogo autogestionable, checkout optimizado. Si ya vendés por WhatsApp y querés automatizar sin perder el toque personal, esto es para vos.",
+    "resultadoCuantificado": "De 'tengo que copiar y pegar cada pedido' a 'los pedidos caen solos y los despacho' en 30 días.",
     "queIncluye": [
-      "Catálogo autogestionable",
-      "Integración Mercado Pago / Stripe",
+      "Catálogo autogestionable (panel simple)",
+      "Mercado Pago o Stripe integrado",
       "Checkout en 2 pasos",
-      "Panel de pedidos",
-      "Carrito persistente"
+      "Panel de pedidos básico",
+      "Carrito persistente",
+      "Bonus: capacitación 1h para que manejes el panel"
     ],
-    "idealPara": "Marcas que ya venden por WhatsApp y quieren automatizar sin perder el toque personal.",
-    "precioOrientativo": "USD 1.500 – 5.000",
-    "cta": "Quiero vender online"
+    "idealPara": "Marcas que ya venden por WhatsApp y quieren profesionalizar sin perder el toque personal.",
+    "duracion": "30 días garantizados",
+    "precioOrientativo": "USD 1.800 – 5.500",
+    "cta": "Quiero mi tienda online",
+    "badge": "ENTREGA RÁPIDA"
   },
   {
-    "titulo": "Optimización de performance",
-    "descripcion": "Auditoría completa de un sitio existente y reescritura de lo que esté frenando conversiones. Core Web Vitals verdes.",
+    "id": "rescate-conversion",
+    "titulo": "Rescate de Conversión",
+    "subtitulo": "Si tu sitio tarda +3s en cargar, perdés ventas cada día",
+    "descripcion": "Auditoría completa de un sitio existente + reescritura de lo que está frenando conversiones. Te entrego un reporte antes/después con métricas concretas. Si no mejora Lighthouse +20 puntos, no pagas.",
+    "resultadoCuantificado": "Mediana de mejora: tiempo de carga -60%, conversiones +35% (medido en 30 días post-deploy).",
     "queIncluye": [
-      "Auditoría Lighthouse + Search Console",
+      "Auditoría Lighthouse + Search Console + GTmetrix",
       "Reescritura de cuellos de botella",
-      "Optimización de imágenes",
-      "Lazy loading y code splitting",
-      "Reporte antes/después con métricas"
+      "Optimización de imágenes y fonts",
+      "Lazy loading + code splitting",
+      "Reporte antes/después con números",
+      "Garantía: si Lighthouse no sube +20 puntos, no pagás"
     ],
-    "idealPara": "Negocios cuyo sitio web tarda más de 3 segundos en cargar y pierden ventas por eso.",
-    "precioOrientativo": "USD 600 – 2.500",
-    "cta": "Quiero auditar mi sitio"
+    "idealPara": "Negocios cuyo sitio web tarda más de 3 segundos en cargar y sospechan que están perdiendo ventas por eso.",
+    "duracion": "2 a 4 semanas",
+    "precioOrientativo": "USD 800 – 2.800",
+    "cta": "Quiero auditar mi sitio",
+    "badge": "GARANTÍA RESULTADO"
   },
   {
-    "titulo": "Integraciones y automatizaciones",
-    "descripcion": "Conecto sistemas que hoy se comunican a mano: CRM, ERP, hojas de cálculo, APIs externas. Lo que se pueda automatizar, se automatiza.",
+    "id": "automatizaciones-pagan",
+    "titulo": "Automatizaciones que Pagan",
+    "subtitulo": "Lo que se pueda automatizar, se automatiza. Tu tiempo vale más.",
+    "descripcion": "Conecto los sistemas que hoy se comunican a mano (CRM, ERP, hojas de cálculo, APIs externas) para que hablen solos. Lo que antes era 4 horas de copy-paste, ahora es un email que llega solo.",
+    "resultadoCuantificado": "Ahorro típico: 6 a 15 horas semanales en tareas repetitivas (medido en primeros 30 días).",
     "queIncluye": [
-      "Mapeo de flujos actuales",
-      "Webhooks y APIs a medida",
+      "Mapeo de flujos actuales y cuellos de botella",
+      "Webhooks + APIs a medida",
       "ETL liviano entre sistemas",
-      "Notificaciones automáticas",
-      "Documentación para tu equipo"
+      "Notificaciones automáticas (Slack, email, WhatsApp)",
+      "Documentación para tu equipo",
+      "Bonus: plantilla de Notion para trackear incidentes"
     ],
-    "idealPara": "Equipos que pierden horas por semana copiando datos entre sistemas que deberían hablar solos.",
-    "precioOrientativo": "USD 1.000 – 4.500",
-    "cta": "Quiero automatizar algo"
+    "idealPara": "Equipos que pierden horas por semana copiando datos entre sistemas o respondiendo manualmente lo que podría ser automático.",
+    "duracion": "2 a 6 semanas",
+    "precioOrientativo": "USD 1.200 – 4.500",
+    "cta": "Quiero automatizar algo",
+    "badge": null
   }
 ]

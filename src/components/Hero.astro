@@ -29,27 +29,40 @@ import CornerBrackets from "./CornerBrackets.astro";
       </p>
 
       <h1 class="font-impact text-white leading-[0.88] tracking-[-0.02em] uppercase [text-shadow:_0_2px_16px_rgba(0,0,0,0.6)]">
-        <span class="block text-[clamp(1.875rem,8vw,6.5rem)]">Software que entrega</span>
-        <span class="block text-[clamp(2.5rem,11vw,9rem)] mt-1 text-[var(--color-azul)]">
-          resultados<span>.</span>
+        <span class="block text-[clamp(1.75rem,7.5vw,5.5rem)] leading-[0.95]">PyMEs argentinas que pasaron</span>
+        <span class="block text-[clamp(1.75rem,7.5vw,5.5rem)] leading-[0.95] mt-1">de <span class="text-[var(--color-azul)]">no-rankear</span> a</span>
+        <span class="block text-[clamp(2.25rem,11vw,8rem)] leading-[0.92] mt-1 text-[var(--color-azul)]">
+          vender todos los días<span>.</span>
         </span>
       </h1>
 
       <p class="mt-8 md:mt-10 font-mono text-sm md:text-base text-white max-w-2xl leading-relaxed [text-shadow:_0_1px_8px_rgba(0,0,0,0.7)]">
-        Construyo ese software para PyMEs argentinas.
+        Construyo sitios para e-commerce, servicios profesionales y retail argentino.
       </p>
 
       <p class="mt-5 text-base md:text-lg text-white max-w-2xl leading-relaxed font-medium [text-shadow:_0_1px_6px_rgba(0,0,0,0.65)]">
-        Hola, soy <strong class="text-white font-semibold">{site.name}</strong>. Desarrollo
-        freelance full-stack. Si tu proyecto mueve la aguja del negocio, estás en el lugar correcto.
+        Hola, soy <strong class="text-white font-semibold">{site.name}</strong>. Desarrollo a medida.
+        Si tu sitio web no está vendiendo todos los días, <span class="text-[var(--color-azul)] font-semibold">te está costando clientes</span>.
       </p>
+
+      <div class="mt-7 md:mt-9 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[var(--color-blanco)]/10 backdrop-blur-sm border border-white/20 font-mono text-[11px] uppercase tracking-[0.18em] font-semibold text-white">
+        <span class="w-1.5 h-1.5 rounded-full bg-[var(--color-azul)] animate-pulse" aria-hidden="true"></span>
+        +12 PyMEs confiaron · +40 proyectos en producción · 8+ años
+      </div>
 
       <div class="mt-9 md:mt-11 flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-6">
         <a
-          href="/proyectos"
-          class="tactile inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full bg-[var(--color-ink)] text-[var(--color-blanco-humo)] font-medium hover:bg-[var(--color-azul)] border-2 border-[var(--color-ink)] hover:border-[var(--color-azul)]"
+          href="/contacto?servicio=Auditoría%20gratis"
+          class="tactile inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full bg-[var(--color-azul)] text-[var(--color-ink)] font-semibold hover:bg-[var(--color-azul-deep)] border-2 border-[var(--color-azul)]"
         >
-          Ver proyectos
+          Auditoría gratis 15min
+          <span aria-hidden="true">→</span>
+        </a>
+        <a
+          href="#servicios"
+          class="tactile inline-flex items-center gap-2 text-sm font-mono uppercase tracking-[0.18em] text-[var(--color-ink)] hover:text-[var(--color-azul)] border-b border-[var(--color-ink)] hover:border-[var(--color-azul)] pb-1"
+        >
+          Ver servicios
           <span aria-hidden="true">→</span>
         </a>
       </div>

@@ -2,11 +2,11 @@
 import servicios from "../data/servicios.json";
 import SectionAnchor from "./SectionAnchor.astro";
 
-const categoryByTitle: Record<string, string> = {
-  "Producto web a medida": "LANDING",
-  "E-commerce con pasarela": "ECOMMERCE",
-  "Optimización de performance": "PERFORMANCE",
-  "Integraciones y automatizaciones": "AUTOMATION",
+const categoryById: Record<string, string> = {
+  "sistema-ventas-online": "LANDING",
+  "tienda-express": "ECOMMERCE",
+  "rescate-conversion": "PERFORMANCE",
+  "automatizaciones-pagan": "AUTOMATION",
 };
 ---
 
@@ -18,54 +18,173 @@ const categoryByTitle: Record<string, string> = {
         <h2 class="font-impact text-[clamp(2rem,5vw,4rem)] uppercase leading-[0.95] text-[var(--color-ink)] mt-2">
           Qué puedo hacer <span class="text-[var(--color-azul)]">por tu negocio.</span>
         </h2>
+        <p class="mt-5 text-[var(--color-ink-soft)] text-lg max-w-xl leading-relaxed">
+          4 servicios con precio cerrado, KPI pactado y garantía por escrito. Sin sorpresas, sin retainer obligatorio.
+        </p>
       </div>
-      <p class="font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-mute)] max-w-xs leading-relaxed">
-        Precio orientativo · entregable definido · sin retainer obligatorio.
-      </p>
+      <div class="flex flex-col items-end gap-2">
+        <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[var(--color-azul-soft)] text-[var(--color-azul-deep)] font-mono text-[10px] uppercase tracking-[0.18em] font-semibold">
+          <span class="w-1.5 h-1.5 rounded-full bg-[var(--color-azul)] animate-pulse" aria-hidden="true"></span>
+          Cupos limitados Q1 2026
+        </span>
+        <p class="font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-mute)] max-w-xs leading-relaxed text-right">
+          Precio de lanzamiento sube el 28/02 · Reservá ahora
+        </p>
+      </div>
     </div>
 
-    <ul class="grid grid-cols-1 sm:grid-cols-2 gap-5 reveal-stagger">
+    <ul class="grid grid-cols-1 md:grid-cols-2 gap-5 reveal-stagger">
       {
         servicios.map((s, i) => (
-          <li class="group relative rounded-xl bg-[var(--color-blanco)] shadow-md border border-[var(--color-border)] tactile transition-all duration-200 hover:-translate-y-1 hover:shadow-xl hover:border-[var(--color-azul)] overflow-hidden">
+          <li
+            id={s.id}
+            class="group relative rounded-xl bg-[var(--color-blanco)] shadow-md border-2 border-[var(--color-ink)] tactile transition-all duration-200 hover:-translate-y-1 hover:shadow-xl hover:border-[var(--color-azul)] overflow-hidden"
+          >
             <div class="h-1.5 bg-[var(--color-azul)]" aria-hidden="true"></div>
+            {s.badge && (
+              <div class="absolute top-4 right-4 z-10">
+                <span class="inline-flex items-center px-2.5 py-1 rounded-full bg-[var(--color-ink)] text-[var(--color-blanco-humo)] font-mono text-[9px] uppercase tracking-[0.22em] font-bold">
+                  {s.badge}
+                </span>
+              </div>
+            )}
             <a
               href={`/contacto?servicio=${encodeURIComponent(s.titulo)}`}
               class="block p-7 md:p-9"
             >
-              <div class="flex items-start justify-between gap-3 mb-5">
+              <div class="flex items-start justify-between gap-3 mb-4">
                 <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[var(--color-azul-soft)] text-[var(--color-azul-deep)] font-mono text-[10px] uppercase tracking-[0.18em] font-semibold">
                   <span class="w-1 h-1 rounded-full bg-[var(--color-azul)]" aria-hidden="true"></span>
-                  {categoryByTitle[s.titulo] ?? "SERVICE"}
+                  {categoryById[s.id] ?? "SERVICE"}
                 </span>
                 <span class="font-mono text-xs text-[var(--color-mute)] tabular-nums">
                   {String(i + 1).padStart(2, "0")} / {String(servicios.length).padStart(2, "0")}
                 </span>
               </div>
 
-              <h3 class="font-impact text-[clamp(1.5rem,2.5vw,2.25rem)] uppercase leading-[0.98] text-[var(--color-ink)] tracking-tight mb-3">
+              <h3 class="font-impact text-[clamp(1.5rem,2.5vw,2.25rem)] uppercase leading-[0.98] text-[var(--color-ink)] tracking-tight mb-1">
                 {s.titulo}
               </h3>
+              <p class="font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--color-azul)] font-semibold mb-4">
+                {s.subtitulo}
+              </p>
 
-              <p class="text-sm md:text-base text-[var(--color-ink-soft)] leading-relaxed mb-6">
+              <p class="text-sm md:text-base text-[var(--color-ink-soft)] leading-relaxed mb-5">
                 {s.descripcion}
               </p>
 
-              <div class="flex items-center justify-between pt-5 border-t border-[var(--color-border)]">
-                <p class="font-mono text-sm md:text-base text-[var(--color-ink)] font-semibold tabular-nums">
-                  {s.precioOrientativo}
+              <div class="mb-5 p-4 rounded-lg bg-[var(--color-blanco-humo)] border-l-4 border-[var(--color-azul)]">
+                <p class="font-mono text-[10px] uppercase tracking-[0.18em] text-[var(--color-mute)] mb-1.5 font-semibold">
+                  Resultado cuantificado
                 </p>
-                <span
-                  aria-hidden="true"
-                  class="font-mono text-[11px] uppercase tracking-[0.18em] font-semibold text-[var(--color-azul)] inline-flex items-center gap-1.5 group-hover:translate-x-1 transition-transform"
-                >
-                  Pedir presupuesto →
+                <p class="text-sm md:text-base text-[var(--color-ink)] font-medium leading-snug">
+                  {s.resultadoCuantificado}
+                </p>
+              </div>
+
+              <ul class="space-y-1.5 mb-6">
+                {s.queIncluye.slice(0, 5).map((item) => (
+                  <li class="flex items-start gap-2 text-sm text-[var(--color-ink-soft)] leading-relaxed">
+                    <svg class="w-4 h-4 mt-0.5 shrink-0 text-[var(--color-azul)]" fill="none" viewBox="0 0 16 16" aria-hidden="true">
+                      <path d="M3 8l3 3 7-7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+
+              <div class="flex items-end justify-between gap-3 pt-5 border-t border-[var(--color-border)]">
+                <div>
+                  <p class="font-mono text-[10px] uppercase tracking-[0.18em] text-[var(--color-mute)] mb-1">Desde</p>
+                  <p class="font-mono text-base md:text-lg text-[var(--color-ink)] font-bold tabular-nums">
+                    {s.precioOrientativo}
+                  </p>
+                </div>
+                <span class="font-mono text-[11px] uppercase tracking-[0.18em] font-semibold text-[var(--color-blanco-humo)] bg-[var(--color-ink)] px-4 py-2.5 rounded-md group-hover:bg-[var(--color-azul)] group-hover:text-[var(--color-ink)] transition-colors">
+                  {s.cta} →
                 </span>
               </div>
+
+              <p class="mt-3 font-mono text-[10px] uppercase tracking-[0.18em] text-[var(--color-mute)] text-center">
+                Entrega: {s.duracion}
+              </p>
             </a>
           </li>
         ))
       }
     </ul>
+
+    <div class="mt-14 md:mt-20 reveal">
+      <h3 class="font-impact text-[clamp(1.5rem,3vw,2.25rem)] uppercase leading-[0.98] text-[var(--color-ink)] mb-6 max-w-2xl">
+        Compará los planes <span class="text-[var(--color-azul)]">lado a lado.</span>
+      </h3>
+      <div class="overflow-x-auto rounded-xl border-2 border-[var(--color-ink)] bg-[var(--color-blanco)]">
+        <table class="w-full text-sm">
+          <thead>
+            <tr class="border-b-2 border-[var(--color-ink)] bg-[var(--color-blanco-humo)]">
+              <th class="text-left p-4 font-mono text-[10px] uppercase tracking-[0.18em] text-[var(--color-mute)] font-semibold">Incluye</th>
+              {servicios.map((s, i) => (
+                <th class="p-4 font-impact text-sm uppercase tracking-tight text-[var(--color-ink)] text-center min-w-[120px]">
+                  <div class="flex flex-col items-center gap-1">
+                    <span class="text-[10px] text-[var(--color-mute)] font-mono">0{i + 1}</span>
+                    <span>{s.titulo.split(' ')[0]}</span>
+                  </div>
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody class="font-mono text-[11px]">
+            <tr class="border-b border-[var(--color-border)]">
+              <td class="p-4 text-[var(--color-ink-soft)]">Sitio mobile-first optimizado</td>
+              {servicios.map(() => (
+                <td class="p-4 text-center text-[var(--color-azul)] text-base">✓</td>
+              ))}
+            </tr>
+            <tr class="border-b border-[var(--color-border)] bg-[var(--color-blanco-humo)]/40">
+              <td class="p-4 text-[var(--color-ink-soft)]">SEO técnico + on-page</td>
+              {servicios.map((s) => (
+                <td class="p-4 text-center text-[var(--color-azul)] text-base">{s.id === "rescate-conversion" || s.id === "automatizaciones-pagan" ? "—" : "✓"}</td>
+              ))}
+            </tr>
+            <tr class="border-b border-[var(--color-border)]">
+              <td class="p-4 text-[var(--color-ink-soft)]">E-commerce con pasarela</td>
+              {servicios.map((s) => (
+                <td class="p-4 text-center text-[var(--color-azul)] text-base">{s.id === "tienda-express" ? "✓" : "—"}</td>
+              ))}
+            </tr>
+            <tr class="border-b border-[var(--color-border)] bg-[var(--color-blanco-humo)]/40">
+              <td class="p-4 text-[var(--color-ink-soft)]">Auditoría Lighthouse + fix</td>
+              {servicios.map((s) => (
+                <td class="p-4 text-center text-[var(--color-azul)] text-base">{s.id === "rescate-conversion" ? "✓" : "—"}</td>
+              ))}
+            </tr>
+            <tr class="border-b border-[var(--color-border)]">
+              <td class="p-4 text-[var(--color-ink-soft)]">Automatizaciones + APIs</td>
+              {servicios.map((s) => (
+                <td class="p-4 text-center text-[var(--color-azul)] text-base">{s.id === "automatizaciones-pagan" ? "✓" : "—"}</td>
+              ))}
+            </tr>
+            <tr class="border-b border-[var(--color-border)] bg-[var(--color-blanco-humo)]/40">
+              <td class="p-4 text-[var(--color-ink-soft)]">Garantía por escrito</td>
+              {servicios.map((s) => (
+                <td class="p-4 text-center text-[var(--color-azul)] text-base">{s.id === "rescate-conversion" ? "✓" : "✓"}</td>
+              ))}
+            </tr>
+            <tr class="border-b border-[var(--color-border)]">
+              <td class="p-4 text-[var(--color-ink-soft)]">Capacitación post-entrega</td>
+              {servicios.map((s) => (
+                <td class="p-4 text-center text-[var(--color-azul)] text-base">{s.id === "tienda-express" || s.id === "automatizaciones-pagan" ? "✓" : "—"}</td>
+              ))}
+            </tr>
+            <tr class="bg-[var(--color-blanco-humo)]">
+              <td class="p-4 font-impact text-[var(--color-ink)] uppercase text-xs tracking-tight">Desde</td>
+              {servicios.map((s) => (
+                <td class="p-4 text-center font-mono text-[10px] font-semibold text-[var(--color-ink)] whitespace-nowrap">{s.precioOrientativo}</td>
+              ))}
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
   </div>
 </section>
