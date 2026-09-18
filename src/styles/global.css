@@ -392,7 +392,8 @@
 
   /* Hero scrim — fuerte overlay oscuro detrás del headline para
      garantizar AA sobre el warm gradient o imagen sin sacrificar
-     el gradient/photo como wallpaper. */
+     el gradient/photo como wallpaper. Cubre el top ~60% para
+     asegurar legibilidad de headline + tagline. */
   .hero-scrim {
     position: relative;
     isolation: isolate;
@@ -403,17 +404,19 @@
     inset: 0;
     z-index: -1;
     background:
-      radial-gradient(
-        ellipse 70% 55% at 30% 50%,
-        rgba(0,0,0,0.55) 0%,
-        rgba(0,0,0,0.32) 45%,
-        rgba(0,0,0,0.05) 75%
-      ),
       linear-gradient(
-        to right,
-        rgba(0,0,0,0.4) 0%,
-        rgba(0,0,0,0.15) 60%,
-        transparent 100%
+        to bottom,
+        rgba(0,0,0,0.55) 0%,
+        rgba(0,0,0,0.55) 35%,
+        rgba(0,0,0,0.4) 55%,
+        rgba(0,0,0,0.15) 75%,
+        rgba(0,0,0,0) 100%
+      ),
+      radial-gradient(
+        ellipse 80% 60% at 30% 35%,
+        rgba(0,0,0,0.35) 0%,
+        rgba(0,0,0,0.15) 50%,
+        rgba(0,0,0,0) 80%
       );
     pointer-events: none;
   }
@@ -451,6 +454,16 @@
     height: 100%;
     object-fit: cover;
     z-index: 0;
+  }
+
+  /* Dot grid overlay — textura sutil para placeholder editorial
+     de proyectos y posts. Sin imágenes externas. */
+  .dots-overlay {
+    background-image: radial-gradient(rgba(255,255,255,0.4) 1px, transparent 1px);
+    background-size: 14px 14px;
+  }
+  .dots-overlay--ink {
+    background-image: radial-gradient(rgba(10,10,10,0.18) 1px, transparent 1px);
   }
 }
 

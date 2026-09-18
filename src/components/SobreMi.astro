@@ -10,12 +10,17 @@ import site from "../data/site.json";
           <span class="sticker__label">About<br />me</span>
         </span>
         <div
-          class="placeholder-image placeholder-image--warm w-full aspect-square max-w-xs rounded-xl flex items-center justify-center"
-          aria-label="Avatar con iniciales MF"
+          class="relative w-40 h-40 md:w-48 md:h-48 mx-auto lg:mx-0"
+          role="img"
+          aria-label="Avatar con iniciales MF — placeholder hasta tener foto real"
         >
-          <span class="font-impact text-[clamp(4rem,8vw,6rem)] uppercase text-white [text-shadow:_0_2px_12px_rgba(0,0,0,0.4)]">
-            MF
-          </span>
+          <div class="absolute inset-0 rounded-full bg-[var(--color-azul)] opacity-90 translate-x-2 translate-y-2"></div>
+          <div class="absolute inset-0 rounded-full bg-[var(--color-ink)] flex items-center justify-center shadow-xl">
+            <span class="font-impact text-6xl md:text-7xl text-[var(--color-blanco-humo)] leading-none tracking-tight">
+              MF
+            </span>
+          </div>
+          <span class="absolute bottom-1 right-1 w-6 h-6 rounded-full bg-[var(--color-azul)] border-4 border-[var(--color-blanco-humo)] shadow-md" aria-hidden="true"></span>
         </div>
       </div>
 

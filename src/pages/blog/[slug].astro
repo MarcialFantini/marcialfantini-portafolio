@@ -15,16 +15,18 @@ export const getStaticPaths = (async () => {
 
 const { post } = Astro.props;
 const { Content } = await render(post);
+const { title, description, pubDate, category, readingTime, tags } = post.data;
 
 const allPosts = await getCollection("blog");
-const related = allPosts
+const sortedAll = allPosts.sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
+const postIndex = sortedAll.findIndex((p) => p.id === post.id) + 1;
+const placeholderIndex = String(postIndex).padStart(2, "0");
+const related = sortedAll
   .filter(
     (p) => p.id !== post.id && (p.data.category === post.data.category || p.data.tags.some((t) => post.data.tags.includes(t)))
   )
   .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime())
   .slice(0, 3);
-
-const { title, description, pubDate, category, readingTime, tags } = post.data;
 ---
 
 <Layout
@@ -35,15 +37,13 @@ const { title, description, pubDate, category, readingTime, tags } = post.data;
   <article>
     <header class="pt-12 md:pt-20 pb-10 md:pb-14 border-b border-[var(--color-border)]">
       <div class="container-page max-w-3xl reveal">
-        <div class="placeholder-image placeholder-image--cool h-56 md:h-72 rounded-xl mb-8 shadow-md">
-          <img
-            src={`https://picsum.photos/seed/post-${post.id}/1200/600`}
-            alt=""
-            role="presentation"
-            class="cover-image"
-            loading="lazy"
-            decoding="async"
-          />
+        <div class="placeholder-image placeholder-image--cool h-56 md:h-72 rounded-xl mb-8 shadow-md relative overflow-hidden">
+          <div class="absolute inset-0 dots-overlay opacity-40"></div>
+          <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+            <span class="font-impact text-[clamp(8rem,20vw,16rem)] text-white/15 select-none tabular-nums leading-none">
+              {placeholderIndex}
+            </span>
+          </div>
         </div>
 
         <a

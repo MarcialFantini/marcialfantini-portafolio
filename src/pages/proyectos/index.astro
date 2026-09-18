@@ -7,6 +7,7 @@ const proyectos = allProyectos.sort(
   (a, b) => b.data.fecha.getTime() - a.data.fecha.getTime()
 );
 const [hero, ...rest] = proyectos;
+const heroIndex = String(proyectos.findIndex((p) => p.id === hero?.id) + 1).padStart(2, "0");
 ---
 
 <Layout
@@ -33,15 +34,13 @@ const [hero, ...rest] = proyectos;
             href={`/proyectos/${hero.id}`}
             class="tactile group block border-2 border-[var(--color-ink)] rounded-lg bg-[var(--color-ink)] text-[var(--color-blanco-humo)] hover:bg-[var(--color-azul)] hover:text-[var(--color-ink)] p-7 md:p-10 reveal"
           >
-            <div class="placeholder-image placeholder-image--warm h-48 md:h-64 rounded-lg mb-6 -mx-7 md:-mx-10 image-scrim">
-              <img
-                src={`https://picsum.photos/seed/proyecto-${hero.id}/1600/700`}
-                alt=""
-                role="presentation"
-                class="cover-image"
-                loading="lazy"
-                decoding="async"
-              />
+            <div class="placeholder-image placeholder-image--warm h-48 md:h-64 rounded-lg mb-6 -mx-7 md:-mx-10 image-scrim relative overflow-hidden">
+              <div class="absolute inset-0 dots-overlay opacity-40"></div>
+              <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+                <span class="font-impact text-[clamp(7rem,18vw,14rem)] text-white/15 select-none tabular-nums leading-none">
+                  {heroIndex}
+                </span>
+              </div>
             </div>
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
               <div>

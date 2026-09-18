@@ -38,17 +38,15 @@ const gradients = ["warm", "cool", "vivid"] as const;
               class="group tactile block rounded-xl bg-[var(--color-blanco-humo)] shadow-sm border border-[var(--color-border)] transition-all duration-200 hover:-translate-y-1 hover:shadow-lg hover:border-[var(--color-azul)] h-full overflow-hidden"
             >
               <div
-                class={`placeholder-image placeholder-image--${gradients[i % gradients.length]} h-40`}
+                class={`placeholder-image placeholder-image--${gradients[i % gradients.length]} h-40 relative overflow-hidden`}
                 aria-hidden="true"
               >
-                <img
-                  src={`https://picsum.photos/seed/post-${post.id}/800/500`}
-                  alt=""
-                  role="presentation"
-                  class="cover-image"
-                  loading="lazy"
-                  decoding="async"
-                />
+                <div class="absolute inset-0 dots-overlay opacity-50"></div>
+                <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+                  <span class="font-impact text-7xl text-white/15 select-none tabular-nums leading-none">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                </div>
               </div>
               <div class="p-6">
                 <div class="flex items-center gap-3 mb-4 font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-mute)]">

@@ -4,26 +4,26 @@ import FormattedDate from "./FormattedDate.astro";
 
 interface Props {
   post: CollectionEntry<"blog">;
+  index?: number;
   compact?: boolean;
 }
 
-const { post, compact = false } = Astro.props;
+const { post, index = 0, compact = false } = Astro.props;
 const { title, description, pubDate, category, readingTime } = post.data;
+const placeholderIndex = String(index + 1).padStart(2, "0");
 ---
 
 <a
   href={`/blog/${post.id}`}
   class="group block rounded-xl bg-[var(--color-blanco-humo)] shadow-sm border border-[var(--color-border)] tactile transition-all duration-200 hover:-translate-y-1 hover:shadow-lg hover:border-[var(--color-azul)] h-full overflow-hidden"
 >
-  <div class="placeholder-image placeholder-image--warm h-32" aria-hidden="true">
-    <img
-      src={`https://picsum.photos/seed/post-${post.id}/800/500`}
-      alt=""
-      role="presentation"
-      class="cover-image"
-      loading="lazy"
-      decoding="async"
-    />
+  <div class="placeholder-image placeholder-image--warm h-32 relative overflow-hidden" aria-hidden="true">
+    <div class="absolute inset-0 dots-overlay opacity-50"></div>
+    <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+      <span class="font-impact text-7xl text-white/15 select-none tabular-nums leading-none">
+        {placeholderIndex}
+      </span>
+    </div>
   </div>
 
   <div class="p-6">

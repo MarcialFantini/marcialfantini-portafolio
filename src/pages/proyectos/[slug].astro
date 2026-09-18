@@ -19,7 +19,10 @@ const { title, cliente, descripcion, problema, resultado, stack, fecha, duracion
   proyecto.data;
 
 const allProyectos = await getCollection("proyectos");
-const related = allProyectos
+const sortedAll = allProyectos.sort((a, b) => b.data.fecha.getTime() - a.data.fecha.getTime());
+const projectIndex = sortedAll.findIndex((p) => p.id === proyecto.id) + 1;
+const placeholderIndex = String(projectIndex).padStart(2, "0");
+const related = sortedAll
   .filter((p) => p.id !== proyecto.id && p.data.tags.some((t) => tags.includes(t)))
   .sort((a, b) => b.data.fecha.getTime() - a.data.fecha.getTime())
   .slice(0, 3);
@@ -33,15 +36,13 @@ const related = allProyectos
   <article>
     <header class="pt-12 md:pt-20 pb-10 md:pb-14 border-b border-[var(--color-border)]">
       <div class="container-page max-w-4xl reveal">
-        <div class="placeholder-image placeholder-image--warm h-56 md:h-72 rounded-xl mb-8 shadow-md">
-          <img
-            src={`https://picsum.photos/seed/proyecto-${proyecto.id}/1200/600`}
-            alt=""
-            role="presentation"
-            class="cover-image"
-            loading="lazy"
-            decoding="async"
-          />
+        <div class="placeholder-image placeholder-image--warm h-56 md:h-72 rounded-xl mb-8 shadow-md relative overflow-hidden">
+          <div class="absolute inset-0 dots-overlay opacity-40"></div>
+          <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+            <span class="font-impact text-[clamp(8rem,20vw,16rem)] text-white/15 select-none tabular-nums leading-none">
+              {placeholderIndex}
+            </span>
+          </div>
         </div>
 
         <a

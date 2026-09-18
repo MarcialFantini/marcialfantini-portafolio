@@ -4,12 +4,14 @@ import FormattedDate from "./FormattedDate.astro";
 
 interface Props {
   proyecto: CollectionEntry<"proyectos">;
+  index?: number;
   compact?: boolean;
 }
 
-const { proyecto, compact = false } = Astro.props;
+const { proyecto, index = 0, compact = false } = Astro.props;
 const { title, cliente, descripcion, stack, fecha, metricas } = proyecto.data;
 const heroMetric = metricas[0];
+const placeholderIndex = String(index + 1).padStart(2, "0");
 ---
 
 <a
@@ -17,17 +19,15 @@ const heroMetric = metricas[0];
   class="group block rounded-xl bg-[var(--color-blanco)] shadow-sm border border-[var(--color-border)] tactile transition-all duration-200 hover:-translate-y-1 hover:shadow-lg hover:border-[var(--color-azul)] h-full overflow-hidden"
 >
   <div
-    class="placeholder-image placeholder-image--cool h-32 md:h-40"
+    class="placeholder-image placeholder-image--cool h-32 md:h-40 relative overflow-hidden"
     aria-hidden="true"
   >
-    <img
-      src={`https://picsum.photos/seed/proyecto-${proyecto.id}/800/500`}
-      alt=""
-      role="presentation"
-      class="cover-image"
-      loading="lazy"
-      decoding="async"
-    />
+    <div class="absolute inset-0 dots-overlay opacity-50"></div>
+    <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+      <span class="font-impact text-7xl md:text-8xl text-white/15 select-none tabular-nums leading-none">
+        {placeholderIndex}
+      </span>
+    </div>
   </div>
 
   <div class="p-6">
