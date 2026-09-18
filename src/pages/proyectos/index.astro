@@ -1,12 +1,12 @@
 ---
 import Layout from "../../layouts/Layout.astro";
-import ProyectoCard from "../../components/ProyectoCard.astro";
 import { getCollection } from "astro:content";
 
 const allProyectos = await getCollection("proyectos");
 const proyectos = allProyectos.sort(
   (a, b) => b.data.fecha.getTime() - a.data.fecha.getTime()
 );
+const [hero, ...rest] = proyectos;
 ---
 
 <Layout
@@ -14,14 +14,8 @@ const proyectos = allProyectos.sort(
   description="Casos donde mis decisiones importaron: cada proyecto con problema, solución, resultado y métricas concretas."
 >
   <section class="pt-16 md:pt-24 pb-12 border-b border-[var(--color-border)]">
-    <div class="container-page max-w-4xl">
-      <p
-        class="font-mono text-xs uppercase tracking-[0.25em] text-[var(--color-mute)] mb-6 flex items-center gap-3"
-      >
-        <span class="inline-block w-8 h-px bg-[var(--color-dorado)]"></span>
-        Proyectos
-      </p>
-      <h1 class="font-display font-bold text-[var(--color-ink)] tracking-tight mb-6">
+    <div class="container-page max-w-4xl reveal">
+      <h1 class="font-display font-bold tracking-tight mb-6 text-[var(--color-ink)]">
         Casos donde mis decisiones importaron.
       </h1>
       <p class="text-xl text-[var(--color-ink-soft)] leading-relaxed max-w-3xl">
@@ -31,11 +25,77 @@ const proyectos = allProyectos.sort(
     </div>
   </section>
 
-  <section class="py-12 md:py-16">
+  {
+    hero && (
+      <section class="border-b border-[var(--color-border)]">
+        <div class="container-page py-10 md:py-14">
+          <a
+            href={`/proyectos/${hero.id}`}
+            class="tactile group block border border-[var(--color-border)] rounded-lg bg-[var(--color-blanco)] hover:border-[var(--color-azul)] p-7 md:p-10 reveal"
+          >
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+              <div>
+                <p class="font-mono text-[11px] uppercase tracking-widest text-[var(--color-mute)] mb-3">
+                  {hero.data.cliente}
+                </p>
+                <p class="font-display text-5xl md:text-7xl font-bold tracking-tighter text-[var(--color-azul)] leading-none">
+                  {hero.data.metricas[0]?.value}
+                </p>
+                <p class="font-mono text-[11px] uppercase tracking-widest text-[var(--color-mute)] mt-3 leading-tight max-w-[180px]">
+                  {hero.data.metricas[0]?.label}
+                </p>
+              </div>
+              <div class="lg:col-span-2">
+                <h2 class="font-display font-semibold text-2xl md:text-3xl tracking-tight text-[var(--color-ink)] group-hover:text-[var(--color-azul)] leading-tight mb-4">
+                  {hero.data.title}
+                </h2>
+                <p class="text-[var(--color-ink-soft)] leading-relaxed">
+                  {hero.data.descripcion}
+                </p>
+              </div>
+            </div>
+          </a>
+        </div>
+      </section>
+    )
+  }
+
+  <section class="py-10 md:py-14">
     <div class="container-page">
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-        {proyectos.map((p) => <ProyectoCard proyecto={p} />)}
-      </div>
+      <ol class="border-t border-[var(--color-border)] reveal-stagger">
+        {
+          rest.map((p) => (
+            <li class="border-b border-[var(--color-border)]">
+              <a
+                href={`/proyectos/${p.id}`}
+                class="tactile group grid grid-cols-[auto_1fr_auto] md:grid-cols-[3rem_1fr_auto_auto] items-baseline gap-5 md:gap-8 py-6"
+              >
+                <span class="font-mono text-xs text-[var(--color-mute)] pt-1 tabular-nums">
+                  <span class="inline-block w-6 h-px bg-[var(--color-border)] mr-2 align-middle"></span>
+                  {p.data.metricas[0]?.value}
+                </span>
+                <div class="min-w-0">
+                  <h3 class="font-display font-semibold text-lg tracking-tight text-[var(--color-ink)] group-hover:text-[var(--color-azul)] leading-tight">
+                    {p.data.title}
+                  </h3>
+                  <p class="mt-1 text-sm text-[var(--color-ink-soft)] leading-snug truncate">
+                    {p.data.cliente} · {p.data.descripcion}
+                  </p>
+                </div>
+                <span class="font-mono text-xs text-[var(--color-mute)] whitespace-nowrap hidden md:inline">
+                  {p.data.fecha.toLocaleDateString("es-AR", { day: "2-digit", month: "2-digit", year: "numeric" })}
+                </span>
+                <span
+                  aria-hidden="true"
+                  class="hidden md:inline text-[var(--color-mute)] group-hover:text-[var(--color-azul)] group-hover:translate-x-1 transition-transform"
+                >
+                  →
+                </span>
+              </a>
+            </li>
+          ))
+        }
+      </ol>
     </div>
   </section>
 </Layout>

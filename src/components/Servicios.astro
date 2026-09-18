@@ -4,78 +4,48 @@ import servicios from "../data/servicios.json";
 
 <section id="servicios" class="py-20 md:py-28 border-b border-[var(--color-border)]">
   <div class="container-page">
-    <div class="max-w-2xl mb-14">
-      <p class="font-mono text-xs uppercase tracking-[0.25em] text-[var(--color-mute)] mb-4 flex items-center gap-3">
-        <span class="inline-block w-6 h-px bg-[var(--color-dorado)]"></span>
-        Servicios
-      </p>
-      <h2 class="font-display font-bold tracking-tight">
-        Qué puedo hacer por tu negocio
+    <div class="max-w-2xl mb-14 reveal">
+      <h2 class="font-display font-bold tracking-tight text-[var(--color-ink)]">
+        Qué puedo hacer por tu negocio.
       </h2>
       <p class="mt-5 text-[var(--color-ink-soft)] text-lg leading-relaxed">
-        Trabajo con un menú corto y claro. Cuatro servicios, sin paquetes misteriosos. Cada uno
-        tiene precio orientativo y entregable definido.
+        Cuatro servicios con precio orientativo y entregable definido. Sin paquetes misteriosos,
+        sin upsell, sin retainer obligatorio.
       </p>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+    <ol class="border-t border-[var(--color-border)] reveal-stagger">
       {
-        servicios.map((s) => (
-          <article
-            class="border border-[var(--color-border)] rounded-lg p-7 md:p-8 bg-[var(--color-blanco)] hover:border-[var(--color-dorado)] transition-colors flex flex-col"
-          >
-            <header class="mb-5">
-              <h3 class="font-display font-semibold text-2xl tracking-tight text-[var(--color-ink)] mb-3">
-                {s.titulo}
-              </h3>
-              <p class="text-[var(--color-ink-soft)] leading-relaxed">{s.descripcion}</p>
-            </header>
-
-            <div class="space-y-5 mt-2">
-              <div>
-                <p class="font-mono text-xs uppercase tracking-widest text-[var(--color-mute)] mb-2">
-                  Qué incluye
+        servicios.map((s, i) => (
+          <li class="group border-b border-[var(--color-border)]">
+            <a
+              href={`/contacto?servicio=${encodeURIComponent(s.titulo)}`}
+              class="tactile grid grid-cols-[auto_1fr_auto] md:grid-cols-[3rem_1fr_auto_auto] items-baseline gap-5 md:gap-8 py-6 md:py-7"
+            >
+              <span class="font-mono text-xs text-[var(--color-mute)] tabular-nums pt-1">
+                {String(i + 1).padStart(2, "0")} <span class="text-[var(--color-border)]">/</span> 04
+              </span>
+              <div class="min-w-0">
+                <h3 class="font-display font-semibold text-xl md:text-2xl tracking-tight text-[var(--color-ink)] group-hover:text-[var(--color-azul)] leading-tight">
+                  {s.titulo}
+                </h3>
+                <p class="mt-1.5 text-sm md:text-base text-[var(--color-ink-soft)] leading-snug max-w-2xl">
+                  {s.descripcion}
                 </p>
-                <ul class="space-y-1.5 text-sm text-[var(--color-ink-soft)]">
-                  {s.queIncluye.map((item) => (
-                    <li class="flex gap-2.5">
-                      <span class="text-[var(--color-dorado)] mt-0.5 shrink-0" aria-hidden="true">·</span>
-                      <span>{item}</span>
-                    </li>
-                  ))}
-                </ul>
               </div>
-
-              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-5 border-t border-[var(--color-border)]">
-                <div>
-                  <p class="font-mono text-xs uppercase tracking-widest text-[var(--color-mute)] mb-1">
-                    Ideal para
-                  </p>
-                  <p class="text-sm text-[var(--color-ink)] leading-snug">{s.idealPara}</p>
-                </div>
-                <div>
-                  <p class="font-mono text-xs uppercase tracking-widest text-[var(--color-mute)] mb-1">
-                    Precio orientativo
-                  </p>
-                  <p class="font-mono text-sm text-[var(--color-azul)] font-medium">
-                    {s.precioOrientativo}
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div class="mt-7">
-              <a
-                href={`/contacto?servicio=${encodeURIComponent(s.titulo)}`}
-                class="inline-flex items-center gap-1.5 text-sm font-medium text-[var(--color-azul)] hover:text-[var(--color-dorado)]"
+              <p class="font-mono text-sm md:text-base text-[var(--color-azul)] font-medium tabular-nums whitespace-nowrap">
+                {s.precioOrientativo}
+              </p>
+              <span
+                aria-hidden="true"
+                class="hidden md:inline text-[var(--color-mute)] group-hover:text-[var(--color-azul)] group-hover:translate-x-1 transition-transform"
               >
-                {s.cta}
-                <span aria-hidden="true">→</span>
-              </a>
-            </div>
-          </article>
+                →
+              </span>
+            </a>
+          </li>
         ))
       }
-    </div>
+    </ol>
   </div>
 </section>

@@ -13,21 +13,21 @@ const pathname = Astro.url.pathname;
 ---
 
 <header
-  class="sticky top-0 z-50 backdrop-blur-md bg-[var(--color-blanco-humo)]/85 border-b border-[var(--color-border)]"
+  class="sticky top-0 z-50 backdrop-blur-md bg-[var(--color-blanco-humo)]/80 dark:bg-[var(--color-blanco-humo)]/70 border-b border-[var(--color-border)]"
 >
-  <div class="container-page flex items-center justify-between h-16 md:h-20">
+  <div class="container-page flex items-center justify-between h-16 md:h-[68px]">
     <a
       href="/"
-      class="flex items-center gap-2 group"
+      class="flex items-center gap-2.5 group"
       aria-label={`${site.name} - ir al inicio`}
     >
       <span
-        class="inline-flex items-center justify-center w-9 h-9 rounded-md bg-[var(--color-ink)] text-[var(--color-blanco)] font-display font-bold text-sm transition-colors group-hover:bg-[var(--color-azul)]"
+        class="tactile inline-flex items-center justify-center w-9 h-9 rounded-md bg-[var(--color-ink)] text-[var(--color-blanco)] font-display font-bold text-sm group-hover:bg-[var(--color-azul)]"
       >
         MF
       </span>
-      <span class="font-display font-semibold text-[var(--color-ink)] text-base hidden sm:inline tracking-tight">
-        {site.shortName}.dev
+      <span class="font-display font-semibold text-[var(--color-ink)] text-[15px] hidden sm:inline tracking-tight">
+        {site.shortName}<span class="text-[var(--color-mute)]">.dev</span>
       </span>
     </a>
 
@@ -42,10 +42,10 @@ const pathname = Astro.url.pathname;
             <a
               href={item.href}
               class:list={[
-                "text-sm font-medium transition-colors tracking-tight",
+                "tactile text-sm font-medium tracking-tight",
                 active
                   ? "text-[var(--color-azul)]"
-                  : "text-[var(--color-ink-soft)] hover:text-[var(--color-dorado)]",
+                  : "text-[var(--color-ink-soft)] hover:text-[var(--color-ink)]",
               ]}
               aria-current={active ? "page" : undefined}
             >
@@ -56,7 +56,7 @@ const pathname = Astro.url.pathname;
       }
       <a
         href="/contacto"
-        class="inline-flex items-center justify-center px-4 py-2 rounded-md bg-[var(--color-ink)] text-[var(--color-blanco-humo)] text-sm font-medium hover:bg-[var(--color-azul)] transition-colors"
+        class="tactile inline-flex items-center justify-center px-4 py-2 rounded-md bg-[var(--color-ink)] text-[var(--color-blanco-humo)] text-sm font-medium hover:bg-[var(--color-azul)]"
       >
         Hablemos
       </a>
@@ -65,7 +65,7 @@ const pathname = Astro.url.pathname;
     <button
       type="button"
       id="mobile-menu-trigger"
-      class="md:hidden p-2 -mr-2 text-[var(--color-ink)]"
+      class="tactile md:hidden p-2 -mr-2 text-[var(--color-ink)]"
       aria-label="Abrir menú"
       aria-controls="mobile-menu"
       aria-expanded="false"
@@ -84,7 +84,7 @@ const pathname = Astro.url.pathname;
         navItems.map((item) => (
           <a
             href={item.href}
-            class="py-3 text-base font-medium text-[var(--color-ink-soft)] hover:text-[var(--color-azul)] border-b border-[var(--color-border)] last:border-b-0"
+            class="tactile py-3 text-base font-medium text-[var(--color-ink-soft)] hover:text-[var(--color-azul)] border-b border-[var(--color-border)] last:border-b-0"
           >
             {item.label}
           </a>
@@ -92,7 +92,7 @@ const pathname = Astro.url.pathname;
       }
       <a
         href="/contacto"
-        class="mt-3 inline-flex items-center justify-center px-4 py-3 rounded-md bg-[var(--color-ink)] text-[var(--color-blanco-humo)] text-base font-medium"
+        class="tactile mt-3 inline-flex items-center justify-center px-4 py-3 rounded-md bg-[var(--color-ink)] text-[var(--color-blanco-humo)] text-base font-medium"
       >
         Hablemos
       </a>

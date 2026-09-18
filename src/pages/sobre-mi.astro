@@ -31,20 +31,9 @@ const process = [
 ];
 
 const stack = [
-  "Astro",
-  "TypeScript",
-  "Tailwind v4",
-  "Next.js",
-  "React",
-  "Node.js",
-  "PostgreSQL",
-  "SQLite",
-  "Stripe",
-  "Mercado Pago",
-  "HubSpot",
-  "Cal.com",
-  "Vercel",
-  "Cloudflare",
+  "Astro", "TypeScript", "Tailwind v4", "Next.js", "React", "Node.js",
+  "PostgreSQL", "SQLite", "Stripe", "Mercado Pago", "HubSpot", "Cal.com",
+  "Vercel", "Cloudflare",
 ];
 
 const principios = [
@@ -75,20 +64,20 @@ const principios = [
 >
   <!-- Hero -->
   <section class="pt-16 md:pt-24 pb-16 md:pb-20 border-b border-[var(--color-border)]">
-    <div class="container-page">
+    <div class="container-page max-w-4xl reveal">
       <p
-        class="font-mono text-xs uppercase tracking-[0.25em] text-[var(--color-mute)] mb-6 flex items-center gap-3"
+        class="font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--color-mute)] mb-6 flex items-center gap-3"
       >
-        <span class="inline-block w-8 h-px bg-[var(--color-dorado)]"></span>
+        <span class="tick-gold"></span>
         Sobre mí
       </p>
-      <h1 class="font-display font-bold text-[var(--color-ink)] max-w-4xl tracking-tight mb-8">
-        Construyo software para que tu PyME cierre más ventas y deje de depender de mi.
+      <h1 class="font-display font-bold text-[var(--color-ink)] tracking-tight mb-8">
+        Construyo software para que tu PyME cierre más ventas y deje de depender de mí.
       </h1>
-      <p class="text-xl text-[var(--color-ink-soft)] max-w-3xl leading-relaxed">
-        Soy Marcial Fantini. Desarrollo freelance desde 2017, especializado en productos
-        digitales para PyMEs argentinas. No quiero clientes cautivos: quiero clientes que
-        aprendan a medir su canal online y eventualmente prescindan de mí.
+      <p class="text-xl text-[var(--color-ink-soft)] leading-relaxed max-w-3xl">
+        Soy Marcial Fantini. Desarrollo freelance desde 2017, especializado en productos digitales
+        para PyMEs argentinas. No quiero clientes cautivos: quiero clientes que aprendan a medir
+        su canal online y eventualmente prescindan de mí.
       </p>
     </div>
   </section>
@@ -96,10 +85,10 @@ const principios = [
   <!-- Bio -->
   <section class="py-16 md:py-24 border-b border-[var(--color-border)]">
     <div class="container-page">
-      <div class="grid grid-cols-1 md:grid-cols-12 gap-10">
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-10 reveal">
         <div class="md:col-span-3">
           <div
-            class="w-32 h-32 md:w-40 md:h-40 rounded-lg bg-[var(--color-ink)] text-[var(--color-blanco)] font-display font-bold text-5xl flex items-center justify-center tracking-tight"
+            class="w-32 h-32 md:w-40 md:h-40 rounded-lg bg-[var(--color-ink)] text-[var(--color-blanco)] font-display font-bold text-5xl flex items-center justify-center tracking-tighter"
             aria-label="Avatar con iniciales MF"
           >
             MF
@@ -123,14 +112,14 @@ const principios = [
             consultorías, e-commerce incipientes. Son clientes que tienen presupuesto limitado y
             necesitan que cada peso cuente. Esa restricción me obligó a elegir bien el stack, no
             a usar la herramienta de moda. Hoy, eso significa que el 90% de mis proyectos son
-            en <strong class="text-[var(--color-ink)]">Astro + TypeScript + Tailwind</strong> con deploy en
+            en <strong class="text-[var(--color-ink)] font-semibold">Astro + TypeScript + Tailwind</strong> con deploy en
             Vercel o Cloudflare.
           </p>
           <p>
             Lo que más disfruto del trabajo freelance no es la libertad horaria (que existe) ni
             la escala de los proyectos (que no es enorme). Es esa llamada post-entrega donde el
-            cliente me dice "cerré tres ventas esta semana atribuibles al sitio nuevo". Eso es
-            lo que me paga la hipoteca, no la pantalla a 1280px.
+            cliente me dice <em class="not-italic text-[var(--color-ink)] font-medium">"cerré tres ventas esta semana atribuibles al sitio nuevo"</em>.
+            Eso es lo que me paga la hipoteca, no la pantalla a 1280px.
           </p>
           <p>
             Si tu PyME necesita presencia digital seria y querés hablar con alguien que piense en
@@ -145,52 +134,50 @@ const principios = [
   <!-- Principios -->
   <section class="py-16 md:py-24 border-b border-[var(--color-border)] bg-[var(--color-blanco)]">
     <div class="container-page">
-      <div class="max-w-2xl mb-12">
-        <p
-          class="font-mono text-xs uppercase tracking-[0.25em] text-[var(--color-mute)] mb-4 flex items-center gap-3"
-        >
-          <span class="inline-block w-6 h-px bg-[var(--color-dorado)]"></span>
-          Principios
-        </p>
-        <h2 class="font-display font-bold tracking-tight">Cómo pienso el trabajo</h2>
-      </div>
+      <h2 class="font-display font-bold tracking-tight max-w-xl mb-12 reveal">
+        Cómo pienso el trabajo.
+      </h2>
 
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+      <ol class="grid grid-cols-1 sm:grid-cols-2 gap-5 reveal-stagger">
         {
           principios.map((p, i) => (
-            <article class="border border-[var(--color-border)] rounded-md p-6 md:p-8">
-              <p class="font-mono text-xs text-[var(--color-mute)] mb-3">
+            <li class="border-t border-[var(--color-border)] pt-5">
+              <p class="font-mono text-xs text-[var(--color-mute)] mb-4 tabular-nums">
                 {String(i + 1).padStart(2, "0")}
               </p>
               <h3 class="font-display font-semibold text-xl tracking-tight mb-3 text-[var(--color-ink)]">
                 {p.title}
               </h3>
-              <p class="text-[var(--color-ink-soft)] leading-relaxed">{p.description}</p>
-            </article>
+              <p class="text-[var(--color-ink-soft)] leading-relaxed text-base">
+                {p.description}
+              </p>
+            </li>
           ))
         }
-      </div>
+      </ol>
     </div>
   </section>
 
   <!-- Proceso -->
   <section class="py-16 md:py-24 border-b border-[var(--color-border)]">
     <div class="container-page">
-      <div class="max-w-2xl mb-14">
+      <div class="max-w-2xl mb-14 reveal">
         <p
-          class="font-mono text-xs uppercase tracking-[0.25em] text-[var(--color-mute)] mb-4 flex items-center gap-3"
+          class="font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--color-mute)] mb-4 flex items-center gap-3"
         >
-          <span class="inline-block w-6 h-px bg-[var(--color-dorado)]"></span>
+          <span class="tick-gold"></span>
           Cómo trabajo
         </p>
-        <h2 class="font-display font-bold tracking-tight">De la primera llamada al sitio en producción</h2>
+        <h2 class="font-display font-bold tracking-tight">
+          De la primera llamada al sitio en producción.
+        </h2>
       </div>
 
-      <ol class="space-y-0">
+      <ol class="reveal-stagger">
         {
           process.map((step, i) => (
             <li class="grid grid-cols-[40px_1fr] md:grid-cols-[60px_1fr_auto] gap-4 md:gap-8 py-7 border-b border-[var(--color-border)] first:border-t last:border-b-0 items-start">
-              <span class="font-mono text-3xl md:text-4xl font-light text-[var(--color-dorado)]">
+              <span class="font-mono text-3xl md:text-4xl font-light text-[var(--color-dorado)] tabular-nums">
                 {String(i + 1).padStart(2, "0")}
               </span>
               <div>
@@ -201,7 +188,7 @@ const principios = [
                   {step.description}
                 </p>
               </div>
-              <span class="font-mono text-xs uppercase tracking-widest text-[var(--color-mute)] pt-2 hidden md:inline">
+              <span class="font-mono text-xs uppercase tracking-widest text-[var(--color-mute)] pt-2 hidden md:inline whitespace-nowrap">
                 {step.duration}
               </span>
             </li>
@@ -214,17 +201,11 @@ const principios = [
   <!-- Stack -->
   <section class="py-16 md:py-24 border-b border-[var(--color-border)] bg-[var(--color-blanco)]">
     <div class="container-page">
-      <div class="max-w-2xl mb-12">
-        <p
-          class="font-mono text-xs uppercase tracking-[0.25em] text-[var(--color-mute)] mb-4 flex items-center gap-3"
-        >
-          <span class="inline-block w-6 h-px bg-[var(--color-dorado)]"></span>
-          Stack
-        </p>
-        <h2 class="font-display font-bold tracking-tight">Las herramientas que conozco</h2>
-      </div>
+      <h2 class="font-display font-bold tracking-tight max-w-xl mb-10 reveal">
+        Las herramientas que conozco.
+      </h2>
 
-      <ul class="flex flex-wrap gap-2">
+      <ul class="flex flex-wrap gap-2 reveal-stagger">
         {
           stack.map((s) => (
             <li class="font-mono text-sm px-3.5 py-2 rounded-md border border-[var(--color-border)] bg-[var(--color-blanco-humo)] text-[var(--color-ink-soft)]">

@@ -27,8 +27,9 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site ?? `https://${site.n
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="generator" content={Astro.generator} />
-    <meta name="color-scheme" content="light" />
-    <meta name="theme-color" content="#F5F5F4" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#F5F5F4" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0E0E10" media="(prefers-color-scheme: dark)" />
 
     <title>{title}</title>
     <meta name="description" content={description} />
@@ -50,6 +51,22 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site ?? `https://${site.n
 
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <!-- Pre-paint theme sync — runs before body to avoid FOUC -->
+    <script is:inline>
+      (function () {
+        try {
+          var stored = localStorage.getItem('mf-theme');
+          var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+          var dark = stored === 'dark' || (stored !== 'light' && prefersDark);
+          if (dark) document.documentElement.classList.add('dark');
+        } catch (e) {
+          if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark');
+          }
+        }
+      })();
+    </script>
 
     <!-- Person structured data -->
     <script type="application/ld+json" is:inline set:html={JSON.stringify({
@@ -83,5 +100,36 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site ?? `https://${site.n
       <slot />
     </main>
     <Footer />
+
+    <!-- Reveal-on-scroll — vanilla IntersectionObserver, sin dependencias -->
+    <script>
+      (function () {
+        var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (reduce) {
+          document.querySelectorAll('.reveal, .reveal-stagger').forEach(function (el) {
+            el.setAttribute('data-revealed', 'in');
+          });
+          return;
+        }
+
+        var io = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              entry.target.setAttribute('data-revealed', 'in');
+              io.unobserve(entry.target);
+            }
+          });
+        }, { rootMargin: '0px 0px -10% 0px', threshold: 0.05 });
+
+        function observe() {
+          document.querySelectorAll('.reveal:not([data-revealed]), .reveal-stagger:not([data-revealed])').forEach(function (el) {
+            io.observe(el);
+          });
+        }
+
+        observe();
+        document.addEventListener('astro:page-load', observe);
+      })();
+    </script>
   </body>
 </html>

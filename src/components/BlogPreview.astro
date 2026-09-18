@@ -1,6 +1,6 @@
 ---
 import { getCollection } from "astro:content";
-import PostCard from "./PostCard.astro";
+import FormattedDate from "./FormattedDate.astro";
 
 const allPosts = await getCollection("blog");
 const posts = allPosts
@@ -10,26 +10,53 @@ const posts = allPosts
 
 <section class="py-20 md:py-28 border-b border-[var(--color-border)] bg-[var(--color-blanco)]">
   <div class="container-page">
-    <div class="flex items-end justify-between flex-wrap gap-4 mb-12">
-      <div class="max-w-xl">
-        <p class="font-mono text-xs uppercase tracking-[0.25em] text-[var(--color-mute)] mb-4 flex items-center gap-3">
-          <span class="inline-block w-6 h-px bg-[var(--color-dorado)]"></span>
-          Blog
-        </p>
-        <h2 class="font-display font-bold tracking-tight">
-          Lo que aprendí en el camino
-        </h2>
-      </div>
+    <div class="flex items-end justify-between flex-wrap gap-4 mb-12 reveal">
+      <h2 class="font-display font-bold tracking-tight text-[var(--color-ink)] max-w-xl">
+        Lo que aprendí en el camino.
+      </h2>
       <a
         href="/blog"
-        class="text-sm font-medium text-[var(--color-azul)] hover:text-[var(--color-dorado)] inline-flex items-center gap-1.5"
+        class="tactile text-sm font-medium text-[var(--color-ink-soft)] hover:text-[var(--color-azul)] inline-flex items-center gap-1.5"
       >
         Ver todos los posts <span aria-hidden="true">→</span>
       </a>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
-      {posts.map((post) => <PostCard post={post} />)}
-    </div>
+    <ol class="border-t border-[var(--color-border)] reveal-stagger">
+      {
+        posts.map((post) => (
+          <li class="border-b border-[var(--color-border)]">
+            <a
+              href={`/blog/${post.id}`}
+              class="tactile group grid grid-cols-[auto_1fr_auto] md:grid-cols-[7rem_1fr_auto_auto] items-baseline gap-5 md:gap-8 py-6 md:py-7"
+            >
+              <div class="font-mono text-xs text-[var(--color-mute)] whitespace-nowrap pt-1 flex flex-col gap-1">
+                <FormattedDate date={post.data.pubDate} format="short" />
+                <span class="text-[var(--color-azul)] uppercase tracking-wider text-[10px]">
+                  {post.data.category}
+                </span>
+              </div>
+              <div class="min-w-0">
+                <h3 class="font-display font-semibold text-xl md:text-2xl tracking-tight text-[var(--color-ink)] group-hover:text-[var(--color-azul)] leading-tight">
+                  {post.data.title}
+                </h3>
+                <p class="mt-2 text-sm md:text-base text-[var(--color-ink-soft)] leading-snug max-w-2xl line-clamp-2">
+                  {post.data.description}
+                </p>
+              </div>
+              <span class="font-mono text-xs text-[var(--color-mute)] whitespace-nowrap hidden md:inline pt-1">
+                {post.data.readingTime} min
+              </span>
+              <span
+                aria-hidden="true"
+                class="hidden md:inline text-[var(--color-mute)] group-hover:text-[var(--color-azul)] group-hover:translate-x-1 transition-transform"
+              >
+                →
+              </span>
+            </a>
+          </li>
+        ))
+      }
+    </ol>
   </div>
 </section>

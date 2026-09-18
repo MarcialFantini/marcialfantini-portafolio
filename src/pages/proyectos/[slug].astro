@@ -32,15 +32,15 @@ const related = allProyectos
 >
   <article>
     <header class="pt-12 md:pt-20 pb-10 md:pb-14 border-b border-[var(--color-border)]">
-      <div class="container-page max-w-4xl">
+      <div class="container-page max-w-4xl reveal">
         <a
           href="/proyectos"
-          class="inline-flex items-center gap-1.5 text-sm text-[var(--color-mute)] hover:text-[var(--color-azul)] mb-8 font-mono"
+          class="tactile inline-flex items-center gap-1.5 text-sm text-[var(--color-mute)] hover:text-[var(--color-ink)] mb-8 font-mono"
         >
           <span aria-hidden="true">←</span> Volver a proyectos
         </a>
 
-        <div class="flex items-center gap-3 mb-5 text-xs font-mono text-[var(--color-mute)]">
+        <div class="flex items-center flex-wrap gap-3 mb-5 text-xs font-mono text-[var(--color-mute)]">
           <span class="text-[var(--color-azul)]">{cliente}</span>
           <span class="w-1 h-1 rounded-full bg-[var(--color-border)]"></span>
           <FormattedDate date={fecha} format="long" />
@@ -48,7 +48,7 @@ const related = allProyectos
           <span>{duracion}</span>
         </div>
 
-        <h1 class="font-display font-bold text-[var(--color-ink)] tracking-tight mb-6">
+        <h1 class="font-display font-bold tracking-tight mb-6 text-[var(--color-ink)]">
           {title}
         </h1>
         <p class="text-xl text-[var(--color-ink-soft)] leading-relaxed max-w-3xl">
@@ -58,7 +58,7 @@ const related = allProyectos
         <div class="mt-8 flex flex-wrap gap-2">
           {tags.map((t) => (
             <span class="font-mono text-xs px-2.5 py-1 rounded border border-[var(--color-border)] text-[var(--color-ink-soft)]">
-              {t}
+              #{t}
             </span>
           ))}
         </div>
@@ -67,49 +67,49 @@ const related = allProyectos
 
     {metricas.length > 0 && (
       <section class="py-10 md:py-12 bg-[var(--color-ink)] text-[var(--color-blanco-humo)]">
-        <div class="container-page">
-          <p class="font-mono text-xs uppercase tracking-widest text-[var(--color-blanco-humo)]/50 mb-6">
+        <div class="container-page reveal">
+          <p class="font-mono text-[11px] uppercase tracking-widest text-[var(--color-blanco-humo)]/60 mb-6">
             Resultados medibles
           </p>
-          <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+          <dl class="grid grid-cols-2 md:grid-cols-4 gap-6">
             {metricas.map((m) => (
               <div class="border-l border-[var(--color-dorado)] pl-4">
-                <p class="font-display font-bold text-3xl md:text-4xl text-[var(--color-blanco)] tracking-tight">
+                <dd class="font-display font-bold text-3xl md:text-4xl text-[var(--color-blanco)] tracking-tight leading-none">
                   {m.value}
-                </p>
-                <p class="font-mono text-xs uppercase tracking-widest text-[var(--color-blanco-humo)]/60 mt-2 leading-tight">
+                </dd>
+                <dt class="font-mono text-[10px] uppercase tracking-widest text-[var(--color-blanco-humo)]/60 mt-2 leading-tight block">
                   {m.label}
-                </p>
+                </dt>
               </div>
             ))}
-          </div>
+          </dl>
         </div>
       </section>
     )}
 
     <div class="container-page py-12 md:py-16">
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-12 lg:gap-16">
-        <aside class="lg:col-span-1 space-y-7 text-sm">
+        <aside class="lg:col-span-1 space-y-7 text-sm reveal">
           <div>
-            <p class="font-mono text-xs uppercase tracking-widest text-[var(--color-mute)] mb-2">
+            <p class="font-mono text-[11px] uppercase tracking-widest text-[var(--color-mute)] mb-2">
               Cliente
             </p>
             <p class="text-[var(--color-ink)]">{cliente}</p>
           </div>
           <div>
-            <p class="font-mono text-xs uppercase tracking-widest text-[var(--color-mute)] mb-2">
+            <p class="font-mono text-[11px] uppercase tracking-widest text-[var(--color-mute)] mb-2">
               Rol
             </p>
             <p class="text-[var(--color-ink)]">{role}</p>
           </div>
           <div>
-            <p class="font-mono text-xs uppercase tracking-widest text-[var(--color-mute)] mb-2">
+            <p class="font-mono text-[11px] uppercase tracking-widest text-[var(--color-mute)] mb-2">
               Duración
             </p>
             <p class="text-[var(--color-ink)]">{duracion}</p>
           </div>
           <div>
-            <p class="font-mono text-xs uppercase tracking-widest text-[var(--color-mute)] mb-2">
+            <p class="font-mono text-[11px] uppercase tracking-widest text-[var(--color-mute)] mb-2">
               Stack
             </p>
             <ul class="flex flex-wrap gap-1.5">
@@ -122,7 +122,7 @@ const related = allProyectos
           </div>
           {(url || repo) && (
             <div class="pt-2 border-t border-[var(--color-border)]">
-              <p class="font-mono text-xs uppercase tracking-widest text-[var(--color-mute)] mb-3">
+              <p class="font-mono text-[11px] uppercase tracking-widest text-[var(--color-mute)] mb-3">
                 Links
               </p>
               <div class="flex flex-col gap-2">
@@ -131,7 +131,7 @@ const related = allProyectos
                     href={url}
                     rel="noopener noreferrer"
                     target="_blank"
-                    class="text-[var(--color-azul)] hover:text-[var(--color-dorado)] inline-flex items-center gap-1"
+                    class="tactile text-[var(--color-azul)] hover:text-[var(--color-dorado)] inline-flex items-center gap-1"
                   >
                     Ver sitio en vivo <span aria-hidden="true">↗</span>
                   </a>
@@ -141,7 +141,7 @@ const related = allProyectos
                     href={repo}
                     rel="noopener noreferrer"
                     target="_blank"
-                    class="text-[var(--color-azul)] hover:text-[var(--color-dorado)] inline-flex items-center gap-1"
+                    class="tactile text-[var(--color-azul)] hover:text-[var(--color-dorado)] inline-flex items-center gap-1"
                   >
                     Repositorio en GitHub <span aria-hidden="true">↗</span>
                   </a>
@@ -151,41 +151,38 @@ const related = allProyectos
           )}
         </aside>
 
-        <div class="lg:col-span-2 space-y-12">
+        <div class="lg:col-span-2 space-y-12 reveal">
           <section>
-            <h2 class="font-display font-bold text-2xl tracking-tight text-[var(--color-ink)] mb-4 flex items-center gap-3">
-              <span class="font-mono text-sm text-[var(--color-dorado)]">01</span>
-              El problema
-            </h2>
-            <p class="text-[var(--color-ink-soft)] text-lg leading-relaxed">
-              {problema}
+            <p class="font-mono text-xs uppercase tracking-widest text-[var(--color-mute)] mb-3">
+              01 · El problema
             </p>
+            <h2 class="font-display font-bold text-2xl md:text-3xl tracking-tight text-[var(--color-ink)] mb-4">
+              {problema}
+            </h2>
           </section>
 
           <section>
-            <h2 class="font-display font-bold text-2xl tracking-tight text-[var(--color-ink)] mb-6 flex items-center gap-3">
-              <span class="font-mono text-sm text-[var(--color-dorado)]">02</span>
-              Lo que entregué
-            </h2>
+            <p class="font-mono text-xs uppercase tracking-widest text-[var(--color-mute)] mb-3">
+              02 · Lo que entregué
+            </p>
             <div class="prose-editorial">
               <Content />
             </div>
           </section>
 
           <section>
-            <h2 class="font-display font-bold text-2xl tracking-tight text-[var(--color-ink)] mb-4 flex items-center gap-3">
-              <span class="font-mono text-sm text-[var(--color-dorado)]">03</span>
-              El resultado
-            </h2>
-            <p class="text-[var(--color-ink-soft)] text-lg leading-relaxed">
-              {resultado}
+            <p class="font-mono text-xs uppercase tracking-widest text-[var(--color-mute)] mb-3">
+              03 · El resultado
             </p>
+            <h2 class="font-display font-bold text-2xl md:text-3xl tracking-tight text-[var(--color-ink)] mb-4">
+              {resultado}
+            </h2>
           </section>
 
           <div class="pt-2 border-t border-[var(--color-border)]">
             <a
               href="/contacto"
-              class="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-md bg-[var(--color-ink)] text-[var(--color-blanco-humo)] font-medium hover:bg-[var(--color-azul)] transition-colors"
+              class="tactile inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-md bg-[var(--color-ink)] text-[var(--color-blanco-humo)] font-medium hover:bg-[var(--color-azul)]"
             >
               Hablemos de un proyecto similar
               <span aria-hidden="true">→</span>
@@ -199,10 +196,10 @@ const related = allProyectos
   {related.length > 0 && (
     <section class="py-16 md:py-24 border-t border-[var(--color-border)] bg-[var(--color-blanco)]">
       <div class="container-page">
-        <h2 class="font-display font-bold text-[var(--color-ink)] tracking-tight mb-10">
-          Proyectos similares
+        <h2 class="font-display font-bold tracking-tight mb-10 text-[var(--color-ink)] reveal">
+          Proyectos similares.
         </h2>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-5 reveal-stagger">
           {related.map((p) => <ProyectoCard proyecto={p} />)}
         </div>
       </div>

@@ -3,60 +3,62 @@ import site from "../data/site.json";
 ---
 
 <section
-  class="relative pt-12 md:pt-20 pb-20 md:pb-28 overflow-hidden border-b border-[var(--color-border)]"
+  class="relative pt-14 md:pt-20 pb-20 md:pb-28 overflow-hidden border-b border-[var(--color-border)]"
   aria-label="Hero"
 >
-  <div
-    aria-hidden="true"
-    class="absolute top-0 right-0 w-[40rem] h-[40rem] -translate-y-1/2 translate-x-1/4 opacity-[0.08] pointer-events-none"
-    style="background: radial-gradient(circle at center, var(--color-dorado) 0%, transparent 70%);"
-  >
-  </div>
-
-  <div class="container-page relative">
+  <div class="container-page relative reveal-stagger">
     <div class="max-w-4xl">
       <p
-        class="font-mono text-xs md:text-sm uppercase tracking-[0.25em] text-[var(--color-mute)] mb-6 flex items-center gap-3"
+        class="font-mono text-[11px] md:text-xs uppercase tracking-[0.22em] text-[var(--color-mute)] mb-6 flex items-center gap-3"
       >
-        <span class="inline-block w-8 h-px bg-[var(--color-dorado)]"></span>
+        <span class="tick-gold"></span>
         {site.location} · {site.availability}
       </p>
 
-      <h1 class="font-display font-bold text-[var(--color-ink)] mb-8 leading-[0.95]">
-        Construyo software
-        <span class="block text-[var(--color-azul)]">que entrega resultados</span>
-        <span class="block">medibles.</span>
+      <h1 class="font-display font-bold text-[var(--color-ink)] mb-6">
+        Software que entrega
+        <span class="block text-[var(--color-azul)]">resultados medibles.</span>
       </h1>
 
-      <p class="text-lg md:text-xl text-[var(--color-ink-soft)] max-w-2xl leading-relaxed mb-10">
-        Hola, soy <strong class="text-[var(--color-ink)]">{site.name}</strong>. Desarrollador
-        freelance especializado en productos digitales para PyMEs. Si querés conversar sobre un
-        proyecto que mueve la aguja de tu negocio, estás en el lugar correcto.
+      <p class="font-mono text-sm md:text-base text-[var(--color-ink-soft)] max-w-2xl mb-5 leading-relaxed">
+        Construyo ese software para PyMEs argentinas.
       </p>
 
-      <div class="flex flex-col sm:flex-row gap-3 sm:gap-4">
+      <p class="text-lg md:text-xl text-[var(--color-ink-soft)] max-w-2xl leading-relaxed mb-10">
+        Hola, soy <strong class="text-[var(--color-ink)] font-semibold">{site.name}</strong>. Desarrollo
+        freelance full-stack. Si tu proyecto mueve la aguja del negocio, estás en el lugar correcto.
+      </p>
+
+      <div class="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-6">
         <a
           href="/proyectos"
-          class="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-md bg-[var(--color-ink)] text-[var(--color-blanco-humo)] font-medium hover:bg-[var(--color-azul)] transition-colors"
+          class="tactile inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-md bg-[var(--color-ink)] text-[var(--color-blanco-humo)] font-medium hover:bg-[var(--color-azul)]"
         >
           Ver proyectos
           <span aria-hidden="true">→</span>
         </a>
         <a
           href="/contacto"
-          class="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-md border border-[var(--color-border)] bg-[var(--color-blanco)] text-[var(--color-ink)] font-medium hover:border-[var(--color-dorado)] hover:text-[var(--color-dorado)] transition-colors"
+          class="tactile inline-flex items-center gap-1.5 text-sm font-medium text-[var(--color-ink-soft)] hover:text-[var(--color-azul)]"
         >
           Hablemos
+          <span aria-hidden="true" class="transition-transform group-hover:translate-x-0.5">→</span>
         </a>
       </div>
 
-      <p class="mt-12 font-mono text-sm text-[var(--color-mute)] flex flex-wrap gap-x-6 gap-y-2 items-center">
-        <span>8+ años en producción</span>
-        <span class="w-px h-3 bg-[var(--color-border)]"></span>
-        <span>40+ proyectos entregados</span>
-        <span class="w-px h-3 bg-[var(--color-border)]"></span>
-        <span>Astro · TypeScript · Tailwind</span>
-      </p>
+      <ul class="mt-14 md:mt-16 pt-6 border-t border-[var(--color-border)] grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-8 max-w-3xl">
+        <li class="flex items-baseline gap-3">
+          <span class="font-mono text-2xl text-[var(--color-ink)] leading-none">8+</span>
+          <span class="font-mono text-[11px] uppercase tracking-widest text-[var(--color-mute)]">Años en producción</span>
+        </li>
+        <li class="flex items-baseline gap-3 sm:border-l sm:border-[var(--color-border)] sm:pl-8">
+          <span class="font-mono text-2xl text-[var(--color-ink)] leading-none">40+</span>
+          <span class="font-mono text-[11px] uppercase tracking-widest text-[var(--color-mute)]">Proyectos</span>
+        </li>
+        <li class="flex items-baseline gap-3 sm:border-l sm:border-[var(--color-border)] sm:pl-8">
+          <span class="font-mono text-[11px] uppercase tracking-widest text-[var(--color-mute)] leading-none">Astro · TS · Tailwind</span>
+        </li>
+      </ul>
     </div>
   </div>
 </section>

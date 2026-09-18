@@ -1,36 +1,128 @@
 ---
 import { getCollection } from "astro:content";
-import ProyectoCard from "./ProyectoCard.astro";
+import FormattedDate from "./FormattedDate.astro";
 
 const allProyectos = await getCollection("proyectos");
 const featured = allProyectos
   .filter((p) => p.data.featured)
-  .sort((a, b) => b.data.fecha.getTime() - a.data.fecha.getTime())
-  .slice(0, 3);
+  .sort((a, b) => b.data.fecha.getTime() - a.data.fecha.getTime());
+
+const [hero, ...rest] = featured.slice(0, 3);
+const rows = rest.slice(0, 2);
 ---
 
 <section class="py-20 md:py-28 border-b border-[var(--color-border)]">
   <div class="container-page">
-    <div class="flex items-end justify-between flex-wrap gap-4 mb-12">
-      <div class="max-w-xl">
-        <p class="font-mono text-xs uppercase tracking-[0.25em] text-[var(--color-mute)] mb-4 flex items-center gap-3">
-          <span class="inline-block w-6 h-px bg-[var(--color-dorado)]"></span>
-          Proyectos
-        </p>
-        <h2 class="font-display font-bold tracking-tight">
-          Algunos casos donde mis decisiones importaron
-        </h2>
-      </div>
+    <div class="flex items-end justify-between flex-wrap gap-4 mb-12 reveal">
+      <h2 class="font-display font-bold tracking-tight text-[var(--color-ink)] max-w-xl">
+        Algunos casos donde mis decisiones importaron.
+      </h2>
       <a
         href="/proyectos"
-        class="text-sm font-medium text-[var(--color-azul)] hover:text-[var(--color-dorado)] inline-flex items-center gap-1.5"
+        class="tactile text-sm font-medium text-[var(--color-ink-soft)] hover:text-[var(--color-azul)] inline-flex items-center gap-1.5"
       >
         Ver todos los proyectos <span aria-hidden="true">→</span>
       </a>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
-      {featured.map((p) => <ProyectoCard proyecto={p} />)}
-    </div>
+    {
+      hero && (
+        <a
+          href={`/proyectos/${hero.id}`}
+          class="group tactile block border border-[var(--color-border)] rounded-lg bg-[var(--color-blanco)] hover:border-[var(--color-azul)] transition-colors overflow-hidden reveal"
+        >
+          <div class="grid grid-cols-1 lg:grid-cols-[1fr_2fr] gap-8 lg:gap-10 p-7 md:p-10">
+            <div class="flex flex-col justify-between gap-6">
+              <div>
+                <p class="font-mono text-xs uppercase tracking-widest text-[var(--color-mute)] mb-3">
+                  {hero.data.cliente}
+                </p>
+                <p class="font-display text-5xl md:text-6xl lg:text-7xl font-bold tracking-tighter text-[var(--color-azul)] leading-none">
+                  {hero.data.metricas[0]?.value}
+                </p>
+                <p class="font-mono text-[11px] uppercase tracking-widest text-[var(--color-mute)] mt-3 leading-tight max-w-[160px]">
+                  {hero.data.metricas[0]?.label}
+                </p>
+              </div>
+              <div class="flex flex-wrap gap-1.5">
+                {hero.data.stack.slice(0, 3).map((s) => (
+                  <span class="font-mono text-[11px] px-2 py-0.5 rounded bg-[var(--color-blanco-humo)] border border-[var(--color-border)] text-[var(--color-ink-soft)]">
+                    {s}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            <div class="flex flex-col">
+              <h3 class="font-display font-semibold text-2xl md:text-3xl tracking-tight text-[var(--color-ink)] group-hover:text-[var(--color-azul)] leading-tight mb-4">
+                {hero.data.title}
+              </h3>
+              <p class="text-[var(--color-ink-soft)] leading-relaxed mb-6">
+                {hero.data.descripcion}
+              </p>
+
+              {hero.data.metricas.length > 1 && (
+                <dl class="grid grid-cols-3 gap-4 mt-auto pt-6 border-t border-[var(--color-border)]">
+                  {hero.data.metricas.slice(1, 4).map((m) => (
+                    <div>
+                      <dd class="font-display text-xl md:text-2xl font-bold tracking-tight text-[var(--color-ink)] leading-none">
+                        {m.value}
+                      </dd>
+                      <dt class="font-mono text-[10px] uppercase tracking-widest text-[var(--color-mute)] mt-2 leading-tight">
+                        {m.label}
+                      </dt>
+                    </div>
+                  ))}
+                </dl>
+              )}
+
+              <div class="mt-7 flex items-center justify-between font-mono text-xs text-[var(--color-mute)]">
+                <span><FormattedDate date={hero.data.fecha} format="short" /> · {hero.data.duracion}</span>
+                <span class="text-[var(--color-azul)] opacity-0 group-hover:opacity-100 transition-opacity">
+                  Ver caso →
+                </span>
+              </div>
+            </div>
+          </div>
+        </a>
+      )
+    }
+
+    {
+      rows.length > 0 && (
+        <ul class="mt-5 border-t border-[var(--color-border)] reveal-stagger">
+          {rows.map((p) => (
+            <li class="border-b border-[var(--color-border)]">
+              <a
+                href={`/proyectos/${p.id}`}
+                class="tactile group grid grid-cols-[auto_1fr_auto] md:grid-cols-[3rem_1fr_auto_auto] items-baseline gap-5 md:gap-8 py-6"
+              >
+                <span class="font-mono text-xs text-[var(--color-mute)] pt-1 tabular-nums">
+                  <span class="inline-block w-6 h-px bg-[var(--color-border)] mr-2 align-middle"></span>
+                  {p.data.metricas[0]?.value}
+                </span>
+                <div class="min-w-0">
+                  <h3 class="font-display font-semibold text-lg tracking-tight text-[var(--color-ink)] group-hover:text-[var(--color-azul)] leading-tight">
+                    {p.data.title}
+                  </h3>
+                  <p class="mt-1 text-sm text-[var(--color-ink-soft)] leading-snug truncate">
+                    {p.data.cliente} · {p.data.descripcion}
+                  </p>
+                </div>
+                <span class="font-mono text-xs text-[var(--color-mute)] whitespace-nowrap hidden md:inline">
+                  <FormattedDate date={p.data.fecha} format="short" />
+                </span>
+                <span
+                  aria-hidden="true"
+                  class="hidden md:inline text-[var(--color-mute)] group-hover:text-[var(--color-azul)] group-hover:translate-x-1 transition-transform"
+                >
+                  →
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      )
+    }
   </div>
 </section>

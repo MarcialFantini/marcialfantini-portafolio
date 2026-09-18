@@ -1,6 +1,6 @@
 ---
 import Layout from "../../layouts/Layout.astro";
-import PostCard from "../../components/PostCard.astro";
+import FormattedDate from "../../components/FormattedDate.astro";
 import { getCollection } from "astro:content";
 
 const posts = (await getCollection("blog")).sort(
@@ -13,14 +13,8 @@ const posts = (await getCollection("blog")).sort(
   description="Ensayos sobre freelance, producto, código y decisiones que aprendí trabajando con PyMEs."
 >
   <section class="pt-16 md:pt-24 pb-12 border-b border-[var(--color-border)]">
-    <div class="container-page max-w-4xl">
-      <p
-        class="font-mono text-xs uppercase tracking-[0.25em] text-[var(--color-mute)] mb-6 flex items-center gap-3"
-      >
-        <span class="inline-block w-8 h-px bg-[var(--color-dorado)]"></span>
-        Blog
-      </p>
-      <h1 class="font-display font-bold text-[var(--color-ink)] tracking-tight mb-6">
+    <div class="container-page max-w-4xl reveal">
+      <h1 class="font-display font-bold tracking-tight mb-6 text-[var(--color-ink)]">
         Lo que aprendí en el camino.
       </h1>
       <p class="text-xl text-[var(--color-ink-soft)] leading-relaxed max-w-3xl">
@@ -30,19 +24,50 @@ const posts = (await getCollection("blog")).sort(
     </div>
   </section>
 
-  <section class="py-12 md:py-16">
+  <section class="py-10 md:py-14">
     <div class="container-page">
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-        {posts.map((post) => <PostCard post={post} />)}
-      </div>
-
-      {posts.length === 0 && (
-        <div class="text-center py-20">
-          <p class="text-[var(--color-ink-soft)]">
+      {
+        posts.length === 0 ? (
+          <p class="text-center py-20 text-[var(--color-ink-soft)]">
             Todavía no hay posts publicados. Vuelve pronto.
           </p>
-        </div>
-      )}
+        ) : (
+          <ol class="border-t border-[var(--color-border)] reveal-stagger">
+            {posts.map((post) => (
+              <li class="border-b border-[var(--color-border)]">
+                <a
+                  href={`/blog/${post.id}`}
+                  class="tactile group grid grid-cols-[auto_1fr_auto] md:grid-cols-[7rem_1fr_auto_auto] items-baseline gap-5 md:gap-8 py-7"
+                >
+                  <div class="font-mono text-xs text-[var(--color-mute)] whitespace-nowrap pt-1 flex flex-col gap-1">
+                    <FormattedDate date={post.data.pubDate} format="short" />
+                    <span class="text-[var(--color-azul)] uppercase tracking-wider text-[10px]">
+                      {post.data.category}
+                    </span>
+                  </div>
+                  <div class="min-w-0">
+                    <h2 class="font-display font-semibold text-xl md:text-2xl tracking-tight text-[var(--color-ink)] group-hover:text-[var(--color-azul)] leading-tight">
+                      {post.data.title}
+                    </h2>
+                    <p class="mt-2 text-sm md:text-base text-[var(--color-ink-soft)] leading-snug max-w-2xl line-clamp-2">
+                      {post.data.description}
+                    </p>
+                  </div>
+                  <span class="font-mono text-xs text-[var(--color-mute)] whitespace-nowrap hidden md:inline pt-1">
+                    {post.data.readingTime} min
+                  </span>
+                  <span
+                    aria-hidden="true"
+                    class="hidden md:inline text-[var(--color-mute)] group-hover:text-[var(--color-azul)] group-hover:translate-x-1 transition-transform"
+                  >
+                    →
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ol>
+        )
+      }
     </div>
   </section>
 </Layout>

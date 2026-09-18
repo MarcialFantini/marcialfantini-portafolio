@@ -34,15 +34,15 @@ const { title, description, pubDate, category, readingTime, tags } = post.data;
 >
   <article>
     <header class="pt-12 md:pt-20 pb-10 md:pb-14 border-b border-[var(--color-border)]">
-      <div class="container-page max-w-3xl">
+      <div class="container-page max-w-3xl reveal">
         <a
           href="/blog"
-          class="inline-flex items-center gap-1.5 text-sm text-[var(--color-mute)] hover:text-[var(--color-azul)] mb-8 font-mono"
+          class="tactile inline-flex items-center gap-1.5 text-sm text-[var(--color-mute)] hover:text-[var(--color-ink)] mb-8 font-mono"
         >
           <span aria-hidden="true">←</span> Volver al blog
         </a>
 
-        <div class="flex items-center gap-3 mb-6 text-xs font-mono text-[var(--color-mute)]">
+        <div class="flex items-center flex-wrap gap-3 mb-6 text-xs font-mono text-[var(--color-mute)]">
           <span class="text-[var(--color-azul)]">{category}</span>
           <span class="w-1 h-1 rounded-full bg-[var(--color-border)]"></span>
           <FormattedDate date={pubDate} format="short" />
@@ -50,7 +50,7 @@ const { title, description, pubDate, category, readingTime, tags } = post.data;
           <span>{readingTime} min lectura</span>
         </div>
 
-        <h1 class="font-display font-bold text-[var(--color-ink)] tracking-tight mb-6">
+        <h1 class="font-display font-bold tracking-tight mb-6 text-[var(--color-ink)]">
           {title}
         </h1>
         <p class="text-xl text-[var(--color-ink-soft)] leading-relaxed">
@@ -70,7 +70,7 @@ const { title, description, pubDate, category, readingTime, tags } = post.data;
     </header>
 
     <div class="container-page py-12 md:py-16">
-      <div class="prose-editorial mx-auto">
+      <div class="prose-editorial mx-auto reveal">
         <Content />
       </div>
     </div>
@@ -79,20 +79,20 @@ const { title, description, pubDate, category, readingTime, tags } = post.data;
   {related.length > 0 && (
     <section class="py-16 md:py-24 border-t border-[var(--color-border)] bg-[var(--color-blanco)]">
       <div class="container-page">
-        <h2 class="font-display font-bold text-[var(--color-ink)] tracking-tight mb-10">
-          Posts relacionados
+        <h2 class="font-display font-bold tracking-tight mb-10 text-[var(--color-ink)] reveal">
+          Posts relacionados.
         </h2>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-5 reveal-stagger">
           {related.map((p) => <PostCard post={p} />)}
         </div>
 
-        <div class="mt-14 text-center">
-          <p class="font-mono text-xs uppercase tracking-widest text-[var(--color-mute)] mb-3">
+        <div class="mt-14 pt-10 border-t border-[var(--color-border)] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <p class="font-display text-xl md:text-2xl tracking-tight text-[var(--color-ink)] max-w-md">
             ¿Tenés un proyecto en mente?
           </p>
           <a
             href="/contacto"
-            class="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-md bg-[var(--color-ink)] text-[var(--color-blanco-humo)] font-medium hover:bg-[var(--color-azul)] transition-colors"
+            class="tactile inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-md bg-[var(--color-ink)] text-[var(--color-blanco-humo)] font-medium hover:bg-[var(--color-azul)]"
           >
             Hablemos
             <span aria-hidden="true">→</span>
