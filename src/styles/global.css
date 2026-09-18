@@ -12,28 +12,39 @@
 /* ---------------------------------------------------------
    Design Tokens — indie hacker, directo, sin fluff
    ---------------------------------------------------------
-   Paleta:
-   - Azul #1E40AF      → primario (CTAs, headings acento, links)
-   - Blanco humo #F5F5F4 → fondo principal
-   - Blanco #FFFFFF    → cards, contraste
-   - Dorado #C8A24E    → acento (hover, highlights, divisores)
+   Paleta — regla 60-30-10 sobre blanco puro:
+   - Blanco #FFFFFF    → 60% fondo dominante (con textura noise sutil)
+   - Azul conde #1B2B5C → 30% secundario (headlines, KPIs, links, CTAs)
+   - Dorado #C8A24E    → 10% acento (hover, ticks, divisores finos)
+
+   - Marfil #F4ECD8    → referencia de marca (solo se usa como --color-ink
+                         en dark mode para sostener la identidad)
    - Ink #18181B       → texto principal
    - Ink soft #3F3F46  → texto secundario
    - Mute #71717A      → metadata, captions
    - Border #E7E5E4    → bordes finos
+
+   Textura: body::before aplica un grano SVG inline (feTurbulence)
+   con mix-blend-mode soft-light y opacity baja — visible tanto en
+   light como en dark mode sin agregar peso de red.
+
+   Dark mode (auto, via prefers-color-scheme + .dark root swap):
+   las superficies invierten conservando identidad. Azul y dorado
+   se levantan levemente para mantener contraste AA sobre fondo oscuro;
+   ink pasa a marfil para sostener la identidad de marca.
    --------------------------------------------------------- */
 @theme {
   /* Typography */
   --font-display: "Bricolage Grotesque Variable", "Bricolage Grotesque", "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --font-mono: "JetBrains Mono Variable", "JetBrains Mono", ui-monospace, "SFMono-Regular", "Menlo", "Consolas", monospace;
 
-  /* Brand palette */
-  --color-azul: #1E40AF;
-  --color-azul-deep: #1B3896;     /* hover/active de CTAs */
-  --color-azul-soft: #DBE2F4;     /* tints de fondo */
+  /* Brand palette — 60-30-10 (blanco / azul conde / dorado) */
+  --color-azul: #1B2B5C;
+  --color-azul-deep: #0F1B3F;
+  --color-azul-soft: #DDE2EE;
   --color-dorado: #C8A24E;
-  --color-dorado-soft: #F3E9CC;
-  --color-blanco-humo: #F5F5F4;
+  --color-dorado-soft: #F0E5C8;
+  --color-blanco-humo: #FFFFFF;
   --color-blanco: #FFFFFF;
   --color-ink: #18181B;
   --color-ink-soft: #3F3F46;
@@ -47,6 +58,26 @@
 
   /* Motion — sutil, indie hacker */
   --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ---------------------------------------------------------
+   Dark mode — token swap, scoped to .dark root class.
+   .dark se aplica via inline script en Layout.astro
+   (antes del primer paint) según prefers-color-scheme.
+   --------------------------------------------------------- */
+.dark {
+  --color-azul: #7BA0F0;
+  --color-azul-deep: #A5C0F8;
+  --color-azul-soft: #1B2A4E;
+  --color-dorado: #D4A857;
+  --color-dorado-soft: #2D2412;
+  --color-blanco-humo: #0B0E18;
+  --color-blanco: #18181B;
+  --color-ink: #F4ECD8;
+  --color-ink-soft: #B8B0A0;
+  --color-mute: #71717A;
+  --color-border: #2A2A2E;
 }
 
 /* ---------------------------------------------------------
@@ -70,6 +101,25 @@
     line-height: 1.55;
   }
 
+  /* Grain texture — SVG inline, 0 deps. mix-blend-mode soft-light
+     para que el grano se vea tanto en blanco como en dark mode. */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 9999;
+    background-image: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 240 240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.5 0 0 0 0 0.5 0 0 0 0 0.5 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-repeat: repeat;
+    background-size: 240px 240px;
+    opacity: 0.07;
+    mix-blend-mode: soft-light;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    body::before { transition: opacity 200ms var(--ease-out-quart); }
+  }
+
   /* Display / Headlines — display sans */
   h1, h2, h3, h4, .font-display {
     font-family: var(--font-display);
@@ -79,7 +129,7 @@
     color: var(--color-ink);
   }
 
-  h1 { font-size: clamp(2.5rem, 5vw + 1rem, 4.5rem); font-weight: 700; letter-spacing: -0.03em; }
+  h1 { font-size: clamp(2.5rem, 5vw + 1rem, 4.75rem); font-weight: 700; letter-spacing: -0.035em; line-height: 0.98; }
   h2 { font-size: clamp(1.75rem, 2.5vw + 1rem, 2.75rem); }
   h3 { font-size: clamp(1.25rem, 1.5vw + 0.75rem, 1.625rem); }
 
@@ -112,8 +162,67 @@
     html { scroll-behavior: auto; }
     *, *::before, *::after {
       animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
       transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
     }
+  }
+}
+
+/* ---------------------------------------------------------
+   Reveal — anim de entrada activada por IntersectionObserver
+   Vanilla, sin dependencias. Respeta prefers-reduced-motion.
+   --------------------------------------------------------- */
+@layer utilities {
+  .reveal {
+    opacity: 0;
+    transform: translateY(14px);
+    transition:
+      opacity 720ms var(--ease-out-expo),
+      transform 720ms var(--ease-out-expo);
+    will-change: opacity, transform;
+  }
+  .reveal[data-revealed="in"] {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .reveal-stagger > * {
+    opacity: 0;
+    transform: translateY(10px);
+    transition:
+      opacity 600ms var(--ease-out-expo),
+      transform 600ms var(--ease-out-expo);
+  }
+  .reveal-stagger[data-revealed="in"] > * {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .reveal-stagger[data-revealed="in"] > *:nth-child(1) { transition-delay: 0ms; }
+  .reveal-stagger[data-revealed="in"] > *:nth-child(2) { transition-delay: 60ms; }
+  .reveal-stagger[data-revealed="in"] > *:nth-child(3) { transition-delay: 120ms; }
+  .reveal-stagger[data-revealed="in"] > *:nth-child(4) { transition-delay: 180ms; }
+  .reveal-stagger[data-revealed="in"] > *:nth-child(5) { transition-delay: 240ms; }
+  .reveal-stagger[data-revealed="in"] > *:nth-child(6) { transition-delay: 300ms; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .reveal,
+    .reveal-stagger > * {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
+  }
+
+  .tactile {
+    transition:
+      transform 120ms var(--ease-out-quart),
+      background-color 200ms var(--ease-out-quart),
+      border-color 200ms var(--ease-out-quart),
+      color 200ms var(--ease-out-quart);
+  }
+  .tactile:active {
+    transform: translateY(1px);
   }
 }
 
@@ -134,6 +243,14 @@
     height: 1px;
     background-color: var(--color-border);
     border: 0;
+  }
+
+  .tick-gold {
+    display: inline-block;
+    width: 1.75rem;
+    height: 1px;
+    background-color: var(--color-dorado);
+    vertical-align: middle;
   }
 
   /* Editorial body para posts de blog */

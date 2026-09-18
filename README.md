@@ -12,10 +12,9 @@ Landing personal de Marcial Fantini, desarrollador freelance full-stack argentin
 
 ## Paleta
 
-- Azul `#1E40AF` — primario, CTAs, links, headlines de acento
-- Blanco humo `#F5F5F4` — fondo principal
-- Blanco `#FFFFFF` — cards, contraste
-- Dorado `#C8A24E` — acento, hover sutil, divisores finos
+- Blanco `#FFFFFF` — **60%** fondo dominante, con textura noise sutil (SVG inline, `mix-blend-mode: soft-light`, 7% opacity)
+- Azul conde `#1B2B5C` — **30%** secundario (CTAs, headlines, links, KPIs)
+- Dorado `#C8A24E` — **10%** acento (hover, ticks, divisores)
 - Ink `#18181B` — texto principal
 - Ink soft `#3F3F46` — texto secundario
 - Mute `#71717A` — metadata
