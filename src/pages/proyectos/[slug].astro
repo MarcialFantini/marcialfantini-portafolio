@@ -33,6 +33,17 @@ const related = allProyectos
   <article>
     <header class="pt-12 md:pt-20 pb-10 md:pb-14 border-b border-[var(--color-border)]">
       <div class="container-page max-w-4xl reveal">
+        <div class="placeholder-image placeholder-image--warm h-56 md:h-72 rounded-xl mb-8 shadow-md">
+          <img
+            src={`https://picsum.photos/seed/proyecto-${proyecto.id}/1200/600`}
+            alt=""
+            role="presentation"
+            class="cover-image"
+            loading="lazy"
+            decoding="async"
+          />
+        </div>
+
         <a
           href="/proyectos"
           class="tactile inline-flex items-center gap-1.5 text-sm text-[var(--color-mute)] hover:text-[var(--color-ink)] mb-8 font-mono"

@@ -15,7 +15,16 @@ const { title, description, pubDate, category, readingTime } = post.data;
   href={`/blog/${post.id}`}
   class="group block rounded-xl bg-[var(--color-blanco-humo)] shadow-sm border border-[var(--color-border)] tactile transition-all duration-200 hover:-translate-y-1 hover:shadow-lg hover:border-[var(--color-azul)] h-full overflow-hidden"
 >
-  <div class="placeholder-image placeholder-image--warm h-32" aria-hidden="true"></div>
+  <div class="placeholder-image placeholder-image--warm h-32" aria-hidden="true">
+    <img
+      src={`https://picsum.photos/seed/post-${post.id}/800/500`}
+      alt=""
+      role="presentation"
+      class="cover-image"
+      loading="lazy"
+      decoding="async"
+    />
+  </div>
 
   <div class="p-6">
     <div class="flex items-center gap-3 mb-4 font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-mute)]">

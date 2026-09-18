@@ -40,7 +40,16 @@ const gradients = ["warm", "cool", "vivid"] as const;
               <div
                 class={`placeholder-image placeholder-image--${gradients[i % gradients.length]} h-40`}
                 aria-hidden="true"
-              ></div>
+              >
+                <img
+                  src={`https://picsum.photos/seed/post-${post.id}/800/500`}
+                  alt=""
+                  role="presentation"
+                  class="cover-image"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </div>
               <div class="p-6">
                 <div class="flex items-center gap-3 mb-4 font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-mute)]">
                   <FormattedDate date={post.data.pubDate} format="short" />

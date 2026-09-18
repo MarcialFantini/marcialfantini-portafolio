@@ -35,6 +35,17 @@ const { title, description, pubDate, category, readingTime, tags } = post.data;
   <article>
     <header class="pt-12 md:pt-20 pb-10 md:pb-14 border-b border-[var(--color-border)]">
       <div class="container-page max-w-3xl reveal">
+        <div class="placeholder-image placeholder-image--cool h-56 md:h-72 rounded-xl mb-8 shadow-md">
+          <img
+            src={`https://picsum.photos/seed/post-${post.id}/1200/600`}
+            alt=""
+            role="presentation"
+            class="cover-image"
+            loading="lazy"
+            decoding="async"
+          />
+        </div>
+
         <a
           href="/blog"
           class="tactile inline-flex items-center gap-1.5 text-sm text-[var(--color-mute)] hover:text-[var(--color-ink)] mb-8 font-mono"

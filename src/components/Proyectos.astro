@@ -39,11 +39,19 @@ const gradients = ["warm", "cool", "vivid"] as const;
           class="group tactile block rounded-2xl bg-[var(--color-blanco)] shadow-lg border border-[var(--color-border)] hover:-translate-y-1 hover:shadow-xl transition-all duration-200 overflow-hidden reveal"
         >
           <div
-            class={`placeholder-image placeholder-image--${gradients[0]} relative`}
+            class={`placeholder-image placeholder-image--${gradients[0]} relative image-scrim`}
             aria-hidden="true"
           >
+            <img
+              src={`https://picsum.photos/seed/proyecto-${hero.id}/1600/900`}
+              alt=""
+              role="presentation"
+              class="cover-image"
+              loading="lazy"
+              decoding="async"
+            />
             <div class="absolute inset-0 flex items-end p-6 md:p-8">
-              <p class="font-mono text-[11px] uppercase tracking-[0.18em] text-white/90 [text-shadow:_0_1px_4px_rgba(0,0,0,0.4)]">
+              <p class="font-mono text-[11px] uppercase tracking-[0.18em] text-white/95 [text-shadow:_0_1px_6px_rgba(0,0,0,0.6)]">
                 {hero.data.cliente} · Featured
               </p>
             </div>
@@ -115,7 +123,16 @@ const gradients = ["warm", "cool", "vivid"] as const;
                 <div
                   class={`placeholder-image placeholder-image--${gradients[(i + 1) % gradients.length]} h-32`}
                   aria-hidden="true"
-                ></div>
+                >
+                  <img
+                    src={`https://picsum.photos/seed/proyecto-${p.id}/800/500`}
+                    alt=""
+                    role="presentation"
+                    class="cover-image"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </div>
                 <div class="p-6">
                   <div class="flex items-center justify-between mb-3">
                     <span class="font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-mute)]">
