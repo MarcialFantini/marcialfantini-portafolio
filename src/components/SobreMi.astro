@@ -7,12 +7,9 @@ import SectionAnchor from "./SectionAnchor.astro";
   <div class="container-page reveal">
     <SectionAnchor number="01" label="SOBRE MÍ" />
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start mt-2">
-      <div class="lg:col-span-4 relative">
-        <span class="absolute -top-4 -left-2 md:-left-4 sticker sticker-orange z-10" style="--sticker-size: 72px;" aria-hidden="true">
-          <span class="sticker__label">About<br />me</span>
-        </span>
+      <div class="lg:col-span-4 flex flex-col items-center lg:items-start gap-6">
         <div
-          class="relative w-40 h-40 md:w-48 md:h-48 mx-auto lg:mx-0"
+          class="relative w-36 h-36 md:w-44 md:h-44"
           role="img"
           aria-label="Avatar con iniciales MF — placeholder hasta tener foto real"
         >
@@ -23,6 +20,14 @@ import SectionAnchor from "./SectionAnchor.astro";
             </span>
           </div>
           <span class="absolute bottom-1 right-1 w-6 h-6 rounded-full bg-[var(--color-azul)] border-4 border-[var(--color-blanco-humo)] shadow-md" aria-hidden="true"></span>
+        </div>
+        <div class="text-center lg:text-left">
+          <p class="font-impact text-xl md:text-2xl uppercase tracking-tight text-[var(--color-ink)] leading-tight">
+            Marcial Fantini
+          </p>
+          <p class="font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--color-mute)] mt-1.5">
+            Desarrollador freelance · Córdoba AR
+          </p>
         </div>
       </div>
 
