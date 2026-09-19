@@ -1,0 +1,339 @@
+---
+import Layout from "../layouts/Layout.astro";
+import site from "../data/site.json";
+
+type Book = {
+  title: string;
+  author: string;
+  year: number;
+  category: string;
+  rating: 1 | 2 | 3 | 4 | 5;
+  oneLiner: string;
+  url?: string;
+};
+
+const shelves = [
+  {
+    name: "Lecturas del año",
+    description: "Lo que leí o releí este año y recomiendo sin dudar.",
+    books: [
+      {
+        title: "Show Your Work",
+        author: "Austin Kleon",
+        year: 2014,
+        category: "Marca personal",
+        rating: 5,
+        oneLiner: "10 lecciones para mostrar tu proceso creativo al mundo sin parecer un vendedor. Corto, accionable, honesto.",
+        url: "https://austinkleon.com/show-your-work/",
+      },
+      {
+        title: "Company of One",
+        author: "Paul Jarvis",
+        year: 2019,
+        category: "Negocio",
+        rating: 5,
+        oneLiner: "Por qué 'quedarte chico' puede ser mejor que escalar. Me cambió la cabeza sobre los retainers.",
+        url: "https://companyofone.com/book/",
+      },
+      {
+        title: "Working in Public",
+        author: "Stacey Abrams",
+        year: 2020,
+        category: "Producto",
+        rating: 4,
+        oneLiner: "Cómo el código abierto cambió la cultura del software y qué podemos aprender para construir en público.",
+      },
+      {
+        title: "The Mom Test",
+        author: "Rob Fitzpatrick",
+        year: 2013,
+        category: "Validación",
+        rating: 5,
+        oneLiner: "Cómo hacer preguntas que no mienten. Lo aplico cada vez que hablo con un cliente antes de cotizar.",
+        url: "https://momtestbook.com/",
+      },
+      {
+        title: "Sell or Be Sold",
+        author: "Grant Cardone",
+        year: 2011,
+        category: "Ventas",
+        rating: 3,
+        oneLiner: "Mucho bombo pero técnicas concretas de prospección útiles. Lectura honesta: no todo lo dice él funciona para servicios.",
+      },
+    ] as Book[],
+  },
+  {
+    name: "Stack y oficio",
+    description: "Manuales que vuelvo a leer cuando me trabo en algo técnico.",
+    books: [
+      {
+        title: "Crafting Interpreters",
+        author: "Robert Nystrom",
+        year: 2021,
+        category: "Lenguajes",
+        rating: 5,
+        oneLiner: "Construí un intérprete de Lox de cero en 600 páginas. La mejor forma de entender JavaScript.",
+        url: "https://craftinginterpreters.com/",
+      },
+      {
+        title: "Designing Data-Intensive Applications",
+        author: "Martin Kleppmann",
+        year: 2017,
+        category: "Backend",
+        rating: 5,
+        oneLiner: "La biblia de las decisiones de datos. Leo un capítulo por sprint, siempre me abre la cabeza.",
+        url: "https://dataintensive.net/",
+      },
+      {
+        title: "Refactoring UI",
+        author: "Adam Wathan & Steve Schoger",
+        year: 2018,
+        category: "UI",
+        rating: 5,
+        oneLiner: "Pragmas concretos de UI para gente que programa. No es teoría, son reglas con ejemplos.",
+        url: "https://www.refactoringui.com/book",
+      },
+      {
+        title: "TypeScript in 50 Lessons",
+        author: "Stefan Baumgartner",
+        year: 2020,
+        category: "TypeScript",
+        rating: 4,
+        oneLiner: "TypeScript profundo sin ser un manual de 800 páginas. Ideal si venís de JavaScript.",
+      },
+      {
+        title: "Web Performance in Practice",
+        author: "Jeremy Wagner",
+        year: 2023,
+        category: "Performance",
+        rating: 4,
+        oneLiner: "Cómo pensar Core Web Vitals desde el negocio, no solo desde la técnica.",
+      },
+    ] as Book[],
+  },
+  {
+    name: "Negocio freelance",
+    description: "Lo que aprendí sobre vivir de vender proyectos a clientes.",
+    books: [
+      {
+        title: "The Freelancer's Bible",
+        author: "Sara Horowitz",
+        year: 2017,
+        category: "Freelance",
+        rating: 4,
+        oneLiner: "Manual práctico para armar tu estructura freelance. Cubre legal, fiscal, contratos y prospección.",
+      },
+      {
+        title: "Obviously Awesome",
+        author: "April Dunford",
+        year: 2019,
+        category: "Posicionamiento",
+        rating: 5,
+        oneLiner: "Cómo posicionar tu producto/servicio cuando nadie te conoce. Aplicable a freelance: tu 'producto' sos vos.",
+        url: "https://www.aprildunford.com/obviously-awesome",
+      },
+      {
+        title: "Pricing Creativity",
+        author: "Jake Kuris",
+        year: 2022,
+        category: "Pricing",
+        rating: 4,
+        oneLiner: "Sobre pricing creativo: cómo cobrar más por trabajo intangible sin perder clientes.",
+      },
+      {
+        title: "Turning Pro",
+        author: "Steven Pressfield",
+        year: 2012,
+        category: "Disciplina",
+        rating: 4,
+        oneLiner: "La diferencia entre amateur y profesional no es talento. Es disciplina diaria. Releo cada 6 meses.",
+      },
+    ] as Book[],
+  },
+];
+
+const podcasts = [
+  {
+    name: "Syntax.fm",
+    host: "Wes Bos & Scott Tolinski",
+    description: "Web dev moderno. Astro, TypeScript, React. Episodios cortos y accionables.",
+  },
+  {
+    name: "How I Built This",
+    host: "Guy Raz / NPR",
+    description: "Historias de founders. Escucho uno antes de cada propuesta grande.",
+  },
+  {
+    name: "El Método",
+    host: "Varios (Spanish)",
+    description: "Productividad y hábitos. En español, ritmo lento.",
+  },
+];
+
+const newsletters = [
+  {
+    name: "Console",
+    author: "Dave Kiss",
+    description: "Web dev semanal. Lectura de 3 minutos, links útiles.",
+  },
+  {
+    name: "Software Lead Weekly",
+    author: "Gergely Orosz",
+    description: "Ingeniería y producto. La mejor curaduría de la industria.",
+  },
+  {
+    name: "Refactoring",
+    author: "Luca Rossi",
+    description: "Carrer advice para ingenieros. Pragmático, sin fluff.",
+  },
+];
+---
+
+<Layout
+  title={`Lectura — ${site.name}`}
+  description="Libros, podcasts y newsletters que consumo para mantenerme actualizado en código, freelance y negocio."
+>
+  <section class="pt-16 md:pt-24 pb-12 border-b border-[var(--color-border)]">
+    <div class="container-page max-w-4xl reveal">
+      <p class="font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--color-azul)] mb-3">
+        Lectura
+      </p>
+      <h1 class="font-impact text-[clamp(2.25rem,5.5vw,4.75rem)] uppercase leading-[0.95] text-[var(--color-ink)] tracking-tight mb-6">
+        Lo que leo, escucho <span class="text-[var(--color-azul)]">y recomiendo.</span>
+      </h1>
+      <p class="text-xl text-[var(--color-ink-soft)] leading-relaxed max-w-3xl">
+        Mantengo esta lista actualizada con lo que vale la pena. Sin afiliaciones, sin links
+        patrocinados. Es lo que realmente consume mi tiempo.
+      </p>
+    </div>
+  </section>
+
+  {
+    shelves.map((shelf) => (
+      <section class="py-12 md:py-16 border-b border-[var(--color-border)]">
+        <div class="container-page">
+          <div class="max-w-4xl mb-10">
+            <p class="font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--color-azul)] mb-3">
+              Estante
+            </p>
+            <h2 class="font-impact text-[clamp(1.75rem,4vw,3rem)] uppercase leading-[0.95] text-[var(--color-ink)] tracking-tight mb-3">
+              {shelf.name}
+            </h2>
+            <p class="text-lg text-[var(--color-ink-soft)] leading-relaxed">
+              {shelf.description}
+            </p>
+          </div>
+          <ul class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 reveal-stagger">
+            {
+              shelf.books.map((book) => (
+                <li class="rounded-lg bg-white border-2 border-[var(--color-ink)] p-6 tactile transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md hover:border-[var(--color-azul)] flex flex-col">
+                  <div class="flex items-start justify-between gap-2 mb-3">
+                    <span class="font-mono text-[10px] uppercase tracking-[0.22em] text-[var(--color-mute)]">
+                      {book.category}
+                    </span>
+                    <span class="font-mono text-xs tabular-nums text-[var(--color-dorado)] tracking-tight" aria-label={`Rating ${book.rating} de 5`}>
+                      {"★".repeat(book.rating)}
+                      <span class="text-[var(--color-border)]">{"★".repeat(5 - book.rating)}</span>
+                    </span>
+                  </div>
+                  <h3 class="font-display font-semibold text-lg text-[var(--color-ink)] leading-tight mb-1">
+                    {book.url ? (
+                      <a href={book.url} class="hover:text-[var(--color-azul)] underline decoration-1 underline-offset-2" target="_blank" rel="noopener noreferrer">
+                        {book.title}
+                      </a>
+                    ) : (
+                      book.title
+                    )}
+                  </h3>
+                  <p class="font-mono text-xs uppercase tracking-[0.18em] text-[var(--color-mute)] mb-3">
+                    {book.author} · {book.year}
+                  </p>
+                  <p class="text-sm text-[var(--color-ink-soft)] leading-relaxed flex-1">
+                    {book.oneLiner}
+                  </p>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+      </section>
+    ))
+  }
+
+  <section class="py-12 md:py-16 border-b border-[var(--color-border)]">
+    <div class="container-page max-w-4xl">
+      <p class="font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--color-azul)] mb-3">
+        Podcasts
+      </p>
+      <h2 class="font-impact text-[clamp(1.75rem,4vw,3rem)] uppercase leading-[0.95] text-[var(--color-ink)] tracking-tight mb-10">
+        Lo que <span class="text-[var(--color-azul)]">escucho.</span>
+      </h2>
+      <ul class="space-y-4">
+        {
+          podcasts.map((p) => (
+            <li class="rounded-lg bg-white border border-[var(--color-border)] p-5">
+              <h3 class="font-display font-semibold text-lg text-[var(--color-ink)] leading-tight">
+                {p.name}
+              </h3>
+              <p class="font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-mute)] mt-1 mb-3">
+                {p.host}
+              </p>
+              <p class="text-base text-[var(--color-ink-soft)] leading-relaxed">
+                {p.description}
+              </p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="py-12 md:py-16 border-b border-[var(--color-border)] bg-[var(--color-blanco)]">
+    <div class="container-page max-w-4xl">
+      <p class="font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--color-azul)] mb-3">
+        Newsletters
+      </p>
+      <h2 class="font-impact text-[clamp(1.75rem,4vw,3rem)] uppercase leading-[0.95] text-[var(--color-ink)] tracking-tight mb-10">
+        Las que <span class="text-[var(--color-azul)]">leo cada semana.</span>
+      </h2>
+      <ul class="space-y-4">
+        {
+          newsletters.map((n) => (
+            <li class="rounded-lg bg-white border border-[var(--color-border)] p-5">
+              <h3 class="font-display font-semibold text-lg text-[var(--color-ink)] leading-tight">
+                {n.name}
+              </h3>
+              <p class="font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-mute)] mt-1 mb-3">
+                {n.author}
+              </p>
+              <p class="text-base text-[var(--color-ink-soft)] leading-relaxed">
+                {n.description}
+              </p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="py-16 md:py-20 bg-[var(--color-ink)] text-white">
+    <div class="container-page text-center max-w-2xl reveal">
+      <p class="font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--color-dorado)] mb-3">
+        Recomendás algo?
+      </p>
+      <h2 class="font-impact text-[clamp(1.75rem,4vw,3rem)] uppercase leading-[0.95] text-white mb-5">
+        Sumá a la lista.
+      </h2>
+      <p class="text-lg text-white/80 leading-relaxed mb-8">
+        Si tenés un libro/podcast/newsletters que cambió tu práctica freelance, mandame por mail. Lo sumo si me convence.
+      </p>
+      <a
+        href={`mailto:${site.email}?subject=Recomendación para /lectura`}
+        class="tactile inline-flex items-center justify-center gap-2 px-7 py-4 rounded-md bg-[var(--color-dorado)] text-[var(--color-azul-deep)] font-mono text-[11px] uppercase tracking-[0.18em] font-bold hover:bg-white"
+      >
+        Mandarme una recomendación
+        <span aria-hidden="true">→</span>
+      </a>
+    </div>
+  </section>
+</Layout>

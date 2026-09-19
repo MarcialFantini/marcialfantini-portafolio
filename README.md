@@ -6,61 +6,91 @@ Landing personal de Marcial Fantini, desarrollador freelance full-stack argentin
 
 - **Astro 7** + **TypeScript** estricto
 - **Tailwind CSS v4** vía `@tailwindcss/vite` con tokens en `@theme`
-- **Content Collections** para blog y proyectos (markdown)
+- **Content Collections** para blog y proyectos (markdown, validados con Zod en `src/content.config.ts`)
 - **Bricolage Grotesque Variable** + **JetBrains Mono Variable** (self-hosted vía `@fontsource-variable/*`, sin Google Fonts)
 - 100% estático. Sin backend. Form de contacto usa `mailto:`.
 
-## Paleta
+## Identidad visual
+
+Paleta propia del proyecto (no figura en `IDENTIDADES-VISUALES.md` porque es una marca ficticia del corpus de muestra):
 
 - Blanco `#FFFFFF` — **60%** fondo dominante, con textura noise sutil (SVG inline, `mix-blend-mode: soft-light`, 7% opacity)
 - Azul conde `#1B2B5C` — **30%** secundario (CTAs, headlines, links, KPIs)
 - Dorado `#C8A24E` — **10%** acento (hover, ticks, divisores)
+- Marfil `#F5F0E6` — fondo alternativo para secciones contrastadas
 - Ink `#18181B` — texto principal
 - Ink soft `#3F3F46` — texto secundario
 - Mute `#71717A` — metadata
 - Border `#E7E5E4` — bordes finos
+
+Tipografías: Bricolage Grotesque Variable (display) + JetBrains Mono Variable (números, KPIs).
 
 ## Estructura
 
 ```
 src/
 ├── components/
-│   ├── Header.astro
-│   ├── Footer.astro
-│   ├── Hero.astro
-│   ├── SobreMi.astro
-│   ├── Servicios.astro
-│   ├── Metricas.astro
-│   ├── Proyectos.astro
 │   ├── BlogPreview.astro
 │   ├── Contacto.astro
-│   ├── ProyectoCard.astro
+│   ├── CornerBrackets.astro
+│   ├── FAQ.astro
+│   ├── Footer.astro
+│   ├── FormattedDate.astro
+│   ├── Header.astro
+│   ├── Hero.astro
+│   ├── Metricas.astro
 │   ├── PostCard.astro
-│   └── FormattedDate.astro
+│   ├── ProyectoCard.astro
+│   ├── Proyectos.astro
+│   ├── SectionAnchor.astro
+│   ├── Servicios.astro
+│   ├── SobreMi.astro
+│   └── StackTools.astro
 ├── content/
-│   ├── blog/         (5 posts .md)
-│   └── proyectos/    (10 proyectos .md)
-├── content.config.ts
+│   ├── blog/         (14 posts .md en 5 categorías)
+│   └── proyectos/    (19 proyectos .md)
+├── content.config.ts        # Zod schemas: blog + proyectos
 ├── data/
 │   ├── site.json
-│   ├── servicios.json
-│   └── metricas.json
+│   ├── servicios.json       # 4 servicios
+│   ├── metricas.json
+│   └── testimonios.json     # 6 testimonios
 ├── layouts/
 │   └── Layout.astro
 ├── pages/
 │   ├── index.astro
 │   ├── sobre-mi.astro
+│   ├── cv.astro
+│   ├── ahora.astro
+│   ├── testimonios.astro
+│   ├── lectura.astro
+│   ├── recurso.astro
 │   ├── contacto.astro
 │   ├── 404.astro
+│   ├── rss.xml.ts           # endpoint RSS (export const prerender = true)
 │   ├── blog/
 │   │   ├── index.astro
+│   │   ├── [slug].astro
+│   │   └── tags/
+│   │       ├── index.astro
+│   │       └── [tag].astro
+│   ├── proyectos/
+│   │   ├── index.astro
 │   │   └── [slug].astro
-│   └── proyectos/
+│   └── servicios/
 │       ├── index.astro
 │       └── [slug].astro
 └── styles/
     └── global.css
 ```
+
+## Contenido
+
+- **Blog**: 14 posts en 5 categorías (`desarrollo`, `productos`, `carrera`, `escritura`, `ia`). Schema en `src/content.config.ts`.
+- **Proyectos**: 19 casos (cliente ficticio). Schema valida `categoria`, `stack`, `metricas`, etc.
+- **RSS**: feed generado estáticamente en `/rss.xml` (requiere `export const prerender = true` para Astro 7 con `output: 'static'`).
+- **Servicios**: 4 packs definidos en `src/data/servicios.json` con precios orientativos.
+- **Testimonios**: 6 casos en `src/data/testimonios.json` con nombre, sector, métrica y quote.
 
 ## Comandos
 
@@ -79,10 +109,12 @@ pnpm check        # astro check (TypeScript)
 | Nombre, tagline, email, redes         | `src/data/site.json`                |
 | Servicios y precios orientativos      | `src/data/servicios.json`           |
 | KPIs destacadas del home              | `src/data/metricas.json`            |
+| Testimonios                           | `src/data/testimonios.json`         |
 | Agregar un post al blog               | Crear `src/content/blog/<slug>.md`  |
 | Agregar un proyecto                   | Crear `src/content/proyectos/<slug>.md` |
 | Colores o tipografías                 | `src/styles/global.css`             |
 | Hero, secciones del home              | `src/components/*.astro`            |
+| Esquema de contenido (Zod)            | `src/content.config.ts`             |
 
 ## Deploy
 
@@ -94,6 +126,10 @@ El sitio es estático. Funciona en cualquier host estático.
 - **GitHub Pages**: `actions/deploy-pages.yml` con upload de `dist/`.
 
 Sin variables de entorno. Sin funciones serverless.
+
+## Nota técnica
+
+El proyecto usa `output: 'static'` implícito de Astro 7. El endpoint `src/pages/rss.xml.ts` declara `export const prerender = true;` para que Astro genere el XML en build time en vez de requerir un adapter. Sin esa directiva, Astro aborta el build y deja `dist/` vacío.
 
 ## Aviso
 
