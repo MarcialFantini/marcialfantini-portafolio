@@ -14,12 +14,9 @@ const { size = 32, class: className = '' } = Astro.props;
   class={className}
   aria-hidden="true"
 >
-  <path
-    d="M16 2L20.5 11.5L30.5 12.7L23 19.5L24.8 29.5L16 24.5L7.2 29.5L9 19.5L1.5 12.7L11.5 11.5L16 2Z"
-    fill="currentColor"
-  />
-  <path
-    d="M16 7L18.8 12.7L25 13.4L20.5 17.5L21.7 23.7L16 20.5L10.3 23.7L11.5 17.5L7 13.4L13.2 12.7L16 7Z"
-    fill="white"
-  />
+  <circle cx="16" cy="16" r="13" fill="currentColor" opacity="0.18"/>
+  <circle cx="16" cy="16" r="10" fill="none" stroke="currentColor" stroke-width="2"/>
+  <path d="M10 22L22 10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+  <circle cx="22" cy="10" r="2" fill="currentColor"/>
+  <circle cx="10" cy="22" r="2" fill="currentColor"/>
 </svg>

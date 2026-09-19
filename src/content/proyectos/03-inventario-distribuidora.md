@@ -2,6 +2,7 @@
 title: "Inventario Distribuidora del Sur"
 slug: "inventario-distribuidora"
 cliente: "Distribuidora del Sur SRL"
+categoria: "panel"
 descripcion: "Sistema de inventario interno con stock por depósito, alertas de reposición y reportes de rotación."
 problema: "Distribuidora con tres depósitos físicos y doscientos clientes. Tenían stock en planillas separadas que se desactualizaban cada semana. Perdían ventas por no saber qué tenían disponible."
 resultado: "Panel interno con stock consolidado por depósito, alertas automáticas de reposición, y reportes semanales de rotación descargables."

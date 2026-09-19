@@ -12,51 +12,108 @@ const socials = [
 
 const links = [
   { href: "/sobre-mi", label: "Sobre mí" },
+  { href: "/servicios", label: "Servicios" },
   { href: "/proyectos", label: "Proyectos" },
   { href: "/blog", label: "Blog" },
+  { href: "/testimonios", label: "Testimonios" },
   { href: "/contacto", label: "Contacto" },
+];
+
+const resourceLinks = [
+  { href: "/cv", label: "CV" },
+  { href: "/ahora", label: "Ahora" },
+  { href: "/lectura", label: "Lectura" },
+  { href: "/rss.xml", label: "RSS" },
 ];
 ---
 
 <footer class="relative bg-[var(--color-ink)] text-[var(--color-blanco-humo)] overflow-hidden">
   <div class="container-page py-14 md:py-20">
-    <div class="mb-10 md:mb-14 reveal">
-      <p class="font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-azul)] mb-3">
-        {site.location} · {year}
-      </p>
-      <a
-        href="/"
-        class="block font-impact uppercase leading-[0.85] tracking-[-0.03em] text-[var(--color-blanco-humo)] hover:text-[var(--color-azul)] transition-colors text-[clamp(3rem,12vw,9rem)]"
-        aria-label={`${site.name} — ir al inicio`}
+    <div class="mb-10 md:mb-14 reveal grid grid-cols-1 lg:grid-cols-[2fr_3fr] gap-10 items-end">
+      <div>
+        <p class="font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--color-dorado)] mb-3">
+          {site.location} · {year}
+        </p>
+        <a
+          href="/"
+          class="block font-impact leading-[0.9] tracking-[-0.04em] text-white hover:text-[var(--color-dorado)] transition-colors text-[clamp(2.5rem,10vw,7rem)]"
+          aria-label={`${site.name} — ir al inicio`}
+        >
+          {site.name}
+        </a>
+        <p class="mt-4 max-w-md text-sm text-white/70 leading-relaxed">
+          {site.description}
+        </p>
+      </div>
+
+      <form
+        id="newsletter-form"
+        class="rounded-lg bg-[var(--color-azul-deep)] p-6 md:p-7 border border-white/10"
+        aria-label="Newsletter — recibe un email mensual con lo que aprendí"
       >
-        Marcial Fantini
-      </a>
+        <p class="font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--color-dorado)] mb-2">
+          Newsletter mensual
+        </p>
+        <h2 class="font-impact text-2xl md:text-3xl uppercase leading-[0.95] text-white mb-2">
+          Lo que aprendí este mes.
+        </h2>
+        <p class="text-sm text-white/70 mb-5 leading-relaxed">
+          Un email por mes con lo que vale la pena. Cero newsletters de marketing.
+          Te podés dar de baja en un click.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-2">
+          <label class="sr-only" for="newsletter-email">Tu email</label>
+          <input
+            type="email"
+            id="newsletter-email"
+            name="email"
+            required
+            autocomplete="email"
+            placeholder="tu@email.com"
+            class="flex-1 min-w-0 px-4 py-3 rounded-md bg-white/95 text-[var(--color-ink)] placeholder:text-[var(--color-mute)] focus:outline-none focus:ring-2 focus:ring-[var(--color-dorado)]"
+          />
+          <button
+            type="submit"
+            class="tactile px-5 py-3 rounded-md bg-[var(--color-dorado)] text-[var(--color-azul-deep)] font-mono text-[11px] uppercase tracking-[0.18em] font-bold hover:bg-white"
+          >
+            Suscribirme
+          </button>
+        </div>
+        <p
+          id="newsletter-msg"
+          class="hidden mt-3 text-sm text-[var(--color-dorado)] font-mono uppercase tracking-[0.18em]"
+          role="status"
+          aria-live="polite"
+        >
+          ¡Listo! Te suscribiste.
+        </p>
+      </form>
     </div>
 
     <div class="grid grid-cols-2 md:grid-cols-[2fr_1fr_1fr_1fr] gap-10 md:gap-8 mb-12">
-      <div class="col-span-2 md:col-span-1 max-w-md">
-        <p class="text-sm text-[var(--color-blanco-humo)]/80 leading-relaxed">
-          {site.description}
+      <div class="col-span-2 md:col-span-1">
+        <p class="font-mono text-[11px] uppercase tracking-[0.18em] text-white/55 mb-3">
+          Contacto
         </p>
         <a
           href={`mailto:${site.email}`}
-          class="mt-5 inline-flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-[0.18em] font-semibold text-[var(--color-azul)] hover:text-[var(--color-blanco-humo)]"
+          class="tactile font-mono text-sm text-[var(--color-dorado)] hover:text-white font-semibold inline-flex items-center gap-1.5 break-all"
         >
           {site.email} <span aria-hidden="true">→</span>
         </a>
       </div>
 
       <div>
-        <p class="font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-mute)] mb-4">
+        <p class="font-mono text-[11px] uppercase tracking-[0.18em] text-white/55 mb-4">
           Navegación
         </p>
-        <ul class="space-y-2.5 text-sm">
+        <ul class="space-y-2 text-sm">
           {
             links.map((l) => (
               <li>
                 <a
                   href={l.href}
-                  class="tactile text-[var(--color-blanco-humo)]/85 hover:text-[var(--color-azul)] font-medium">
+                  class="tactile text-white/80 hover:text-[var(--color-dorado)] font-medium">
                   {l.label}
                 </a>
               </li>
@@ -66,10 +123,29 @@ const links = [
       </div>
 
       <div>
-        <p class="font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-mute)] mb-4">
+        <p class="font-mono text-[11px] uppercase tracking-[0.18em] text-white/55 mb-4">
+          Recursos
+        </p>
+        <ul class="space-y-2 text-sm">
+          {
+            resourceLinks.map((l) => (
+              <li>
+                <a
+                  href={l.href}
+                  class="tactile text-white/80 hover:text-[var(--color-dorado)] font-medium">
+                  {l.label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+
+      <div>
+        <p class="font-mono text-[11px] uppercase tracking-[0.18em] text-white/55 mb-4">
           Conectá
         </p>
-        <ul class="space-y-2.5 text-sm">
+        <ul class="space-y-2 text-sm">
           {
             socials.map((s) => (
               <li>
@@ -77,7 +153,7 @@ const links = [
                   href={s.href}
                   rel={s.href.startsWith('http') ? 'noopener noreferrer' : undefined}
                   target={s.href.startsWith('http') ? '_blank' : undefined}
-                  class="tactile text-[var(--color-blanco-humo)]/85 hover:text-[var(--color-azul)] font-medium inline-flex items-center gap-1"
+                  class="tactile text-white/80 hover:text-[var(--color-dorado)] font-medium inline-flex items-center gap-1"
                 >
                   {s.label}
                   <span aria-hidden="true">↗</span>
@@ -87,25 +163,45 @@ const links = [
           }
         </ul>
       </div>
-
-      <div>
-        <p class="font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-mute)] mb-4">
-          Stack
-        </p>
-        <p class="font-mono text-sm text-[var(--color-blanco-humo)]/80 leading-relaxed">
-          Astro · TypeScript<br />
-          Tailwind v4 · Vercel
-        </p>
-      </div>
     </div>
 
-    <div class="pt-6 border-t border-[var(--color-blanco-humo)]/15 flex flex-col md:flex-row items-start md:items-center justify-between gap-3">
-      <p class="font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-mute)]">
+    <div class="pt-6 border-t border-white/15 flex flex-col md:flex-row items-start md:items-center justify-between gap-3">
+      <p class="font-mono text-[11px] uppercase tracking-[0.18em] text-white/55">
         © {year} {site.name} · Córdoba, Argentina
       </p>
-      <p class="font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-mute)]">
-        Hecho en casa · Sin frameworks de moda
+      <p class="font-mono text-[11px] uppercase tracking-[0.18em] text-white/55">
+        Construido con Astro + TypeScript · Sin frameworks de moda
       </p>
     </div>
   </div>
 </footer>
+
+<script>
+  (function () {
+    const form = document.getElementById('newsletter-form');
+    const msg = document.getElementById('newsletter-msg');
+    const input = document.getElementById('newsletter-email') as HTMLInputElement | null;
+    if (!form || !msg || !input) return;
+
+    // Check if already subscribed
+    try {
+      if (localStorage.getItem('mf-newsletter-subscribed') === '1') {
+        msg.textContent = 'Ya estás suscrito. Gracias.';
+        msg.classList.remove('hidden');
+      }
+    } catch {}
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const value = input.value.trim();
+      if (!value) return;
+      try {
+        localStorage.setItem('mf-newsletter-subscribed', '1');
+        localStorage.setItem('mf-newsletter-email', value);
+      } catch {}
+      msg.textContent = '¡Listo! Te suscribiste.';
+      msg.classList.remove('hidden');
+      input.value = '';
+    });
+  })();
+</script>

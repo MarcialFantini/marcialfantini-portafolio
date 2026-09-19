@@ -6,6 +6,31 @@ import { getCollection } from "astro:content";
 const posts = (await getCollection("blog")).sort(
   (a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime()
 );
+
+// Build category counts
+const categoryLabels: Record<string, string> = {
+  desarrollo: "Desarrollo",
+  productos: "Productos",
+  carrera: "Carrera",
+  escritura: "Escritura",
+  ia: "IA / Tools",
+};
+
+const categoryCounts = new Map<string, number>();
+for (const post of posts) {
+  categoryCounts.set(post.data.category, (categoryCounts.get(post.data.category) ?? 0) + 1);
+}
+
+const categories = Array.from(categoryCounts.entries()).sort((a, b) => b[1] - a[1]);
+
+// Tag counts
+const tagCounts = new Map<string, number>();
+for (const post of posts) {
+  for (const tag of post.data.tags) {
+    tagCounts.set(tag, (tagCounts.get(tag) ?? 0) + 1);
+  }
+}
+const topTags = Array.from(tagCounts.entries()).sort((a, b) => b[1] - a[1]).slice(0, 12);
 ---
 
 <Layout
@@ -14,13 +39,46 @@ const posts = (await getCollection("blog")).sort(
 >
   <section class="pt-16 md:pt-24 pb-12 border-b border-[var(--color-border)]">
     <div class="container-page max-w-4xl reveal">
-      <h1 class="font-display font-bold tracking-tight mb-6 text-[var(--color-ink)]">
-        Lo que aprendí en el camino.
+      <nav class="mb-8 font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-mute)]">
+        <ol class="flex flex-wrap items-center gap-2">
+          <li><a href="/" class="hover:text-[var(--color-azul)]">Inicio</a></li>
+          <li aria-hidden="true">/</li>
+          <li class="text-[var(--color-ink)]">Blog</li>
+        </ol>
+      </nav>
+
+      <h1 class="font-impact text-[clamp(2.25rem,5.5vw,4.75rem)] uppercase leading-[0.95] text-[var(--color-ink)] tracking-tight mb-6">
+        Lo que aprendí <span class="text-[var(--color-azul)]">en el camino.</span>
       </h1>
       <p class="text-xl text-[var(--color-ink-soft)] leading-relaxed max-w-3xl">
         Ensayos sobre freelance, producto, código y todo lo que me hubiera gustado leer cuando
         arranqué. Sin tutoriales, sin copywriting, con el costo y el beneficio claros.
       </p>
+    </div>
+  </section>
+
+  <section class="py-8 md:py-10 border-b border-[var(--color-border)]">
+    <div class="container-page flex flex-wrap items-center gap-2 reveal">
+      <span class="font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-mute)] mr-2">
+        Categorías:
+      </span>
+      {
+        categories.map(([cat, count]) => (
+          <a
+            href={`#cat-${cat}`}
+            class="tactile inline-flex items-center gap-2 px-3 py-1.5 rounded-md bg-white border border-[var(--color-border)] font-mono text-xs text-[var(--color-ink-soft)] hover:border-[var(--color-azul)] hover:text-[var(--color-azul)]"
+          >
+            <span>{categoryLabels[cat] ?? cat}</span>
+            <span class="text-[var(--color-mute)] tabular-nums">{count}</span>
+          </a>
+        ))
+      }
+      <a
+        href="/blog/tags"
+        class="tactile ml-auto inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md font-mono text-xs text-[var(--color-azul)] hover:text-[var(--color-ink)] font-semibold"
+      >
+        Tags <span aria-hidden="true">→</span>
+      </a>
     </div>
   </section>
 
@@ -34,31 +92,39 @@ const posts = (await getCollection("blog")).sort(
         ) : (
           <ol class="border-t border-[var(--color-border)] reveal-stagger">
             {posts.map((post) => (
-              <li class="border-b border-[var(--color-border)]">
+              <li
+                id={`cat-${post.data.category}`}
+                class="border-b border-[var(--color-border)]"
+              >
                 <a
                   href={`/blog/${post.id}`}
                   class="tactile group grid grid-cols-[auto_1fr_auto] md:grid-cols-[7rem_1fr_auto_auto] items-baseline gap-5 md:gap-8 py-7"
                 >
                   <div class="font-mono text-xs text-[var(--color-mute)] whitespace-nowrap pt-1 flex flex-col gap-1">
                     <FormattedDate date={post.data.pubDate} format="short" />
-<span class="text-[var(--color-dorado)] uppercase tracking-wider text-[10px] font-semibold">
-                        {post.data.category}
-                      </span>
-                    </div>
-                    <div class="min-w-0">
-                      <h2 class="font-display font-semibold text-xl md:text-2xl tracking-tight text-[var(--color-ink)] group-hover:text-[var(--color-dorado)] leading-tight">
+                    <span class="text-[var(--color-azul)] uppercase tracking-wider text-[10px] font-semibold">
+                      {categoryLabels[post.data.category] ?? post.data.category}
+                    </span>
+                  </div>
+                  <div class="min-w-0">
+                    <h2 class="font-display font-semibold text-xl md:text-2xl tracking-tight text-[var(--color-ink)] group-hover:text-[var(--color-azul)] leading-tight">
                       {post.data.title}
                     </h2>
                     <p class="mt-2 text-sm md:text-base text-[var(--color-ink-soft)] leading-snug max-w-2xl line-clamp-2">
                       {post.data.description}
                     </p>
+                    {post.data.tags.length > 0 && (
+                      <p class="mt-2 font-mono text-[10px] uppercase tracking-[0.18em] text-[var(--color-mute)]">
+                        {post.data.tags.slice(0, 4).map((t) => `#${t}`).join(" · ")}
+                      </p>
+                    )}
                   </div>
                   <span class="font-mono text-xs text-[var(--color-mute)] whitespace-nowrap hidden md:inline pt-1">
-                    {post.data.readingTime} min
+                    {post.data.readingTime ?? "—"} min
                   </span>
                   <span
                     aria-hidden="true"
-                    class="hidden md:inline text-[var(--color-mute)] group-hover:text-[var(--color-dorado)] group-hover:translate-x-1 transition-transform"
+                    class="hidden md:inline text-[var(--color-mute)] group-hover:text-[var(--color-azul)] group-hover:translate-x-1 transition-transform"
                   >
                     →
                   </span>
@@ -70,4 +136,29 @@ const posts = (await getCollection("blog")).sort(
       }
     </div>
   </section>
+
+  {topTags.length > 0 && (
+    <section class="py-10 border-t border-[var(--color-border)] bg-[var(--color-blanco)]">
+      <div class="container-page">
+        <p class="font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-mute)] mb-3">
+          Tags populares
+        </p>
+        <ul class="flex flex-wrap gap-2">
+          {
+            topTags.map(([tag, count]) => (
+              <li>
+                <a
+                  href={`/blog/tags/${tag}`}
+                  class="tactile inline-flex items-center gap-2 px-3 py-1.5 rounded-md bg-white border border-[var(--color-border)] font-mono text-xs text-[var(--color-ink-soft)] hover:border-[var(--color-azul)] hover:text-[var(--color-azul)]"
+                >
+                  <span>#{tag}</span>
+                  <span class="text-[var(--color-mute)] tabular-nums">{count}</span>
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </section>
+  )}
 </Layout>

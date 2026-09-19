@@ -8,7 +8,7 @@ const posts = allPosts
   .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime())
   .slice(0, 3);
 
-const gradients = ["warm", "cool", "vivid"] as const;
+const gradients = ["azul", "azul-card", "dorado"] as const;
 ---
 
 <section class="relative py-20 md:py-28 border-b-2 border-[var(--color-ink)] bg-[var(--color-blanco)] overflow-hidden">
@@ -40,12 +40,11 @@ const gradients = ["warm", "cool", "vivid"] as const;
                 class={`placeholder-image placeholder-image--${gradients[i % gradients.length]} h-40 relative overflow-hidden`}
                 aria-hidden="true"
               >
-                <div class="absolute inset-0 dots-overlay opacity-50"></div>
-                <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
-                  <span class="font-impact text-7xl text-white/15 select-none tabular-nums leading-none">
-                    {String(i + 1).padStart(2, "0")}
-                  </span>
-                </div>
+<div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+                    <span class="font-impact text-7xl text-white/15 select-none tabular-nums leading-none">
+                      {String(i + 1).padStart(2, "0")}
+                    </span>
+                  </div>
               </div>
               <div class="p-6">
                 <div class="flex items-center gap-3 mb-4 font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-mute)]">

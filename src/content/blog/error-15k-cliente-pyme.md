@@ -3,7 +3,7 @@ title: "El error de USD 15k que cometí con un cliente PyME (y cómo lo arreglé
 description: "Historia real de un proyecto en el que la codicia me ganó y entregué un sitio con un plugin de pago que terminó costándome dinero, tiempo y una relación. Lecciones y herramientas para no repetirlo."
 pubDate: 2026-02-05
 author: "Marcial Fantini"
-category: "Casos"
+category: "escritura"
 readingTime: 8
 tags: ["lecciones", "freelance", "casos"]
 featured: false

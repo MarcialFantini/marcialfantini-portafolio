@@ -1,0 +1,229 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import servicios from "../../data/servicios.json";
+import site from "../../data/site.json";
+import type { GetStaticPaths } from "astro";
+
+export const getStaticPaths = (async () => {
+  return servicios.map((s) => ({
+    params: { slug: s.id },
+    props: { servicio: s },
+  }));
+}) satisfies GetStaticPaths;
+
+const { servicio } = Astro.props;
+
+// Build 4-5 realistic FAQs per service
+const faqsPorServicio: Record<string, { pregunta: string; respuesta: string }[]> = {
+  "sistema-ventas-online": [
+    {
+      pregunta: "¿Cuánto tarda un sitio tipo 'sistema de ventas'?",
+      respuesta: "Entre 3 y 8 semanas. La mayoría de mis proyectos cierra en 4-5. Si necesitás algo más rápido, hay recargo express.",
+    },
+    {
+      pregunta: "¿Qué incluye el SEO técnico?",
+      respuesta: "Schema markup, sitemap, robots.txt, meta tags, Open Graph, datos estructurados LocalBusiness. Lo que Google necesita para indexarte bien. No incluye link building.",
+    },
+    {
+      pregunta: "¿Puedo editar el sitio yo después?",
+      respuesta: "Si contratás el paquete con CMS (Astro + Content Collections o headless Sanity), sí. Si contratás sitio estático, dependés de mí para cambios. Te lo aclaro en la propuesta.",
+    },
+  ],
+  "tienda-express": [
+    {
+      pregunta: "¿30 días es realista?",
+      respuesta: "Sí, si me das acceso a productos y fotos en la semana 1. Si hay demoras del lado del cliente, se corre. Si hay demoras mías, descuento del saldo final.",
+    },
+    {
+      pregunta: "¿Mercado Pago o Stripe?",
+      respuesta: "Cualquiera de los dos. Elijo según tu país y volumen. Para Argentina, Mercado Pago casi siempre. Para USD con tarjeta internacional, Stripe.",
+    },
+    {
+      pregunta: "¿Y los envíos?",
+      respuesta: "Calculo envíos por código postal vía API propia (OCA, Correo Argentino, Andreani). Si querés usar Mercado Envíos, se integra directo.",
+    },
+  ],
+  "rescate-conversion": [
+    {
+      pregunta: "¿Cómo funciona la garantía de Lighthouse +20 puntos?",
+      respuesta: "Mido antes, trabajo 2-4 semanas, mido después. Si Lighthouse mobile no subió al menos 20 puntos, te devuelvo el 100% del proyecto. Mido en PageSpeed Insights, no en herramientas pagas que inflan.",
+    },
+    {
+      pregunta: "¿Qué hacés si mi sitio tiene 15 problemas?",
+      respuesta: "Rankeo por impacto (los 3 que más mueven la aguja primero). Arreglo esos en el sprint 1. El resto queda rankeado en el reporte para que decidas si seguís o no.",
+    },
+  ],
+  "automatizaciones-pagan": [
+    {
+      pregunta: "¿Qué herramientas usás?",
+      respuesta: "Node.js + APIs nativas (MercadoLibre, AFIP, HubSpot, etc.) + n8n o Make para workflows no críticos. Nada de BlackBox AI. Las automatizaciones que mueven plata necesitan código auditable.",
+    },
+    {
+      pregunta: "¿Cuánto se ahorra?",
+      respuesta: "Típicamente 6 a 15 horas semanales en tareas repetitivas, medido en los primeros 30 días. Te lo cuantifico en la propuesta con horas reales del flujo actual.",
+    },
+  ],
+};
+
+const faqItems = faqsPorServicio[servicio.id] ?? [];
+---
+
+<Layout
+  title={`${servicio.titulo} — ${site.name}`}
+  description={servicio.descripcion}
+>
+  <section class="pt-16 md:pt-20 pb-12 border-b border-[var(--color-border)]">
+    <div class="container-page max-w-4xl reveal">
+      <nav class="mb-8 font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-mute)]">
+        <ol class="flex flex-wrap items-center gap-2">
+          <li><a href="/servicios" class="hover:text-[var(--color-azul)]">Servicios</a></li>
+          <li aria-hidden="true">/</li>
+          <li class="text-[var(--color-ink)]">{servicio.titulo}</li>
+        </ol>
+      </nav>
+
+      <div class="flex items-center gap-3 mb-4">
+        <span class="font-mono text-[10px] uppercase tracking-[0.22em] text-[var(--color-mute)] tabular-nums">
+          0{servicios.findIndex((s) => s.id === servicio.id) + 1}
+        </span>
+        <span class="h-px flex-1 bg-[var(--color-border)]"></span>
+        <span class="font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-mute)]">
+          {servicio.duracion}
+        </span>
+      </div>
+
+      <h1 class="font-impact text-[clamp(2.25rem,5.5vw,4.5rem)] uppercase leading-[0.95] text-[var(--color-ink)] tracking-tight mb-5">
+        {servicio.titulo}.<br />
+        <span class="text-[var(--color-azul)]">{servicio.subtitulo}</span>
+      </h1>
+
+      <p class="text-xl text-[var(--color-ink-soft)] leading-relaxed max-w-3xl mb-8">
+        {servicio.descripcion}
+      </p>
+
+      <div class="flex flex-wrap items-center gap-4 text-sm font-mono uppercase tracking-[0.18em] text-[var(--color-mute)]">
+        <span class="px-3 py-1.5 rounded-md bg-[var(--color-dorado-soft)] text-[var(--color-dorado-deep)] font-semibold">
+          Desde {servicio.precioOrientativo}
+        </span>
+        <span class="px-3 py-1.5 rounded-md bg-[var(--color-azul-soft)] text-[var(--color-azul-deep)] font-semibold">
+          {servicio.duracion}
+        </span>
+        {servicio.badge && (
+          <span class="px-3 py-1.5 rounded-md bg-[var(--color-ink)] text-white font-semibold">
+            {servicio.badge}
+          </span>
+        )}
+      </div>
+    </div>
+  </section>
+
+  <section class="py-12 md:py-16 border-b border-[var(--color-border)] bg-[var(--color-azul)] text-white">
+    <div class="container-page max-w-3xl reveal">
+      <p class="font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--color-dorado)] mb-3">
+        Resultado esperado
+      </p>
+      <p class="font-impact text-[clamp(1.5rem,3vw,2.5rem)] uppercase leading-[0.98] text-white">
+        {servicio.resultadoCuantificado}
+      </p>
+    </div>
+  </section>
+
+  <section class="py-12 md:py-16 border-b border-[var(--color-border)]">
+    <div class="container-page max-w-3xl">
+      <p class="font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--color-azul)] mb-3">
+        Qué incluye
+      </p>
+      <h2 class="font-impact text-[clamp(1.75rem,3.5vw,2.75rem)] uppercase leading-[0.95] text-[var(--color-ink)] tracking-tight mb-10">
+        Todo lo que entrego, <span class="text-[var(--color-azul)]">por escrito.</span>
+      </h2>
+      <ul class="space-y-3">
+        {
+          servicio.queIncluye.map((item) => (
+            <li class="flex items-start gap-3 text-base md:text-lg text-[var(--color-ink)] leading-relaxed">
+              <span class="shrink-0 inline-flex items-center justify-center w-6 h-6 rounded-full bg-[var(--color-azul)] text-white font-mono text-xs mt-1">
+                ✓
+              </span>
+              <span>{item}</span>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="py-12 md:py-16 border-b border-[var(--color-border)] bg-[var(--color-blanco)]">
+    <div class="container-page max-w-3xl">
+      <p class="font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--color-azul)] mb-3">
+        Para quién es
+      </p>
+      <p class="text-xl md:text-2xl text-[var(--color-ink)] leading-snug font-medium">
+        {servicio.idealPara}
+      </p>
+    </div>
+  </section>
+
+  {faqItems.length > 0 && (
+    <section class="py-12 md:py-16 border-b border-[var(--color-border)]">
+      <div class="container-page max-w-3xl">
+        <p class="font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--color-azul)] mb-3">
+          FAQ del servicio
+        </p>
+        <h2 class="font-impact text-[clamp(1.75rem,3.5vw,2.75rem)] uppercase leading-[0.95] text-[var(--color-ink)] tracking-tight mb-10">
+          Preguntas <span class="text-[var(--color-azul)]">concretas.</span>
+        </h2>
+        <div class="space-y-3">
+          {
+            faqItems.map((faq) => (
+              <details class="group rounded-md bg-white border-2 border-[var(--color-ink)] tactile">
+                <summary class="flex items-start justify-between gap-4 p-5 cursor-pointer list-none">
+                  <h3 class="font-display font-semibold text-base md:text-lg text-[var(--color-ink)] leading-snug flex-1">
+                    {faq.pregunta}
+                  </h3>
+                  <span class="shrink-0 inline-flex items-center justify-center w-9 h-9 rounded-full border-2 border-[var(--color-ink)] text-[var(--color-ink)] group-open:bg-[var(--color-azul)] group-open:border-[var(--color-azul)] group-open:text-white transition-all" aria-hidden="true">
+                    <svg class="w-4 h-4 transition-transform group-open:rotate-45" fill="none" viewBox="0 0 16 16">
+                      <path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                    </svg>
+                  </span>
+                </summary>
+                <div class="px-5 pb-5">
+                  <p class="text-sm md:text-base text-[var(--color-ink-soft)] leading-relaxed">
+                    {faq.respuesta}
+                  </p>
+                </div>
+              </details>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+  )}
+
+  <section class="py-12 md:py-16 bg-[var(--color-ink)] text-white border-t border-[var(--color-ink)]">
+    <div class="container-page text-center max-w-2xl reveal">
+      <p class="font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--color-dorado)] mb-3">
+        Reservá este servicio
+      </p>
+      <h2 class="font-impact text-[clamp(1.75rem,4vw,3rem)] uppercase leading-[0.95] text-white mb-5">
+        ¿Te encaja? <span class="text-[var(--color-dorado)]">Hablemos.</span>
+      </h2>
+      <p class="text-lg text-white/80 leading-relaxed mb-8">
+        30 minutos de auditoría gratis para confirmar que el servicio cubre tu caso. Si no entra, te recomiendo otro freelance.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-3 justify-center">
+        <a
+          href={`/contacto?servicio=${encodeURIComponent(servicio.titulo)}`}
+          class="tactile inline-flex items-center justify-center gap-2 px-7 py-4 rounded-md bg-[var(--color-dorado)] text-[var(--color-azul-deep)] font-mono text-[11px] uppercase tracking-[0.18em] font-bold hover:bg-white"
+        >
+          Quiero este servicio
+          <span aria-hidden="true">→</span>
+        </a>
+        <a
+          href="/servicios"
+          class="tactile inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-md border border-white/30 text-white font-mono text-[11px] uppercase tracking-[0.18em] font-semibold hover:border-[var(--color-dorado)] hover:text-[var(--color-dorado)]"
+        >
+          Ver otros servicios
+        </a>
+      </div>
+    </div>
+  </section>
+</Layout>

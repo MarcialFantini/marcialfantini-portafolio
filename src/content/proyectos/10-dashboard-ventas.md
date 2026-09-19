@@ -2,6 +2,7 @@
 title: "Dashboard de Ventas Mayoristas"
 slug: "dashboard-ventas"
 cliente: "Distribuidora Cuyo"
+categoria: "dashboard"
 descripcion: "Dashboard interno con KPIs de ventas, cohortes de clientes, productos más vendidos y comparativa interanual."
 problema: "Distribuidora con 30 vendedores en ruta. Tomaban decisiones con datos del día anterior en Excel, sin poder cruzar cohortes ni comparativas."
 resultado: "Dashboard en tiempo real con KPIs por vendedor, top productos, cohortes y comparativa YoY. Accesible desde mobile."

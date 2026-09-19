@@ -3,7 +3,7 @@ title: "Por qué dejé de ofrecer 'páginas web' y empecé a vender resultados"
 description: "Un cambio de framing que me permitió cobrar tres veces más y trabajar con clientes que entienden el valor. La diferencia entre output y outcome."
 pubDate: 2026-01-15
 author: "Marcial Fantini"
-category: "Estrategia"
+category: "carrera"
 readingTime: 5
 tags: ["pricing", "freelance", "producto"]
 featured: true

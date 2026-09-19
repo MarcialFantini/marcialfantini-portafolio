@@ -2,6 +2,7 @@
 title: "Blog Editorial Consultora"
 slug: "blog-consultora"
 cliente: "Consultora Estrada & Cía"
+categoria: "blog"
 descripcion: "Blog editorial con autores múltiples, secciones por área de consultoría y newsletter integrada."
 problema: "Consultora boutique con 12 consultores senior. Querían posicionarse orgánicamente en Google y consolidar su voz editorial en temas donde son referentes."
 resultado: "Blog editorial con perfil por autor, posts categorizados por servicio, SEO técnico fuerte y conversión a newsletter."
@@ -19,11 +20,11 @@ metricas:
   - { label: "Suscriptores newsletter", value: "1.200" }
 ---
 
-Consultora de management con 12 consultores senior que querían consolidar su presencia editorial. El blog anterior estaba en Medium, sin SEO, sin домínio propio, sin suscripción.
+Consultora de management con 12 consultores senior que querían consolidar su presencia editorial. El blog anterior estaba en Medium, sin SEO, sin dominio propio, sin suscripción.
 
 ## El problema
 
-Medium les daba visibilidad pero no los posicionaba como autoridad. Suscríbete a Medium no los posicionaba en Google. Querían dominio propio conSEO técnico y conversión a newsletter propia.
+Medium les daba visibilidad pero no los posicionaba como autoridad. Suscríbete a Medium no los posicionaba en Google. Querían dominio propio con SEO técnico y conversión a newsletter propia.
 
 ## La solución
 

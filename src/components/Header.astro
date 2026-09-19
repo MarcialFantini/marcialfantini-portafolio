@@ -3,7 +3,7 @@ import site from "../data/site.json";
 
 const navItems = [
   { href: "/sobre-mi", label: "Sobre mí" },
-  { href: "/#servicios", label: "Servicios" },
+  { href: "/servicios", label: "Servicios" },
   { href: "/proyectos", label: "Proyectos" },
   { href: "/blog", label: "Blog" },
   { href: "/contacto", label: "Contacto" },
@@ -13,22 +13,20 @@ const pathname = Astro.url.pathname;
 ---
 
 <header
-  class="sticky top-0 z-50 backdrop-blur-md bg-[var(--color-blanco-humo)]/80 border-b border-[var(--color-border)]"
+  class="sticky top-0 z-50 backdrop-blur-md bg-[var(--color-blanco-humo)]/85 border-b border-[var(--color-border)]"
 >
   <div class="container-page flex items-center justify-between h-16 md:h-[72px] gap-6">
     <a
       href="/"
-      class="flex items-center gap-1.5 group shrink-0"
+      class="flex items-center gap-2 group shrink-0"
       aria-label={`${site.name} — ir al inicio`}
     >
-      <span class="font-impact text-[22px] md:text-[26px] leading-none uppercase text-[var(--color-ink)] tracking-[-0.02em]">
-        M<span class="text-[var(--color-azul)]">F</span>
+      <span class="font-impact text-[20px] md:text-[24px] leading-none text-[var(--color-azul)] tracking-[-0.04em]">
+        MF
       </span>
-      <span aria-hidden="true" class="font-impact text-[22px] md:text-[26px] leading-none text-[var(--color-border)]">[</span>
       <span class="font-mono text-[10px] md:text-[11px] uppercase tracking-[0.22em] text-[var(--color-mute)] hidden sm:inline">
-        dev
+        {site.shortName}
       </span>
-      <span aria-hidden="true" class="font-impact text-[22px] md:text-[26px] leading-none text-[var(--color-border)] hidden sm:inline">]</span>
     </a>
 
     <nav aria-label="Principal" class="hidden md:flex items-center gap-1">
@@ -44,8 +42,8 @@ const pathname = Astro.url.pathname;
               class:list={[
                 "tactile font-mono text-[11px] uppercase tracking-[0.18em] px-3 py-2 rounded-md",
                 active
-                  ? "text-[var(--color-ink)] bg-[var(--color-border)]/40"
-                  : "text-[var(--color-ink-soft)] hover:text-[var(--color-ink)] hover:bg-[var(--color-border)]/30",
+                  ? "text-[var(--color-ink)] bg-[var(--color-azul-soft)]"
+                  : "text-[var(--color-ink-soft)] hover:text-[var(--color-ink)] hover:bg-[var(--color-azul-soft)]/50",
               ]}
               aria-current={active ? "page" : undefined}
             >
@@ -57,15 +55,8 @@ const pathname = Astro.url.pathname;
     </nav>
 
     <a
-      href="/recurso"
-      class="tactile hidden md:inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[var(--color-blanco)] text-[var(--color-ink)] text-[11px] font-mono uppercase tracking-[0.18em] font-semibold border-2 border-[var(--color-ink)] hover:bg-[var(--color-ink)] hover:text-[var(--color-blanco-humo)]"
-    >
-      Recurso gratis
-    </a>
-
-    <a
       href="/contacto"
-      class="tactile hidden md:inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[var(--color-azul)] text-[var(--color-blanco-humo)] text-[11px] font-mono uppercase tracking-[0.18em] font-semibold hover:bg-[var(--color-azul-deep)]"
+      class="tactile hidden md:inline-flex items-center gap-2 px-5 py-2.5 rounded-md bg-[var(--color-azul)] text-white text-[11px] font-mono uppercase tracking-[0.18em] font-semibold hover:bg-[var(--color-azul-deep)]"
     >
       Hablemos
       <span aria-hidden="true">→</span>
@@ -89,23 +80,38 @@ const pathname = Astro.url.pathname;
 
   <div
     id="mobile-menu"
-    class="hidden md:hidden border-t-2 border-[var(--color-ink)] bg-[var(--color-blanco-humo)] mobile-menu-slide"
+    class="hidden md:hidden border-t border-[var(--color-border)] bg-[var(--color-blanco-humo)] mobile-menu-slide"
     hidden
   >
-    <nav aria-label="Móvil" class="container-page flex flex-col py-3">
+    <nav aria-label="Móvil" class="container-page flex flex-col py-2">
       {
         navItems.map((item) => (
           <a
             href={item.href}
-            class="tactile mobile-menu-link flex items-center min-h-[48px] py-3 font-mono text-[12px] uppercase tracking-[0.18em] text-[var(--color-ink-soft)] hover:text-[var(--color-ink)] border-b border-[var(--color-border)] last:border-b-0"
+            class="tactile mobile-menu-link flex items-center justify-between min-h-[48px] py-3 font-mono text-[12px] uppercase tracking-[0.18em] text-[var(--color-ink-soft)] hover:text-[var(--color-azul)] border-b border-[var(--color-border)] last:border-b-0"
           >
             {item.label}
+            <span aria-hidden="true" class="text-[var(--color-mute)]">→</span>
           </a>
         ))
       }
       <a
+        href="/cv"
+        class="tactile mobile-menu-link flex items-center justify-between min-h-[48px] py-3 font-mono text-[12px] uppercase tracking-[0.18em] text-[var(--color-ink-soft)] hover:text-[var(--color-azul)] border-b border-[var(--color-border)]"
+      >
+        CV
+        <span aria-hidden="true" class="text-[var(--color-mute)]">↗</span>
+      </a>
+      <a
+        href="/ahora"
+        class="tactile mobile-menu-link flex items-center justify-between min-h-[48px] py-3 font-mono text-[12px] uppercase tracking-[0.18em] text-[var(--color-ink-soft)] hover:text-[var(--color-azul)] border-b border-[var(--color-border)]"
+      >
+        Ahora
+        <span aria-hidden="true" class="text-[var(--color-mute)]">→</span>
+      </a>
+      <a
         href="/contacto"
-        class="tactile mt-4 mb-2 inline-flex items-center justify-center gap-2 min-h-[48px] px-5 py-3 rounded-full bg-[var(--color-azul)] text-[var(--color-blanco-humo)] font-mono text-[11px] uppercase tracking-[0.18em] font-semibold hover:bg-[var(--color-azul-deep)]"
+        class="tactile mt-4 mb-2 inline-flex items-center justify-center gap-2 min-h-[48px] px-5 py-3 rounded-md bg-[var(--color-azul)] text-white font-mono text-[11px] uppercase tracking-[0.18em] font-semibold hover:bg-[var(--color-azul-deep)]"
       >
         Hablemos
         <span aria-hidden="true">→</span>
@@ -123,7 +129,6 @@ const pathname = Astro.url.pathname;
     const openMenu = () => {
       menu.classList.remove('hidden');
       menu.removeAttribute('hidden');
-      // Forzar reflow para que la animación corra desde hidden
       void menu.offsetWidth;
       menu.classList.add('mobile-menu--open');
       trigger.setAttribute('aria-expanded', 'true');
@@ -136,7 +141,6 @@ const pathname = Astro.url.pathname;
       trigger.setAttribute('aria-expanded', 'false');
       trigger.setAttribute('aria-label', 'Abrir menú');
       document.body.style.overflow = '';
-      // Esperar a que termine la animación de cierre
       setTimeout(() => {
         if (trigger.getAttribute('aria-expanded') === 'false') {
           menu.classList.add('hidden');
@@ -151,12 +155,10 @@ const pathname = Astro.url.pathname;
       else openMenu();
     });
 
-    // Cerrar al hacer click en cualquier link del menú
     menu.querySelectorAll('a').forEach((link) => {
       link.addEventListener('click', closeMenu);
     });
 
-    // Cerrar con Escape
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' && trigger.getAttribute('aria-expanded') === 'true') {
         closeMenu();
@@ -164,7 +166,6 @@ const pathname = Astro.url.pathname;
       }
     });
 
-    // Cerrar al volver a desktop
     const mq = window.matchMedia('(min-width: 768px)');
     mq.addEventListener('change', (e) => {
       if (e.matches) closeMenu();

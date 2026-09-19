@@ -1,7 +1,39 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import Contacto from "../components/Contacto.astro";
 import site from "../data/site.json";
+
+const timeline = [
+  {
+    year: "2017",
+    title: "Arranca como freelance",
+    detail: "Primer sitio cobrado USD 80. Sin saber cotizar ni hablar con clientes.",
+  },
+  {
+    year: "2019",
+    title: "Pivot a proyecto cerrado con KPI",
+    detail: "Dejo de cobrar por hora. Empiezo a vender resultados medibles.",
+  },
+  {
+    year: "2021",
+    title: "Estabiliza el stack",
+    detail: "Astro + TypeScript + Tailwind como default. Menos bugs, más velocidad de entrega.",
+  },
+  {
+    year: "2023",
+    title: "Piso de USD 2.500",
+    detail: "Rechaza proyectos chicos. La facturación sube 25% el primer año con menos clientes.",
+  },
+  {
+    year: "2025",
+    title: "Garantía por escrito en algunos servicios",
+    detail: "Rescate de Conversión garantiza +20 puntos Lighthouse o devuelve el 100%.",
+  },
+  {
+    year: "2026",
+    title: "Newsletter mensual + herramientas de IA",
+    detail: "Empieza a publicar posts sobre su flujo freelance real. Suscriptores arrancan.",
+  },
+];
 
 const process = [
   {
@@ -13,13 +45,13 @@ const process = [
   {
     title: "Propuesta cerrada",
     description:
-      "Te envío un PDF con alcance, precio cerrado, hitos y KPI. Si firman, cobro 40% de anticipo y arranco. Si no encaja, te recomiendo otro freelance.",
+      "Te envío un PDF con alcance, precio cerrado, hitos y KPI. Si firmás, cobro 50% de anticipo y arranco. Si no encaja, te recomiendo otro freelance.",
     duration: "5-7 días",
   },
   {
     title: "Construcción iterativa",
     description:
-      "Trabajo en ciclos semanales con demos en vivo cada viernes. Ves progreso real, no PowerPoint. El feedback se incorpora en cada vuelta.",
+      "Trabajo en sprints semanales con demos en vivo cada viernes. Ves progreso real, no PowerPoint. El feedback se incorpora en cada vuelta.",
     duration: "según alcance",
   },
   {
@@ -30,11 +62,14 @@ const process = [
   },
 ];
 
-const stack = [
-  "Astro", "TypeScript", "Tailwind v4", "Next.js", "React", "Node.js",
-  "PostgreSQL", "SQLite", "Stripe", "Mercado Pago", "HubSpot", "Cal.com",
-  "Vercel", "Cloudflare",
-];
+const stack = {
+  "Lenguajes y runtime": ["TypeScript", "JavaScript", "SQL", "Node.js", "HTML", "CSS"],
+  "Frontend y estilos": ["Astro", "React", "Next.js", "Tailwind CSS v4", "MDX"],
+  "Datos y backend": ["SQLite / libSQL", "PostgreSQL", "REST APIs", "WebSockets"],
+  "Pagos e integraciones": ["Stripe", "Mercado Pago", "HubSpot", "Cal.com", "AFIP SDK", "WhatsApp Business API"],
+  "Deploy y herramientas": ["Vercel", "Cloudflare Pages", "GitHub Actions", "Beehiiv", "Plausible"],
+  "IA en mi flujo": ["GitHub Copilot", "Cursor", "Vercel v0", "NotebookLM"],
+};
 
 const principios = [
   {
@@ -60,14 +95,22 @@ const principios = [
 
 <Layout
   title={`Sobre mí — ${site.name}`}
-  description={`Bio extendida, principios y proceso de trabajo de ${site.name}, desarrollador freelance full-stack desde Córdoba, Argentina.`}
+  description={`Bio extendida, principios, timeline y proceso de trabajo de ${site.name}, desarrollador freelance full-stack desde Córdoba, Argentina.`}
 >
-  <section class="relative pt-16 md:pt-24 pb-16 md:pb-20 border-b border-[var(--color-border)] overflow-hidden">
-    <div class="container-page max-w-4xl reveal relative z-[1]">
-      <span class="section-indicator text-[var(--color-mute)]">
+  <section class="relative pt-16 md:pt-24 pb-16 md:pb-20 border-b border-[var(--color-border)]">
+    <div class="container-page max-w-4xl reveal">
+      <nav class="mb-8 font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-mute)]">
+        <ol class="flex flex-wrap items-center gap-2">
+          <li><a href="/" class="hover:text-[var(--color-azul)]">Inicio</a></li>
+          <li aria-hidden="true">/</li>
+          <li class="text-[var(--color-ink)]">Sobre mí</li>
+        </ol>
+      </nav>
+
+      <p class="font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--color-azul)] mb-3">
         Sobre mí
-      </span>
-      <h1 class="font-impact text-[clamp(2.25rem,5.5vw,4.75rem)] uppercase leading-[0.95] text-[var(--color-ink)] tracking-tight mt-5 mb-8">
+      </p>
+      <h1 class="font-impact text-[clamp(2.25rem,5.5vw,4.75rem)] uppercase leading-[0.95] text-[var(--color-ink)] tracking-tight mb-8">
         Construyo software para que tu PyME cierre más ventas <span class="text-[var(--color-azul)]">y deje de depender de mí.</span>
       </h1>
       <p class="text-xl text-[var(--color-ink-soft)] leading-relaxed max-w-3xl">
@@ -83,10 +126,10 @@ const principios = [
       <div class="grid grid-cols-1 md:grid-cols-12 gap-10 reveal">
         <div class="md:col-span-3">
           <div
-            class="placeholder-image placeholder-image--warm w-32 h-32 md:w-40 md:h-40 rounded-xl flex items-center justify-center"
+            class="placeholder-image placeholder-image--azul w-32 h-32 md:w-40 md:h-40 rounded-lg flex items-center justify-center"
             aria-label="Avatar con iniciales MF"
           >
-            <span class="font-impact text-5xl md:text-6xl uppercase text-white [text-shadow:_0_2px_12px_rgba(0,0,0,0.4)]">
+            <span class="font-impact text-5xl md:text-6xl uppercase text-white">
               MF
             </span>
           </div>
@@ -128,7 +171,42 @@ const principios = [
     </div>
   </section>
 
-  <section class="relative py-16 md:py-24 border-b border-[var(--color-border)] bg-[var(--color-blanco)] overflow-hidden">
+  <section class="relative py-16 md:py-24 border-b border-[var(--color-border)] bg-[var(--color-azul)] text-white overflow-hidden">
+    <div class="container-page relative z-[1]">
+      <p class="font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--color-dorado)] mb-3">
+        Timeline
+      </p>
+      <h2 class="font-impact text-[clamp(1.75rem,4vw,3rem)] uppercase leading-[0.95] text-white tracking-tight max-w-2xl mb-12 reveal">
+        9 años, <span class="text-[var(--color-dorado)]">6 decisiones.</span>
+      </h2>
+
+      <ol class="relative space-y-8 reveal-stagger">
+        <span class="absolute left-[7px] md:left-[10px] top-2 bottom-2 w-px bg-[var(--color-dorado)] opacity-50" aria-hidden="true"></span>
+        {
+          timeline.map((step) => (
+            <li class="relative pl-10 md:pl-14">
+              <span class="absolute left-0 top-2 w-4 h-4 rounded-full bg-[var(--color-dorado)] border-4 border-[var(--color-azul)]" aria-hidden="true"></span>
+              <div class="grid grid-cols-1 md:grid-cols-[5rem_1fr] gap-3">
+                <span class="font-impact text-2xl text-[var(--color-dorado)] tabular-nums leading-none">
+                  {step.year}
+                </span>
+                <div>
+                  <h3 class="font-display font-semibold text-lg text-white leading-tight mb-1">
+                    {step.title}
+                  </h3>
+                  <p class="text-base text-white/80 leading-relaxed">
+                    {step.detail}
+                  </p>
+                </div>
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <section class="relative py-16 md:py-24 border-b border-[var(--color-border)] bg-[var(--color-blanco)]">
     <div class="container-page relative z-[1]">
       <h2 class="font-impact text-[clamp(1.75rem,4vw,3.25rem)] uppercase leading-[0.95] text-[var(--color-ink)] tracking-tight max-w-xl mb-12 reveal">
         Cómo pienso <span class="text-[var(--color-azul)]">el trabajo.</span>
@@ -137,7 +215,7 @@ const principios = [
       <ol class="grid grid-cols-1 sm:grid-cols-2 gap-5 reveal-stagger">
         {
           principios.map((p, i) => (
-            <li class="rounded-xl border border-[var(--color-border)] bg-[var(--color-blanco-humo)] p-6 tactile transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md hover:border-[var(--color-azul)]">
+            <li class="rounded-lg border border-[var(--color-border)] bg-white p-6 tactile transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md hover:border-[var(--color-azul)]">
               <p class="font-impact text-3xl md:text-4xl text-[var(--color-azul)] tabular-nums mb-4">
                 {String(i + 1).padStart(2, "0")}
               </p>
@@ -156,25 +234,20 @@ const principios = [
 
   <section class="py-16 md:py-24 border-b border-[var(--color-border)]">
     <div class="container-page">
-      <div class="max-w-2xl mb-14 reveal flex items-center gap-4">
-        <span class="sticker sticker-orange" style="--sticker-size: 72px;">
-          <span class="sticker__label">Proceso</span>
-        </span>
-        <div>
-          <span class="section-indicator text-[var(--color-mute)]">
-            Cómo trabajo
-          </span>
-          <h2 class="font-impact text-[clamp(1.75rem,4vw,3.25rem)] uppercase leading-[0.95] text-[var(--color-ink)] tracking-tight mt-3">
-            De la primera llamada al sitio <span class="text-[var(--color-azul)]">en producción.</span>
-          </h2>
-        </div>
+      <div class="max-w-2xl mb-14 reveal">
+        <p class="font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--color-azul)] mb-3">
+          Cómo trabajo
+        </p>
+        <h2 class="font-impact text-[clamp(1.75rem,4vw,3.25rem)] uppercase leading-[0.95] text-[var(--color-ink)] tracking-tight">
+          De la primera llamada al sitio <span class="text-[var(--color-azul)]">en producción.</span>
+        </h2>
       </div>
 
       <ol class="reveal-stagger">
         {
           process.map((step, i) => (
             <li class="grid grid-cols-[40px_1fr] md:grid-cols-[60px_1fr_auto] gap-4 md:gap-8 py-7 border-b border-[var(--color-border)] first:border-t last:border-b-0 items-start">
-              <span class="font-mono text-3xl md:text-4xl font-light text-[var(--color-azul)] tabular-nums">
+              <span class="font-impact text-3xl md:text-4xl text-[var(--color-azul)] tabular-nums">
                 {String(i + 1).padStart(2, "0")}
               </span>
               <div>
@@ -195,23 +268,61 @@ const principios = [
     </div>
   </section>
 
-  <section class="relative py-16 md:py-24 border-b border-[var(--color-border)] bg-[var(--color-blanco)] overflow-hidden">
+  <section class="relative py-16 md:py-24 border-b border-[var(--color-border)] bg-[var(--color-blanco)]">
     <div class="container-page relative z-[1]">
+      <p class="font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--color-azul)] mb-3">
+        Stack
+      </p>
       <h2 class="font-impact text-[clamp(1.75rem,4vw,3.25rem)] uppercase leading-[0.95] text-[var(--color-ink)] tracking-tight max-w-xl mb-10 reveal">
         Las herramientas <span class="text-[var(--color-azul)]">que conozco.</span>
       </h2>
 
-      <ul class="flex flex-wrap gap-2 reveal-stagger">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 reveal-stagger">
         {
-          stack.map((s) => (
-            <li class="font-mono text-sm px-3.5 py-2 rounded-md border border-[var(--color-border)] bg-[var(--color-blanco-humo)] text-[var(--color-ink-soft)]">
-              {s}
-            </li>
+          Object.entries(stack).map(([category, items]) => (
+            <div>
+              <h3 class="font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-mute)] mb-2">
+                {category}
+              </h3>
+              <ul class="flex flex-wrap gap-1.5">
+                {
+                  items.map((s) => (
+                    <li class="font-mono text-sm px-3 py-1.5 rounded-md border border-[var(--color-border)] bg-white text-[var(--color-ink-soft)]">
+                      {s}
+                    </li>
+                  ))
+                }
+              </ul>
+            </div>
           ))
         }
-      </ul>
+      </div>
     </div>
   </section>
 
-  <Contacto />
+  <section class="py-12 md:py-16">
+    <div class="container-page flex flex-col sm:flex-row gap-4 items-center justify-center">
+      <a
+        href="/cv"
+        class="tactile inline-flex items-center gap-2 px-6 py-3 rounded-md bg-[var(--color-ink)] text-white font-mono text-[11px] uppercase tracking-[0.18em] font-semibold hover:bg-[var(--color-azul)]"
+      >
+        Ver CV completo
+        <span aria-hidden="true">→</span>
+      </a>
+      <a
+        href="/ahora"
+        class="tactile inline-flex items-center gap-2 px-6 py-3 rounded-md border-2 border-[var(--color-ink)] text-[var(--color-ink)] font-mono text-[11px] uppercase tracking-[0.18em] font-semibold hover:bg-[var(--color-ink)] hover:text-white"
+      >
+        En qué estoy trabajando
+        <span aria-hidden="true">→</span>
+      </a>
+      <a
+        href="/contacto"
+        class="tactile inline-flex items-center gap-2 px-6 py-3 rounded-md bg-[var(--color-azul)] text-white font-mono text-[11px] uppercase tracking-[0.18em] font-semibold hover:bg-[var(--color-azul-deep)]"
+      >
+        Hablemos
+        <span aria-hidden="true">→</span>
+      </a>
+    </div>
+  </section>
 </Layout>

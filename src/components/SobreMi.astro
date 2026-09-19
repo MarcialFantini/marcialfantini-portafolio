@@ -1,74 +1,73 @@
 ---
 import site from "../data/site.json";
-import SectionAnchor from "./SectionAnchor.astro";
 ---
 
-<section class="relative py-20 md:py-28 border-b-2 border-[var(--color-ink)] overflow-hidden">
+<section class="relative py-20 md:py-28 border-b border-[var(--color-border)] overflow-hidden">
   <div class="container-page reveal">
-    <SectionAnchor number="01" label="SOBRE MÍ" />
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start mt-2">
-      <div class="lg:col-span-4 flex flex-col items-center lg:items-start gap-6">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
+      <div class="lg:col-span-4 flex flex-col items-start gap-6">
         <div
           class="relative w-36 h-36 md:w-44 md:h-44"
           role="img"
           aria-label="Avatar con iniciales MF — placeholder hasta tener foto real"
         >
-          <div class="absolute inset-0 rounded-full bg-[var(--color-azul)] opacity-90 translate-x-2 translate-y-2"></div>
-          <div class="absolute inset-0 rounded-full bg-[var(--color-ink)] flex items-center justify-center shadow-xl">
-            <span class="font-impact text-6xl md:text-7xl text-[var(--color-blanco-humo)] leading-none tracking-tight">
+          <div class="absolute inset-0 rounded-md bg-[var(--color-dorado)] translate-x-2 translate-y-2"></div>
+          <div class="absolute inset-0 rounded-md bg-[var(--color-azul)] flex items-center justify-center">
+            <span class="font-impact text-6xl md:text-7xl text-white leading-none">
               MF
             </span>
           </div>
-          <span class="absolute bottom-1 right-1 w-6 h-6 rounded-full bg-[var(--color-azul)] border-4 border-[var(--color-blanco-humo)] shadow-md" aria-hidden="true"></span>
         </div>
-        <div class="text-center lg:text-left">
-          <p class="font-impact text-xl md:text-2xl uppercase tracking-tight text-[var(--color-ink)] leading-tight">
+        <div>
+          <p class="font-impact text-xl md:text-2xl tracking-tight text-[var(--color-ink)] leading-tight">
             Marcial Fantini
           </p>
           <p class="font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--color-mute)] mt-1.5">
-            Desarrollador freelance · Córdoba AR
+            Full-stack freelance · Córdoba AR
+          </p>
+          <p class="font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--color-mute)] mt-1">
+            2017 → hoy
           </p>
         </div>
       </div>
 
-      <div class="lg:col-span-8 lg:pt-2">
-        <h2 class="font-impact text-[clamp(2rem,5vw,4rem)] uppercase leading-[0.95] text-[var(--color-ink)] mt-2 max-w-2xl">
-          Construyo software que <span class="text-[var(--color-azul)]">cierra más ventas.</span>
+      <div class="lg:col-span-8">
+        <p class="font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--color-azul)] mb-4">
+          01 · Sobre mí
+        </p>
+
+        <h2 class="font-impact text-[clamp(2rem,5vw,3.75rem)] leading-[0.95] text-[var(--color-ink)] max-w-3xl">
+          Construyo software para que tu PyME <span class="text-[var(--color-azul)]">cierre más ventas</span> y deje de depender de mí.
         </h2>
 
-        <div class="mt-6 grid gap-5 max-w-3xl">
-          <p class="text-xl md:text-2xl text-[var(--color-ink)] leading-snug font-display font-medium border-l-4 border-[var(--color-azul)] pl-5">
-            Soy <strong>{site.name}</strong>, desarrollador full-stack basado en Córdoba, Argentina.
+        <div class="mt-7 max-w-3xl space-y-5 text-[var(--color-ink-soft)] text-lg leading-relaxed">
+          <p>
+            Soy {site.name}, desarrollador full-stack freelance desde 2017. Trabajo
+            con <strong class="text-[var(--color-ink)] font-semibold">PyMEs argentinas</strong> de
+            e-commerce, servicios profesionales y retail que necesitan presencia
+            digital seria o un producto a medida que no encuentran en Shopify, Wix ni WordPress.
           </p>
-          <p class="text-xl md:text-2xl text-[var(--color-ink)] leading-snug font-display font-medium border-l-4 border-[var(--color-azul)] pl-5">
-            Trabajo con <strong>PyMEs argentinas de e-commerce, servicios profesionales y retail</strong> que necesitan presencia digital seria o un producto a medida que no encuentran en Shopify, Wix ni WordPress.
-          </p>
-          <p class="text-xl md:text-2xl text-[var(--color-ink)] leading-snug font-display font-medium border-l-4 border-[var(--color-azul)] pl-5">
-            Lo que entrego <strong>cobra por proyecto con KPI pactado, no por hora</strong> — y mis clientes suelen quedarse entre 18 y 36 meses derivando colegas.
-          </p>
-        </div>
-
-        <div class="mt-8 max-w-3xl">
-          <p class="text-[var(--color-ink-soft)] text-lg leading-relaxed">
-            Lo que entrego no es <em class="not-italic text-[var(--color-ink)] font-semibold">"una página web"</em>:
-            es un activo digital que rinde. Carga rápido, posiciona en Google, convierte visitas en
-            consultas o ventas, y se mide con números reales.
+          <p>
+            Lo que entrego <strong class="text-[var(--color-ink)] font-semibold">cobra por proyecto
+            con KPI pactado, no por hora</strong>. Mis clientes suelen quedarse entre
+            18 y 36 meses derivando colegas. Si después de un año no aprendiste a
+            medir tu canal online, fallé.
           </p>
         </div>
 
-        <div class="mt-8 flex flex-col sm:flex-row gap-4 sm:gap-6">
+        <div class="mt-9 flex flex-col sm:flex-row gap-4 sm:gap-6">
           <a
             href="/sobre-mi"
             class="tactile inline-flex items-center gap-2 text-sm font-mono uppercase tracking-[0.18em] text-[var(--color-ink)] hover:text-[var(--color-azul)] border-b border-[var(--color-ink)] hover:border-[var(--color-azul)] pb-1"
           >
-            Conocé mi proceso de trabajo
+            Cómo pienso el trabajo
             <span aria-hidden="true">→</span>
           </a>
           <a
-            href="#servicios"
+            href="/ahora"
             class="tactile inline-flex items-center gap-2 text-sm font-mono uppercase tracking-[0.18em] text-[var(--color-ink)] hover:text-[var(--color-azul)] border-b border-[var(--color-ink)] hover:border-[var(--color-azul)] pb-1"
           >
-            Ver servicios y precios
+            En qué estoy trabajando
             <span aria-hidden="true">→</span>
           </a>
         </div>

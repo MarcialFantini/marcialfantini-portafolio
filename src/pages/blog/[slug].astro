@@ -27,18 +27,63 @@ const related = sortedAll
   )
   .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime())
   .slice(0, 3);
+
+// Compute word count from rendered content body (rendered markdown)
+const body = post.body ?? "";
+const wordCount = body.trim().split(/\s+/).length;
+const computedReadingTime = Math.max(1, Math.round(wordCount / 220));
+const finalReadingTime = readingTime ?? computedReadingTime;
+
+// Build TOC from headings
+const headingRegex = /^(#{2,3})\s+(.+)$/gm;
+const toc: { level: number; text: string; id: string }[] = [];
+let m: RegExpExecArray | null;
+while ((m = headingRegex.exec(body)) !== null) {
+  const level = m[1].length;
+  const text = m[2].trim();
+  const id = text
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9\s-]/g, "")
+    .trim()
+    .replace(/\s+/g, "-");
+  toc.push({ level, text, id });
+}
+
+const categoryLabels: Record<string, string> = {
+  desarrollo: "Desarrollo",
+  productos: "Productos",
+  carrera: "Carrera",
+  escritura: "Escritura",
+  ia: "IA / Tools",
+};
+
+const canonicalURL = new URL(`/blog/${post.id}`, Astro.site ?? "https://marcialfantini.com").toString();
+const shareText = `${title} — ${description}`;
 ---
 
 <Layout
-  title={`${title} — Marcial Fantini`}
+  title={`${title} — ${"Marcial Fantini"}`}
   description={description}
   pageType="article"
 >
+  <div class="scroll-progress-bar" aria-hidden="true"></div>
+
   <article>
     <header class="pt-12 md:pt-20 pb-10 md:pb-14 border-b border-[var(--color-border)]">
       <div class="container-page max-w-3xl reveal">
-        <div class="placeholder-image placeholder-image--cool h-56 md:h-72 rounded-xl mb-8 shadow-md relative overflow-hidden">
-          <div class="absolute inset-0 dots-overlay opacity-40"></div>
+        <nav class="mb-8 font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-mute)]">
+          <ol class="flex flex-wrap items-center gap-2">
+            <li><a href="/" class="hover:text-[var(--color-azul)]">Inicio</a></li>
+            <li aria-hidden="true">/</li>
+            <li><a href="/blog" class="hover:text-[var(--color-azul)]">Blog</a></li>
+            <li aria-hidden="true">/</li>
+            <li class="text-[var(--color-ink)] truncate max-w-[60vw]">{title}</li>
+          </ol>
+        </nav>
+
+        <div class="placeholder-image placeholder-image--azul-card h-56 md:h-72 rounded-lg mb-8 shadow-md relative overflow-hidden">
           <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
             <span class="font-impact text-[clamp(8rem,20vw,16rem)] text-white/15 select-none tabular-nums leading-none">
               {placeholderIndex}
@@ -46,22 +91,17 @@ const related = sortedAll
           </div>
         </div>
 
-        <a
-          href="/blog"
-          class="tactile inline-flex items-center gap-1.5 text-sm text-[var(--color-mute)] hover:text-[var(--color-ink)] mb-8 font-mono"
-        >
-          <span aria-hidden="true">←</span> Volver al blog
-        </a>
-
-        <div class="flex items-center flex-wrap gap-3 mb-6 text-xs font-mono text-[var(--color-mute)]">
-          <span class="text-[var(--color-dorado)] font-semibold">{category}</span>
+        <div class="flex items-center flex-wrap gap-3 mb-5 text-xs font-mono text-[var(--color-mute)]">
+          <span class="px-2.5 py-1 rounded-md bg-[var(--color-azul-soft)] text-[var(--color-azul-deep)] font-semibold uppercase tracking-[0.18em]">
+            {categoryLabels[category] ?? category}
+          </span>
           <span class="w-1 h-1 rounded-full bg-[var(--color-border)]"></span>
-          <FormattedDate date={pubDate} format="short" />
+          <FormattedDate date={pubDate} format="long" />
           <span class="w-1 h-1 rounded-full bg-[var(--color-border)]"></span>
-          <span>{readingTime} min lectura</span>
+          <span>{finalReadingTime} min lectura</span>
         </div>
 
-        <h1 class="font-display font-bold tracking-tight mb-6 text-[var(--color-ink)]">
+        <h1 class="font-impact text-[clamp(2rem,5vw,3.75rem)] uppercase leading-[0.95] text-[var(--color-ink)] tracking-tight mb-6">
           {title}
         </h1>
         <p class="text-xl text-[var(--color-ink-soft)] leading-relaxed">
@@ -70,19 +110,83 @@ const related = sortedAll
 
         {tags.length > 0 && (
           <div class="mt-8 flex flex-wrap gap-2">
-            {tags.map((t) => (
-              <span class="font-mono text-xs px-2.5 py-1 rounded border border-[var(--color-border)] text-[var(--color-ink-soft)]">
-                #{t}
-              </span>
-            ))}
+            {
+              tags.map((t) => (
+                <a
+                  href={`/blog/tags/${t}`}
+                  class="font-mono text-xs px-2.5 py-1 rounded-md border border-[var(--color-border)] text-[var(--color-ink-soft)] hover:border-[var(--color-azul)] hover:text-[var(--color-azul)] tactile"
+                >
+                  #{t}
+                </a>
+              ))
+            }
           </div>
         )}
       </div>
     </header>
 
     <div class="container-page py-12 md:py-16">
-      <div class="prose-editorial mx-auto reveal">
-        <Content />
+      <div class="grid grid-cols-1 lg:grid-cols-[1fr_220px] gap-12">
+        <div class="prose-editorial reveal" data-post-body>
+          <Content />
+        </div>
+
+        {toc.length >= 2 && (
+          <aside class="hidden lg:block">
+            <div class="sticky top-24">
+              <p class="font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--color-mute)] mb-4">
+                En este post
+              </p>
+              <nav aria-label="Tabla de contenidos">
+                <ul class="space-y-2 text-sm border-l border-[var(--color-border)] pl-4">
+                  {
+                    toc.map((h) => (
+                      <li class={h.level === 3 ? "pl-3" : ""}>
+                        <a
+                          href={`#${h.id}`}
+                          class="font-mono text-[var(--color-ink-soft)] hover:text-[var(--color-azul)] leading-snug"
+                        >
+                          {h.text}
+                        </a>
+                      </li>
+                    ))
+                  }
+                </ul>
+              </nav>
+
+              <p class="font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--color-mute)] mt-8 mb-3">
+                Compartir
+              </p>
+              <div class="flex flex-col gap-2">
+                <button
+                  type="button"
+                  data-share="copy"
+                  data-share-url={canonicalURL}
+                  class="tactile inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-md bg-[var(--color-azul-soft)] text-[var(--color-azul-deep)] font-mono text-[10px] uppercase tracking-[0.18em] font-semibold hover:bg-[var(--color-azul)] hover:text-white"
+                >
+                  <span aria-hidden="true">⎘</span>
+                  <span data-share-label>Copiar link</span>
+                </button>
+                <a
+                  href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(canonicalURL)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="tactile inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-md border border-[var(--color-border)] text-[var(--color-ink-soft)] font-mono text-[10px] uppercase tracking-[0.18em] font-semibold hover:border-[var(--color-azul)] hover:text-[var(--color-azul)]"
+                >
+                  Twitter <span aria-hidden="true">↗</span>
+                </a>
+                <a
+                  href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(canonicalURL)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="tactile inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-md border border-[var(--color-border)] text-[var(--color-ink-soft)] font-mono text-[10px] uppercase tracking-[0.18em] font-semibold hover:border-[var(--color-azul)] hover:text-[var(--color-azul)]"
+                >
+                  LinkedIn <span aria-hidden="true">↗</span>
+                </a>
+              </div>
+            </div>
+          </aside>
+        )}
       </div>
     </div>
   </article>
@@ -90,7 +194,7 @@ const related = sortedAll
   {related.length > 0 && (
     <section class="py-16 md:py-24 border-t border-[var(--color-border)] bg-[var(--color-blanco)]">
       <div class="container-page">
-        <h2 class="font-display font-bold tracking-tight mb-10 text-[var(--color-ink)] reveal">
+        <h2 class="font-impact text-[clamp(1.75rem,4vw,3rem)] uppercase leading-[0.95] text-[var(--color-ink)] tracking-tight mb-10 reveal">
           Posts relacionados.
         </h2>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-5 reveal-stagger">
@@ -103,7 +207,7 @@ const related = sortedAll
           </p>
           <a
             href="/contacto"
-            class="tactile inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-md bg-[var(--color-ink)] text-[var(--color-azul)] font-semibold hover:bg-[var(--color-azul)] hover:text-[var(--color-ink)] border-2 border-[var(--color-ink)]"
+            class="tactile inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-md bg-[var(--color-ink)] text-white font-semibold hover:bg-[var(--color-azul)] border-2 border-[var(--color-ink)]"
           >
             Hablemos
             <span aria-hidden="true">→</span>
@@ -113,3 +217,69 @@ const related = sortedAll
     </section>
   )}
 </Layout>
+
+<script>
+  (function () {
+    // Add ids to post body h2/h3 if missing (TOC anchor targets)
+    const article = document.querySelector('[data-post-body]');
+    if (article instanceof HTMLElement) {
+      let i = 0;
+      const seen = new Set<string>();
+      article.querySelectorAll('h2, h3').forEach((el) => {
+        if (el.id) return;
+        const txt = (el.textContent ?? '').trim();
+        let id = txt
+          .toLowerCase()
+          .normalize('NFD')
+          .replace(/[\u0300-\u036f]/g, '')
+          .replace(/[^a-z0-9\s-]/g, '')
+          .trim()
+          .replace(/\s+/g, '-');
+        if (!id) id = `h-${i++}`;
+        let unique = id;
+        let n = 2;
+        while (seen.has(unique)) unique = `${id}-${n++}`;
+        seen.add(unique);
+        el.id = unique;
+      });
+    }
+
+    // Scroll progress bar
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const bar = document.querySelector('.scroll-progress-bar') as HTMLElement | null;
+    if (bar && !reduce) {
+      const update = () => {
+        const article = document.querySelector('[data-post-body]') as HTMLElement | null;
+        if (!article) return;
+        const rect = article.getBoundingClientRect();
+        const winH = window.innerHeight;
+        const total = rect.height - winH;
+        const scrolled = -rect.top;
+        const pct = total > 0 ? Math.min(1, Math.max(0, scrolled / total)) : 0;
+        bar.style.setProperty('--scroll-progress', `${Math.round(pct * 100)}%`);
+      };
+      update();
+      window.addEventListener('scroll', update, { passive: true });
+      document.addEventListener('astro:page-load', update);
+    }
+
+    // Share buttons
+    document.querySelectorAll('[data-share]').forEach((btn) => {
+      btn.addEventListener('click', async () => {
+        const action = btn.getAttribute('data-share');
+        const url = btn.getAttribute('data-share-url') ?? window.location.href;
+        if (action === 'copy') {
+          const label = btn.querySelector('[data-share-label]');
+          try {
+            await navigator.clipboard.writeText(url);
+            if (label) label.textContent = '¡Copiado!';
+            setTimeout(() => { if (label) label.textContent = 'Copiar link'; }, 2200);
+          } catch {
+            if (label) label.textContent = 'No se pudo copiar';
+            setTimeout(() => { if (label) label.textContent = 'Copiar link'; }, 2200);
+          }
+        }
+      });
+    });
+  })();
+</script>

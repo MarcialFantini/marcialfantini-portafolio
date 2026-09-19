@@ -6,26 +6,20 @@ import Layout from "../layouts/Layout.astro";
   title="404 — Página no encontrada"
   description="La página que buscás no existe. Volvé al inicio o escribime si pensás que fue un error."
 >
-  <section class="relative min-h-[80vh] flex items-center py-20 bg-gradient-vivid overflow-hidden isolate">
-    <span class="section-indicator absolute top-6 left-6 md:top-10 md:left-10 text-[var(--color-ink)] z-[3]" aria-hidden="true">
-      Error · 404
-    </span>
-
+  <section class="relative min-h-[80vh] flex items-center py-20 bg-gradient-azul text-[var(--color-blanco-humo)] overflow-hidden">
     <div class="container-page max-w-3xl relative z-[1] reveal">
-      <h1 class="font-impact uppercase leading-[0.85] tracking-[-0.03em] text-[var(--color-ink)] text-[clamp(8rem,30vw,22rem)] [text-shadow:_0_4px_24px_rgba(0,0,0,0.2)]">
+      <p class="font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--color-dorado)] mb-3">
+        Error · 404
+      </p>
+
+      <h1 class="font-impact leading-[0.85] tracking-[-0.04em] text-white text-[clamp(8rem,30vw,22rem)]">
         404.
       </h1>
 
-      <div class="flex items-center gap-3 mb-6">
-        <span class="inline-flex items-center px-3 py-1.5 rounded-full bg-[var(--color-azul)] text-[var(--color-blanco-humo)] font-mono text-[11px] uppercase tracking-[0.18em] font-semibold">
-          Page not found
-        </span>
-      </div>
-
-      <p class="font-impact text-[clamp(1.5rem,4vw,2.75rem)] uppercase leading-[0.98] text-[var(--color-ink)] tracking-tight mb-6 [text-shadow:_0_1px_6px_rgba(0,0,0,0.3)]">
-        Esta página no existe.
+      <p class="font-impact text-[clamp(1.5rem,4vw,2.75rem)] uppercase leading-[0.98] text-white tracking-tight mb-6">
+        Esta página <span class="text-[var(--color-dorado)]">no existe.</span>
       </p>
-      <p class="text-lg text-[var(--color-ink)] leading-relaxed mb-10 max-w-xl font-medium [text-shadow:_0_1px_4px_rgba(0,0,0,0.25)]">
+      <p class="text-lg text-white/85 leading-relaxed mb-10 max-w-xl">
         Si llegaste acá desde un link, decime y lo corrijo. Si llegaste escribiendo a mano,
         probablemente escribiste mal la URL.
       </p>
@@ -33,14 +27,14 @@ import Layout from "../layouts/Layout.astro";
       <div class="flex flex-col sm:flex-row gap-3 sm:gap-4">
         <a
           href="/"
-          class="tactile inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full bg-[var(--color-blanco)] text-[var(--color-ink)] font-mono text-[11px] uppercase tracking-[0.18em] font-semibold hover:bg-[var(--color-ink)] hover:text-[var(--color-blanco-humo)] border-2 border-[var(--color-ink)]"
+          class="tactile inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-md bg-[var(--color-dorado)] text-[var(--color-azul-deep)] font-mono text-[11px] uppercase tracking-[0.18em] font-bold hover:bg-white"
         >
           Volver al inicio
           <span aria-hidden="true">→</span>
         </a>
         <a
           href="/contacto"
-          class="tactile inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full border-2 border-[var(--color-ink)] bg-transparent text-[var(--color-ink)] font-mono text-[11px] uppercase tracking-[0.18em] font-semibold hover:bg-[var(--color-ink)] hover:text-[var(--color-blanco-humo)]"
+          class="tactile inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-md border border-white/30 text-white font-mono text-[11px] uppercase tracking-[0.18em] font-semibold hover:border-[var(--color-dorado)] hover:text-[var(--color-dorado)]"
         >
           Escribirme
         </a>

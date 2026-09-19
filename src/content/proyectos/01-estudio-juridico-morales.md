@@ -2,6 +2,7 @@
 title: "Landing Estudio Jurídico"
 slug: "estudio-juridico-morales"
 cliente: "Estudio Morales & Asociados"
+categoria: "landing"
 descripcion: "Landing institucional con foco en conversión de consultas y secciones por área de práctica."
 problema: "El estudio tenía un sitio web de 2014 sin SSL, sin mobile-friendly y sin conversión. Las consultas llegaban solo por derivaciones."
 resultado: "Sitio institucional editorial, mobile-first, con secciones por área de práctica y formulario que dispara email + WhatsApp al abogado responsable."

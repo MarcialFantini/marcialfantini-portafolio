@@ -1,0 +1,62 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import { getCollection } from "astro:content";
+
+const posts = await getCollection("blog");
+const tagCounts = new Map<string, number>();
+for (const post of posts) {
+  for (const tag of post.data.tags) {
+    tagCounts.set(tag, (tagCounts.get(tag) ?? 0) + 1);
+  }
+}
+const tags = Array.from(tagCounts.entries()).sort((a, b) => b[1] - a[1]);
+---
+
+<Layout
+  title="Tags — Blog"
+  description={`${tags.length} tags en el blog. Filtrá por tema.`}
+>
+  <section class="pt-16 md:pt-24 pb-12 border-b border-[var(--color-border)]">
+    <div class="container-page max-w-4xl reveal">
+      <nav class="mb-8 font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-mute)]">
+        <ol class="flex flex-wrap items-center gap-2">
+          <li><a href="/" class="hover:text-[var(--color-azul)]">Inicio</a></li>
+          <li aria-hidden="true">/</li>
+          <li><a href="/blog" class="hover:text-[var(--color-azul)]">Blog</a></li>
+          <li aria-hidden="true">/</li>
+          <li class="text-[var(--color-ink)]">Tags</li>
+        </ol>
+      </nav>
+
+      <p class="font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--color-azul)] mb-3">
+        Tags
+      </p>
+      <h1 class="font-impact text-[clamp(2.25rem,5.5vw,4.75rem)] uppercase leading-[0.95] text-[var(--color-ink)] tracking-tight mb-6">
+        Explorá por <span class="text-[var(--color-azul)]">tema.</span>
+      </h1>
+      <p class="text-xl text-[var(--color-ink-soft)] leading-relaxed max-w-3xl">
+        {tags.length} tags en total. Filtrá los posts por el tema que te interese.
+      </p>
+    </div>
+  </section>
+
+  <section class="py-12 md:py-16">
+    <div class="container-page">
+      <ul class="flex flex-wrap gap-2 reveal-stagger">
+        {
+          tags.map(([tag, count]) => (
+            <li>
+              <a
+                href={`/blog/tags/${tag}`}
+                class="tactile inline-flex items-center gap-2 px-4 py-2 rounded-md bg-white border-2 border-[var(--color-ink)] font-mono text-sm text-[var(--color-ink)] hover:border-[var(--color-azul)] hover:text-[var(--color-azul)]"
+              >
+                <span>#{tag}</span>
+                <span class="text-[var(--color-mute)] tabular-nums text-xs">{count}</span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+</Layout>

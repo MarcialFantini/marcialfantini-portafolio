@@ -6,8 +6,27 @@ const allProyectos = await getCollection("proyectos");
 const proyectos = allProyectos.sort(
   (a, b) => b.data.fecha.getTime() - a.data.fecha.getTime()
 );
+
 const [hero, ...rest] = proyectos;
 const heroIndex = String(proyectos.findIndex((p) => p.id === hero?.id) + 1).padStart(2, "0");
+
+const categoryLabels: Record<string, string> = {
+  landing: "Landing",
+  ecommerce: "E-commerce",
+  panel: "Panel",
+  blog: "Blog / Editorial",
+  integracion: "Integración",
+  dashboard: "Dashboard",
+  reservas: "Reservas",
+  otro: "Otro",
+};
+
+const categoryCounts = new Map<string, number>();
+for (const p of proyectos) {
+  const c = p.data.categoria;
+  categoryCounts.set(c, (categoryCounts.get(c) ?? 0) + 1);
+}
+const categories = Array.from(categoryCounts.entries()).sort((a, b) => b[1] - a[1]);
 ---
 
 <Layout
@@ -16,13 +35,39 @@ const heroIndex = String(proyectos.findIndex((p) => p.id === hero?.id) + 1).padS
 >
   <section class="pt-16 md:pt-24 pb-12 border-b border-[var(--color-border)]">
     <div class="container-page max-w-4xl reveal">
-      <h1 class="font-display font-bold tracking-tight mb-6 text-[var(--color-ink)]">
-        Casos donde mis decisiones importaron.
+      <nav class="mb-8 font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-mute)]">
+        <ol class="flex flex-wrap items-center gap-2">
+          <li><a href="/" class="hover:text-[var(--color-azul)]">Inicio</a></li>
+          <li aria-hidden="true">/</li>
+          <li class="text-[var(--color-ink)]">Proyectos</li>
+        </ol>
+      </nav>
+
+      <h1 class="font-impact text-[clamp(2.25rem,5.5vw,4.75rem)] uppercase leading-[0.95] text-[var(--color-ink)] tracking-tight mb-6">
+        Casos donde <span class="text-[var(--color-azul)]">mis decisiones importaron.</span>
       </h1>
       <p class="text-xl text-[var(--color-ink-soft)] leading-relaxed max-w-3xl">
-        Cada proyecto con problema, solución, resultado y métricas concretas. Sin animar
-        capturas: los repos hablan por sí mismos.
+        Cada proyecto con problema, solución, resultado y métricas concretas. {proyectos.length} casos totales.
       </p>
+    </div>
+  </section>
+
+  <section class="py-8 md:py-10 border-b border-[var(--color-border)]">
+    <div class="container-page flex flex-wrap items-center gap-2 reveal">
+      <span class="font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-mute)] mr-2">
+        Filtrar por tipo:
+      </span>
+      {
+        categories.map(([cat, count]) => (
+          <a
+            href={`#cat-${cat}`}
+            class="tactile inline-flex items-center gap-2 px-3 py-1.5 rounded-md bg-white border border-[var(--color-border)] font-mono text-xs text-[var(--color-ink-soft)] hover:border-[var(--color-azul)] hover:text-[var(--color-azul)]"
+          >
+            <span>{categoryLabels[cat] ?? cat}</span>
+            <span class="text-[var(--color-mute)] tabular-nums">{count}</span>
+          </a>
+        ))
+      }
     </div>
   </section>
 
@@ -32,10 +77,9 @@ const heroIndex = String(proyectos.findIndex((p) => p.id === hero?.id) + 1).padS
         <div class="container-page py-10 md:py-14">
           <a
             href={`/proyectos/${hero.id}`}
-            class="tactile group block border-2 border-[var(--color-ink)] rounded-lg bg-[var(--color-ink)] text-[var(--color-blanco-humo)] hover:bg-[var(--color-azul)] hover:text-[var(--color-ink)] p-7 md:p-10 reveal"
+            class="tactile group block border-2 border-[var(--color-ink)] rounded-lg bg-[var(--color-ink)] text-white hover:bg-[var(--color-azul)] hover:text-white p-7 md:p-10 reveal"
           >
-            <div class="placeholder-image placeholder-image--warm h-48 md:h-64 rounded-lg mb-6 -mx-7 md:-mx-10 image-scrim relative overflow-hidden">
-              <div class="absolute inset-0 dots-overlay opacity-40"></div>
+            <div class="placeholder-image placeholder-image--azul h-48 md:h-64 rounded-lg mb-6 -mx-7 md:-mx-10 relative overflow-hidden">
               <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
                 <span class="font-impact text-[clamp(7rem,18vw,14rem)] text-white/15 select-none tabular-nums leading-none">
                   {heroIndex}
@@ -44,21 +88,21 @@ const heroIndex = String(proyectos.findIndex((p) => p.id === hero?.id) + 1).padS
             </div>
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
               <div>
-                <p class="font-mono text-[11px] uppercase tracking-widest text-[var(--color-azul)] group-hover:text-[var(--color-ink)] mb-3 transition-colors">
+                <p class="font-mono text-[11px] uppercase tracking-widest text-[var(--color-dorado)] group-hover:text-white mb-3 transition-colors">
                   {hero.data.cliente}
                 </p>
-                <p class="font-impact text-[clamp(3rem,7vw,6rem)] uppercase text-[var(--color-azul)] group-hover:text-[var(--color-ink)] leading-[0.95] tabular-nums transition-colors">
+                <p class="font-impact text-[clamp(3rem,7vw,6rem)] uppercase text-[var(--color-dorado)] group-hover:text-white leading-[0.95] tabular-nums transition-colors">
                   {hero.data.metricas[0]?.value}
                 </p>
-                <p class="font-mono text-[11px] uppercase tracking-widest text-[var(--color-blanco-humo)]/70 group-hover:text-[var(--color-ink)]/70 mt-3 leading-tight max-w-[180px] transition-colors">
+                <p class="font-mono text-[11px] uppercase tracking-widest text-white/70 group-hover:text-white/80 mt-3 leading-tight max-w-[180px] transition-colors">
                   {hero.data.metricas[0]?.label}
                 </p>
               </div>
               <div class="lg:col-span-2">
-                <h2 class="font-impact text-[clamp(1.5rem,3vw,2.5rem)] uppercase leading-[1] text-[var(--color-blanco-humo)] group-hover:text-[var(--color-ink)] tracking-tight mb-4 transition-colors">
+                <h2 class="font-impact text-[clamp(1.5rem,3vw,2.5rem)] uppercase leading-[1] text-white tracking-tight mb-4 transition-colors">
                   {hero.data.title}
                 </h2>
-                <p class="text-[var(--color-blanco-humo)]/85 group-hover:text-[var(--color-ink)]/85 leading-relaxed transition-colors">
+                <p class="text-white/85 leading-relaxed transition-colors">
                   {hero.data.descripcion}
                 </p>
               </div>
@@ -74,7 +118,10 @@ const heroIndex = String(proyectos.findIndex((p) => p.id === hero?.id) + 1).padS
       <ol class="border-t border-[var(--color-border)] reveal-stagger">
         {
           rest.map((p) => (
-            <li class="border-b border-[var(--color-border)]">
+            <li
+              id={`cat-${p.data.categoria}`}
+              class="border-b border-[var(--color-border)]"
+            >
               <a
                 href={`/proyectos/${p.id}`}
                 class="tactile group grid grid-cols-[auto_1fr_auto] md:grid-cols-[3rem_1fr_auto_auto] items-baseline gap-5 md:gap-8 py-6"
@@ -84,11 +131,14 @@ const heroIndex = String(proyectos.findIndex((p) => p.id === hero?.id) + 1).padS
                   {p.data.metricas[0]?.value}
                 </span>
                 <div class="min-w-0">
-                  <h3 class="font-display font-semibold text-lg tracking-tight text-[var(--color-ink)] group-hover:text-[var(--color-dorado)] leading-tight">
+                  <h3 class="font-display font-semibold text-lg tracking-tight text-[var(--color-ink)] group-hover:text-[var(--color-azul)] leading-tight">
                     {p.data.title}
                   </h3>
                   <p class="mt-1 text-sm text-[var(--color-ink-soft)] leading-snug truncate">
                     {p.data.cliente} · {p.data.descripcion}
+                  </p>
+                  <p class="mt-1 font-mono text-[10px] uppercase tracking-[0.18em] text-[var(--color-mute)]">
+                    {categoryLabels[p.data.categoria] ?? p.data.categoria}
                   </p>
                 </div>
                 <span class="font-mono text-xs text-[var(--color-mute)] whitespace-nowrap hidden md:inline">
@@ -96,7 +146,7 @@ const heroIndex = String(proyectos.findIndex((p) => p.id === hero?.id) + 1).padS
                 </span>
                 <span
                   aria-hidden="true"
-                  class="hidden md:inline text-[var(--color-mute)] group-hover:text-[var(--color-dorado)] group-hover:translate-x-1 transition-transform"
+                  class="hidden md:inline text-[var(--color-mute)] group-hover:text-[var(--color-azul)] group-hover:translate-x-1 transition-transform"
                 >
                   →
                 </span>

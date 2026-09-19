@@ -1,0 +1,245 @@
+---
+import Layout from "../layouts/Layout.astro";
+import site from "../data/site.json";
+
+const lastUpdated = "2026-04-22";
+
+const status = {
+  availability: "Disponible para proyectos desde julio 2026",
+  currentFocus: "E-commerce headless con Astro + Shopify",
+  location: "Córdoba, Argentina (UTC-3)",
+  timezoneNote: "Disponible para reuniones 9-12 y 14-18 ART",
+};
+
+const now = [
+  {
+    title: "E-commerce headless para Muebles Río Luján",
+    type: "Proyecto activo",
+    description:
+      "Migrando de Shopify a headless con Astro + Storefront API. Velocidad sub-700ms, catálogo navegable, checkout Shopify preservado.",
+    eta: "Fin de sprint: 2026-05-30",
+  },
+  {
+    title: "Newsletter mensual con IA y herramientas",
+    type: "Contenido",
+    description:
+      "Serie de posts sobre cómo uso IA en mi flujo freelance. Sale el primer lunes de cada mes.",
+    eta: "Próximo: 2026-05-04",
+  },
+  {
+    title: "Auditando 3 sitios PyME antes de aceptar proyectos Q3",
+    type: "Preventa",
+    description:
+      "Tres auditorías pagas agendadas. Si tu PyME necesita una y entrás en mayo, escribime ya.",
+    eta: "Q3 2026",
+  },
+];
+
+const recently = [
+  { title: "Terminé: Panel de Reservas para Donde Marino (restaurante)", date: "2026-04-15" },
+  { title: "Terminé: Dashboard de Cobranzas para Servicios Financieros del Plata", date: "2026-03-28" },
+  { title: "Terminé: POS Mobile para Dietética La Esquina", date: "2026-02-20" },
+  { title: "Lancé: Migración WordPress → Astro para Revista La Vuelta", date: "2026-01-30" },
+];
+
+const learning = [
+  "Turso (SQLite distribuido) para reemplazar bases relacionales pesadas.",
+  "Astro Server Islands — para cuando necesito interactivity sin perder CWV.",
+  "View Transitions API en producción — explorando cuándo vale vs cuándo es overkill.",
+];
+
+const notDoing = [
+  "WordPress / WooCommerce para clientes nuevos.",
+  "Apps móviles nativas (React Native / Swift) — prefiero PWA o sitio mobile-first.",
+  "Retainer mensual para proyectos nuevos — solo cierro proyectos por alcance.",
+  "Trabajo por hora — siempre precio cerrado con KPI.",
+];
+---
+
+<Layout
+  title={`Ahora — ${site.name}`}
+  description="En qué estoy trabajando esta semana, qué aprendí, qué terminé. Una sola fuente de verdad actualizada periódicamente."
+>
+  <section class="pt-16 md:pt-24 pb-12 border-b border-[var(--color-border)]">
+    <div class="container-page max-w-4xl reveal">
+      <p class="font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--color-azul)] mb-3">
+        /ahora — single source of truth
+      </p>
+      <h1 class="font-impact text-[clamp(2.25rem,5.5vw,4.75rem)] uppercase leading-[0.95] text-[var(--color-ink)] tracking-tight mb-6">
+        En qué estoy <span class="text-[var(--color-azul)]">trabajando.</span>
+      </h1>
+      <p class="text-xl text-[var(--color-ink-soft)] leading-relaxed max-w-3xl">
+        Una sola página que actualizo cuando cambia algo. Lo que estoy haciendo, lo que terminé
+        y lo que NO estoy haciendo. Si te interesa trabajar conmigo, empezá por acá.
+      </p>
+      <p class="font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-mute)] mt-6">
+        Última actualización: {lastUpdated}
+      </p>
+    </div>
+  </section>
+
+  <section class="py-12 md:py-16 border-b border-[var(--color-border)]">
+    <div class="container-page max-w-4xl">
+      <p class="font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--color-azul)] mb-3">
+        Status
+      </p>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="rounded-lg bg-white border border-[var(--color-border)] p-5">
+          <p class="font-mono text-[10px] uppercase tracking-[0.22em] text-[var(--color-mute)] mb-1">
+            Disponibilidad
+          </p>
+          <p class="font-display font-semibold text-base text-[var(--color-ink)] leading-tight">
+            {status.availability}
+          </p>
+        </div>
+        <div class="rounded-lg bg-white border border-[var(--color-border)] p-5">
+          <p class="font-mono text-[10px] uppercase tracking-[0.22em] text-[var(--color-mute)] mb-1">
+            Foco principal
+          </p>
+          <p class="font-display font-semibold text-base text-[var(--color-ink)] leading-tight">
+            {status.currentFocus}
+          </p>
+        </div>
+        <div class="rounded-lg bg-white border border-[var(--color-border)] p-5">
+          <p class="font-mono text-[10px] uppercase tracking-[0.22em] text-[var(--color-mute)] mb-1">
+            Ubicación
+          </p>
+          <p class="font-display font-semibold text-base text-[var(--color-ink)] leading-tight">
+            {status.location}
+          </p>
+        </div>
+        <div class="rounded-lg bg-white border border-[var(--color-border)] p-5">
+          <p class="font-mono text-[10px] uppercase tracking-[0.22em] text-[var(--color-mute)] mb-1">
+            Horario
+          </p>
+          <p class="font-display font-semibold text-base text-[var(--color-ink)] leading-tight">
+            {status.timezoneNote}
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-12 md:py-16 border-b border-[var(--color-border)]">
+    <div class="container-page max-w-4xl">
+      <p class="font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--color-azul)] mb-3">
+        Ahora
+      </p>
+      <h2 class="font-impact text-[clamp(1.75rem,4vw,3rem)] uppercase leading-[0.95] text-[var(--color-ink)] tracking-tight mb-10">
+        3 cosas <span class="text-[var(--color-azul)]">activas.</span>
+      </h2>
+      <ol class="space-y-5">
+        {
+          now.map((item, i) => (
+            <li class="rounded-lg bg-white border-2 border-[var(--color-ink)] p-6 tactile hover:-translate-y-0.5 transition-transform">
+              <div class="flex items-start justify-between gap-3 mb-3">
+                <span class="font-impact text-2xl text-[var(--color-azul)] tabular-nums leading-none">
+                  0{i + 1}
+                </span>
+                <span class="font-mono text-[10px] uppercase tracking-[0.22em] text-[var(--color-dorado-deep)] bg-[var(--color-dorado-soft)] px-2.5 py-1 rounded-md font-semibold">
+                  {item.type}
+                </span>
+              </div>
+              <h3 class="font-display font-semibold text-lg text-[var(--color-ink)] leading-tight mb-2">
+                {item.title}
+              </h3>
+              <p class="text-base text-[var(--color-ink-soft)] leading-relaxed mb-3">
+                {item.description}
+              </p>
+              <p class="font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-mute)]">
+                {item.eta}
+              </p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <section class="py-12 md:py-16 border-b border-[var(--color-border)] bg-[var(--color-blanco)]">
+    <div class="container-page max-w-4xl">
+      <p class="font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--color-azul)] mb-3">
+        Recién
+      </p>
+      <h2 class="font-impact text-[clamp(1.75rem,4vw,3rem)] uppercase leading-[0.95] text-[var(--color-ink)] tracking-tight mb-10">
+        Lo que <span class="text-[var(--color-azul)]">terminé.</span>
+      </h2>
+      <ul class="space-y-3">
+        {
+          recently.map((r) => (
+            <li class="flex items-baseline justify-between gap-4 py-3 border-b border-[var(--color-border)] last:border-b-0">
+              <span class="font-display font-medium text-[var(--color-ink)] leading-snug">{r.title}</span>
+              <span class="font-mono text-xs text-[var(--color-mute)] tabular-nums shrink-0">{r.date}</span>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="py-12 md:py-16 border-b border-[var(--color-border)]">
+    <div class="container-page max-w-4xl">
+      <p class="font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--color-azul)] mb-3">
+        Aprendiendo
+      </p>
+      <h2 class="font-impact text-[clamp(1.75rem,4vw,3rem)] uppercase leading-[0.95] text-[var(--color-ink)] tracking-tight mb-10">
+        Lo que <span class="text-[var(--color-azul)]">estoy estudiando.</span>
+      </h2>
+      <ul class="space-y-2.5">
+        {
+          learning.map((l) => (
+            <li class="flex items-start gap-3 text-base text-[var(--color-ink-soft)] leading-relaxed">
+              <span class="font-mono text-sm text-[var(--color-azul)] shrink-0 mt-1">→</span>
+              <span>{l}</span>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="py-12 md:py-16 border-b border-[var(--color-border)] bg-[var(--color-ink)] text-white">
+    <div class="container-page max-w-4xl">
+      <p class="font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--color-dorado)] mb-3">
+        No estoy haciendo
+      </p>
+      <h2 class="font-impact text-[clamp(1.75rem,4vw,3rem)] uppercase leading-[0.95] text-white tracking-tight mb-10">
+        Lo que <span class="text-[var(--color-dorado)]">rechacé este año.</span>
+      </h2>
+      <p class="text-white/70 leading-relaxed mb-8 max-w-2xl">
+        Si tu proyecto entra en alguna de estas categorías, no soy el freelance indicado. Te recomiendo buscar otro perfil.
+      </p>
+      <ul class="space-y-2.5">
+        {
+          notDoing.map((n) => (
+            <li class="flex items-start gap-3 text-base text-white/90 leading-relaxed">
+              <span class="font-mono text-sm text-[var(--color-dorado)] shrink-0 mt-1">×</span>
+              <span>{n}</span>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="py-16 md:py-20">
+    <div class="container-page text-center max-w-2xl reveal">
+      <p class="font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--color-azul)] mb-3">
+        Próximo paso
+      </p>
+      <h2 class="font-impact text-[clamp(2rem,5vw,3.5rem)] uppercase leading-[0.95] text-[var(--color-ink)] mb-5">
+        Te encaja? <span class="text-[var(--color-azul)]">Hablemos.</span>
+      </h2>
+      <p class="text-lg text-[var(--color-ink-soft)] leading-relaxed mb-8">
+        Auditoría gratis de 30 minutos. Si tu caso entra en uno de mis servicios, te paso cotización cerrada.
+      </p>
+      <a
+        href="/contacto"
+        class="tactile inline-flex items-center justify-center gap-2 px-7 py-4 rounded-md bg-[var(--color-azul)] text-white font-mono text-[11px] uppercase tracking-[0.18em] font-bold hover:bg-[var(--color-azul-deep)]"
+      >
+        Escribirme
+        <span aria-hidden="true">→</span>
+      </a>
+    </div>
+  </section>
+</Layout>

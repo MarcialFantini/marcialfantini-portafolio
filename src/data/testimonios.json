@@ -1,0 +1,98 @@
+[
+  {
+    "id": "lucia-fernandez",
+    "monograma": "LF",
+    "nombre": "Lucía Fernández",
+    "role": "Directora comercial",
+    "empresa": "Estudio Morales & Asociados",
+    "sector": "Estudio jurídico",
+    "quote": "Pasamos de no recibir consultas online a ser el segundo canal de clientes. En 6 meses, Marcial nos construyó una presencia que compitió con estudios 10x más grandes.",
+    "metric": "+180% consultas online",
+    "proyectoSlug": "estudio-juridico-morales",
+    "fecha": "2025-09"
+  },
+  {
+    "id": "german-paz",
+    "monograma": "GP",
+    "nombre": "Germán Paz",
+    "role": "Dueño",
+    "empresa": "Ferretería El Tornillo",
+    "sector": "Retail mayorista",
+    "quote": "El catálogo navegable nos ahorró 30 llamadas semanales. Los mayoristas ahora piden por código. La inversión se pagó sola en 4 meses.",
+    "metric": "30 llamadas/sem ahorradas",
+    "proyectoSlug": "catalogo-ferreteria",
+    "fecha": "2025-08"
+  },
+  {
+    "id": "andrea-suarez",
+    "monograma": "AS",
+    "nombre": "Andrea Suárez",
+    "role": "Gerenta general",
+    "empresa": "Distribuidora del Sur SRL",
+    "sector": "Distribución",
+    "quote": "Las decisiones de compra pasaron de 'ir el viernes a contar' a 'ver el reporte del lunes'. Perdimos 80% menos ventas por cotizar stock inexistente.",
+    "metric": "-80% ventas perdidas",
+    "proyectoSlug": "inventario-distribuidora",
+    "fecha": "2025-11"
+  },
+  {
+    "id": "sebastian-rivas",
+    "monograma": "SR",
+    "nombre": "Sebastián Rivas",
+    "role": "Cofundador",
+    "empresa": "Lo de Marta — Panificados",
+    "sector": "E-commerce artesanal",
+    "quote": "Cierro pedidos a las 3am que antes se perdían. La conversión mobile de 4.2% duplica el promedio del rubro. Vale cada peso.",
+    "metric": "4.2% conversión mobile",
+    "proyectoSlug": "checkout-artesanal",
+    "fecha": "2025-10"
+  },
+  {
+    "id": "carolina-mendez",
+    "monograma": "CM",
+    "nombre": "Carolina Méndez",
+    "role": "Directora editorial",
+    "empresa": "Consultora Estrada & Cía",
+    "sector": "Consultoría",
+    "quote": "El blog pasó de Medium a dominio propio. En 4 meses posicionamos 8 posts en primera página de Google. La newsletter creció 6x.",
+    "metric": "+500% suscriptores newsletter",
+    "proyectoSlug": "blog-consultora",
+    "fecha": "2025-12"
+  },
+  {
+    "id": "martin-acosta",
+    "monograma": "MA",
+    "nombre": "Martín Acosta",
+    "role": "Director comercial",
+    "empresa": "Inmobiliaria Buenavista",
+    "sector": "Inmobiliaria",
+    "quote": "40 leads cualificados por mes contra 5 antes. Respondemos cada consulta en menos de 15 minutos. Las ventas atribuibles al canal online crecieron 25%.",
+    "metric": "+700% leads cualificados",
+    "proyectoSlug": "leads-inmobiliaria",
+    "fecha": "2026-01"
+  },
+  {
+    "id": "paula-ortiz",
+    "monograma": "PO",
+    "nombre": "Paula Ortiz",
+    "role": "Fundadora",
+    "empresa": "Muebles Río Luján",
+    "sector": "E-commerce de diseño",
+    "quote": "Pasamos de 8 a 24 ventas por mes sumando online sin abrir locales. El modelo de preventa con 50% anticipo nos，解决了生产现金流的问题.",
+    "metric": "+200% ventas mensuales",
+    "proyectoSlug": "ecommerce-marca",
+    "fecha": "2026-02"
+  },
+  {
+    "id": "javier-toledo",
+    "monograma": "JT",
+    "nombre": "Javier Toledo",
+    "role": "Gerente comercial",
+    "empresa": "Distribuidora Cuyo",
+    "sector": "Distribución mayorista",
+    "quote": "Los vendedores ahora reciben feedback basado en datos. Detectamos cohortes con potencial no atendido que generaron USD 18k de revenue en 90 días.",
+    "metric": "USD 18k revenue incremental",
+    "proyectoSlug": "dashboard-ventas",
+    "fecha": "2026-01"
+  }
+]

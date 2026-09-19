@@ -1,0 +1,207 @@
+---
+import Layout from "../layouts/Layout.astro";
+import site from "../data/site.json";
+
+const experiences = [
+  {
+    title: "Freelance Full-Stack Developer",
+    company: "Autónomo",
+    period: "2017 → presente",
+    location: "Córdoba, Argentina · 100% remoto",
+    bullets: [
+      "+40 proyectos entregados en producción para PyMEs argentinas y clientes en Latam/España.",
+      "Especialización en Astro + TypeScript + Tailwind con foco en performance, SEO técnico y conversiones.",
+      "Stack estándar: Astro, TypeScript estricto, Tailwind v4, SQLite/libSQL, Vercel/Cloudflare.",
+      "Modelo de cobro por proyecto con KPI pactado; garantía por escrito en algunos servicios.",
+    ],
+  },
+  {
+    title: "Senior Frontend Engineer",
+    company: "Estudio Digital (ficticio)",
+    period: "2015 → 2017",
+    location: "Buenos Aires, Argentina",
+    bullets: [
+      "Lideré el equipo frontend (4 personas) en proyectos para clientes enterprise.",
+      "Migración de WordPress a React/Next.js en 3 proyectos grandes.",
+      "Introduje prácticas de testing (Jest + Cypress) y CI/CD.",
+    ],
+  },
+  {
+    title: "Full-Stack Developer",
+    company: "Consultora IT (ficticia)",
+    period: "2013 → 2015",
+    location: "Córdoba, Argentina",
+    bullets: [
+      "Desarrollo de intranets y aplicaciones internas para Pymes y ONGs.",
+      "Stack: PHP, MySQL, jQuery, Bootstrap, WordPress.",
+      "Aprendí que la herramienta aburrida es la mejor herramienta.",
+    ],
+  },
+];
+
+const stack = {
+  "Lenguajes": ["TypeScript", "JavaScript", "SQL", "HTML", "CSS", "Python (básico)"],
+  "Frontend": ["Astro", "React", "Next.js", "Tailwind CSS v4", "Vue (básico)"],
+  "Backend / DB": ["Node.js", "SQLite / libSQL", "PostgreSQL", "REST APIs", "WebSockets"],
+  "Herramientas": ["Vercel", "Cloudflare", "GitHub Actions", "Stripe", "Mercado Pago", "HubSpot", "Cal.com", "AFIP SDK"],
+  "IA / product": ["GitHub Copilot", "Cursor", "Vercel v0", "NotebookLM"],
+};
+
+const education = [
+  { title: "Ingeniería en Sistemas", org: "Universidad Nacional de Córdoba (en curso)", year: "—" },
+  { title: "Full-Stack Developer Bootcamp", org: "Acámica (2018)", year: "2018" },
+];
+
+const languages = [
+  { name: "Español", level: "Nativo" },
+  { name: "Inglés", level: "Avanzado C1 · lectura técnica fluida" },
+  { name: "Portugués", level: "Intermedio B1" },
+];
+---
+
+<Layout
+  title={`CV — ${site.name}`}
+  description={`Currículum de ${site.name}, desarrollador freelance full-stack con 8+ años en producción. Experiencia, stack, formación.`}
+>
+  <div class="scroll-progress-bar" aria-hidden="true"></div>
+
+  <section class="no-print container-page pt-12 md:pt-16 pb-8 border-b border-[var(--color-border)]">
+    <div class="max-w-4xl flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+      <div>
+        <p class="font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--color-azul)] mb-2">
+          CV
+        </p>
+        <h1 class="font-impact text-[clamp(2rem,4.5vw,3.5rem)] uppercase leading-[0.95] text-[var(--color-ink)] tracking-tight">
+          {site.name}
+        </h1>
+        <p class="text-base text-[var(--color-ink-soft)] mt-2">
+          Full-stack freelance · {site.location} · <a class="text-[var(--color-azul)] underline" href={`mailto:${site.email}`}>{site.email}</a>
+        </p>
+      </div>
+      <button
+        type="button"
+        id="print-cv"
+        class="tactile inline-flex items-center justify-center gap-2 px-5 py-3 rounded-md bg-[var(--color-ink)] text-white font-mono text-[11px] uppercase tracking-[0.18em] font-semibold hover:bg-[var(--color-azul)]"
+      >
+        Imprimir / Guardar como PDF
+        <span aria-hidden="true">↓</span>
+      </button>
+    </div>
+    <p class="max-w-3xl mt-4 text-sm text-[var(--color-mute)]">
+      Para guardar como PDF usá <kbd class="font-mono text-xs px-1.5 py-0.5 rounded border border-[var(--color-border)] bg-[var(--color-blanco-humo)]">Cmd/Ctrl + P</kbd> → "Guardar como PDF". El stylesheet de impresión está optimizado para A4.
+    </p>
+  </section>
+
+  <article class="container-page max-w-4xl py-12 md:py-16 prose-editorial">
+
+    <section class="mb-12">
+      <h2 class="font-impact text-xl uppercase tracking-tight text-[var(--color-azul)] border-b border-[var(--color-border)] pb-2 mb-4">
+        Resumen
+      </h2>
+      <p>
+        Desarrollador freelance full-stack con 8+ años construyendo productos digitales para PyMEs argentinas
+        y clientes en Latam. Especializado en <strong>Astro + TypeScript + Tailwind v4</strong> con foco en
+        performance, SEO técnico y conversiones medidas. Modelo de trabajo por proyecto con KPI pactado
+        y garantía por escrito. 40+ proyectos entregados, 12 clientes PyME activos recurrentes.
+      </p>
+    </section>
+
+    <section class="mb-12">
+      <h2 class="font-impact text-xl uppercase tracking-tight text-[var(--color-azul)] border-b border-[var(--color-border)] pb-2 mb-4">
+        Experiencia
+      </h2>
+      {experiences.map((exp) => (
+        <div class="mb-7">
+          <div class="flex flex-col md:flex-row md:items-baseline justify-between gap-1 mb-2">
+            <h3 class="font-display font-semibold text-lg text-[var(--color-ink)] leading-tight">
+              {exp.title} <span class="text-[var(--color-mute)] font-normal">— {exp.company}</span>
+            </h3>
+            <span class="font-mono text-xs uppercase tracking-[0.18em] text-[var(--color-mute)] shrink-0">
+              {exp.period}
+            </span>
+          </div>
+          <p class="font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-mute)] mb-3">
+            {exp.location}
+          </p>
+          <ul class="list-disc pl-5">
+            {exp.bullets.map((b) => <li>{b}</li>)}
+          </ul>
+        </div>
+      ))}
+    </section>
+
+    <section class="mb-12">
+      <h2 class="font-impact text-xl uppercase tracking-tight text-[var(--color-azul)] border-b border-[var(--color-border)] pb-2 mb-4">
+        Stack técnico
+      </h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {Object.entries(stack).map(([category, items]) => (
+          <div>
+            <h3 class="font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-mute)] mb-2">
+              {category}
+            </h3>
+            <ul class="flex flex-wrap gap-1.5 list-none p-0">
+              {items.map((item) => (
+                <li class="font-mono text-xs px-2.5 py-1 rounded border border-[var(--color-border)] bg-white text-[var(--color-ink-soft)]">
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <section class="mb-12">
+      <h2 class="font-impact text-xl uppercase tracking-tight text-[var(--color-azul)] border-b border-[var(--color-border)] pb-2 mb-4">
+        Formación
+      </h2>
+      <ul class="list-none p-0 space-y-3">
+        {education.map((e) => (
+          <li class="flex items-baseline justify-between gap-4">
+            <div>
+              <p class="font-display font-semibold text-[var(--color-ink)] leading-tight">{e.title}</p>
+              <p class="font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-mute)] mt-0.5">{e.org}</p>
+            </div>
+            <span class="font-mono text-xs text-[var(--color-mute)] tabular-nums shrink-0">{e.year}</span>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <section class="mb-12">
+      <h2 class="font-impact text-xl uppercase tracking-tight text-[var(--color-azul)] border-b border-[var(--color-border)] pb-2 mb-4">
+        Idiomas
+      </h2>
+      <ul class="list-none p-0 space-y-2">
+        {languages.map((l) => (
+          <li class="flex items-center justify-between gap-3 text-sm">
+            <span class="font-display font-medium text-[var(--color-ink)]">{l.name}</span>
+            <span class="font-mono text-xs text-[var(--color-mute)]">{l.level}</span>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <section>
+      <h2 class="font-impact text-xl uppercase tracking-tight text-[var(--color-azul)] border-b border-[var(--color-border)] pb-2 mb-4">
+        Contacto
+      </h2>
+      <ul class="list-none p-0 space-y-2 text-sm">
+        <li><strong>Email:</strong> <a class="text-[var(--color-azul)] underline" href={`mailto:${site.email}`}>{site.email}</a></li>
+        <li><strong>GitHub:</strong> <a class="text-[var(--color-azul)] underline" href={site.social.github} rel="noopener noreferrer" target="_blank">{site.social.github}</a></li>
+        <li><strong>LinkedIn:</strong> <a class="text-[var(--color-azul)] underline" href={site.social.linkedin} rel="noopener noreferrer" target="_blank">{site.social.linkedin}</a></li>
+        <li><strong>Twitter:</strong> <a class="text-[var(--color-azul)] underline" href={site.social.twitter} rel="noopener noreferrer" target="_blank">{site.social.twitter}</a></li>
+        <li><strong>Ubicación:</strong> {site.location}</li>
+      </ul>
+    </section>
+
+  </article>
+</Layout>
+
+<script>
+  (function () {
+    var btn = document.getElementById('print-cv');
+    if (btn) btn.addEventListener('click', () => window.print());
+  })();
+</script>

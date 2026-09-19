@@ -2,6 +2,7 @@
 title: "Captación de Leads Inmobiliaria"
 slug: "leads-inmobiliaria"
 cliente: "Inmobiliaria Buenavista"
+categoria: "landing"
 descripcion: "Sitio de búsqueda de propiedades con filtros, ficha completa por unidad y formulario de consulta con scoring de lead."
 problema: "Inmobiliaria con 200 propiedades en cartera. Su portal era un Joomla de 2017 sin filtros funcionando, sin móvil, sin analítica de leads."
 resultado: "Portal moderno con búsqueda por zona, precio, ambientes y operación, ficha completa por propiedad, y formulario que prioriza leads en CRM."

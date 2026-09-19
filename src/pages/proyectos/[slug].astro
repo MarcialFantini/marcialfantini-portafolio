@@ -15,7 +15,7 @@ export const getStaticPaths = (async () => {
 
 const { proyecto } = Astro.props;
 const { Content } = await render(proyecto);
-const { title, cliente, descripcion, problema, resultado, stack, fecha, duracion, role, repo, url, tags, metricas } =
+const { title, cliente, descripcion, problema, resultado, stack, fecha, duracion, role, repo, url, tags, categoria, metricas } =
   proyecto.data;
 
 const allProyectos = await getCollection("proyectos");
@@ -26,6 +26,20 @@ const related = sortedAll
   .filter((p) => p.id !== proyecto.id && p.data.tags.some((t) => tags.includes(t)))
   .sort((a, b) => b.data.fecha.getTime() - a.data.fecha.getTime())
   .slice(0, 3);
+
+const categoryLabels: Record<string, string> = {
+  landing: "Landing",
+  ecommerce: "E-commerce",
+  panel: "Panel",
+  blog: "Blog / Editorial",
+  integracion: "Integración",
+  dashboard: "Dashboard",
+  reservas: "Reservas",
+  otro: "Otro",
+};
+
+const canonicalURL = new URL(`/proyectos/${proyecto.id}`, Astro.site ?? "https://marcialfantini.com").toString();
+const shareText = `${title} — caso de ${cliente}`;
 ---
 
 <Layout
@@ -33,11 +47,22 @@ const related = sortedAll
   description={descripcion}
   pageType="article"
 >
+  <div class="scroll-progress-bar" aria-hidden="true"></div>
+
   <article>
     <header class="pt-12 md:pt-20 pb-10 md:pb-14 border-b border-[var(--color-border)]">
       <div class="container-page max-w-4xl reveal">
-        <div class="placeholder-image placeholder-image--warm h-56 md:h-72 rounded-xl mb-8 shadow-md relative overflow-hidden">
-          <div class="absolute inset-0 dots-overlay opacity-40"></div>
+        <nav class="mb-8 font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-mute)]">
+          <ol class="flex flex-wrap items-center gap-2">
+            <li><a href="/" class="hover:text-[var(--color-azul)]">Inicio</a></li>
+            <li aria-hidden="true">/</li>
+            <li><a href="/proyectos" class="hover:text-[var(--color-azul)]">Proyectos</a></li>
+            <li aria-hidden="true">/</li>
+            <li class="text-[var(--color-ink)] truncate max-w-[60vw]">{title}</li>
+          </ol>
+        </nav>
+
+        <div class="placeholder-image placeholder-image--azul h-56 md:h-72 rounded-lg mb-8 shadow-md relative overflow-hidden">
           <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
             <span class="font-impact text-[clamp(8rem,20vw,16rem)] text-white/15 select-none tabular-nums leading-none">
               {placeholderIndex}
@@ -45,51 +70,55 @@ const related = sortedAll
           </div>
         </div>
 
-        <a
-          href="/proyectos"
-          class="tactile inline-flex items-center gap-1.5 text-sm text-[var(--color-mute)] hover:text-[var(--color-ink)] mb-8 font-mono"
-        >
-          <span aria-hidden="true">←</span> Volver a proyectos
-        </a>
-
         <div class="flex items-center flex-wrap gap-3 mb-5 text-xs font-mono text-[var(--color-mute)]">
-          <span class="text-[var(--color-dorado)] font-semibold">{cliente}</span>
+          <span class="px-2.5 py-1 rounded-md bg-[var(--color-azul-soft)] text-[var(--color-azul-deep)] font-semibold uppercase tracking-[0.18em]">
+            {categoryLabels[categoria] ?? categoria}
+          </span>
+          <span class="w-1 h-1 rounded-full bg-[var(--color-border)]"></span>
+          <span class="font-semibold text-[var(--color-ink-soft)]">{cliente}</span>
           <span class="w-1 h-1 rounded-full bg-[var(--color-border)]"></span>
           <FormattedDate date={fecha} format="long" />
           <span class="w-1 h-1 rounded-full bg-[var(--color-border)]"></span>
           <span>{duracion}</span>
         </div>
 
-        <h1 class="font-display font-bold tracking-tight mb-6 text-[var(--color-ink)]">
+        <h1 class="font-impact text-[clamp(2rem,5vw,3.75rem)] uppercase leading-[0.95] text-[var(--color-ink)] tracking-tight mb-6">
           {title}
         </h1>
         <p class="text-xl text-[var(--color-ink-soft)] leading-relaxed max-w-3xl">
           {descripcion}
         </p>
 
-        <div class="mt-8 flex flex-wrap gap-2">
-          {tags.map((t) => (
-            <span class="font-mono text-xs px-2.5 py-1 rounded border border-[var(--color-border)] text-[var(--color-ink-soft)]">
-              #{t}
-            </span>
-          ))}
-        </div>
+        {tags.length > 0 && (
+          <div class="mt-8 flex flex-wrap gap-2">
+            {
+              tags.map((t) => (
+                <a
+                  href={`/proyectos?tag=${t}`}
+                  class="font-mono text-xs px-2.5 py-1 rounded-md border border-[var(--color-border)] text-[var(--color-ink-soft)] hover:border-[var(--color-azul)] hover:text-[var(--color-azul)] tactile"
+                >
+                  #{t}
+                </a>
+              ))
+            }
+          </div>
+        )}
       </div>
     </header>
 
     {metricas.length > 0 && (
-      <section class="py-10 md:py-12 bg-[var(--color-ink)] text-[var(--color-blanco-humo)]">
+      <section class="py-10 md:py-12 bg-[var(--color-azul)] text-white">
         <div class="container-page reveal">
-          <p class="font-mono text-[11px] uppercase tracking-widest text-[var(--color-blanco-humo)]/60 mb-6">
+          <p class="font-mono text-[11px] uppercase tracking-widest text-[var(--color-dorado)] mb-6">
             Resultados medibles
           </p>
           <dl class="grid grid-cols-2 md:grid-cols-4 gap-6">
             {metricas.map((m) => (
-              <div class="border-l border-[var(--color-dorado)] pl-4">
-                <dd class="font-impact text-3xl md:text-4xl text-[var(--color-blanco)] uppercase tabular-nums tracking-tight leading-none">
+              <div class="border-l-2 border-[var(--color-dorado)] pl-4">
+                <dd class="font-impact text-3xl md:text-4xl text-white uppercase tabular-nums tracking-tight leading-none">
                   {m.value}
                 </dd>
-                <dt class="font-mono text-[10px] uppercase tracking-widest text-[var(--color-blanco-humo)]/60 mt-2 leading-tight block">
+                <dt class="font-mono text-[10px] uppercase tracking-widest text-white/70 mt-2 leading-tight block">
                   {m.label}
                 </dt>
               </div>
@@ -122,11 +151,17 @@ const related = sortedAll
           </div>
           <div>
             <p class="font-mono text-[11px] uppercase tracking-widest text-[var(--color-mute)] mb-2">
+              Categoría
+            </p>
+            <p class="text-[var(--color-ink)]">{categoryLabels[categoria] ?? categoria}</p>
+          </div>
+          <div>
+            <p class="font-mono text-[11px] uppercase tracking-widest text-[var(--color-mute)] mb-2">
               Stack
             </p>
             <ul class="flex flex-wrap gap-1.5">
               {stack.map((s) => (
-                <li class="font-mono text-[11px] px-2 py-0.5 rounded bg-[var(--color-blanco-humo)] border border-[var(--color-border)] text-[var(--color-ink-soft)]">
+                <li class="font-mono text-[11px] px-2 py-0.5 rounded bg-[var(--color-azul-soft)] border border-[var(--color-border)] text-[var(--color-ink-soft)]">
                   {s}
                 </li>
               ))}
@@ -143,7 +178,7 @@ const related = sortedAll
                     href={url}
                     rel="noopener noreferrer"
                     target="_blank"
-                    class="tactile text-[var(--color-dorado)] hover:text-[var(--color-ink)] inline-flex items-center gap-1"
+                    class="tactile text-[var(--color-azul)] hover:text-[var(--color-dorado-deep)] inline-flex items-center gap-1 font-semibold"
                   >
                     Ver sitio en vivo <span aria-hidden="true">↗</span>
                   </a>
@@ -153,7 +188,7 @@ const related = sortedAll
                     href={repo}
                     rel="noopener noreferrer"
                     target="_blank"
-                    class="tactile text-[var(--color-dorado)] hover:text-[var(--color-ink)] inline-flex items-center gap-1"
+                    class="tactile text-[var(--color-azul)] hover:text-[var(--color-dorado-deep)] inline-flex items-center gap-1 font-semibold"
                   >
                     Repositorio en GitHub <span aria-hidden="true">↗</span>
                   </a>
@@ -165,7 +200,7 @@ const related = sortedAll
 
         <div class="lg:col-span-2 space-y-12 reveal">
           <section>
-            <p class="font-mono text-xs uppercase tracking-widest text-[var(--color-mute)] mb-3">
+            <p class="font-mono text-xs uppercase tracking-widest text-[var(--color-azul)] mb-3">
               01 · El problema
             </p>
             <h2 class="font-display font-bold text-2xl md:text-3xl tracking-tight text-[var(--color-ink)] mb-4">
@@ -174,16 +209,16 @@ const related = sortedAll
           </section>
 
           <section>
-            <p class="font-mono text-xs uppercase tracking-widest text-[var(--color-mute)] mb-3">
+            <p class="font-mono text-xs uppercase tracking-widest text-[var(--color-azul)] mb-3">
               02 · Lo que entregué
             </p>
-            <div class="prose-editorial">
+            <div class="prose-editorial" data-post-body>
               <Content />
             </div>
           </section>
 
           <section>
-            <p class="font-mono text-xs uppercase tracking-widest text-[var(--color-mute)] mb-3">
+            <p class="font-mono text-xs uppercase tracking-widest text-[var(--color-azul)] mb-3">
               03 · El resultado
             </p>
             <h2 class="font-display font-bold text-2xl md:text-3xl tracking-tight text-[var(--color-ink)] mb-4">
@@ -191,12 +226,39 @@ const related = sortedAll
             </h2>
           </section>
 
-          <div class="pt-2 border-t border-[var(--color-border)]">
+          <div class="pt-6 border-t border-[var(--color-border)] flex flex-col sm:flex-row items-start sm:items-center gap-4 justify-between">
+            <div class="flex flex-col sm:flex-row gap-2">
+              <button
+                type="button"
+                data-share="copy"
+                data-share-url={canonicalURL}
+                class="tactile inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-md bg-[var(--color-azul-soft)] text-[var(--color-azul-deep)] font-mono text-[10px] uppercase tracking-[0.18em] font-semibold hover:bg-[var(--color-azul)] hover:text-white"
+              >
+                <span aria-hidden="true">⎘</span>
+                <span data-share-label>Copiar link</span>
+              </button>
+              <a
+                href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(canonicalURL)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="tactile inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-md border border-[var(--color-border)] text-[var(--color-ink-soft)] font-mono text-[10px] uppercase tracking-[0.18em] font-semibold hover:border-[var(--color-azul)] hover:text-[var(--color-azul)]"
+              >
+                Twitter <span aria-hidden="true">↗</span>
+              </a>
+              <a
+                href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(canonicalURL)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="tactile inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-md border border-[var(--color-border)] text-[var(--color-ink-soft)] font-mono text-[10px] uppercase tracking-[0.18em] font-semibold hover:border-[var(--color-azul)] hover:text-[var(--color-azul)]"
+              >
+                LinkedIn <span aria-hidden="true">↗</span>
+              </a>
+            </div>
             <a
               href="/contacto"
-              class="tactile inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-md bg-[var(--color-ink)] text-[var(--color-azul)] font-semibold hover:bg-[var(--color-dorado)] hover:text-[var(--color-blanco)] border-2 border-[var(--color-ink)] hover:border-[var(--color-dorado)]"
+              class="tactile inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-md bg-[var(--color-ink)] text-white font-semibold hover:bg-[var(--color-azul)] border-2 border-[var(--color-ink)]"
             >
-              Hablemos de un proyecto similar
+              Hablemos de uno similar
               <span aria-hidden="true">→</span>
             </a>
           </div>
@@ -208,7 +270,7 @@ const related = sortedAll
   {related.length > 0 && (
     <section class="py-16 md:py-24 border-t border-[var(--color-border)] bg-[var(--color-blanco)]">
       <div class="container-page">
-        <h2 class="font-display font-bold tracking-tight mb-10 text-[var(--color-ink)] reveal">
+        <h2 class="font-impact text-[clamp(1.75rem,4vw,3rem)] uppercase leading-[0.95] text-[var(--color-ink)] tracking-tight mb-10 reveal">
           Proyectos similares.
         </h2>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-5 reveal-stagger">
@@ -218,3 +280,45 @@ const related = sortedAll
     </section>
   )}
 </Layout>
+
+<script>
+  (function () {
+    // Scroll progress bar
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const bar = document.querySelector('.scroll-progress-bar') as HTMLElement | null;
+    if (bar && !reduce) {
+      const update = () => {
+        const article = document.querySelector('article') as HTMLElement | null;
+        if (!article) return;
+        const rect = article.getBoundingClientRect();
+        const winH = window.innerHeight;
+        const total = rect.height - winH;
+        const scrolled = -rect.top;
+        const pct = total > 0 ? Math.min(1, Math.max(0, scrolled / total)) : 0;
+        bar.style.setProperty('--scroll-progress', `${Math.round(pct * 100)}%`);
+      };
+      update();
+      window.addEventListener('scroll', update, { passive: true });
+      document.addEventListener('astro:page-load', update);
+    }
+
+    // Share buttons
+    document.querySelectorAll('[data-share]').forEach((btn) => {
+      btn.addEventListener('click', async () => {
+        const action = btn.getAttribute('data-share');
+        const url = btn.getAttribute('data-share-url') ?? window.location.href;
+        if (action === 'copy') {
+          const label = btn.querySelector('[data-share-label]');
+          try {
+            await navigator.clipboard.writeText(url);
+            if (label) label.textContent = '¡Copiado!';
+            setTimeout(() => { if (label) label.textContent = 'Copiar link'; }, 2200);
+          } catch {
+            if (label) label.textContent = 'No se pudo copiar';
+            setTimeout(() => { if (label) label.textContent = 'Copiar link'; }, 2200);
+          }
+        }
+      });
+    });
+  })();
+</script>

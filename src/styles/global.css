@@ -1,89 +1,76 @@
 /* =========================================================
    Marcial Fantini — Personal Brand
-   Global Styles · Orvika-inspired creative agency adaptation.
-   White base + orange signature + multi-stop gradients.
-   ========================================================= */
+   Global Styles · Indie-hacker edition.
+
+   Base principal: blanco puro. Accent principal: AZUL CONDE.
+   Dorado (#C8A24E) como acento secundario (hover, ticks,
+   divisores). Tokens --color-azul y --color-dorado conservan
+   los nombres por compatibilidad con todo el código existente,
+   pero ahora controlan los colores de la paleta especificada.
+   --------------------------------------------------------- */
 
 @import "tailwindcss";
 
-/* Self-hosted variable fonts (sin Google Fonts) */
+/* Self-hosted variable fonts — solo las dos tipografías
+   declaradas en spec. Sin Google Fonts. */
 @import "@fontsource-variable/bricolage-grotesque/wght.css";
 @import "@fontsource-variable/jetbrains-mono/wght.css";
-@import "@fontsource/anton/400.css";
 
 /* ---------------------------------------------------------
-   Design Tokens — Orvika-inspired rebrand.
-   Base principal: WHITE puro. Accent principal: ORANGE.
-   Gradientes multicolores para hero, contacto y 404.
-   Cobalt como highlight secundario (sparingly).
-
-   Tokens semánticos preservados para compatibilidad con
-   el código existente; ahora controlan roles nuevos:
-   --color-azul          → ahora controla ORANGE (CTA accent)
-   --color-azul-deep     → ahora controla ORANGE-DEEP (hover)
-   --color-blanco-humo   → ahora controla WHITE (body bg)
-   --color-blanco        → white surface (cards)
-   --color-dorado        → ahora controla COBALT (highlight)
-   --color-ink           → ahora controla BLACK (texto + bloques)
-   --color-border        → neutral light
-
-   Dark mode (.dark): superficies invierten preservando la
-   identidad. Black sections se mantienen en dark mode.
+   Design Tokens
    --------------------------------------------------------- */
 @theme {
-  /* Typography — three voices */
+  /* Typography — dos voces: display (Bricolage) + mono (JetBrains) */
   --font-display: "Bricolage Grotesque Variable", "Bricolage Grotesque", "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --font-mono: "JetBrains Mono Variable", "JetBrains Mono", ui-monospace, "SFMono-Regular", "Menlo", "Consolas", monospace;
-  --font-impact: "Anton", impact, "Arial Narrow", sans-serif;
 
-  /* Brand palette — Orvika white + orange + multicolor */
-  --color-azul: #FF5722;
-  --color-azul-deep: #E64A19;
-  --color-azul-soft: #FFE9DF;
-  --color-dorado: #3B5BFF;
-  --color-dorado-soft: #DCE1FF;
+  /* Brand palette — blanco 60%, conde 30%, dorado 10% */
+  --color-azul: #1B2B5C;
+  --color-azul-deep: #0F1A3A;
+  --color-azul-soft: #E6E9F2;
+  --color-dorado: #C8A24E;
+  --color-dorado-deep: #A6843A;
+  --color-dorado-soft: #F5EFE0;
   --color-blanco-humo: #FFFFFF;
   --color-blanco: #FFFFFF;
-  --color-ink: #0A0A0A;
-  --color-ink-soft: #404040;
-  --color-mute: #525252;
-  --color-border: #E5E5E5;
+  --color-ink: #18181B;
+  --color-ink-soft: #3F3F46;
+  --color-mute: #71717A;
+  --color-border: #E7E5E4;
 
-  /* Brand gradients — full-bleed wallpapers */
-  --color-gradient-warm: linear-gradient(135deg, #FF6B9D 0%, #FFA45C 50%, #FFD93D 100%);
-  --color-gradient-cool: linear-gradient(135deg, #B983FF 0%, #FF6B9D 100%);
-  --color-gradient-vivid: linear-gradient(135deg, #FF6B9D 0%, #B983FF 35%, #3B5BFF 70%, #00C896 100%);
+  /* Acentos derivados — usados en gradients sutiles y dividers.
+     Mantengo registro editorial sin caer en "creative agency"
+     multicolor gradients. */
+  --color-gradient-azul: linear-gradient(180deg, #1B2B5C 0%, #0F1A3A 100%);
+  --color-gradient-azul-card: linear-gradient(135deg, #1B2B5C 0%, #243A75 100%);
+  --color-gradient-dorado: linear-gradient(135deg, #C8A24E 0%, #A6843A 100%);
 
-  /* Radius — esquinas apenas redondeadas */
-  --radius-sm: 6px;
-  --radius-md: 8px;
-  --radius-lg: 12px;
+  /* Radius */
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 10px;
 
-  /* Motion — sutil, indie hacker */
+  /* Easings */
   --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
-
-  /* Sticker starburst — para badges circulares */
-  --starburst: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M50,0 L60.87,9.43 L75,6.7 L79.7,20.3 L93.3,25 L90.57,39.13 L100,50 L90.57,60.87 L93.3,75 L79.7,79.7 L75,93.3 L60.87,90.57 L50,100 L39.13,90.57 L25,93.3 L20.3,79.7 L6.7,75 L9.43,60.87 L0,50 L9.43,39.13 L6.7,25 L20.3,20.3 L25,6.7 L39.13,9.43 Z'/%3E%3C/svg%3E");
 }
 
 /* ---------------------------------------------------------
-   Dark mode — token swap, scoped to .dark root class.
-   El orange pasa a #FF7043 (más claro para AA sobre #0A0A0A).
-   Black sections (Métricas, Footer) preservan #0A0A0A en dark
-   porque son "high contrast blocks" intencionales.
+   Dark mode — preserva la identidad. Azul conde se ilumina a
+   #3B5BFF para mantener AA sobre #0A0A0A.
    --------------------------------------------------------- */
 .dark {
-  --color-azul: #FF7043;
-  --color-azul-deep: #FF5722;
-  --color-azul-soft: #2A1A0F;
-  --color-dorado: #5B7BFF;
-  --color-dorado-soft: #1A1F3D;
+  --color-azul: #3B5BFF;
+  --color-azul-deep: #5B7BFF;
+  --color-azul-soft: #1A1F3D;
+  --color-dorado: #E0B96B;
+  --color-dorado-deep: #C8A24E;
+  --color-dorado-soft: #2A2418;
   --color-blanco-humo: #0A0A0A;
   --color-blanco: #18181B;
   --color-ink: #FFFFFF;
   --color-ink-soft: #B8B8B8;
-  --color-mute: #525252;
+  --color-mute: #71717A;
   --color-border: #2A2A2E;
 }
 
@@ -97,9 +84,6 @@
     text-rendering: optimizeLegibility;
     scroll-behavior: smooth;
     background-color: var(--color-blanco-humo);
-  }
-
-  html {
     overflow-x: hidden;
   }
 
@@ -116,12 +100,9 @@
     overflow-wrap: anywhere;
   }
 
-  /* Flex/grid children pueden overflow si no tienen min-width:0.
-     Esto previene el bug común en mobile donde un texto largo
-     fuerza al padre a expandirse más allá del viewport. */
   .min-w-0 { min-width: 0; }
 
-  /* Display / Headlines — display sans */
+  /* Display / Headlines */
   h1, h2, h3, h4, .font-display {
     font-family: var(--font-display);
     font-weight: 600;
@@ -140,7 +121,7 @@
   }
 
   a {
-    color: var(--color-azul-deep);
+    color: var(--color-azul);
     text-decoration: none;
     transition: color 150ms var(--ease-out-quart);
   }
@@ -150,24 +131,21 @@
 
   ::selection {
     background-color: var(--color-azul);
-    color: var(--color-blanco);
+    color: var(--color-blanco-humo);
   }
 
   :focus-visible {
-    outline: 3px solid var(--color-azul);
+    outline: 2px solid var(--color-azul);
     outline-offset: 3px;
     border-radius: 4px;
-    box-shadow: 0 0 0 6px rgba(255, 87, 34, 0.18);
   }
 
-  /* Inputs de formulario — focus ring más visible sobre fondos claros */
   input:focus-visible,
   textarea:focus-visible,
   select:focus-visible {
     outline: 2px solid var(--color-azul);
     outline-offset: 2px;
     border-color: var(--color-azul) !important;
-    box-shadow: 0 0 0 4px rgba(255, 87, 34, 0.15);
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -182,10 +160,18 @@
 }
 
 /* ---------------------------------------------------------
-   Mobile menu — animación slide de apertura/cierre del menú
-   hamburguesa. Sin JS, solo CSS classes toggled.
+   Mobile menu slide (mantengo infra existente)
    --------------------------------------------------------- */
 @layer utilities {
+  /* Heavy display — reemplaza el rol de la antigua Anton.
+     Mantiene la sensación "all caps display" con Bricolage
+     en peso 800 + tracking más cerrado. */
+  .font-impact {
+    font-family: var(--font-display);
+    font-weight: 800;
+    letter-spacing: -0.04em;
+  }
+
   .mobile-menu-slide {
     overflow: hidden;
     max-height: 0;
@@ -199,15 +185,12 @@
     opacity: 1;
   }
   @media (prefers-reduced-motion: reduce) {
-    .mobile-menu-slide {
-      transition: none;
-    }
+    .mobile-menu-slide { transition: none; }
   }
 }
 
 /* ---------------------------------------------------------
-   Reveal — anim de entrada activada por IntersectionObserver
-   Vanilla, sin dependencias. Respeta prefers-reduced-motion.
+   Reveal on scroll
    --------------------------------------------------------- */
 @layer utilities {
   .reveal {
@@ -240,6 +223,8 @@
   .reveal-stagger[data-revealed="in"] > *:nth-child(4) { transition-delay: 180ms; }
   .reveal-stagger[data-revealed="in"] > *:nth-child(5) { transition-delay: 240ms; }
   .reveal-stagger[data-revealed="in"] > *:nth-child(6) { transition-delay: 300ms; }
+  .reveal-stagger[data-revealed="in"] > *:nth-child(7) { transition-delay: 360ms; }
+  .reveal-stagger[data-revealed="in"] > *:nth-child(8) { transition-delay: 420ms; }
 
   @media (prefers-reduced-motion: reduce) {
     .reveal,
@@ -264,16 +249,11 @@
     transform: translateY(1px);
   }
 
-  /* Tap target — garantizar mínimo 44x44px en mobile para touch.
-     WCAG 2.5.5 Target Size (AAA) ≥ 44x44 CSS pixels. */
   .tap-target {
     min-height: 44px;
     min-width: 44px;
   }
 
-  /* Form inputs en mobile — font-size mínimo 16px para evitar
-     iOS Safari auto-zoom al focus. Touch action manipulation
-     evita double-tap zoom accidental. */
   input, textarea, select, button {
     font-size: inherit;
     touch-action: manipulation;
@@ -297,36 +277,6 @@
     transform: translateY(-2px) scale(1.005);
   }
 
-  @media (prefers-reduced-motion: no-preference) {
-    .placeholder-image {
-      transform: scale(0.96);
-      transition: transform 720ms var(--ease-out-expo);
-    }
-    .reveal-stagger[data-revealed="in"] .placeholder-image {
-      transform: scale(1);
-      transition: transform 720ms var(--ease-out-expo) 80ms;
-    }
-    .group:hover .placeholder-image {
-      transform: scale(1.04);
-      transition: transform 380ms var(--ease-out-expo);
-    }
-  }
-
-  .float-bob {
-    animation: float-bob-translate 3s ease-in-out infinite alternate;
-    will-change: translate;
-  }
-  .float-bob--rotate-neg3 {
-    transform: rotate(-3deg);
-  }
-  .float-bob--rotate-2 {
-    transform: rotate(2deg);
-  }
-  @keyframes float-bob-translate {
-    from { translate: 0 0; }
-    to   { translate: 0 -4px; }
-  }
-
   .tactile[aria-current="page"] {
     position: relative;
   }
@@ -339,83 +289,29 @@
     background-color: var(--color-azul);
     margin-right: 0.5rem;
     vertical-align: middle;
-    animation: nav-dot-pulse 1.6s ease-in-out infinite;
-    transform-origin: center;
-  }
-  @keyframes nav-dot-pulse {
-    0%, 100% { opacity: 0.5;  transform: scale(1); }
-    50%      { opacity: 1;    transform: scale(1.4); }
   }
 
   /* ---------------------------------------------------------
-     Decoration System — Orvika-inspired visual language.
-     Sin imágenes externas. Todo inline.
+     Decoration — paleta indie-hacker.
+     Reemplaza los starbursts / multi-color gradients del
+     rebrand Orvika por una librería sobria, alineada con la
+     paleta conde-blue + gold.
      --------------------------------------------------------- */
 
-  /* Full-bleed gradients */
-  .bg-gradient-warm {
-    background: var(--color-gradient-warm);
+  /* Gradients sutiles para hero, contacto y 404.
+     Solo dos tonos (azul conde) o azul + dorado. Sin
+     "creative agency multicolor". */
+  .bg-gradient-azul {
+    background: var(--color-gradient-azul);
   }
-  .bg-gradient-cool {
-    background: var(--color-gradient-cool);
+  .bg-gradient-azul-card {
+    background: var(--color-gradient-azul-card);
   }
-  .bg-gradient-vivid {
-    background: var(--color-gradient-vivid);
-  }
-
-  /* Floating card — para hero floating elements.
-     Position absolute; tamaño y rotación vía inline style. */
-  .float-card {
-    position: absolute;
-    background: var(--color-blanco);
-    color: var(--color-ink);
-    border-radius: 14px;
-    box-shadow:
-      0 1px 2px rgba(0,0,0,0.06),
-      0 10px 30px rgba(0,0,0,0.12),
-      0 30px 60px rgba(0,0,0,0.08);
-    padding: 1rem 1.25rem;
-    z-index: 2;
-  }
-  .float-card--ink {
-    background: var(--color-ink);
-    color: var(--color-blanco-humo);
-  }
-  .float-card--orange {
-    background: var(--color-azul);
-    color: var(--color-blanco-humo);
+  .bg-gradient-dorado {
+    background: var(--color-gradient-dorado);
   }
 
-  /* Timeline line — línea horizontal con dots decorativos (Orvika stats).
-     SVG inline 100% width; hereda color de texto (currentColor). */
-  .timeline-line {
-    position: relative;
-    width: 100%;
-    height: 24px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    color: var(--color-azul);
-  }
-  .timeline-line::before,
-  .timeline-line::after {
-    content: "";
-    flex: 1;
-    height: 2px;
-    background-color: currentColor;
-    opacity: 0.5;
-  }
-  .timeline-line__dot {
-    width: 14px;
-    height: 14px;
-    border-radius: 50%;
-    background-color: currentColor;
-    flex-shrink: 0;
-    box-shadow: 0 0 0 4px var(--color-ink);
-  }
-
-  /* Section indicator — small text "OUR-UI-UX-DESIGN →" style page
-     indicator para corners de sección. Mono uppercase tracking. */
+  /* Hairline divider con tick dorado (sutil). */
   .section-indicator {
     display: inline-flex;
     align-items: center;
@@ -426,187 +322,32 @@
     letter-spacing: 0.18em;
     color: inherit;
   }
-  .section-indicator::after {
-    content: "→";
-    font-family: var(--font-display);
-    font-size: 0.95rem;
-    letter-spacing: 0;
-  }
 
-  /* Stat ticket — number card estilo ticket con dot decorativo
-     arriba (línea horizontal + dot + big number Anton). */
-  .stat-ticket {
-    position: relative;
-    padding-top: 1.5rem;
-  }
-  .stat-ticket::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
+  /* Tick dorado de 1.5rem */
+  .tick-dorado {
+    display: inline-block;
+    width: 1.75rem;
     height: 1px;
-    background-color: currentColor;
-    opacity: 0.3;
-  }
-  .stat-ticket__dot {
-    position: absolute;
-    top: -5px;
-    left: 0;
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    background-color: var(--color-azul);
-    box-shadow: 0 0 0 3px var(--color-ink);
+    background-color: var(--color-dorado);
+    vertical-align: middle;
   }
 
-  /* Sticker badge — sun-burst con texto rotado (preservado). */
-  .sticker {
-    display: inline-grid;
-    place-items: center;
-    width: var(--sticker-size, 112px);
-    height: var(--sticker-size, 112px);
-    padding: 18%;
-    background-color: currentColor;
-    -webkit-mask-image: var(--starburst);
-    mask-image: var(--starburst);
-    -webkit-mask-size: contain;
-    mask-size: contain;
-    -webkit-mask-repeat: no-repeat;
-    mask-repeat: no-repeat;
-    -webkit-mask-position: center;
-    mask-position: center;
-    flex-shrink: 0;
-  }
-  .sticker-orange { color: var(--color-azul); }
-  .sticker-cobalt { color: var(--color-dorado); }
-  .sticker-black { color: var(--color-ink); }
-  .sticker-white { color: var(--color-blanco-humo); }
-
-  .sticker__label {
-    font-family: var(--font-impact);
-    font-size: 0.95rem;
-    line-height: 1;
-    letter-spacing: 0.04em;
-    text-align: center;
-    text-transform: uppercase;
-    font-weight: 400;
-    color: var(--color-ink);
-    transform: rotate(-3deg);
-  }
-  .sticker-black .sticker__label,
-  .sticker-orange .sticker__label,
-  .sticker-cobalt .sticker__label { color: var(--color-blanco-humo); }
-  .sticker-white .sticker__label { color: var(--color-ink); }
-
-  /* Decorative placeholder gradient — para imágenes de proyectos
-     y posts sin assets reales. Tres variantes. */
+  /* Placeholder image minimal — fondos planos o gradient
+     azul, sin dot-grid overlay. Reemplaza placeholder-image
+     del sistema anterior. */
   .placeholder-image {
     position: relative;
     overflow: hidden;
-    border-radius: 12px;
+    border-radius: 10px;
     aspect-ratio: 16 / 9;
+    background-color: var(--color-azul-soft);
+    color: var(--color-azul);
   }
-  .placeholder-image--warm { background: var(--color-gradient-warm); }
-  .placeholder-image--cool { background: var(--color-gradient-cool); }
-  .placeholder-image--vivid { background: var(--color-gradient-vivid); }
+  .placeholder-image--azul { background: var(--color-gradient-azul); color: var(--color-blanco-humo); }
+  .placeholder-image--azul-card { background: var(--color-gradient-azul-card); color: var(--color-blanco-humo); }
+  .placeholder-image--dorado { background: var(--color-gradient-dorado); color: var(--color-blanco-humo); }
   .placeholder-image--ink { background: var(--color-ink); color: var(--color-blanco-humo); }
-
-  /* Hero scrim — fuerte overlay oscuro detrás del headline para
-     garantizar AA sobre el warm gradient o imagen sin sacrificar
-     el gradient/photo como wallpaper. Cubre el top ~60% para
-     asegurar legibilidad de headline + tagline. */
-  .hero-scrim {
-    position: relative;
-    isolation: isolate;
-  }
-  .hero-scrim::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-    background:
-      linear-gradient(
-        to bottom,
-        rgba(0,0,0,0.55) 0%,
-        rgba(0,0,0,0.55) 35%,
-        rgba(0,0,0,0.4) 55%,
-        rgba(0,0,0,0.15) 75%,
-        rgba(0,0,0,0) 100%
-      ),
-      radial-gradient(
-        ellipse 80% 60% at 30% 35%,
-        rgba(0,0,0,0.35) 0%,
-        rgba(0,0,0,0.15) 50%,
-        rgba(0,0,0,0) 80%
-      );
-    pointer-events: none;
-  }
-
-  /* Image scrim — bottom→top dark gradient sobre imágenes de card
-     para garantizar legibilidad de textos/títulos superpuestos. */
-  .image-scrim {
-    position: relative;
-    overflow: hidden;
-  }
-  .image-scrim::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(
-      to top,
-      rgba(0,0,0,0.75) 0%,
-      rgba(0,0,0,0.4) 35%,
-      rgba(0,0,0,0.05) 65%,
-      transparent 100%
-    );
-    pointer-events: none;
-    z-index: 1;
-  }
-  .image-scrim > * {
-    position: relative;
-    z-index: 2;
-  }
-
-  /* Imagen full-cover con fallback gradient (mientras carga). */
-  .cover-image {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    z-index: 0;
-  }
-
-  /* Hero image — blurred + darkened para moody/abstract backdrop.
-     Scale up para que los bordes del blur no se vean. */
-  .cover-image--hero {
-    filter: blur(14px) brightness(0.42) saturate(0.55) contrast(1.05);
-    transform: scale(1.18);
-    transform-origin: center center;
-  }
-
-  /* Warm gradient overlay sobre hero image — devuelve calidez
-     después del desaturar. */
-  .hero-warm-tint {
-    position: absolute;
-    inset: 0;
-    background: var(--color-gradient-warm);
-    opacity: 0.28;
-    mix-blend-mode: overlay;
-    z-index: 0;
-    pointer-events: none;
-  }
-
-  /* Dot grid overlay — textura sutil para placeholder editorial
-     de proyectos y posts. Sin imágenes externas. */
-  .dots-overlay {
-    background-image: radial-gradient(rgba(255,255,255,0.4) 1px, transparent 1px);
-    background-size: 14px 14px;
-  }
-  .dots-overlay--ink {
-    background-image: radial-gradient(rgba(10,10,10,0.18) 1px, transparent 1px);
-  }
+  .placeholder-image--blanco { background: var(--color-blanco); color: var(--color-azul); border: 1px solid var(--color-border); }
 }
 
 /* ---------------------------------------------------------
@@ -614,7 +355,7 @@
    --------------------------------------------------------- */
 @layer components {
   .container-page {
-    max-width: 72rem;        /* 1152px */
+    max-width: 72rem;
     margin-inline: auto;
     padding-inline: 1.25rem;
   }
@@ -626,14 +367,6 @@
     height: 1px;
     background-color: var(--color-border);
     border: 0;
-  }
-
-  .tick-orange {
-    display: inline-block;
-    width: 1.75rem;
-    height: 1px;
-    background-color: var(--color-azul);
-    vertical-align: middle;
   }
 
   /* Editorial body para posts de blog */
@@ -652,24 +385,26 @@
     color: var(--color-ink);
     font-size: 1.625rem;
     letter-spacing: -0.015em;
+    scroll-margin-top: 5rem;
   }
   .prose-editorial h3 {
     margin-top: 2rem;
     margin-bottom: 0.5rem;
     color: var(--color-ink);
     font-size: 1.25rem;
+    scroll-margin-top: 5rem;
   }
   .prose-editorial p {
     margin-bottom: 1rem;
   }
   .prose-editorial a {
-    color: var(--color-azul-deep);
+    color: var(--color-azul);
     text-decoration: underline;
     text-decoration-thickness: 1px;
     text-underline-offset: 3px;
   }
   .prose-editorial a:hover {
-    color: var(--color-dorado);
+    color: var(--color-dorado-deep);
   }
   .prose-editorial strong {
     color: var(--color-ink);
@@ -686,7 +421,7 @@
   .prose-editorial ol li::marker { color: var(--color-mute); font-family: var(--font-mono); font-size: 0.95em; }
 
   .prose-editorial blockquote {
-    border-left: 2px solid var(--color-azul);
+    border-left: 2px solid var(--color-dorado);
     padding: 0.25rem 0 0.25rem 1.25rem;
     font-style: normal;
     color: var(--color-ink);
@@ -696,10 +431,10 @@
   .prose-editorial code {
     font-family: var(--font-mono);
     font-size: 0.92em;
-    background-color: var(--color-blanco);
+    background-color: var(--color-azul-soft);
+    color: var(--color-azul-deep);
     padding: 0.15rem 0.4rem;
     border-radius: 4px;
-    border: 1px solid var(--color-border);
   }
 
   .prose-editorial hr {
@@ -709,6 +444,7 @@
     margin: 2.5rem 0;
   }
 
+  /* Skip-link */
   .skip-link {
     position: absolute;
     left: -9999px;
@@ -723,5 +459,45 @@
   .skip-link:focus {
     left: 1rem;
     top: 1rem;
+  }
+
+  /* Scroll progress bar — leído por script inline en posts.
+     El JS setea --scroll-progress entre 0 y 1. */
+  .scroll-progress-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 2px;
+    width: 100%;
+    background: transparent;
+    z-index: 60;
+    pointer-events: none;
+  }
+  .scroll-progress-bar::after {
+    content: "";
+    display: block;
+    height: 100%;
+    width: var(--scroll-progress, 0%);
+    background: var(--color-dorado);
+    transition: width 80ms linear;
+  }
+
+  /* Print stylesheet para /cv */
+  @media print {
+    html, body {
+      background: white !important;
+      color: black !important;
+    }
+    .no-print, header, footer, nav, .skip-link {
+      display: none !important;
+    }
+    .container-page { max-width: none; padding: 0; }
+    a {
+      color: inherit !important;
+      text-decoration: underline;
+    }
+    h1, h2, h3 { page-break-after: avoid; }
+    section { page-break-inside: avoid; }
+    .prose-editorial { max-width: none; }
   }
 }

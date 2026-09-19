@@ -2,6 +2,7 @@
 title: "E-commerce Marca Propia"
 slug: "ecommerce-marca"
 cliente: "Muebles Río Luján"
+categoria: "ecommerce"
 descripcion: "E-commerce full-stack con catálogo administrable, checkout Stripe, gestión de stock y envíos a todo el país."
 problema: "Marca de muebles de diseño que fabricaba a pedido. Querían vender directo al público sin pasar por showroom, manteniendo el control del stock por unidad de producción."
 resultado: "E-commerce completo con catálogo navegable, variantes por producto, checkout Stripe, gestión de stock sincronizada con producción y panel de envíos."

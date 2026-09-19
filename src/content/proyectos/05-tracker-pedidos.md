@@ -2,6 +2,7 @@
 title: "Tracker Pedidos Mayoristas"
 slug: "tracker-pedidos"
 cliente: "Logística Patagónica"
+categoria: "panel"
 descripcion: "App interna para que clientes mayoristas rastreen el estado de sus pedidos en tiempo real."
 problema: "Operador logístico con 80 clientes mayoristas. El call center recibía 200 llamadas por día preguntando 'dónde está mi pedido'."
 resultado: "App web con login por cliente, listado de pedidos activos, estado por etapa (preparado, despachado, en tránsito, entregado) y notificación automática al cambiar estado."

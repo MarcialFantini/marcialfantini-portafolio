@@ -2,6 +2,7 @@
 title: "Checkout Artesanal Lo de Marta"
 slug: "checkout-artesanal"
 cliente: "Lo de Marta — Panificados Artesanales"
+categoria: "ecommerce"
 descripcion: "Sitio + checkout simple con Mercado Pago, catálogo de 30 productos y envíos a CABA y GBA."
 problema: "Panificadora artesanal que vendía por Instagram y WhatsApp. Querían profesionalizar la venta online sin perder el trato personal que justifica el precio premium."
 resultado: "Sitio institucional con catálogo navegable, checkout integrado a Mercado Pago, y cálculo de envíos por código postal."

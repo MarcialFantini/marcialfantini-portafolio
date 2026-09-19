@@ -3,7 +3,7 @@ title: "Por qué tu PyME no necesita una app móvil"
 description: "El 90% de las PyMEs argentinas que me piden 'una app' no la necesitan. Explico qué problema están tratando de resolver, y por qué un sitio web responsive bien hecho les resuelve más por menos."
 pubDate: 2026-02-12
 author: "Marcial Fantini"
-category: "Producto"
+category: "productos"
 readingTime: 6
 tags: ["producto", "mobile", "pymes"]
 featured: false

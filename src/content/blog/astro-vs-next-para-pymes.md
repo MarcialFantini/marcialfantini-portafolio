@@ -3,7 +3,7 @@ title: "Astro vs Next.js para PyMEs: por qué elijo Astro en 2026"
 description: "Comparación honesta entre Astro y Next.js para proyectos chicos y medianos. Cuándo cada uno tiene sentido, y por qué para el 90% de mis clientes elijo Astro."
 pubDate: 2026-01-22
 author: "Marcial Fantini"
-category: "Código"
+category: "desarrollo"
 readingTime: 7
 tags: ["astro", "next", "performance", "stack"]
 featured: true

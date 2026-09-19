@@ -3,7 +3,7 @@ title: "Cómo cobro mis proyectos freelance (y por qué nunca por hora)"
 description: "El método exacto de pricing que uso para mis proyectos freelance: tres modalidades por proyecto según el tipo de entrega, cuándo usar cada una y por qué la hora es una trampa."
 pubDate: 2026-01-29
 author: "Marcial Fantini"
-category: "Estrategia"
+category: "carrera"
 readingTime: 6
 tags: ["freelance", "pricing", "negocio"]
 featured: true

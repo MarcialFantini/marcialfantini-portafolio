@@ -2,6 +2,7 @@
 title: "Catálogo Ferretería El Tornillo"
 slug: "catalogo-ferreteria"
 cliente: "Ferretería El Tornillo"
+categoria: "landing"
 descripcion: "Catálogo navegable con 200+ SKUs, búsqueda por categoría y descarga de lista en PDF para pedidos mayoristas."
 problema: "Ferretería de tres generaciones con clientela mayorista que necesitaba pedir por código sin llamar a la tienda. El catálogo en PDF era un solo archivo gigante de 80MB."
 resultado: "Catálogo web navegable con búsqueda por categoría y código, exportable a PDF filtrado, optimizado para imprimir y consultar desde el celular en el depósito."

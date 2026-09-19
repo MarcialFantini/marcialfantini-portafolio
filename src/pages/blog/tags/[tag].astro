@@ -1,0 +1,107 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import FormattedDate from "../../../components/FormattedDate.astro";
+import { getCollection } from "astro:content";
+import type { GetStaticPaths } from "astro";
+
+export const getStaticPaths = (async () => {
+  const posts = await getCollection("blog");
+  const tagMap = new Map<string, typeof posts>();
+  for (const post of posts) {
+    for (const tag of post.data.tags) {
+      if (!tagMap.has(tag)) tagMap.set(tag, []);
+      tagMap.get(tag)!.push(post);
+    }
+  }
+  return Array.from(tagMap.entries()).map(([tag, taggedPosts]) => ({
+    params: { tag },
+    props: {
+      tag,
+      posts: taggedPosts.sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime()),
+    },
+  }));
+}) satisfies GetStaticPaths;
+
+const { tag, posts } = Astro.props;
+---
+
+<Layout
+  title={`#${tag} — Blog`}
+  description={`Posts etiquetados con ${tag}. ${posts.length} artículos.`}
+>
+  <section class="pt-16 md:pt-24 pb-12 border-b border-[var(--color-border)]">
+    <div class="container-page max-w-4xl reveal">
+      <nav class="mb-8 font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-mute)]">
+        <ol class="flex flex-wrap items-center gap-2">
+          <li><a href="/" class="hover:text-[var(--color-azul)]">Inicio</a></li>
+          <li aria-hidden="true">/</li>
+          <li><a href="/blog" class="hover:text-[var(--color-azul)]">Blog</a></li>
+          <li aria-hidden="true">/</li>
+          <li><a href="/blog/tags" class="hover:text-[var(--color-azul)]">Tags</a></li>
+          <li aria-hidden="true">/</li>
+          <li class="text-[var(--color-ink)]">#{tag}</li>
+        </ol>
+      </nav>
+
+      <p class="font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--color-azul)] mb-3">
+        Tag
+      </p>
+      <h1 class="font-impact text-[clamp(2.25rem,5.5vw,4.75rem)] uppercase leading-[0.95] text-[var(--color-ink)] tracking-tight mb-4">
+        #{tag}
+      </h1>
+      <p class="text-xl text-[var(--color-ink-soft)] leading-relaxed max-w-3xl">
+        {posts.length} {posts.length === 1 ? "post etiquetado" : "posts etiquetados"} con este tag.
+      </p>
+    </div>
+  </section>
+
+  <section class="py-12 md:py-16">
+    <div class="container-page">
+      <ol class="border-t border-[var(--color-border)] reveal-stagger">
+        {
+          posts.map((post) => (
+            <li class="border-b border-[var(--color-border)]">
+              <a
+                href={`/blog/${post.id}`}
+                class="tactile group grid grid-cols-[auto_1fr_auto] md:grid-cols-[7rem_1fr_auto_auto] items-baseline gap-5 md:gap-8 py-7"
+              >
+                <div class="font-mono text-xs text-[var(--color-mute)] whitespace-nowrap pt-1 flex flex-col gap-1">
+                  <FormattedDate date={post.data.pubDate} format="short" />
+                  <span class="text-[var(--color-azul)] uppercase tracking-wider text-[10px] font-semibold">
+                    {post.data.category}
+                  </span>
+                </div>
+                <div class="min-w-0">
+                  <h2 class="font-display font-semibold text-xl md:text-2xl tracking-tight text-[var(--color-ink)] group-hover:text-[var(--color-azul)] leading-tight">
+                    {post.data.title}
+                  </h2>
+                  <p class="mt-2 text-sm md:text-base text-[var(--color-ink-soft)] leading-snug max-w-2xl line-clamp-2">
+                    {post.data.description}
+                  </p>
+                </div>
+                <span class="font-mono text-xs text-[var(--color-mute)] whitespace-nowrap hidden md:inline pt-1">
+                  {post.data.readingTime ?? "—"} min
+                </span>
+                <span
+                  aria-hidden="true"
+                  class="hidden md:inline text-[var(--color-mute)] group-hover:text-[var(--color-azul)] group-hover:translate-x-1 transition-transform"
+                >
+                  →
+                </span>
+              </a>
+            </li>
+          ))
+        }
+      </ol>
+
+      <div class="mt-12 pt-8 border-t border-[var(--color-border)]">
+        <a
+          href="/blog"
+          class="tactile inline-flex items-center gap-2 text-sm font-mono uppercase tracking-[0.18em] text-[var(--color-ink)] hover:text-[var(--color-azul)]"
+        >
+          <span aria-hidden="true">←</span> Ver todos los posts
+        </a>
+      </div>
+    </div>
+  </section>
+</Layout>
