@@ -1105,3 +1105,62 @@
     .film-stage { position: relative; height: auto; min-height: 100svh; }
   }
 }
+
+/* ---------------------------------------------------------
+   Header fijo + modo "sobre el film".
+   Sin capa a propósito: debe ganar a las utilidades Tailwind.
+   motion.ts alterna .is-over-film en [data-site-header].
+   --------------------------------------------------------- */
+:root { --header-h: 65px; }
+@media (min-width: 768px) { :root { --header-h: 73px; } }
+
+/* El header ya no ocupa flujo: las páginas sin film compensan su alto. */
+main:not(:has([data-film-scene])) { padding-top: var(--header-h); }
+
+.site-header {
+  transition:
+    background-color 300ms var(--ease-out-quart),
+    border-color 300ms var(--ease-out-quart),
+    color 300ms var(--ease-out-quart);
+}
+.sh-brand, .sh-mute, .sh-nav, .sh-burger {
+  transition: color 300ms var(--ease-out-quart), background-color 300ms var(--ease-out-quart), border-color 300ms var(--ease-out-quart);
+}
+
+.site-header.is-over-film {
+  background-color: rgba(10, 19, 48, 0.55);
+  border-bottom-color: rgba(246, 241, 228, 0.14);
+}
+.site-header.is-over-film .sh-brand { color: var(--color-neon); }
+.site-header.is-over-film .sh-mute,
+.site-header.is-over-film .sh-burger { color: var(--color-ivory-dim); }
+.site-header.is-over-film .sh-burger { color: var(--color-ivory); }
+.site-header.is-over-film .sh-nav {
+  background-color: rgba(246, 241, 228, 0.06);
+  border-color: rgba(246, 241, 228, 0.14);
+}
+.site-header.is-over-film .sh-link { color: var(--color-ivory); }
+.site-header.is-over-film .sh-link:hover { color: var(--color-neon); background-color: rgba(255, 210, 74, 0.1); }
+.site-header.is-over-film .sh-link[aria-current="page"] { color: var(--color-neon); background-color: rgba(255, 210, 74, 0.14); }
+.site-header.is-over-film .sh-link[aria-current="page"]::before { background-color: var(--color-neon); }
+.site-header.is-over-film a[href="/contacto"].inline-flex:hover,
+.site-header.is-over-film a[href="/contacto"].hidden:hover {
+  background-color: var(--color-ivory);
+  color: var(--color-navy-950);
+}
+
+/* Menú móvil: panel propio, sólido y legible en ambos modos. */
+.site-header.is-over-film .sh-menu {
+  background-color: var(--color-navy-950);
+  border-top-color: rgba(246, 241, 228, 0.14);
+}
+.site-header.is-over-film .mobile-menu-link {
+  color: var(--color-ivory);
+  border-bottom-color: rgba(246, 241, 228, 0.12);
+}
+.site-header.is-over-film .mobile-menu-link:hover { color: var(--color-neon); }
+.site-header.is-over-film .mobile-menu-link span { color: var(--color-ivory-dim); }
+.site-header.is-over-film .sh-menu a[href="/contacto"]:not(.mobile-menu-link) {
+  background-color: var(--color-neon);
+  color: var(--color-navy-950);
+}

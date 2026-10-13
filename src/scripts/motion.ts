@@ -27,6 +27,11 @@ interface Film {
   late: boolean;
 }
 let films: Film[] = [];
+/* Header fijo: .is-over-film cuando una escena del film cruza la franja del header. */
+const HEADER_PROBE = 36;
+let header: HTMLElement | null = null;
+let headerOver = false;
+let headerIo: IntersectionObserver | null = null;
 const clamp01 = (n: number) => (n < 0 ? 0 : n > 1 ? 1 : n);
 const easeInOutCubic = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
 
@@ -109,8 +114,11 @@ function frame() {
 
   // Film: lecturas primero (todas), escrituras al final del frame
   const filmWrites: { f: Film; p: number; active: boolean; late: boolean }[] = [];
+  let overFilm = false;
   for (const f of films) {
     const r = f.el.getBoundingClientRect();
+    // El stage sticky cubre el viewport mientras el wrapper cruza la franja del header
+    if (r.top <= HEADER_PROBE && r.bottom > HEADER_PROBE) overFilm = true;
     const span = r.height - vh;
     const p = span > 0 ? clamp01(-r.top / span) : 0;
     const active = r.bottom > -vh * 0.25 && r.top < vh * 1.25;
@@ -131,6 +139,11 @@ function frame() {
     if (r.bottom < -200 || r.top > vh + 200) continue;
     const speed = parseFloat(el.dataset.parallax ?? "") || 0.15;
     el.style.setProperty("--p", `${((r.top + r.height / 2 - vh / 2) * -speed).toFixed(1)}px`);
+  }
+
+  if (overFilm !== headerOver) {
+    headerOver = overFilm;
+    header?.classList.toggle("is-over-film", overFilm);
   }
 
   for (const w of filmWrites) {
@@ -156,9 +169,27 @@ function setup() {
     if (!h.closest(".reveal, .reveal-stagger, [data-scene], [data-film-scene]")) h.classList.add("reveal");
   });
 
+  header = document.querySelector<HTMLElement>("[data-site-header]");
+  headerOver = false;
+  headerIo?.disconnect();
+  headerIo = null;
+
   if (reduce) {
     revealAll();
     buildRail();
+    // Escenas estáticas (sin pin): un IO sobre la franja superior del viewport alcanza
+    const scenes = document.querySelectorAll<HTMLElement>("[data-film-scene]");
+    if (header && scenes.length) {
+      const hit = new Set<Element>();
+      headerIo = new IntersectionObserver(
+        (entries) => {
+          for (const e of entries) (e.isIntersecting ? hit.add(e.target) : hit.delete(e.target));
+          header!.classList.toggle("is-over-film", hit.size > 0);
+        },
+        { rootMargin: `0px 0px -${Math.max(0, window.innerHeight - HEADER_PROBE - 1)}px 0px` }
+      );
+      scenes.forEach((s) => headerIo!.observe(s));
+    }
     return;
   }
 
