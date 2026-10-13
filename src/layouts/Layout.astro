@@ -170,6 +170,16 @@ const professionalService = {
     })} />
   </head>
   <body class="min-h-[100dvh] flex flex-col antialiased">
+    <svg width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute">
+      <filter id="duo-brand" color-interpolation-filters="sRGB">
+        <feColorMatrix type="matrix" values="0.33 0.5 0.17 0 0  0.33 0.5 0.17 0 0  0.33 0.5 0.17 0 0  0 0 0 1 0" />
+        <feComponentTransfer>
+          <feFuncR type="table" tableValues="0.039 0.62 0.965" />
+          <feFuncG type="table" tableValues="0.075 0.53 0.945" />
+          <feFuncB type="table" tableValues="0.188 0.33 0.894" />
+        </feComponentTransfer>
+      </filter>
+    </svg>
     <a href="#main-content" class="skip-link">Saltar al contenido principal</a>
     <div class="page-progress" aria-hidden="true"></div>
     <div class="spotlight" aria-hidden="true"></div>

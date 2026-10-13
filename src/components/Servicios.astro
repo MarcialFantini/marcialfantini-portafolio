@@ -13,7 +13,25 @@ const categoryById: Record<string, string> = {
 
 // Slot de imagen por servicio: si existe public/servicios/<id>.<ext> se renderiza adentro del
 // <figure data-service-image>; si no, el figure queda vacío y oculto (sin cambios de markup después).
+// Las imágenes actuales son stock gratuito (Unsplash) provisorio: ver docs/image-credits.md. Reemplazar por fotos propias.
 const imageExts = ["avif", "webp", "jpg", "jpeg", "png"];
+// Lee ancho/alto de un JPEG (marcador SOF) para reservar espacio; null si no es JPEG.
+const jpegSize = (file: string): { w: number; h: number } | null => {
+  try {
+    const b = fs.readFileSync(path.join(process.cwd(), "public", file.replace(/^\//, "")));
+    if (b[0] !== 0xff || b[1] !== 0xd8) return null;
+    let o = 2;
+    while (o + 9 < b.length) {
+      if (b[o] !== 0xff) { o++; continue; }
+      const m = b[o + 1];
+      if (m >= 0xc0 && m <= 0xcf && m !== 0xc4 && m !== 0xc8 && m !== 0xcc) {
+        return { h: b.readUInt16BE(o + 5), w: b.readUInt16BE(o + 7) };
+      }
+      o += 2 + b.readUInt16BE(o + 2);
+    }
+  } catch {}
+  return null;
+};
 const serviceImage = (id: string): string | null => {
   for (const ext of imageExts) {
     if (fs.existsSync(path.join(process.cwd(), "public", "servicios", `${id}.${ext}`))) {
@@ -119,7 +137,7 @@ const steps = [
               )}
 
               <figure class="svc__media" data-service-image data-service={s.id} aria-hidden="true">
-                {img && <img src={img} alt="" loading="lazy" decoding="async" />}
+                {img && <img src={img} alt="" width={jpegSize(img)?.w} height={jpegSize(img)?.h} loading="lazy" decoding="async" />}
               </figure>
             </div>
           );

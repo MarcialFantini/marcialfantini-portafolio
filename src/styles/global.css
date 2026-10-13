@@ -1236,7 +1236,18 @@
       transform: translate3d(0, -46%, 0) scale(0.96);
       transition: opacity 300ms var(--ease-out-quart), transform 500ms var(--ease-out-expo);
     }
-    .svc__media > img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .svc__media > img { width: 100%; height: 100%; object-fit: cover; display: block; filter: url(#duo-brand); }
+    .svc__media[data-service="web-empresarial"] > img { object-position: 50% 52%; }
+    /* Grano estático (sin animación) sobre el duotono */
+    .svc__media:has(img)::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+      opacity: 0.06;
+      mix-blend-mode: overlay;
+      pointer-events: none;
+    }
     .svc-row:has(> .svc:not([open])):hover .svc__media:has(img) { opacity: 1; transform: translate3d(0, -50%, 0) scale(1); }
   }
 
