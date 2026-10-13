@@ -81,7 +81,7 @@ const dont = [
               src={aboutPhoto}
               alt={`El equipo de ${site.name}`}
               loading="lazy"
-              class="w-full rounded-xl border border-[var(--color-border)]"
+              class="w-full rounded-card border border-[var(--color-border)]"
             />
           </figure>
         )
@@ -98,7 +98,7 @@ const dont = [
       <ul class="grid grid-cols-1 md:grid-cols-3 gap-5">
         {
           build.map((b) => (
-            <li class="rounded-xl border-2 border-[var(--color-ink)] bg-[var(--color-blanco)] p-6">
+            <li class="rounded-card border border-[var(--color-line)] bg-[var(--color-blanco)] p-6">
               <h3 class="font-impact text-xl uppercase leading-tight text-[var(--color-ink)] mb-3">{b.title}</h3>
               <p class="text-[var(--color-ink-soft)] leading-relaxed">{b.text}</p>
             </li>
@@ -117,7 +117,7 @@ const dont = [
       <ol class="grid grid-cols-1 md:grid-cols-3 gap-5">
         {
           steps.map((s, i) => (
-            <li class="rounded-xl border border-[var(--color-border)] bg-[var(--color-blanco)] p-6">
+            <li class="rounded-card border border-[var(--color-border)] bg-[var(--color-blanco)] p-6">
               <span class="font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--color-dorado)]">
                 Paso {String(i + 1).padStart(2, "0")}
               </span>
@@ -158,14 +158,14 @@ const dont = [
       <div class="flex flex-col sm:flex-row gap-3 sm:gap-4">
         <a
           href="/contacto?servicio=Auditor%C3%ADa%20gratis"
-          class="tactile inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-md bg-[var(--color-dorado)] text-[var(--color-azul-deep)] font-mono text-[11px] uppercase tracking-[0.18em] font-bold hover:bg-[var(--color-ink)] hover:text-white"
+          class="tactile inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-control bg-[var(--color-dorado)] text-[var(--color-on-gold)] font-mono text-[11px] uppercase tracking-[0.18em] font-bold hover:bg-[var(--color-deep)] hover:text-white"
         >
           Pedir auditoría gratis
           <span aria-hidden="true">→</span>
         </a>
         <a
           href="/servicios"
-          class="tactile inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-md border border-[var(--color-ink)] text-[var(--color-ink)] font-mono text-[11px] uppercase tracking-[0.18em] font-semibold hover:border-[var(--color-azul)] hover:text-[var(--color-azul)]"
+          class="tactile inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-control border border-[var(--color-ink)] text-[var(--color-ink)] font-mono text-[11px] uppercase tracking-[0.18em] font-semibold hover:border-[var(--color-azul)] hover:text-[var(--color-azul)]"
         >
           Ver servicios
         </a>

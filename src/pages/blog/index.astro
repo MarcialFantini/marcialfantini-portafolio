@@ -49,7 +49,7 @@ const topTags = Array.from(tagCounts.entries()).sort((a, b) => b[1] - a[1]).slic
           </p>
           <a
             href="/contacto"
-            class="tactile inline-flex items-center gap-2 px-6 py-3.5 rounded-md bg-[var(--color-dorado)] text-[var(--color-azul-deep)] font-mono text-[11px] uppercase tracking-[0.18em] font-bold hover:bg-[var(--color-ink)] hover:text-white"
+            class="tactile inline-flex items-center gap-2 px-6 py-3.5 rounded-control bg-[var(--color-dorado)] text-[var(--color-on-gold)] font-mono text-[11px] uppercase tracking-[0.18em] font-bold hover:bg-[var(--color-deep)] hover:text-white"
           >
             Hablemos <span aria-hidden="true">→</span>
           </a>
@@ -86,7 +86,7 @@ const topTags = Array.from(tagCounts.entries()).sort((a, b) => b[1] - a[1]).slic
         categories.map(([cat, count]) => (
           <a
             href={`#cat-${cat}`}
-            class="tactile inline-flex items-center gap-2 px-3 py-1.5 rounded-md bg-white border border-[var(--color-border)] font-mono text-xs text-[var(--color-ink-soft)] hover:border-[var(--color-azul)] hover:text-[var(--color-azul)]"
+            class="tactile inline-flex items-center gap-2 px-3 py-1.5 rounded-control bg-[var(--color-blanco)] border border-[var(--color-line)] font-mono text-xs text-[var(--color-ink-soft)] hover:border-[var(--color-azul)] hover:text-[var(--color-azul)]"
           >
             <span>{categoryLabels[cat] ?? cat}</span>
             <span class="text-[var(--color-mute)] tabular-nums">{count}</span>
@@ -95,7 +95,7 @@ const topTags = Array.from(tagCounts.entries()).sort((a, b) => b[1] - a[1]).slic
       }
       <a
         href="/blog/tags"
-        class="tactile ml-auto inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md font-mono text-xs text-[var(--color-azul)] hover:text-[var(--color-ink)] font-semibold"
+        class="tactile ml-auto inline-flex items-center gap-1.5 px-3 py-1.5 rounded-control font-mono text-xs text-[var(--color-azul)] hover:text-[var(--color-ink)] font-semibold"
       >
         Tags <span aria-hidden="true">→</span>
       </a>
@@ -169,7 +169,7 @@ const topTags = Array.from(tagCounts.entries()).sort((a, b) => b[1] - a[1]).slic
               <li>
                 <a
                   href={`/blog/tags/${tag}`}
-                  class="tactile inline-flex items-center gap-2 px-3 py-1.5 rounded-md bg-white border border-[var(--color-border)] font-mono text-xs text-[var(--color-ink-soft)] hover:border-[var(--color-azul)] hover:text-[var(--color-azul)]"
+                  class="tactile inline-flex items-center gap-2 px-3 py-1.5 rounded-control bg-[var(--color-blanco)] border border-[var(--color-line)] font-mono text-xs text-[var(--color-ink-soft)] hover:border-[var(--color-azul)] hover:text-[var(--color-azul)]"
                 >
                   <span>#{tag}</span>
                   <span class="text-[var(--color-mute)] tabular-nums">{count}</span>

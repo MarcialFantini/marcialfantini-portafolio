@@ -15,7 +15,7 @@ const pathname = Astro.url.pathname;
 
 <header
   data-site-header
-  class="site-header fixed inset-x-0 top-0 z-50 backdrop-blur-md bg-[var(--color-blanco-humo)]/85 border-b border-[var(--color-border)]"
+  class="site-header fixed inset-x-0 top-0 z-[var(--z-header)] backdrop-blur-md bg-[var(--color-blanco-humo)]/85 border-b border-[var(--color-border)]"
 >
   <div class="container-page flex items-center justify-between h-16 md:h-[72px] gap-6">
     <a
@@ -31,7 +31,7 @@ const pathname = Astro.url.pathname;
       </span>
     </a>
 
-    <nav aria-label="Principal" class="sh-nav hidden md:flex items-center gap-1 rounded-xl border border-[var(--color-border)] bg-[var(--color-blanco)] p-1">
+    <nav aria-label="Principal" class="sh-nav hidden md:flex items-center gap-1 rounded-control border border-[var(--color-border)] bg-[var(--color-blanco)] p-1">
       {
         navItems.map((item) => {
           const active =
@@ -42,7 +42,7 @@ const pathname = Astro.url.pathname;
             <a
               href={item.href}
               class:list={[
-                "sh-link tactile font-mono text-[11px] uppercase tracking-[0.18em] px-3.5 py-2 rounded-lg",
+                "sh-link tactile font-mono text-[11px] uppercase tracking-[0.18em] px-3.5 py-2 rounded-control",
                 active
                   ? "text-[var(--color-ink)] bg-[var(--color-azul-soft)]"
                   : "text-[var(--color-ink-soft)] hover:text-[var(--color-ink)] hover:bg-[var(--color-azul-soft)]/50",
@@ -58,7 +58,7 @@ const pathname = Astro.url.pathname;
 
     <a
       href="/contacto"
-      class="tactile hidden md:inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[var(--color-dorado)] text-[#0F1A3A] text-[11px] font-mono uppercase tracking-[0.18em] font-semibold hover:bg-[var(--color-ink)] hover:text-[var(--color-blanco-humo)]"
+      class="tactile hidden md:inline-flex items-center gap-2 px-5 py-2.5 rounded-control bg-[var(--color-dorado)] text-[var(--color-on-gold)] text-[11px] font-mono uppercase tracking-[0.18em] font-semibold hover:bg-[var(--color-deep)] hover:text-white"
     >
       Hablemos
       <span aria-hidden="true">→</span>
@@ -66,7 +66,7 @@ const pathname = Astro.url.pathname;
 
     <a
       href="/contacto?servicio=Auditor%C3%ADa%20gratis"
-      class="sh-cta-m tactile ml-auto md:hidden inline-flex items-center min-h-[40px] px-3 rounded-lg bg-[var(--color-dorado)] text-[#0F1A3A] text-[11px] font-mono uppercase tracking-[0.12em] font-semibold whitespace-nowrap"
+      class="sh-cta-m tactile ml-auto md:hidden inline-flex items-center min-h-[40px] px-3 rounded-control bg-[var(--color-dorado)] text-[var(--color-on-gold)] text-[11px] font-mono uppercase tracking-[0.12em] font-semibold whitespace-nowrap"
     >
       Auditoría gratis
     </a>
@@ -74,7 +74,7 @@ const pathname = Astro.url.pathname;
     <button
       type="button"
       id="mobile-menu-trigger"
-      class="sh-burger tactile md:hidden flex items-center justify-center w-11 h-11 -mr-2 -ml-3 text-[var(--color-ink)] rounded-md"
+      class="sh-burger tactile md:hidden flex items-center justify-center w-11 h-11 -mr-2 -ml-3 text-[var(--color-ink)] rounded-control"
       aria-label="Abrir menú"
       aria-controls="mobile-menu"
       aria-expanded="false"
@@ -106,7 +106,7 @@ const pathname = Astro.url.pathname;
       }
       <a
         href="/contacto"
-        class="tactile mt-4 mb-2 inline-flex items-center justify-center gap-2 min-h-[48px] px-5 py-3 rounded-md bg-[var(--color-azul)] text-white font-mono text-[11px] uppercase tracking-[0.18em] font-semibold hover:bg-[var(--color-azul-deep)]"
+        class="tactile mt-4 mb-2 inline-flex items-center justify-center gap-2 min-h-[48px] px-5 py-3 rounded-control bg-[var(--color-action)] text-white font-mono text-[11px] uppercase tracking-[0.18em] font-semibold hover:bg-[var(--color-action-hover)]"
       >
         Hablemos
         <span aria-hidden="true">→</span>

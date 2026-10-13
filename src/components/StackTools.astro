@@ -23,7 +23,7 @@ const tools = [
 
 <section
   id="stack"
-  class="relative py-20 md:py-28 border-b-2 border-[var(--color-ink)] overflow-hidden"
+  class="relative py-20 md:py-28 border-b border-[var(--color-border)] overflow-hidden"
   aria-label="Stack y herramientas"
 >
   <div class="container-page">
@@ -40,7 +40,7 @@ const tools = [
     </div>
 
     <ul
-      class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-px bg-[var(--color-border)] border border-[var(--color-border)] rounded-xl overflow-hidden reveal-stagger"
+      class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-px bg-[var(--color-border)] border border-[var(--color-border)] rounded-card overflow-hidden reveal-stagger"
     >
       {tools.map(({ name, role, Icon }) => (
         <li class="group bg-[var(--color-blanco-humo)] tactile">

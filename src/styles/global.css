@@ -39,6 +39,18 @@
   --color-border: #E7E5E4;
   --color-page: #F3F4F8;
 
+  /* Semánticos (cada uno tiene su contraparte en .dark) */
+  --color-line: #D6D3CE;          /* borde 1px de tarjetas */
+  --color-deep: #18181B;          /* bloques oscuros (footer, bandas CTA, botones "ink") */
+  --color-on-gold: #0F1A3A;       /* texto sobre relleno dorado: navy en ambos modos */
+  --color-field: #FFFFFF;         /* fondo de inputs/selects */
+  --color-action: #1B2B5C;        /* relleno de botones primarios (texto blanco) */
+  --color-action-hover: #0F1A3A;
+  --color-ok-bg: #DCFCE7;
+  --color-ok-ink: #14532D;
+  --color-err-bg: #FEE2E2;
+  --color-err-ink: #7F1D1D;
+
   /* Acentos derivados — usados en gradients sutiles y dividers.
      Mantengo registro editorial sin caer en "creative agency"
      multicolor gradients. */
@@ -64,12 +76,22 @@
   --color-oro-ink: #0F1A3A;
   --color-oro-ink-soft: #2B3558;
   --color-oro-price: #6B4F0C;
+  --color-oro-mute: #5C4A1C;
+  --color-oro-line: rgba(166, 132, 58, 0.45);
+  --color-oro-open: rgba(255, 255, 255, 0.45);
+  --color-oro-accent: #1B2B5C;
+  --color-oro-btn: #0F1A3A;
+  --color-oro-btn-ink: #FFD24A;
   --shadow-glow-gold: 0 0 24px rgba(255, 210, 74, 0.45), 0 0 90px rgba(255, 210, 74, 0.22);
 
-  /* Radius */
+  /* Radius scale: control 10 / card 16 / panel 28 (36 en desktop) */
   --radius-sm: 4px;
   --radius-md: 6px;
   --radius-lg: 10px;
+  --radius-control: 10px;
+  --radius-card: 16px;
+  --radius-panel: 28px;
+  --radius-panel-lg: 36px;
 
   /* Easings */
   --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
@@ -77,23 +99,62 @@
 }
 
 /* ---------------------------------------------------------
-   Dark mode — preserva la identidad. Azul conde se ilumina a
-   #3B5BFF para mantener AA sobre #0A0A0A.
+   Z-index scale (única fuente de verdad)
+   --------------------------------------------------------- */
+:root {
+  --z-base: 1;
+  --z-film-skip: 44;
+  --z-film-cta: 45;
+  --z-header: 50;
+  --z-progress: 90;
+  --z-rail: 70;
+  --z-skip: 100;
+  color-scheme: light dark;
+}
+
+/* ---------------------------------------------------------
+   Dark mode — prefers-color-scheme es la única fuente de verdad
+   (la clase .dark la aplica un script inline en <head> antes del
+   primer paint). Superficies navy, texto marfil, acentos que
+   mantienen AA. El film es navy en ambos modos.
    --------------------------------------------------------- */
 .dark {
-  --color-azul: #3B5BFF;
-  --color-azul-deep: #5B7BFF;
-  --color-azul-soft: #1A1F3D;
+  --color-azul: #8CA2FF;
+  --color-azul-deep: #B4C2FF;
+  --color-azul-soft: #1B2650;
   --color-dorado: #E0B96B;
   --color-dorado-deep: #C8A24E;
   --color-dorado-soft: #2A2418;
-  --color-blanco-humo: #0A0A0A;
-  --color-blanco: #18181B;
-  --color-ink: #FFFFFF;
-  --color-ink-soft: #B8B8B8;
-  --color-mute: #71717A;
-  --color-border: #2A2A2E;
-  --color-page: #0A0A0A;
+  --color-blanco-humo: #0A1226;
+  --color-blanco: #0E1731;
+  --color-ink: #F6F1E4;
+  --color-ink-soft: #B9BDD0;
+  --color-mute: #9AA0B8;
+  --color-border: #232C4B;
+  --color-line: #34406B;
+  --color-page: #070C1C;
+  --color-deep: #0A1330;
+  --color-field: #101A3A;
+  --color-action: #3350E0;
+  --color-action-hover: #2740BD;
+  --color-ok-bg: #0F2E1D;
+  --color-ok-ink: #A7F3C4;
+  --color-err-bg: #3A1519;
+  --color-err-ink: #FECACA;
+
+  /* Panel oro en oscuro: superficie navy con filo dorado y texto marfil */
+  --color-oro-from: #162553;
+  --color-oro-to: #0F1A3A;
+  --color-oro-edge: #C8A24E;
+  --color-oro-ink: #F6F1E4;
+  --color-oro-ink-soft: #CFC9B8;
+  --color-oro-price: #FFD24A;
+  --color-oro-mute: #B5AE98;
+  --color-oro-line: rgba(224, 185, 107, 0.32);
+  --color-oro-open: rgba(255, 255, 255, 0.06);
+  --color-oro-accent: #FFD24A;
+  --color-oro-btn: #E0B96B;
+  --color-oro-btn-ink: #0F1A3A;
 }
 
 /* ---------------------------------------------------------
@@ -286,19 +347,6 @@
     }
   }
 
-  .card-pop {
-    will-change: transform;
-  }
-  .card-pop:hover {
-    transform: translateY(-4px) scale(1.015);
-    box-shadow:
-      0 2px 4px rgba(0, 0, 0, 0.06),
-      0 18px 40px rgba(0, 0, 0, 0.10);
-  }
-  .card-pop:active {
-    transform: translateY(-2px) scale(1.005);
-  }
-
   .tactile[aria-current="page"] {
     position: relative;
   }
@@ -361,14 +409,14 @@
     position: relative;
     width: 100%;
     overflow: hidden;
-    border-radius: 10px;
+    border-radius: var(--radius-control);
     aspect-ratio: 16 / 9;
     background-color: var(--color-azul-soft);
     color: var(--color-azul);
   }
-  .placeholder-image--azul { background: var(--color-gradient-azul); color: var(--color-blanco-humo); }
-  .placeholder-image--azul-card { background: var(--color-gradient-azul-card); color: var(--color-blanco-humo); }
-  .placeholder-image--dorado { background: var(--color-gradient-dorado); color: var(--color-blanco-humo); }
+  .placeholder-image--azul { background: var(--color-gradient-azul); color: #fff; }
+  .placeholder-image--azul-card { background: var(--color-gradient-azul-card); color: #fff; }
+  .placeholder-image--dorado { background: var(--color-gradient-dorado); color: var(--color-on-gold); }
   .placeholder-image--ink { background: var(--color-ink); color: var(--color-blanco-humo); }
   .placeholder-image--blanco { background: var(--color-blanco); color: var(--color-azul); border: 1px solid var(--color-border); }
 }
@@ -472,11 +520,11 @@
     position: absolute;
     left: -9999px;
     top: 0;
-    background: var(--color-azul);
-    color: var(--color-blanco);
+    background: var(--color-action);
+    color: #fff;
     padding: 0.75rem 1rem;
-    border-radius: 4px;
-    z-index: 100;
+    border-radius: var(--radius-control);
+    z-index: var(--z-skip);
     font-weight: 600;
   }
   .skip-link:focus {
@@ -493,7 +541,7 @@
     height: 2px;
     width: 100%;
     background: transparent;
-    z-index: 60;
+    z-index: var(--z-progress);
     pointer-events: none;
   }
   .scroll-progress-bar::after {
@@ -525,29 +573,10 @@
   }
 }
 /* =========================================================
-   CINEMATIC LAYER — dusk palette, grain, motion primitives.
+   CINEMATIC LAYER — paleta navy/marfil/dorado, primitivas de movimiento.
    Todo animado usa transform/opacity (compositor-only).
    ========================================================= */
 @layer utilities {
-  /* Film grain — overlay fijo, un solo layer, sin repaint */
-  .grain {
-    position: fixed;
-    inset: -50%;
-    z-index: 90;
-    pointer-events: none;
-    opacity: 0.07;
-    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
-    animation: grain-shift 1.2s steps(6) infinite;
-  }
-  @keyframes grain-shift {
-    0% { transform: translate(0, 0); }
-    20% { transform: translate(-3%, 2%); }
-    40% { transform: translate(2%, -3%); }
-    60% { transform: translate(-2%, -1%); }
-    80% { transform: translate(3%, 3%); }
-    100% { transform: translate(0, 0); }
-  }
-
   /* Cursor spotlight (desktop). Posición via CSS vars → solo transform */
   .spotlight {
     position: fixed;
@@ -556,7 +585,7 @@
     width: 520px;
     height: 520px;
     margin: -260px 0 0 -260px;
-    z-index: 1;
+    z-index: var(--z-base);
     pointer-events: none;
     border-radius: 50%;
     background: radial-gradient(circle, rgba(200, 162, 78, 0.14), transparent 62%);
@@ -612,16 +641,18 @@
     align-items: center;
     gap: 0.6rem;
     padding: 0.95rem 1.6rem;
-    border-radius: 999px;
+    border-radius: var(--radius-control);
     font-family: var(--font-mono);
     font-size: 11px;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.18em;
-    color: #0F1A3A;
+    color: var(--color-on-gold);
     background: var(--color-gradient-dorado);
     overflow: hidden;
-    transition: transform 300ms var(--ease-out-expo), box-shadow 300ms var(--ease-out-expo);
+    /* translate lo escribe el imán (motion.ts) sin pelear con el transform del hover */
+    translate: var(--mx, 0px) var(--my, 0px);
+    transition: transform 300ms var(--ease-out-expo), translate 300ms var(--ease-out-expo), box-shadow 300ms var(--ease-out-expo);
     box-shadow: 0 8px 30px -8px rgba(200, 162, 78, 0.45);
   }
   .btn-sunset::before {
@@ -629,11 +660,11 @@
     position: absolute;
     inset: 0;
     z-index: -1;
-    background: #fff;
+    background: var(--color-ivory);
     transform: translateY(101%);
     transition: transform 450ms var(--ease-out-expo);
   }
-  .btn-sunset:hover { color: #0F1A3A; transform: translateY(-2px); box-shadow: 0 14px 40px -8px rgba(200, 162, 78, 0.6); }
+  .btn-sunset:hover { color: var(--color-on-gold); transform: translateY(-2px); box-shadow: 0 14px 40px -8px rgba(200, 162, 78, 0.6); }
   .btn-sunset:hover::before { transform: translateY(0); }
 
   .btn-ghost {
@@ -642,16 +673,17 @@
     align-items: center;
     gap: 0.6rem;
     padding: 0.95rem 1.4rem;
-    border-radius: 999px;
+    border-radius: var(--radius-control);
     border: 1px solid rgba(255, 255, 255, 0.3);
     font-family: var(--font-mono);
     font-size: 11px;
     text-transform: uppercase;
     letter-spacing: 0.18em;
     color: #fff;
-    transition: border-color 250ms, background-color 250ms, transform 300ms var(--ease-out-expo);
+    translate: var(--mx, 0px) var(--my, 0px);
+    transition: border-color 250ms, background-color 250ms, transform 300ms var(--ease-out-expo), translate 300ms var(--ease-out-expo);
   }
-  .btn-ghost:hover { color: #fff; border-color: var(--color-azul); background: rgba(200, 162, 78, 0.12); transform: translateY(-2px); }
+  .btn-ghost:hover { color: #fff; border-color: var(--color-dorado); background: rgba(200, 162, 78, 0.12); transform: translateY(-2px); }
 
   /* Marquee infinito (transform-only) */
   .marquee { overflow: hidden; border-block: 1px solid var(--color-border); }
@@ -668,27 +700,15 @@
     position: fixed;
     top: 0; left: 0; right: 0;
     height: 3px;
-    z-index: 95;
+    z-index: var(--z-progress);
     transform-origin: 0 50%;
     transform: scaleX(0);
     background: linear-gradient(90deg, #C8A24E, #E0B96B);
     pointer-events: none;
   }
 
-  /* Tarjetas: glass + glow en hover */
-  .card-pop {
-    background: var(--color-blanco);
-    border: 1px solid var(--color-border);
-    transition: transform 500ms var(--ease-out-expo), border-color 300ms, box-shadow 500ms var(--ease-out-expo);
-  }
-  .card-pop:hover {
-    transform: translateY(-6px);
-    border-color: var(--color-dorado);
-    box-shadow: 0 30px 60px -20px rgba(27, 43, 92, 0.25);
-  }
-
   @media (prefers-reduced-motion: reduce) {
-    .grain, .marquee__track { animation: none; }
+    .marquee__track { animation: none; }
     .mask-line > span { transform: none; transition: none; }
     [data-parallax] { transform: none; }
     .spotlight { display: none; }
@@ -725,7 +745,7 @@
     right: 1.25rem;
     top: 50%;
     transform: translateY(-50%);
-    z-index: 70;
+    z-index: var(--z-rail);
     display: none;
     flex-direction: column;
     align-items: flex-end;
@@ -775,7 +795,7 @@
   }
   .process-marquee__item i { color: var(--color-dorado); font-style: normal; }
 
-  .magnetic { transition: transform 300ms var(--ease-out-expo); will-change: transform; }
+  .magnetic { will-change: translate; }
 
   @media (prefers-reduced-motion: reduce) {
     .scene-title, .scene-sun { transform: none; opacity: 1; }
@@ -786,62 +806,9 @@
 
 /* =========================================================
    SIGNATURE LAYER — lo que hace reconocible al sitio.
-   Intro con cortina, sello giratorio, cursor, foil, tilt.
+   Sello giratorio y foil dorado.
    ========================================================= */
 @layer utilities {
-  /* Intro: 100% CSS (keyframes); el JS solo espera para liberar el hero.
-     La animación termina en visibility:hidden aunque falle el script. */
-  .intro {
-    position: fixed;
-    inset: 0;
-    z-index: 200;
-    display: grid;
-    place-items: center;
-    background: linear-gradient(180deg, #0F1A3A, #1B2B5C);
-    color: #fff;
-    animation: intro-curtain 900ms var(--ease-out-expo) 1.35s forwards;
-    pointer-events: none;
-  }
-  .intro__mark {
-    display: block;
-    text-align: center;
-    font-family: var(--font-display);
-    font-weight: 800;
-    font-size: clamp(4rem, 14vw, 9rem);
-    letter-spacing: -0.06em;
-    line-height: 1;
-    opacity: 0;
-    animation: intro-mark 1000ms var(--ease-out-expo) 100ms forwards;
-  }
-  .intro__line {
-    display: block;
-    height: 1px;
-    width: min(240px, 50vw);
-    margin: 1.25rem auto 0.9rem;
-    background: var(--color-dorado);
-    transform: scaleX(0);
-    transform-origin: 0 50%;
-    animation: intro-line 900ms var(--ease-out-expo) 350ms forwards;
-  }
-  .intro__tag {
-    display: block;
-    text-align: center;
-    font-family: var(--font-mono);
-    font-size: 10px;
-    letter-spacing: 0.32em;
-    text-transform: uppercase;
-    color: rgba(255, 255, 255, 0.65);
-    opacity: 0;
-    animation: intro-mark 800ms var(--ease-out-expo) 600ms forwards;
-  }
-  @keyframes intro-mark { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
-  @keyframes intro-line { to { transform: scaleX(1); } }
-  @keyframes intro-curtain {
-    0% { transform: translateY(0); visibility: visible; }
-    99% { visibility: visible; }
-    100% { transform: translateY(-101%); visibility: hidden; }
-  }
-
   /* Sello giratorio del hero */
   .seal {
     position: absolute;
@@ -877,47 +844,9 @@
   }
   @keyframes foil { from { background-position: 0% 50%; } to { background-position: 100% 50%; } }
 
-  /* Cursor propio (solo mouse) */
-  .cursor-ring {
-    position: fixed;
-    top: 0; left: 0;
-    width: 34px; height: 34px;
-    margin: -17px 0 0 -17px;
-    z-index: 120;
-    pointer-events: none;
-    border: 1px solid #fff;
-    border-radius: 50%;
-    mix-blend-mode: difference;
-    opacity: 0;
-    transition: opacity 300ms, width 350ms var(--ease-out-expo), height 350ms var(--ease-out-expo), margin 350ms var(--ease-out-expo), background-color 300ms;
-    will-change: transform;
-  }
-  .cursor-ring.is-on { opacity: 1; }
-  .cursor-ring.is-hot { width: 64px; height: 64px; margin: -32px 0 0 -32px; background: rgba(255, 255, 255, 0.14); }
-  @media (hover: none) { .cursor-ring { display: none; } }
-
-  /* Tarjetas: inclinación 3D + brillo que sigue al cursor */
-  .card-pop { position: relative; }
-  .card-pop::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    pointer-events: none;
-    opacity: 0;
-    background: radial-gradient(260px circle at var(--sx, 50%) var(--sy, 50%), rgba(200, 162, 78, 0.22), transparent 60%);
-    transition: opacity 300ms;
-  }
-  .card-pop:hover::after { opacity: 1; }
-  .card-pop:hover {
-    transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) translateY(-6px);
-  }
-
   @media (prefers-reduced-motion: reduce) {
-    .intro { display: none; }
     .seal, .seal__ring { transform: none; animation: none; }
     .text-sunset { animation: none; }
-    .cursor-ring { display: none; }
   }
 }
 
@@ -1045,26 +974,23 @@
   /* Paneles redondeados (cards grandes de Pageflows) */
   .panel {
     margin: 14px 12px;
-    border-radius: 28px;
+    border-radius: var(--radius-panel);
     overflow: hidden;
     background: var(--color-blanco);
     border: 1px solid var(--color-border);
   }
-  @media (min-width: 768px) { .panel { margin: 18px max(16px, calc((100vw - 76rem) / 2)); border-radius: 36px; } }
+  @media (min-width: 768px) { .panel { margin: 18px max(16px, calc((100vw - 76rem) / 2)); border-radius: var(--radius-panel-lg); } }
   .panel > section { border: 0 !important; background-color: transparent; }
-  .panel > section.bg-\[var\(--color-ink\)\] { background-color: var(--color-ink); }
 
-  /* Panel secundario oro marfil (servicios). Re-mapea tokens localmente: texto azul marino
-     sobre marfil, también bajo .dark, para que el contraste no dependa del tema. */
+  /* Panel secundario "oro" (servicios). Claro: marfil dorado con texto navy.
+     Oscuro: superficie navy con filo dorado y texto marfil. Todo vía tokens
+     --color-oro-* (definidos en @theme y redefinidos en .dark). */
   .panel--oro {
     --color-ink: var(--color-oro-ink);
     --color-ink-soft: var(--color-oro-ink-soft);
-    --color-mute: #5C4A1C;
-    --color-azul: #1B2B5C;
-    --color-border: rgba(166, 132, 58, 0.45);
-    --color-blanco: #FFFFFF;
-    --color-azul-soft: #EEF0F8;
-    --color-dorado: #C8A24E;
+    --color-mute: var(--color-oro-mute);
+    --color-azul: var(--color-oro-accent);
+    --color-border: var(--color-oro-line);
     --color-dorado-deep: var(--color-oro-price);
     background: linear-gradient(180deg, var(--color-oro-from) 0%, var(--color-oro-to) 100%);
     border-color: var(--color-oro-edge);
@@ -1072,23 +998,19 @@
     color: var(--color-oro-ink);
   }
   .panel--oro .btn-sunset {
-    background: var(--color-oro-ink);
-    color: var(--color-neon);
+    background: var(--color-oro-btn);
+    color: var(--color-oro-btn-ink);
     box-shadow: 0 8px 24px -10px rgba(15, 26, 58, 0.55);
   }
-  .panel--oro .btn-sunset:hover { color: var(--color-oro-ink); }
-  .panel--oro .svc__price { color: var(--color-oro-price); }
+  .panel--oro .btn-sunset:hover { color: var(--color-on-gold); }
+  .panel--oro .svc__price,
   .panel--oro .svc__quote { color: var(--color-oro-price); }
-  .panel--oro .svc { border-bottom-color: rgba(166, 132, 58, 0.45); }
   .panel--oro .svc[open] {
-    background: rgba(255, 255, 255, 0.45);
-    border-radius: 14px;
+    background: var(--color-oro-open);
+    border-radius: var(--radius-card);
     padding-inline: 1rem;
   }
   @media (min-width: 768px) { .panel--oro .svc[open] { padding-inline: 1.5rem; } }
-
-  /* Botones: rectángulo redondeado (no píldora) */
-  .btn-sunset, .btn-ghost { border-radius: 14px; }
 }
 
 /* ---------------------------------------------------------
@@ -1171,7 +1093,7 @@
     max-width: 62vw;
     padding: 0.55em 0.95em;
     border: 1px solid rgba(246, 241, 228, 0.18);
-    border-radius: 12px;
+    border-radius: var(--radius-control);
     background: rgba(27, 43, 92, 0.72);
     color: var(--color-ivory-dim);
     font-family: var(--font-mono);
@@ -1187,10 +1109,10 @@
     position: fixed;
     left: 1rem;
     bottom: calc(3.8rem + env(safe-area-inset-bottom, 0px));
-    z-index: 44;
+    z-index: var(--z-film-skip);
     padding: 0.35rem 0.8rem;
     border: 1px solid rgba(246, 241, 228, 0.28);
-    border-radius: 999px;
+    border-radius: var(--radius-control);
     background: rgba(10, 19, 48, 0.62);
     color: var(--color-ivory);
     font-size: 0.75rem;
@@ -1220,7 +1142,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    z-index: 45;
+    z-index: var(--z-film-cta);
     padding: 0.8rem 1rem calc(0.8rem + env(safe-area-inset-bottom, 0px));
     background: var(--color-neon);
     color: var(--color-navy-950);
@@ -1248,7 +1170,7 @@
       right: 1.5rem;
       bottom: 1.5rem;
       padding: 0.75rem 1.4rem;
-      border-radius: 999px;
+      border-radius: var(--radius-control);
       box-shadow: 0 0 26px rgba(255, 210, 74, 0.38), 0 10px 30px -10px rgba(0, 0, 0, 0.7);
       transform: translate3d(0, 16px, 0);
     }

@@ -109,10 +109,13 @@ function bindMagnet(el: HTMLElement) {
     const r = el.getBoundingClientRect();
     const x = (e.clientX - r.left - r.width / 2) * 0.18;
     const y = (e.clientY - r.top - r.height / 2) * 0.28;
-    el.style.transform = `translate3d(${x.toFixed(1)}px,${y.toFixed(1)}px,0)`;
+    // Vars consumidas por la propiedad CSS `translate`: no pisan el transform del hover
+    el.style.setProperty("--mx", `${x.toFixed(1)}px`);
+    el.style.setProperty("--my", `${y.toFixed(1)}px`);
   });
   el.addEventListener("pointerleave", () => {
-    el.style.transform = "";
+    el.style.removeProperty("--mx");
+    el.style.removeProperty("--my");
   });
 }
 
@@ -287,58 +290,9 @@ function setup() {
   document.querySelectorAll<HTMLElement>(".btn-sunset, .btn-ghost").forEach(bindMagnet);
 
   buildRail();
-  bindCards();
-  initCursor();
-  // Si hay intro, el hero espera a que la cortina termine
-  const delay = document.querySelector(".intro") ? 1750 : 0;
-  window.setTimeout(() => requestAnimationFrame(() => document.body.classList.add("is-loaded")), delay);
+  // Sin intro: los titulares con máscara (.mask-line) se revelan en el primer frame
+  requestAnimationFrame(() => document.body.classList.add("is-loaded"));
   schedule();
-}
-
-function bindCards() {
-  document.querySelectorAll<HTMLElement>(".card-pop").forEach((el) => {
-    if (el.dataset.tilt) return;
-    el.dataset.tilt = "1";
-    el.addEventListener("pointermove", (e) => {
-      if (e.pointerType !== "mouse") return;
-      const r = el.getBoundingClientRect();
-      const px = (e.clientX - r.left) / r.width;
-      const py = (e.clientY - r.top) / r.height;
-      el.style.setProperty("--ry", `${((px - 0.5) * 7).toFixed(2)}deg`);
-      el.style.setProperty("--rx", `${((0.5 - py) * 7).toFixed(2)}deg`);
-      el.style.setProperty("--sx", `${(px * 100).toFixed(1)}%`);
-      el.style.setProperty("--sy", `${(py * 100).toFixed(1)}%`);
-    });
-    el.addEventListener("pointerleave", () => {
-      el.style.setProperty("--rx", "0deg");
-      el.style.setProperty("--ry", "0deg");
-    });
-  });
-}
-
-let ring: HTMLElement | null = null;
-let ringX = -100;
-let ringY = -100;
-let tx = -100;
-let ty = -100;
-let ringRaf = 0;
-
-function ringLoop() {
-  ringX += (tx - ringX) * 0.2;
-  ringY += (ty - ringY) * 0.2;
-  if (ring) ring.style.transform = `translate3d(${ringX.toFixed(1)}px,${ringY.toFixed(1)}px,0)`;
-  ringRaf = Math.abs(tx - ringX) + Math.abs(ty - ringY) > 0.4 ? requestAnimationFrame(ringLoop) : 0;
-}
-
-function initCursor() {
-  if (reduce || !window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
-  ring = document.querySelector<HTMLElement>(".cursor-ring");
-  if (!ring) {
-    ring = document.createElement("div");
-    ring.className = "cursor-ring";
-    ring.setAttribute("aria-hidden", "true");
-    document.body.appendChild(ring);
-  }
 }
 
 if (!reduce) {
@@ -352,14 +306,6 @@ if (!reduce) {
       my = e.clientY;
       pointerDirty = true;
       schedule();
-      if (ring) {
-        tx = e.clientX;
-        ty = e.clientY;
-        ring.classList.add("is-on");
-        const hot = (e.target as Element).closest("a, button, .card-pop, input, textarea, select");
-        ring.classList.toggle("is-hot", !!hot);
-        if (!ringRaf) ringRaf = requestAnimationFrame(ringLoop);
-      }
     },
     { passive: true }
   );

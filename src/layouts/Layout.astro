@@ -35,7 +35,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site ?? `https://${site.n
     <meta name="generator" content={Astro.generator} />
     <meta name="color-scheme" content="light dark" />
     <meta name="theme-color" content="#1B2B5C" media="(prefers-color-scheme: light)" />
-    <meta name="theme-color" content="#0A0A0A" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#0A1330" media="(prefers-color-scheme: dark)" />
 
     <title>{title}</title>
     <meta name="description" content={description} />
@@ -80,19 +80,19 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site ?? `https://${site.n
       </style>
     </noscript>
 
-    <!-- Pre-paint theme sync — runs before body to avoid FOUC -->
+    <!-- Tema: prefers-color-scheme es la única fuente de verdad. Se aplica antes del
+         primer paint (script bloqueante en <head>) para evitar el flash; sin toggle manual. -->
     <script is:inline>
       (function () {
-        try {
-          var stored = localStorage.getItem('mf-theme');
-          var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-          var dark = stored === 'dark' || (stored !== 'light' && prefersDark);
-          if (dark) document.documentElement.classList.add('dark');
-        } catch (e) {
-          if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-            document.documentElement.classList.add('dark');
-          }
-        }
+        var mq = window.matchMedia('(prefers-color-scheme: dark)');
+        var root = document.documentElement;
+        var apply = function () { root.classList.toggle('dark', mq.matches); };
+        apply();
+        if (mq.addEventListener) mq.addEventListener('change', apply);
+        // ClientRouter reemplaza los atributos de <html>: re-aplicar en el documento entrante
+        document.addEventListener('astro:before-swap', function (e) {
+          e.newDocument.documentElement.classList.toggle('dark', mq.matches);
+        });
       })();
     </script>
 
@@ -123,28 +123,8 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site ?? `https://${site.n
   </head>
   <body class="min-h-[100dvh] flex flex-col antialiased">
     <a href="#main-content" class="skip-link">Saltar al contenido principal</a>
-    {
-      Astro.url.pathname === "/" && (
-        <>
-          <div class="intro" aria-hidden="true">
-            <div>
-              <span class="intro__mark">MF</span>
-              <span class="intro__line" />
-              <span class="intro__tag">Marcial Fantini · Full-stack</span>
-            </div>
-          </div>
-          <script is:inline>
-            try {
-              if (sessionStorage.getItem('mf-intro')) document.querySelector('.intro')?.remove();
-              else sessionStorage.setItem('mf-intro', '1');
-            } catch (e) {}
-          </script>
-        </>
-      )
-    }
     <div class="page-progress" aria-hidden="true"></div>
     <div class="spotlight" aria-hidden="true"></div>
-    <div class="grain" aria-hidden="true"></div>
     <Header />
     <main id="main-content" class="flex-1">
       <slot />

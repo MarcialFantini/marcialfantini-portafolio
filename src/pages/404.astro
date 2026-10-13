@@ -6,7 +6,7 @@ import Layout from "../layouts/Layout.astro";
   title="Página no encontrada"
   description="La página que buscás no existe. Volvé al inicio o escribinos si pensás que fue un error."
 >
-  <section class="relative min-h-[80vh] flex items-center py-20 bg-gradient-azul text-[var(--color-blanco-humo)] overflow-hidden">
+  <section class="relative min-h-[80vh] flex items-center py-20 bg-gradient-azul text-white overflow-hidden">
     <div class="container-page max-w-3xl relative z-[1] reveal">
       <p class="font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--color-dorado)] mb-3">
         Error 404
@@ -23,14 +23,14 @@ import Layout from "../layouts/Layout.astro";
       <div class="flex flex-col sm:flex-row gap-3 sm:gap-4">
         <a
           href="/"
-          class="tactile inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-md bg-[var(--color-dorado)] text-[var(--color-azul-deep)] font-mono text-[11px] uppercase tracking-[0.18em] font-bold hover:bg-white"
+          class="tactile inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-control bg-[var(--color-dorado)] text-[var(--color-on-gold)] font-mono text-[11px] uppercase tracking-[0.18em] font-bold hover:bg-[var(--color-ivory)]"
         >
           Volver al inicio
           <span aria-hidden="true">→</span>
         </a>
         <a
           href="/contacto"
-          class="tactile inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-md border border-white/30 text-white font-mono text-[11px] uppercase tracking-[0.18em] font-semibold hover:border-[var(--color-dorado)] hover:text-[var(--color-dorado)]"
+          class="tactile inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-control border border-white/30 text-white font-mono text-[11px] uppercase tracking-[0.18em] font-semibold hover:border-[var(--color-dorado)] hover:text-[var(--color-dorado)]"
         >
           Escribinos
         </a>

@@ -25,7 +25,7 @@ const resourceLinks = [
 ];
 ---
 
-<footer class="relative bg-[var(--color-ink)] text-[var(--color-blanco-humo)] overflow-hidden">
+<footer class="relative bg-[var(--color-deep)] text-white overflow-hidden">
   <div class="container-page py-14 md:py-20">
     <div class="mb-10 md:mb-14 reveal grid grid-cols-1 lg:grid-cols-[2fr_3fr] gap-10 items-end">
       <div>
@@ -48,7 +48,7 @@ const resourceLinks = [
       <form
         id="newsletter-form"
         data-endpoint={site.newsletterEndpoint}
-        class="rounded-lg bg-[var(--color-azul-deep)] p-6 md:p-7 border border-white/10"
+        class="rounded-card bg-[var(--color-navy-900)] p-6 md:p-7 border border-white/10"
         aria-label="Newsletter — recibí un email mensual con lo que aprendimos"
       >
         <p class="font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--color-dorado)] mb-2">
@@ -77,11 +77,11 @@ const resourceLinks = [
             required
             autocomplete="email"
             placeholder="tu@email.com"
-            class="flex-1 min-w-0 px-4 py-3 rounded-md bg-white/95 text-[var(--color-ink)] placeholder:text-[var(--color-mute)] focus:outline-none focus:ring-2 focus:ring-[var(--color-dorado)]"
+            class="flex-1 min-w-0 px-4 py-3 rounded-control bg-[var(--color-field)] text-[var(--color-ink)] placeholder:text-[var(--color-mute)] focus:outline-none focus:ring-2 focus:ring-[var(--color-dorado)]"
           />
           <button
             type="submit"
-            class="tactile px-5 py-3 rounded-md bg-[var(--color-dorado)] text-[var(--color-azul-deep)] font-mono text-[11px] uppercase tracking-[0.18em] font-bold hover:bg-white"
+            class="tactile px-5 py-3 rounded-control bg-[var(--color-dorado)] text-[var(--color-on-gold)] font-mono text-[11px] uppercase tracking-[0.18em] font-bold hover:bg-[var(--color-ivory)]"
           >
             Suscribirme
           </button>

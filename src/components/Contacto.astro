@@ -24,7 +24,7 @@ const { compact = false } = Astro.props;
 
 <section
   id="contacto"
-  class="relative py-20 md:py-28 bg-gradient-azul text-[var(--color-blanco-humo)] border-y border-[var(--color-azul-deep)] overflow-hidden"
+  class="relative py-20 md:py-28 bg-gradient-azul text-white border-y border-[var(--color-azul-deep)] overflow-hidden"
   aria-label="Contacto"
 >
   <div class="container-page relative z-[1]">
@@ -50,12 +50,12 @@ const { compact = false } = Astro.props;
             href={whatsappUrl}
             target="_blank"
             rel="noopener noreferrer"
-            class="tactile flex w-full items-center justify-center gap-2 px-6 py-4 rounded-md bg-[var(--color-dorado)] text-[var(--color-azul-deep)] font-mono text-[12px] uppercase tracking-[0.18em] font-bold hover:bg-white"
+            class="tactile flex w-full items-center justify-center gap-2 px-6 py-4 rounded-control bg-[var(--color-dorado)] text-[var(--color-on-gold)] font-mono text-[12px] uppercase tracking-[0.18em] font-bold hover:bg-[var(--color-ivory)]"
           >
             Escribinos por WhatsApp <span aria-hidden="true">↗</span>
           </a>
         )}
-        <div class="rounded-lg bg-[var(--color-blanco-humo)] text-[var(--color-ink)] p-7 border-l-4 border-[var(--color-dorado)]">
+        <div class="rounded-card bg-[var(--color-blanco-humo)] text-[var(--color-ink)] p-7 border-l-4 border-[var(--color-dorado)]">
           <p class="font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-mute)] mb-3">
             {whatsappUrl ? "O por email" : "Email directo"}
           </p>
@@ -70,7 +70,7 @@ const { compact = false } = Astro.props;
             <button
               type="button"
               id="copy-email-btn"
-              class="tactile inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-[var(--color-azul-soft)] text-[var(--color-azul-deep)] font-mono text-[10px] uppercase tracking-[0.18em] font-semibold hover:bg-[var(--color-azul)] hover:text-white"
+              class="tactile inline-flex items-center gap-1.5 px-3 py-1.5 rounded-control bg-[var(--color-azul-soft)] text-[var(--color-azul-deep)] font-mono text-[10px] uppercase tracking-[0.18em] font-semibold hover:bg-[var(--color-action)] hover:text-white"
             >
               <span aria-hidden="true" id="copy-email-icon">⎘</span>
               <span id="copy-email-label">Copiar email</span>
@@ -118,7 +118,7 @@ const { compact = false } = Astro.props;
       <form
         id="contact-form"
         novalidate
-        class="rounded-lg bg-[var(--color-blanco-humo)] text-[var(--color-ink)] p-7 md:p-10"
+        class="rounded-card bg-[var(--color-blanco-humo)] text-[var(--color-ink)] p-7 md:p-10"
         aria-label="Formulario de contacto"
       >
         <div class="space-y-5">
@@ -133,9 +133,9 @@ const { compact = false } = Astro.props;
               required
               autocomplete="name"
               aria-describedby="name-error"
-              class="w-full px-4 py-3 rounded-md border border-[var(--color-border)] bg-white text-[var(--color-ink)] placeholder:text-[var(--color-mute)] transition-colors"
+              class="w-full px-4 py-3 rounded-control border border-[var(--color-line)] bg-[var(--color-field)] text-[var(--color-ink)] placeholder:text-[var(--color-mute)] transition-colors"
             />
-            <p id="name-error" class="hidden mt-1.5 text-sm text-red-700" role="alert"></p>
+            <p id="name-error" class="hidden mt-1.5 text-sm text-[var(--color-err-ink)]" role="alert"></p>
           </div>
 
           <div>
@@ -149,9 +149,9 @@ const { compact = false } = Astro.props;
               required
               autocomplete="email"
               aria-describedby="email-error"
-              class="w-full px-4 py-3 rounded-md border border-[var(--color-border)] bg-white text-[var(--color-ink)] placeholder:text-[var(--color-mute)] transition-colors"
+              class="w-full px-4 py-3 rounded-control border border-[var(--color-line)] bg-[var(--color-field)] text-[var(--color-ink)] placeholder:text-[var(--color-mute)] transition-colors"
             />
-            <p id="email-error" class="hidden mt-1.5 text-sm text-red-700" role="alert"></p>
+            <p id="email-error" class="hidden mt-1.5 text-sm text-[var(--color-err-ink)]" role="alert"></p>
           </div>
 
           <div>
@@ -161,7 +161,7 @@ const { compact = false } = Astro.props;
             <select
               id="servicio"
               name="servicio"
-              class="w-full px-4 py-3 rounded-md border border-[var(--color-border)] bg-white text-[var(--color-ink)] transition-colors"
+              class="w-full px-4 py-3 rounded-control border border-[var(--color-line)] bg-[var(--color-field)] text-[var(--color-ink)] transition-colors"
             >
               <option value="">Elegí uno</option>
               {
@@ -188,9 +188,9 @@ const { compact = false } = Astro.props;
               required
               rows={5}
               aria-describedby="message-error"
-              class="w-full px-4 py-3 rounded-md border border-[var(--color-border)] bg-white text-[var(--color-ink)] placeholder:text-[var(--color-mute)] resize-y transition-colors"
+              class="w-full px-4 py-3 rounded-control border border-[var(--color-line)] bg-[var(--color-field)] text-[var(--color-ink)] placeholder:text-[var(--color-mute)] resize-y transition-colors"
             ></textarea>
-            <p id="message-error" class="hidden mt-1.5 text-sm text-red-700" role="alert"></p>
+            <p id="message-error" class="hidden mt-1.5 text-sm text-[var(--color-err-ink)]" role="alert"></p>
           </div>
 
           <input
@@ -205,7 +205,7 @@ const { compact = false } = Astro.props;
           <button
             type="submit"
             id="contact-submit"
-            class="tactile w-full inline-flex items-center justify-center gap-2 px-6 py-4 rounded-md bg-[var(--color-azul)] text-white font-mono text-[11px] uppercase tracking-[0.18em] font-semibold hover:bg-[var(--color-azul-deep)] disabled:opacity-60 disabled:cursor-not-allowed"
+            class="tactile w-full inline-flex items-center justify-center gap-2 px-6 py-4 rounded-control bg-[var(--color-action)] text-white font-mono text-[11px] uppercase tracking-[0.18em] font-semibold hover:bg-[var(--color-action-hover)] disabled:opacity-60 disabled:cursor-not-allowed"
           >
             <span id="contact-submit-label">{endpoint ? "Enviar mensaje" : "Abrir mi app de email"}</span>
             <span aria-hidden="true">→</span>
@@ -213,7 +213,7 @@ const { compact = false } = Astro.props;
 
           <p
             id="contact-status"
-            class="hidden text-sm leading-relaxed rounded-md px-4 py-3"
+            class="hidden text-sm leading-relaxed rounded-control px-4 py-3"
             role="status"
             aria-live="polite"
           ></p>
@@ -266,11 +266,11 @@ const { compact = false } = Astro.props;
       if (!status) return;
       status.textContent = text;
       status.className =
-        'text-sm leading-relaxed rounded-md px-4 py-3 ' +
+        'text-sm leading-relaxed rounded-control px-4 py-3 ' +
         (kind === 'success'
-          ? 'bg-green-100 text-green-900'
+          ? 'bg-[var(--color-ok-bg)] text-[var(--color-ok-ink)]'
           : kind === 'error'
-            ? 'bg-red-100 text-red-900'
+            ? 'bg-[var(--color-err-bg)] text-[var(--color-err-ink)]'
             : 'bg-[var(--color-azul-soft)] text-[var(--color-azul-deep)]');
     };
 

@@ -49,7 +49,7 @@ const tags = Array.from(tagCounts.entries()).sort((a, b) => b[1] - a[1]);
             <li>
               <a
                 href={`/blog/tags/${tag}`}
-                class="tactile inline-flex items-center gap-2 px-4 py-2 rounded-md bg-white border-2 border-[var(--color-ink)] font-mono text-sm text-[var(--color-ink)] hover:border-[var(--color-azul)] hover:text-[var(--color-azul)]"
+                class="tactile inline-flex items-center gap-2 px-4 py-2 rounded-control bg-[var(--color-blanco)] border border-[var(--color-line)] font-mono text-sm text-[var(--color-ink)] hover:border-[var(--color-azul)] hover:text-[var(--color-azul)]"
               >
                 <span>#{tag}</span>
                 <span class="text-[var(--color-mute)] tabular-nums text-xs">{count}</span>
