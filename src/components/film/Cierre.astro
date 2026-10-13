@@ -1,8 +1,9 @@
 ---
+const { from, to } = Astro.props;
 ---
 
-<div class="film-scene cierre" data-film-scene="cierre" data-chapter="Cierre" style="--film-len: 220">
-  <div class="film-stage cierre__stage">
+<div class="film-layer cierre" data-film-scene="cierre" data-from={from} data-to={to}>
+  <div class="film-body cierre__stage">
     <div class="cierre__bg" aria-hidden="true"></div>
     <div class="cierre__glow" aria-hidden="true"></div>
 

@@ -1,5 +1,8 @@
 ---
 // Mismas posiciones que Peso: la escena arranca con el ruido ya acumulado y lo colapsa.
+// En el solapamiento del seam esta capa aparece (opacity) justo encima de Peso:
+// el estado visual inicial coincide con el final de Peso, así que no se ven chips duplicados.
+const { from, to } = Astro.props;
 const shards = [
   { t: "12 mensajes sin responder", x: 32, y: 20, dy: 46, r: -5 },
   { t: "Sin sitio web", x: 69, y: 28, dy: 38, r: 4 },
@@ -12,8 +15,8 @@ const shards = [
 ];
 ---
 
-<div class="film-scene giro" data-film-scene="giro" data-chapter="El giro" style="--film-len: 280">
-  <div class="film-stage giro__stage">
+<div class="film-layer giro" data-film-scene="giro" data-from={from} data-to={to}>
+  <div class="film-body giro__stage">
     <div class="giro__bg" aria-hidden="true"></div>
 
     <div class="giro__shards" aria-hidden="true">

@@ -1,9 +1,11 @@
 ---
 import metricas from "../../data/metricas.json";
+
+const { from, to } = Astro.props;
 ---
 
-<div class="film-scene alivio" data-film-scene="alivio" data-chapter="El alivio" style="--film-len: 300">
-  <div class="film-stage alivio__stage">
+<div class="film-layer alivio" data-film-scene="alivio" data-from={from} data-to={to}>
+  <div class="film-body alivio__stage">
     <div class="alivio__bg" aria-hidden="true"></div>
     <div class="alivio__glow" aria-hidden="true"></div>
 

@@ -1,6 +1,8 @@
 ---
 import site from "../../data/site.json";
 
+const { from, to } = Astro.props;
+
 // x/y: % del stage (centro del chip). d: cuándo entra (0..1). dy: deriva en px. r: rotación final en grados.
 const chips = [
   { t: "12 mensajes sin responder", x: 32, y: 20, d: 0.06, dy: 46, r: -5 },
@@ -14,8 +16,8 @@ const chips = [
 ];
 ---
 
-<div class="film-scene peso" data-film-scene="peso" data-chapter="Inicio" style="--film-len: 320">
-  <div class="film-stage peso__stage">
+<div class="film-layer peso is-active" data-film-scene="peso" data-from={from} data-to={to}>
+  <div class="film-body peso__stage">
     <div class="peso__bg" aria-hidden="true"></div>
 
     <div class="peso__chips" aria-hidden="true">

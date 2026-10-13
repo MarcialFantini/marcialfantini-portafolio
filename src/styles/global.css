@@ -1063,12 +1063,11 @@
   }
   .box-glow-gold { box-shadow: var(--shadow-glow-gold); }
 
-  .film-scene {
+  /* Un único film: wrapper alto + un stage sticky con las escenas apiladas */
+  .film {
     position: relative;
-    height: calc(var(--film-len, 300) * 100vh / 100);
-    height: calc(var(--film-len, 300) * 1svh);
-    --p: 0;
-    --e: 0;
+    height: calc(var(--film-len, 1500) * 100vh / 100);
+    height: calc(var(--film-len, 1500) * 1svh);
   }
   .film-stage {
     position: sticky;
@@ -1080,7 +1079,38 @@
     background: var(--color-navy-950);
     color: var(--color-ivory);
   }
-  .film-scene.is-active .film-stage .film-will { will-change: transform, opacity; }
+  /* Anclas del riel de capítulos: franja de cada escena dentro del wrapper */
+  .film-anchor {
+    position: absolute;
+    left: 0;
+    width: 1px;
+    top: var(--a-top);
+    height: var(--a-h);
+    pointer-events: none;
+    visibility: hidden;
+  }
+  /* Capa de escena: --p/--e (locales), --o (opacidad de entrada) las escribe motion.ts */
+  .film-layer {
+    position: absolute;
+    inset: 0;
+    isolation: isolate;
+    --p: 0;
+    --e: 0;
+    --o: 1;
+    opacity: var(--o);
+    pointer-events: none;
+  }
+  .film-layer:not(.is-active) { visibility: hidden; }
+  /* Escena ya superada (solo queda debajo durante el fundido): nada clicable */
+  .film-layer.is-done a { pointer-events: none !important; }
+  .film-body {
+    position: absolute;
+    inset: 0;
+    isolation: isolate;
+    background: var(--color-navy-950);
+    color: var(--color-ivory);
+  }
+  .film-layer.is-active .film-will { will-change: transform, opacity; }
 
   /* Chip de "ruido" compartido por El peso y El giro */
   .film-chip {
@@ -1101,8 +1131,17 @@
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .film-scene { height: auto; }
-    .film-stage { position: relative; height: auto; min-height: 100svh; }
+    .film { height: auto; }
+    .film-stage { position: relative; height: auto; overflow: visible; }
+    .film-anchor { display: none; }
+    .film-layer {
+      position: relative;
+      inset: auto;
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .film-layer:not(.is-active) { visibility: visible; }
+    .film-body { position: relative; inset: auto; min-height: 100svh; overflow: clip; }
   }
 }
 
@@ -1115,7 +1154,7 @@
 @media (min-width: 768px) { :root { --header-h: 73px; } }
 
 /* El header ya no ocupa flujo: las páginas sin film compensan su alto. */
-main:not(:has([data-film-scene])) { padding-top: var(--header-h); }
+main:not(:has([data-film])) { padding-top: var(--header-h); }
 
 .site-header {
   transition:

@@ -1,6 +1,8 @@
 ---
 import servicios from "../../data/servicios.json";
 
+const { from, to } = Astro.props;
+
 // Cada pieza entra en un tramo de --p: --s = inicio, cae durante 0.12.
 const cards = servicios.map((s, i) => ({
   id: s.id,
@@ -10,8 +12,8 @@ const cards = servicios.map((s, i) => ({
 }));
 ---
 
-<div class="film-scene sol" data-film-scene="solucion" data-chapter="La solución" style="--film-len: 380">
-  <div class="film-stage sol__stage">
+<div class="film-layer sol" data-film-scene="solucion" data-from={from} data-to={to}>
+  <div class="film-body sol__stage">
     <div class="sol__bg" aria-hidden="true"></div>
 
     <div class="sol__content">

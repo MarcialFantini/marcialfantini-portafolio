@@ -17,16 +17,26 @@ let my = -999;
 let pointerDirty = false;
 let ticking = false;
 
-/* Film: cada [data-film-scene] es un wrapper alto con un stage sticky.
-   El progreso 0..1 del scroll dentro del wrapper se escribe en el propio
-   elemento como --p (lineal) y --e (easeInOutCubic). */
-interface Film {
+/* Film: UN wrapper alto [data-film] con un único stage sticky; las escenas son
+   capas apiladas [data-film-scene] con un tramo [data-from, data-to] del progreso
+   global P (0..1). Cada capa recibe --p (local, lineal), --e (easeInOutCubic) y
+   --o (opacidad de entrada: la capa nueva se funde encima de la saliente). */
+interface Layer {
   el: HTMLElement;
+  from: number;
+  to: number;
+  first: boolean;
   p: number;
+  o: number;
   active: boolean;
   late: boolean;
+  done: boolean;
 }
-let films: Film[] = [];
+let filmEl: HTMLElement | null = null;
+let layers: Layer[] = [];
+/* Tramo (fracción de P) del fundido de entrada y margen de activación */
+const FADE = 0.02;
+const PAD = 0.01;
 /* Header fijo: .is-over-film cuando una escena del film cruza la franja del header. */
 const HEADER_PROBE = 36;
 let header: HTMLElement | null = null;
@@ -113,18 +123,23 @@ function frame() {
   if (bar) bar.style.transform = `scaleX(${(max > 0 ? Math.min(y / max, 1) : 0).toFixed(4)})`;
 
   // Film: lecturas primero (todas), escrituras al final del frame
-  const filmWrites: { f: Film; p: number; active: boolean; late: boolean }[] = [];
+  const filmWrites: { l: Layer; p: number; o: number; active: boolean; late: boolean; done: boolean }[] = [];
   let overFilm = false;
-  for (const f of films) {
-    const r = f.el.getBoundingClientRect();
+  if (filmEl) {
+    const r = filmEl.getBoundingClientRect();
     // El stage sticky cubre el viewport mientras el wrapper cruza la franja del header
     if (r.top <= HEADER_PROBE && r.bottom > HEADER_PROBE) overFilm = true;
     const span = r.height - vh;
-    const p = span > 0 ? clamp01(-r.top / span) : 0;
-    const active = r.bottom > -vh * 0.25 && r.top < vh * 1.25;
-    const late = p >= 0.6;
-    if (Math.abs(p - f.p) > 0.0004 || active !== f.active || late !== f.late) {
-      filmWrites.push({ f, p, active, late });
+    const P = span > 0 ? clamp01(-r.top / span) : 0;
+    for (const l of layers) {
+      const p = clamp01((P - l.from) / (l.to - l.from));
+      const o = l.first ? 1 : clamp01((P - l.from) / FADE);
+      const active = P >= l.from - PAD && P <= l.to + FADE + PAD;
+      const done = P > l.to;
+      const late = p >= 0.6;
+      if (Math.abs(p - l.p) > 0.0004 || Math.abs(o - l.o) > 0.004 || active !== l.active || late !== l.late || done !== l.done) {
+        filmWrites.push({ l, p, o, active, late, done });
+      }
     }
   }
 
@@ -147,14 +162,20 @@ function frame() {
   }
 
   for (const w of filmWrites) {
-    const { f } = w;
-    f.el.style.setProperty("--p", w.p.toFixed(4));
-    f.el.style.setProperty("--e", easeInOutCubic(w.p).toFixed(4));
-    if (w.active !== f.active) f.el.classList.toggle("is-active", w.active);
-    if (w.late !== f.late) f.el.classList.toggle("is-late", w.late);
-    f.p = w.p;
-    f.active = w.active;
-    f.late = w.late;
+    const { l } = w;
+    if (w.p !== l.p) {
+      l.el.style.setProperty("--p", w.p.toFixed(4));
+      l.el.style.setProperty("--e", easeInOutCubic(w.p).toFixed(4));
+    }
+    if (w.o !== l.o) l.el.style.setProperty("--o", w.o.toFixed(3));
+    if (w.active !== l.active) l.el.classList.toggle("is-active", w.active);
+    if (w.late !== l.late) l.el.classList.toggle("is-late", w.late);
+    if (w.done !== l.done) l.el.classList.toggle("is-done", w.done);
+    l.p = w.p;
+    l.o = w.o;
+    l.active = w.active;
+    l.late = w.late;
+    l.done = w.done;
   }
 
   if (pointerDirty && glow) {
@@ -166,7 +187,7 @@ function frame() {
 function setup() {
   // Titulares de sección entran solos, sin tocar cada componente
   document.querySelectorAll("main h2").forEach((h) => {
-    if (!h.closest(".reveal, .reveal-stagger, [data-scene], [data-film-scene]")) h.classList.add("reveal");
+    if (!h.closest(".reveal, .reveal-stagger, [data-scene], [data-film]")) h.classList.add("reveal");
   });
 
   header = document.querySelector<HTMLElement>("[data-site-header]");
@@ -176,9 +197,18 @@ function setup() {
 
   if (reduce) {
     revealAll();
+    // Sin pin: las anclas (posicionadas por offset) no sirven; el capítulo pasa a cada capa estática
+    document.querySelectorAll<HTMLElement>("[data-film-anchor]").forEach((a) => {
+      const layer = document.querySelector<HTMLElement>(`[data-film-scene="${a.dataset.filmAnchor}"]`);
+      if (layer) {
+        layer.id = a.id;
+        layer.dataset.chapter = a.dataset.chapter ?? "";
+      }
+      a.remove();
+    });
     buildRail();
-    // Escenas estáticas (sin pin): un IO sobre la franja superior del viewport alcanza
-    const scenes = document.querySelectorAll<HTMLElement>("[data-film-scene]");
+    // Film estático (sin pin): un IO sobre la franja superior del viewport alcanza
+    const scenes = document.querySelectorAll<HTMLElement>("[data-film]");
     if (header && scenes.length) {
       const hit = new Set<Element>();
       headerIo = new IntersectionObserver(
@@ -210,11 +240,17 @@ function setup() {
 
   parallax = Array.from(document.querySelectorAll<HTMLElement>("[data-parallax]"));
   hero = document.querySelector<HTMLElement>("[data-scene]");
-  films = Array.from(document.querySelectorAll<HTMLElement>("[data-film-scene]")).map((el) => ({
+  filmEl = document.querySelector<HTMLElement>("[data-film]");
+  layers = Array.from(document.querySelectorAll<HTMLElement>("[data-film-scene]")).map((el, i) => ({
     el,
+    from: parseFloat(el.dataset.from ?? "0"),
+    to: parseFloat(el.dataset.to ?? "1"),
+    first: i === 0,
     p: -1,
-    active: false,
+    o: -1,
+    active: el.classList.contains("is-active"),
     late: false,
+    done: false,
   }));
   bar = document.querySelector<HTMLElement>(".page-progress");
   glow = document.querySelector<HTMLElement>(".spotlight");
