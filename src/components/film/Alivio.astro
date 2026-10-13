@@ -1,20 +1,19 @@
 ---
-import metricas from "../../data/metricas.json";
-import testimonios from "../../data/testimonios.json";
-
 const { from, to } = Astro.props;
 
-// Prueba real: dos testimonios de testimonios.json, citados literal (primera oración de `quote`).
-const ids = ["lucia-fernandez", "martin-acosta"];
-const quotes = ids
-  .map((id) => testimonios.find((t) => t.id === id))
-  .filter((t): t is (typeof testimonios)[number] => !!t)
-  .map((t) => ({
-    texto: t.quote.split(/(?<=\.)\s/)[0],
-    metric: t.metric,
-    nombre: t.nombre,
-    cargo: `${t.role}, ${t.empresa}`,
-  }));
+// Qué recupera el cliente: resultados de proceso, sin cifras ni testimonios.
+const alivios = [
+  "Tiempo para atender tu negocio",
+  "Tranquilidad: el sitio trabaja aunque no estés",
+  "Que te encuentren cuando te buscan",
+  "Consultas que llegan solas",
+];
+
+const pasos = [
+  { n: "1", t: "Hablamos 15 min" },
+  { n: "2", t: "Te pasamos propuesta con precio claro" },
+  { n: "3", t: "Armamos y te entregamos con 2 rondas de revisión" },
+];
 ---
 
 <div class="film-layer alivio" data-film-scene="alivio" data-from={from} data-to={to}>
@@ -24,37 +23,30 @@ const quotes = ids
 
     <div class="alivio__content">
       <h2 class="alivio__h2">
-        <span class="alivio__line film-will" style="--s:0.04">Resultados <span class="text-glow-gold">reales</span>.</span>
-        <span class="alivio__line film-will" style="--s:0.12">De negocios como el tuyo.</span>
+        <span class="alivio__line film-will" style="--s:0.04">Vos atendés tu negocio.</span>
+        <span class="alivio__line film-will" style="--s:0.12">El sitio <span class="text-glow-gold">hace el resto</span>.</span>
       </h2>
 
-      <ul class="alivio__kpis">
+      <ul class="alivio__gains">
         {
-          metricas.map((m, i) => (
-            <li class="alivio__kpi film-will" style={`--s:${0.2 + i * 0.07};--i:${i}`}>
-              <span class="alivio__num">
-                {m.value}
-                {m.sufijo}
-              </span>
-              <span class="alivio__label">{m.label}</span>
+          alivios.map((a, i) => (
+            <li class="alivio__gain film-will" style={`--s:${0.2 + i * 0.07}`}>
+              {a}
             </li>
           ))
         }
       </ul>
 
-      <div class="alivio__quotes">
+      <ol class="alivio__steps">
         {
-          quotes.map((q, i) => (
-            <figure class="alivio__quote film-will" style={`--s:${0.56 + i * 0.1}`}>
-              <blockquote>“{q.texto}”</blockquote>
-              <p class="alivio__metric">{q.metric}</p>
-              <figcaption>
-                <strong>{q.nombre}</strong> · {q.cargo}
-              </figcaption>
-            </figure>
+          pasos.map((p, i) => (
+            <li class="alivio__step film-will" style={`--s:${0.5 + i * 0.1}`}>
+              <span class="alivio__n">{p.n}</span>
+              <span class="alivio__t">{p.t}</span>
+            </li>
           ))
         }
-      </div>
+      </ol>
     </div>
   </div>
 </div>
@@ -100,93 +92,73 @@ const quotes = ids
     transform: translate3d(0, calc((1 - var(--v)) * 3svh), 0);
     filter: blur(calc((1 - var(--v)) * 6px));
   }
-  .alivio__kpis {
+  .alivio__gains {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 0.5rem;
+    grid-template-columns: 1fr;
+    gap: 0.4rem;
     width: min(100%, 44rem);
-    margin-top: 1.5rem;
+    margin-top: 1.25rem;
     padding: 0;
     list-style: none;
   }
-  .alivio__kpi {
+  .alivio__gain {
     --v: clamp(0, calc((var(--p) - var(--s)) * 6), 1);
     opacity: var(--v);
-    /* "Sube": arranca más abajo y se asienta con la curva suave */
-    transform: translate3d(0, calc((1 - var(--v)) * 9svh), 0);
+    transform: translate3d(0, calc((1 - var(--v)) * 6svh), 0);
+    font-size: clamp(0.9rem, 3.6vw, 1.15rem);
+    line-height: 1.3;
+    color: var(--color-ivory);
   }
-  .alivio__num {
-    display: block;
-    font-family: var(--font-mono);
-    font-weight: 700;
-    font-size: clamp(1.5rem, 6.4vw, 3rem);
-    line-height: 1;
-    color: var(--color-neon);
-    text-shadow: 0 0 calc(var(--v) * 22px) rgba(255, 210, 74, 0.4);
-  }
-  .alivio__label {
-    display: block;
-    margin-top: 0.4rem;
-    font-size: clamp(0.62rem, 2.5vw, 0.9rem);
-    line-height: 1.2;
-    color: var(--color-ivory-dim);
-  }
-  .alivio__quotes {
+  .alivio__steps {
     display: grid;
-    gap: 0.75rem;
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
     width: min(100%, 44rem);
-    margin-top: 1.5rem;
+    margin-top: 1.25rem;
+    padding: 0;
+    list-style: none;
     text-align: left;
   }
-  /* En móvil entra solo el primer testimonio: el segundo no entra en el alto del viewport */
-  .alivio__quote:nth-child(n + 2) { display: none; }
-  .alivio__quote {
+  .alivio__step {
     --v: clamp(0, calc((var(--p) - var(--s)) * 6), 1);
-    margin: 0;
-    padding: 0.8rem 0.95rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.6rem 0.85rem;
     border: 1px solid rgba(255, 210, 74, 0.28);
     border-radius: 12px;
     background: rgba(27, 43, 92, 0.55);
     opacity: var(--v);
     transform: translate3d(0, calc((1 - var(--v)) * 5svh), 0);
   }
-  .alivio__quote blockquote {
-    margin: 0;
-    font-size: clamp(0.85rem, 3.3vw, 1.05rem);
-    line-height: 1.4;
-    color: var(--color-ivory);
-  }
-  .alivio__metric {
-    margin-top: 0.4rem;
+  .alivio__n {
+    flex: none;
     font-family: var(--font-mono);
-    font-size: clamp(0.72rem, 2.8vw, 0.85rem);
     font-weight: 700;
+    font-size: clamp(1.1rem, 4.5vw, 1.6rem);
+    line-height: 1;
     color: var(--color-neon);
   }
-  .alivio__quote figcaption {
-    margin-top: 0.25rem;
-    font-size: clamp(0.66rem, 2.5vw, 0.8rem);
+  .alivio__t {
+    font-size: clamp(0.8rem, 3.2vw, 1rem);
     line-height: 1.3;
-    color: var(--color-ivory-dim);
+    color: var(--color-ivory);
   }
-  .alivio__quote figcaption strong { color: var(--color-ivory); }
   @media (min-width: 768px) {
-    .alivio__kpis { margin-top: 2rem; gap: 1rem; }
-    .alivio__quotes { grid-template-columns: 1fr 1fr; margin-top: 2rem; }
-    .alivio__quote:nth-child(n + 2) { display: block; }
-    .alivio__quote { padding: 1rem 1.15rem; }
+    .alivio__gains { grid-template-columns: 1fr 1fr; margin-top: 2rem; gap: 0.6rem 1.5rem; }
+    .alivio__steps { grid-template-columns: repeat(3, 1fr); margin-top: 2rem; gap: 1rem; }
+    .alivio__step { padding: 0.9rem 1rem; }
   }
 
   @media (prefers-reduced-motion: reduce) {
     .alivio__content { position: relative; padding-block: 4rem; }
     .alivio__line,
-    .alivio__kpi,
-    .alivio__quote {
+    .alivio__gain,
+    .alivio__step {
       opacity: 1;
       transform: none;
       filter: none;
     }
-    .alivio__quote:nth-child(n + 2) { display: block; }
     .alivio__glow { opacity: 1; }
   }
 </style>

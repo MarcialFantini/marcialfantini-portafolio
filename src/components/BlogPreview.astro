@@ -1,7 +1,6 @@
 ---
 import { getCollection } from "astro:content";
 import FormattedDate from "./FormattedDate.astro";
-import SectionAnchor from "./SectionAnchor.astro";
 
 const allPosts = await getCollection("blog");
 const posts = allPosts
@@ -15,9 +14,9 @@ const gradients = ["azul", "azul-card", "dorado"] as const;
   <div class="container-page">
     <div class="flex items-end justify-between flex-wrap gap-6 mb-12 reveal">
       <div>
-        <SectionAnchor number="06" label="NOTAS" />
+        <p class="font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--color-azul)] mb-3">Blog</p>
         <h2 class="font-impact text-[clamp(2rem,5vw,4rem)] uppercase leading-[0.95] text-[var(--color-ink)] mt-2 max-w-xl">
-          Lo que aprendí <span class="text-[var(--color-azul)]">en el camino.</span>
+          Lo que aprendemos <span class="text-[var(--color-azul)]">en el camino.</span>
         </h2>
       </div>
       <a

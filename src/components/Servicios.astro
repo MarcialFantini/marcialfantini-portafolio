@@ -1,6 +1,5 @@
 ---
 import servicios from "../data/servicios.json";
-import SectionAnchor from "./SectionAnchor.astro";
 
 const categoryById: Record<string, string> = {
   "web-productos-servicios": "Página web",
@@ -14,9 +13,9 @@ const categoryById: Record<string, string> = {
   <div class="container-page">
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-12 md:mb-20">
       <div class="lg:col-span-7 reveal">
-        <SectionAnchor number="03" label="SERVICIOS" />
+        <p class="font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--color-azul)] mb-3">Servicios</p>
         <h2 class="font-impact text-[clamp(2.25rem,6vw,5rem)] uppercase leading-[0.92] text-[var(--color-ink)] mt-2">
-          Qué podemos hacer<span class="text-[var(--color-azul)]">por tu negocio.</span>
+          Qué podemos hacer{" "}<span class="text-[var(--color-azul)]">por tu negocio.</span>
         </h2>
       </div>
       <p class="lg:col-span-4 lg:col-start-9 self-end text-[var(--color-ink-soft)] text-lg leading-relaxed reveal">

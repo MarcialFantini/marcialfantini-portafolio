@@ -6,7 +6,6 @@ import Solucion from "../components/film/Solucion.astro";
 import Alivio from "../components/film/Alivio.astro";
 import Cierre from "../components/film/Cierre.astro";
 import SobreMi from "../components/SobreMi.astro";
-import Metricas from "../components/Metricas.astro";
 import Servicios from "../components/Servicios.astro";
 import Proyectos from "../components/Proyectos.astro";
 import BlogPreview from "../components/BlogPreview.astro";
@@ -20,7 +19,7 @@ const scenes = [
   { key: "peso", chapter: "Inicio", len: 160 },
   { key: "giro", chapter: "La oferta", len: 130 },
   { key: "solucion", chapter: "Servicios", len: 180 },
-  { key: "alivio", chapter: "Resultados reales", len: 150 },
+  { key: "alivio", chapter: "El alivio", len: 150 },
   { key: "cierre", chapter: "Auditoría gratis", len: 110 },
 ];
 const total = scenes.reduce((a, s) => a + s.len, 0);
@@ -66,7 +65,6 @@ const [rPeso, rGiro, rSol, rAlivio, rCierre] = ranges;
     </a>
   </div>
   <div class="panel" data-chapter="Sobre mí"><SobreMi /></div>
-  <div class="panel" data-chapter="Resultados"><Metricas /></div>
   <div class="panel panel--oro" id="servicios-precios" data-chapter="Servicios"><Servicios /></div>
   <div class="panel" data-chapter="Proyectos"><Proyectos /></div>
   <div class="panel" data-chapter="Escritos"><BlogPreview /></div>

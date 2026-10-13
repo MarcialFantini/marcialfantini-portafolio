@@ -2,7 +2,6 @@
 import { getCollection } from "astro:content";
 import FormattedDate from "./FormattedDate.astro";
 import CornerBrackets from "./CornerBrackets.astro";
-import SectionAnchor from "./SectionAnchor.astro";
 
 const allProyectos = await getCollection("proyectos");
 const featured = allProyectos
@@ -19,9 +18,9 @@ const gradients = ["azul", "azul-card", "dorado"] as const;
   <div class="container-page">
     <div class="flex items-end justify-between flex-wrap gap-6 mb-12 reveal">
       <div>
-        <SectionAnchor number="04" label="CASOS" />
+        <p class="font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--color-azul)] mb-3">Proyectos</p>
         <h2 class="font-impact text-[clamp(2rem,5vw,4rem)] uppercase leading-[0.95] text-[var(--color-ink)] mt-2 max-w-3xl">
-          Algunos casos donde <span class="text-[var(--color-azul)]">mis decisiones</span> importaron.
+          Algunos proyectos <span class="text-[var(--color-azul)]">que armamos.</span>
         </h2>
       </div>
       <a

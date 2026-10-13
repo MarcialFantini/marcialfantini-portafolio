@@ -10,7 +10,6 @@ interface Props {
   description?: string;
   ogImage?: string;
   pageType?: string;
-  hideChrome?: boolean;
 }
 
 const {
@@ -18,7 +17,6 @@ const {
   description = site.description,
   ogImage = "/og-default.svg",
   pageType = "website",
-  hideChrome = false,
 } = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site ?? `https://${site.name.toLowerCase().replace(/\s+/g, "-")}.com`);

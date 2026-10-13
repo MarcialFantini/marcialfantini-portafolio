@@ -3,18 +3,9 @@
 // En el solapamiento del seam esta capa aparece (opacity) justo encima de Peso:
 // el estado visual inicial coincide con el final de Peso, así que no se ven chips duplicados.
 import servicios from "../../data/servicios.json";
+import { filmChips as shards } from "../../data/film-chips";
 
 const { from, to } = Astro.props;
-const shards = [
-  { t: "12 mensajes sin responder", x: 32, y: 20, dy: 46, r: -5 },
-  { t: "Sin sitio web", x: 69, y: 28, dy: 38, r: 4 },
-  { t: "Clientes que no vuelven", x: 50, y: 38, dy: 52, r: -2 },
-  { t: "Google muestra a la competencia", x: 33, y: 52, dy: 40, r: 6 },
-  { t: "¿Tenés página?", x: 68, y: 60, dy: 34, r: -6 },
-  { t: "Todo por WhatsApp", x: 46, y: 70, dy: 44, r: 3 },
-  { t: "Presupuestos perdidos", x: 70, y: 80, dy: 30, r: -4 },
-  { t: "“Pasame el link”", x: 31, y: 84, dy: 36, r: 5 },
-];
 
 // Ancla de precio: el mínimo real de precioDesdeUsd en servicios.json
 // (los servicios sin precio fijo, como software a medida, traen null y se ignoran).

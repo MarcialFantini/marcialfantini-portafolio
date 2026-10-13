@@ -6,7 +6,7 @@ const year = new Date().getFullYear();
 const socials = [
   { href: site.social.github, label: "GitHub" },
   { href: site.social.linkedin, label: "LinkedIn" },
-  { href: site.social.twitter, label: "Twitter" },
+  { href: site.social.twitter, label: "X" },
   { href: `mailto:${site.email}`, label: "Email" },
 ];
 
@@ -60,8 +60,7 @@ const resourceLinks = [
           Lo que aprendimos este mes.
         </h2>
         <p class="text-sm text-white/70 mb-5 leading-relaxed">
-          Un email por mes con lo que vale la pena. Cero newsletters de marketing.
-          Te podés dar de baja en un click.
+          Un email por mes con novedades y consejos para tu sitio. Te podés dar de baja cuando quieras.
         </p>
         <input
           type="text"
@@ -178,9 +177,6 @@ const resourceLinks = [
     <div class="pt-6 border-t border-white/15 flex flex-col md:flex-row items-start md:items-center justify-between gap-3">
       <p class="font-mono text-[11px] uppercase tracking-[0.18em] text-white/55">
         © {year} {site.name} · Córdoba, Argentina
-      </p>
-      <p class="font-mono text-[11px] uppercase tracking-[0.18em] text-white/55">
-        Construido con Astro + TypeScript · Sin frameworks de moda
       </p>
     </div>
   </div>

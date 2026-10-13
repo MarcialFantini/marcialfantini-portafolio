@@ -1,12 +1,11 @@
 {
   "name": "Marcial Fantini",
   "shortName": "MF",
-  "tagline": "Software que entrega resultados medibles",
+  "tagline": "Sitios web que traen clientes a tu PyME",
   "description": "Agencia que desarrolla páginas web, ecommerce (tiendas online) y software a medida para que tu negocio venda más y trabaje mejor. Contanos qué necesitás.",
   "location": "Córdoba, Argentina",
   "email": "hola@marcialfantini.com",
   "newsletterEndpoint": "",
-  "availability": "Disponible para proyectos a partir de febrero 2026",
   "social": {
     "github": "https://github.com/MarcialFantini",
     "linkedin": "https://www.linkedin.com/in/marcial-fantini",

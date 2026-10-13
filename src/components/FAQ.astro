@@ -1,6 +1,4 @@
 ---
-import SectionAnchor from "./SectionAnchor.astro";
-
 interface FAQItem {
   pregunta: string;
   respuesta: string;
@@ -20,7 +18,7 @@ const faqs: FAQItem[] = [
   {
     pregunta: "¿Qué pasa si no me gusta el resultado?",
     respuesta:
-      "Iteramos. Cada proyecto incluye 2 rondas de revisión por etapa (diseño + desarrollo). Si después de eso no estamos alineados, te quedás con todo el trabajo entregado hasta ese momento y resolvemos por escrito. No trabajamos con cláusula de satisfacción 100% garantizada porque ningún proyecto real la cumple, pero sí con honestidad sobre qué se puede y qué no se puede resolver.",
+      "Lo ajustamos. Cada proyecto incluye 2 rondas de revisión. Si después de eso querés más cambios, lo charlamos y te pasamos el costo por escrito antes de hacerlos.",
   },
   {
     pregunta: "¿Cuánto cuesta mantenerlo después?",
@@ -28,24 +26,19 @@ const faqs: FAQItem[] = [
       "Depende del proyecto y de lo que necesites después de la publicación (dominio, hosting, cambios o soporte). Te lo aclaramos por escrito en la propuesta, sin sorpresas.",
   },
   {
-    pregunta: "¿Cobrás por hora o por proyecto?",
+    pregunta: "¿Cobran por hora o por proyecto?",
     respuesta:
       "Por proyecto, con un presupuesto claro por escrito antes de empezar: página web desde USD 300, página empresarial desde USD 400 y ecommerce desde USD 800 (precios orientativos). El software a medida se cotiza según tu proyecto. Si algo se sale del alcance, lo charlamos antes de hacerlo.",
   },
   {
-    pregunta: "¿Trabajás con empresas de otros países?",
+    pregunta: "¿Puedo ver ejemplos antes de contratarlos?",
     respuesta:
-      "Sí, pero con un ajuste. Trabajamos 100% remoto y async, así que la zona horaria no es problema. Lo que sí cambia es el precio: para clientes fuera de Argentina trabajamos en USD y con contratos en inglés. La calidad y el proceso son los mismos.",
+      "Sí. En la primera charla te mostramos proyectos de complejidad parecida a lo que necesitás, sin compromiso, para que veas qué tipo de trabajo hacemos.",
   },
   {
-    pregunta: "¿Puedo ver ejemplos de mi industria antes de contratarte?",
+    pregunta: "¿Qué necesito tener listo antes de escribirles?",
     respuesta:
-      "Si tenemos un caso parecido, te lo mostramos en la primera reunión (sin compromiso). Si no tenemos un caso exacto en tu vertical, te mostramos 2-3 proyectos de complejidad similar para que veas qué tipo de problema resolvemos y cómo lo medimos.",
-  },
-  {
-    pregunta: "¿Qué necesito tener listo antes de llamarte?",
-    respuesta:
-      "Nada. Si tenés una idea de lo que necesitás, un presupuesto aproximado y una fecha, mejor. Si no, charlamos 15 minutos, te hacemos unas preguntas y armamos el brief entre los dos. La auditoría gratis de 15 minutos existe justamente para esto.",
+      "Nada. Si tenés una idea de lo que necesitás, un presupuesto aproximado y una fecha, mejor. Si no, charlamos 15 minutos, te hacemos unas preguntas y armamos el brief entre todos. La auditoría gratis de 15 minutos existe justamente para esto, y te respondemos en menos de 24 h hábiles.",
   },
 ];
 ---
@@ -53,13 +46,10 @@ const faqs: FAQItem[] = [
 <section id="faq" class="relative py-20 md:py-28 border-b-2 border-[var(--color-ink)] bg-[var(--color-blanco)] overflow-hidden">
   <div class="container-page">
     <div class="max-w-3xl mb-12 md:mb-16 reveal">
-      <SectionAnchor number="07" label="FAQ" />
+      <p class="font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--color-azul)] mb-3">Preguntas frecuentes</p>
       <h2 class="font-impact text-[clamp(2rem,5vw,4rem)] uppercase leading-[0.95] text-[var(--color-ink)] mt-2">
-        Las preguntas que <span class="text-[var(--color-azul)]">nos hacen siempre.</span>
+        Las preguntas que <span class="text-[var(--color-azul)]">nos hacen seguido.</span>
       </h2>
-      <p class="mt-5 text-[var(--color-ink-soft)] text-lg leading-relaxed">
-        8 objeciones reales, respondidas con la verdad (no con marketing).
-      </p>
     </div>
 
     <div class="max-w-3xl space-y-3 reveal-stagger">
