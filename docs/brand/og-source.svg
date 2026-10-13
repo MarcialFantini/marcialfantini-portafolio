@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0F1A3A"/>
+      <stop offset="1" stop-color="#0A1330"/>
+    </linearGradient>
+    <radialGradient id="halo" cx="0.88" cy="0.1" r="0.6">
+      <stop offset="0" stop-color="#FFD24A" stop-opacity="0.22"/>
+      <stop offset="1" stop-color="#FFD24A" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#halo)"/>
+  <rect x="80" y="84" width="72" height="72" rx="16" fill="#1B2B5C"/>
+  <text x="116" y="120" font-family="Arial, Helvetica, sans-serif" font-size="34" font-weight="700" fill="#FFD24A" text-anchor="middle" dominant-baseline="central">MF</text>
+  <text x="172" y="120" font-family="Arial, Helvetica, sans-serif" font-size="30" font-weight="700" fill="#F6F1E4" dominant-baseline="central">Marcial Fantini</text>
+  <rect x="80" y="236" width="96" height="6" rx="3" fill="#FFD24A"/>
+  <text font-family="Arial, Helvetica, sans-serif" font-size="76" font-weight="700" fill="#F6F1E4" letter-spacing="-1.5">
+    <tspan x="80" y="334">Sitios web que traen</tspan>
+    <tspan x="80" y="422">clientes a tu <tspan fill="#FFD24A">PyME</tspan></tspan>
+  </text>
+  <text x="80" y="520" font-family="Arial, Helvetica, sans-serif" font-size="30" fill="#C8A24E">Páginas web · Ecommerce · Software a medida</text>
+</svg>

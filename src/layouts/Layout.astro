@@ -15,16 +15,70 @@ interface Props {
 }
 
 const {
-  title = `${site.name} — ${site.tagline}`,
+  title: titleProp,
   description = site.description,
-  ogImage = "/og-default.svg",
+  ogImage = "/og-default.png",
   pageType = "website",
   noindex = false,
 } = Astro.props;
 
 const showRss = await hasPublishedPosts();
 
-const canonicalURL = new URL(Astro.url.pathname, Astro.site ?? `https://${site.name.toLowerCase().replace(/\s+/g, "-")}.com`);
+const siteURL = Astro.site ?? new URL("https://marcialfantini.com");
+const canonicalURL = new URL(Astro.url.pathname, siteURL);
+const isHome = Astro.url.pathname === "/";
+
+// Home: titulo fijo. Resto: "<Pagina> | Marcial Fantini" (normaliza el sufijo " — Marcial Fantini").
+const HOME_TITLE = `${site.name} | Páginas web, ecommerce y software a medida en Córdoba`;
+const suffix = ` | ${site.name}`;
+const title = isHome
+  ? HOME_TITLE
+  : !titleProp
+    ? HOME_TITLE
+    : titleProp.endsWith(` — ${site.name}`)
+      ? titleProp.slice(0, -(` — ${site.name}`).length) + suffix
+      : titleProp.includes(site.name)
+        ? titleProp
+        : titleProp + suffix;
+
+const ogImageURL = new URL(ogImage, siteURL).toString();
+const ogAlt = `${site.name}: ${site.tagline}. Páginas web, ecommerce y software a medida.`;
+const logoURL = new URL("/icon-512.png", siteURL).toString();
+
+import servicios from "../data/servicios.json";
+const socialLinks = Object.values(site.social).filter(Boolean);
+const professionalService = {
+  "@context": "https://schema.org",
+  "@type": "ProfessionalService",
+  "name": site.name,
+  "url": siteURL.toString(),
+  "logo": logoURL,
+  "image": ogImageURL,
+  "description": site.description,
+  "slogan": site.tagline,
+  "email": site.email,
+  "priceRange": "USD 300+",
+  "availableLanguage": "es-AR",
+  "areaServed": [
+    { "@type": "City", "name": "Córdoba" },
+    { "@type": "Country", "name": "Argentina" },
+  ],
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Córdoba",
+    "addressCountry": "AR",
+  },
+  "sameAs": socialLinks,
+  "hasOfferCatalog": {
+    "@type": "OfferCatalog",
+    "name": "Servicios",
+    "itemListElement": servicios.map((s) => ({
+      "@type": "Offer",
+      "url": new URL(`/servicios/${s.id}`, siteURL).toString(),
+      "itemOffered": { "@type": "Service", "name": s.titulo, "description": s.descripcion },
+    })),
+  },
+};
 ---
 
 <!doctype html>
@@ -48,7 +102,11 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site ?? `https://${site.n
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonicalURL} />
-    <meta property="og:image" content={ogImage} />
+    <meta property="og:image" content={ogImageURL} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:alt" content={ogAlt} />
     <meta property="og:locale" content="es_AR" />
     <meta property="og:site_name" content={site.name} />
 
@@ -56,10 +114,14 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site ?? `https://${site.n
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
-    <meta name="twitter:image" content={ogImage} />
+    <meta name="twitter:image" content={ogImageURL} />
+    <meta name="twitter:image:alt" content={ogAlt} />
 
     <!-- Favicon -->
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
 
     <ClientRouter />
 
@@ -96,22 +158,8 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site ?? `https://${site.n
       })();
     </script>
 
-    <!-- Organization structured data -->
-    <script type="application/ld+json" is:inline set:html={JSON.stringify({
-      "@context": "https://schema.org",
-      "@type": "Organization",
-      "name": site.name,
-      "slogan": site.tagline,
-      "description": site.description,
-      "url": Astro.site?.toString() ?? "/",
-      "email": `mailto:${site.email}`,
-      "address": {
-        "@type": "PostalAddress",
-        "addressLocality": site.location,
-        "addressCountry": "AR"
-      },
-      "sameAs": Object.values(site.social),
-    })} />
+    <!-- ProfessionalService structured data -->
+    <script type="application/ld+json" is:inline set:html={JSON.stringify(professionalService)} />
 
     <!-- Website structured data -->
     <script type="application/ld+json" is:inline set:html={JSON.stringify({
