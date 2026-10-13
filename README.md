@@ -133,6 +133,6 @@ El proyecto usa `output: 'static'` implícito de Astro 7. El endpoint `src/pages
 
 ## Aviso
 
-Todos los proyectos, clientes y métricas son ficticios. El dominio `marcialfantini.com` no está
+Todos los proyectos, clientes y métricas son ficticios. El dominio `marcialfantini.site` no está
 registrado a este proyecto al momento del build. Para deploy real: editar `astro.config.mjs`
 campo `site` y los URLs en `src/data/site.json`.

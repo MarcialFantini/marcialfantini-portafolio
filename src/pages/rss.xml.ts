@@ -6,7 +6,7 @@ export const prerender = true;
 
 export const GET: APIRoute = async ({ site: astroSite }) => {
   const sorted = await getPublishedPosts();
-  const baseUrl = astroSite?.toString() ?? 'https://marcialfantini.com';
+  const baseUrl = astroSite?.toString() ?? 'https://www.marcialfantini.site';
 
   const escapeXml = (s: string) => s
     .replace(/&/g, '&amp;')

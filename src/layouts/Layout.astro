@@ -24,7 +24,7 @@ const {
 
 const showRss = await hasPublishedPosts();
 
-const siteURL = Astro.site ?? new URL("https://marcialfantini.com");
+const siteURL = Astro.site ?? new URL("https://www.marcialfantini.site");
 const canonicalURL = new URL(Astro.url.pathname, siteURL);
 const isHome = Astro.url.pathname === "/";
 

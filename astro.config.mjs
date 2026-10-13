@@ -3,7 +3,7 @@ import { defineConfig } from 'astro/config';
 import tailwindcss from '@tailwindcss/vite';
 import sitemap from '@astrojs/sitemap';
 
-const SITE = 'https://marcialfantini.com';
+const SITE = 'https://www.marcialfantini.site';
 
 // Rutas fuera del sitemap: indices que hoy son estados vacios (noindex) y utilidades.
 const EXCLUDED = new Set([
