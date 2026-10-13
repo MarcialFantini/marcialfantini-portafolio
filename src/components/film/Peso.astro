@@ -5,14 +5,14 @@ const { from, to } = Astro.props;
 
 // x/y: % del stage (centro del chip). d: cuándo entra (0..1). dy: deriva en px. r: rotación final en grados.
 const chips = [
-  { t: "12 mensajes sin responder", x: 32, y: 20, d: 0.06, dy: 46, r: -5 },
-  { t: "Sin sitio web", x: 69, y: 28, d: 0.14, dy: 38, r: 4 },
-  { t: "Clientes que no vuelven", x: 50, y: 38, d: 0.22, dy: 52, r: -2 },
-  { t: "Invisible en Google", x: 33, y: 52, d: 0.3, dy: 40, r: 6 },
-  { t: "¿Tenés página?", x: 68, y: 60, d: 0.38, dy: 34, r: -6 },
-  { t: "Todo por WhatsApp", x: 46, y: 70, d: 0.46, dy: 44, r: 3 },
-  { t: "Presupuestos perdidos", x: 70, y: 80, d: 0.54, dy: 30, r: -4 },
-  { t: "La competencia, primero", x: 31, y: 84, d: 0.62, dy: 36, r: 5 },
+  { t: "12 mensajes sin responder", x: 32, y: 20, d: 0.04, dy: 46, r: -5 },
+  { t: "Sin sitio web", x: 69, y: 28, d: 0.11, dy: 38, r: 4 },
+  { t: "Clientes que no vuelven", x: 50, y: 38, d: 0.18, dy: 52, r: -2 },
+  { t: "Google muestra a la competencia", x: 33, y: 52, d: 0.25, dy: 40, r: 6 },
+  { t: "¿Tenés página?", x: 68, y: 60, d: 0.32, dy: 34, r: -6 },
+  { t: "Todo por WhatsApp", x: 46, y: 70, d: 0.39, dy: 44, r: 3 },
+  { t: "Presupuestos perdidos", x: 70, y: 80, d: 0.46, dy: 30, r: -4 },
+  { t: "“Pasame el link”", x: 31, y: 84, d: 0.53, dy: 36, r: 5 },
 ];
 ---
 
@@ -42,13 +42,15 @@ const chips = [
         {site.location} · Desarrollo full-stack freelance
       </p>
       <h1 class="peso__h1">
-        Software que cierra <span class="text-glow-gold">más ventas</span> para PyMEs.
+        Sitios web que traen <span class="text-glow-gold">clientes</span> a tu PyME.
       </h1>
       <p class="peso__lead">
-        Mensajes sin responder, nada en Google, clientes que no vuelven. Eso pesa.
+        Te piden el link y no tenés. Te escriben de noche y nadie contesta. En Google aparece tu competencia.
       </p>
       <span class="peso__hint" aria-hidden="true">Scrolleá</span>
     </div>
+
+    <a href="#servicios-precios" class="peso__skip">Ver servicios y precios <span aria-hidden="true">↓</span></a>
   </div>
 </div>
 
@@ -67,7 +69,7 @@ const chips = [
     z-index: -1;
   }
   .peso__chip {
-    --v: clamp(0, calc((var(--p) - var(--d)) * 3.5), 1);
+    --v: clamp(0, calc((var(--p) - var(--d)) * 5), 1);
     opacity: var(--v);
     transform: translate3d(-50%, calc(-50% + (1 - var(--v)) * 44px + var(--p) * var(--dy) * 1px), 0)
       rotate(calc(var(--r) * 1deg * (0.35 + var(--e) * 0.65)))
@@ -130,7 +132,7 @@ const chips = [
   }
   .peso__h1 {
     margin-top: 1.5rem;
-    max-width: 16ch;
+    max-width: 17ch;
     font-family: var(--font-display);
     font-weight: 600;
     font-size: clamp(2.3rem, min(9.4vw, 13svh), 5.6rem);
@@ -154,6 +156,32 @@ const chips = [
     letter-spacing: 0.22em;
     text-transform: uppercase;
     color: rgba(246, 241, 228, 0.45);
+  }
+  /* Saltar el film: visible mientras el titular está en pantalla, accesible por teclado */
+  .peso__skip {
+    position: absolute;
+    left: 50%;
+    bottom: 1.5rem;
+    z-index: 2;
+    padding: 0.5rem 1rem;
+    border: 1px solid rgba(255, 210, 74, 0.5);
+    border-radius: 999px;
+    background: rgba(10, 19, 48, 0.6);
+    color: var(--color-neon);
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-decoration: none;
+    white-space: nowrap;
+    opacity: clamp(0, calc((0.6 - var(--p)) * 6), 1);
+    transform: translate3d(-50%, 0, 0);
+    pointer-events: auto;
+  }
+  .peso.is-late .peso__skip,
+  .peso.is-done .peso__skip { pointer-events: none; }
+  .peso__skip:focus-visible {
+    opacity: 1;
+    outline: 2px solid var(--color-ivory);
+    outline-offset: 3px;
   }
   @media (min-width: 768px) {
     .peso__eyebrow { font-size: 0.8125rem; }
@@ -186,6 +214,15 @@ const chips = [
       transform: none;
       pointer-events: auto;
       padding-bottom: 2rem;
+    }
+    .peso__skip {
+      position: relative;
+      left: auto;
+      bottom: auto;
+      align-self: center;
+      margin-bottom: 2rem;
+      opacity: 1;
+      transform: none;
     }
     .peso__press,
     .peso__hint { display: none; }

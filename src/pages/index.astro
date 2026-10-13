@@ -17,11 +17,11 @@ import site from "../data/site.json";
 // Un solo film: alto total = suma de las escenas (svh). Cada escena ocupa un tramo
 // contiguo [from, to] del progreso global P (0..1); motion.ts deriva su --p local.
 const scenes = [
-  { key: "peso", chapter: "Inicio", len: 320 },
-  { key: "giro", chapter: "El giro", len: 280 },
-  { key: "solucion", chapter: "La solución", len: 380 },
-  { key: "alivio", chapter: "El alivio", len: 300 },
-  { key: "cierre", chapter: "Cierre", len: 220 },
+  { key: "peso", chapter: "Inicio", len: 160 },
+  { key: "giro", chapter: "La oferta", len: 130 },
+  { key: "solucion", chapter: "Servicios", len: 180 },
+  { key: "alivio", chapter: "Resultados reales", len: 150 },
+  { key: "cierre", chapter: "Auditoría gratis", len: 110 },
 ];
 const total = scenes.reduce((a, s) => a + s.len, 0);
 let acc = 0;
@@ -55,10 +55,19 @@ const [rPeso, rGiro, rSol, rAlivio, rCierre] = ranges;
       <Alivio from={rAlivio.from} to={rAlivio.to} />
       <Cierre from={rCierre.from} to={rCierre.to} />
     </div>
+    <a
+      href="/contacto?servicio=Auditor%C3%ADa%20gratis"
+      class="film-cta"
+      data-film-cta
+      tabindex="-1"
+      aria-hidden="true"
+    >
+      Auditoría gratis de 15 min
+    </a>
   </div>
   <div class="panel" data-chapter="Sobre mí"><SobreMi /></div>
   <div class="panel" data-chapter="Resultados"><Metricas /></div>
-  <div class="panel" data-chapter="Servicios"><Servicios /></div>
+  <div class="panel" id="servicios-precios" data-chapter="Servicios"><Servicios /></div>
   <div class="panel" data-chapter="Proyectos"><Proyectos /></div>
   <div class="panel" data-chapter="Escritos"><BlogPreview /></div>
   <div class="panel" data-chapter="Dudas"><FAQ /></div>

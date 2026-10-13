@@ -2,17 +2,28 @@
 // Mismas posiciones que Peso: la escena arranca con el ruido ya acumulado y lo colapsa.
 // En el solapamiento del seam esta capa aparece (opacity) justo encima de Peso:
 // el estado visual inicial coincide con el final de Peso, así que no se ven chips duplicados.
+import servicios from "../../data/servicios.json";
+
 const { from, to } = Astro.props;
 const shards = [
   { t: "12 mensajes sin responder", x: 32, y: 20, dy: 46, r: -5 },
   { t: "Sin sitio web", x: 69, y: 28, dy: 38, r: 4 },
   { t: "Clientes que no vuelven", x: 50, y: 38, dy: 52, r: -2 },
-  { t: "Invisible en Google", x: 33, y: 52, dy: 40, r: 6 },
+  { t: "Google muestra a la competencia", x: 33, y: 52, dy: 40, r: 6 },
   { t: "¿Tenés página?", x: 68, y: 60, dy: 34, r: -6 },
   { t: "Todo por WhatsApp", x: 46, y: 70, dy: 44, r: 3 },
   { t: "Presupuestos perdidos", x: 70, y: 80, dy: 30, r: -4 },
-  { t: "La competencia, primero", x: 31, y: 84, dy: 36, r: 5 },
+  { t: "“Pasame el link”", x: 31, y: 84, dy: 36, r: 5 },
 ];
+
+// Ancla de precio: el mínimo real de los rangos "USD a – b" de servicios.json
+const minUsd = Math.min(
+  ...servicios
+    .map((s) => /USD\s*([\d.]+)/.exec(s.precioOrientativo)?.[1])
+    .filter((n): n is string => !!n)
+    .map((n) => Number(n.replace(/\./g, "")))
+);
+const minLabel = `USD ${minUsd.toLocaleString("es-AR")}`;
 ---
 
 <div class="film-layer giro" data-film-scene="giro" data-from={from} data-to={to}>
@@ -35,18 +46,18 @@ const shards = [
 
     <div class="giro__content">
       <h2 class="giro__h2">
-        <span class="giro__line film-will" style="--s:0.30">Un sitio que</span>
-        <span class="giro__line film-will" style="--s:0.38"><span class="text-glow-gold">trabaja</span> por vos</span>
-        <span class="giro__line film-will" style="--s:0.46">mientras dormís.</span>
+        <span class="giro__line film-will" style="--s:0.16">Un sitio que vende</span>
+        <span class="giro__line film-will" style="--s:0.26"><span class="text-glow-gold">mientras dormís</span>.</span>
       </h2>
       <p class="giro__sub film-will">
-        Ordenás una vez. Tus clientes te encuentran, te escriben y te compran, todos los días.
+        Empezá con una auditoría gratis de 15 minutos: te digo qué te falta para que te encuentren y te escriban.
       </p>
+      <p class="giro__price film-will">Proyectos desde {minLabel} · precios orientativos</p>
       <div class="giro__cta film-will">
         <a href="/contacto?servicio=Auditor%C3%ADa%20gratis" class="btn-sunset">
-          Reservá una auditoría de 15 min
+          Reservá tu auditoría gratis de 15 min
         </a>
-        <a href="/proyectos" class="btn-ghost">Ver proyectos</a>
+        <a href="#servicios-precios" class="btn-ghost">Ver servicios y precios</a>
       </div>
     </div>
   </div>
@@ -65,7 +76,7 @@ const shards = [
     z-index: -2;
   }
   .giro__shard {
-    --k: clamp(0, calc(var(--p) / 0.3), 1);
+    --k: clamp(0, calc(var(--p) / 0.2), 1);
     opacity: calc(1 - var(--k));
     border-color: rgba(255, 210, 74, calc(0.2 + var(--k) * 0.5));
     transform: translate3d(
@@ -82,7 +93,7 @@ const shards = [
     inset: -20%;
     z-index: -1;
     background: radial-gradient(circle at 50% 50%, rgba(255, 233, 160, 0.95) 0%, rgba(255, 210, 74, 0.55) 22%, transparent 58%);
-    opacity: clamp(0, min(calc(var(--p) / 0.1), calc((0.4 - var(--p)) / 0.3)), 1);
+    opacity: clamp(0, min(calc(var(--p) / 0.07), calc((0.28 - var(--p)) / 0.2)), 1);
     transform: scale(calc(0.35 + var(--p) * 2.6));
     pointer-events: none;
   }
@@ -94,8 +105,8 @@ const shards = [
     z-index: -1;
     width: 55%;
     background: linear-gradient(90deg, transparent, rgba(255, 210, 74, 0.38), rgba(255, 246, 214, 0.55), rgba(255, 210, 74, 0.38), transparent);
-    opacity: clamp(0, min(calc((var(--p) - 0.04) / 0.1), calc((0.62 - var(--p)) / 0.2)), 1);
-    transform: translate3d(calc(-130% + clamp(0, calc((var(--p) - 0.04) / 0.56), 1) * 340%), 0, 0) skewX(-18deg);
+    opacity: clamp(0, min(calc((var(--p) - 0.03) / 0.07), calc((0.42 - var(--p)) / 0.14)), 1);
+    transform: translate3d(calc(-130% + clamp(0, calc((var(--p) - 0.03) / 0.4), 1) * 340%), 0, 0) skewX(-18deg);
     pointer-events: none;
   }
   .giro__halo {
@@ -103,7 +114,7 @@ const shards = [
     inset: 0;
     z-index: -1;
     background: radial-gradient(520px 340px at 50% 48%, rgba(246, 241, 228, 0.1), transparent 70%);
-    opacity: clamp(0, calc((var(--p) - 0.28) * 3), 1);
+    opacity: clamp(0, calc((var(--p) - 0.18) * 4), 1);
     pointer-events: none;
   }
   .giro__content {
@@ -126,15 +137,15 @@ const shards = [
     color: var(--color-ivory);
   }
   .giro__line {
-    --v: clamp(0, calc((var(--p) - var(--s)) * 5), 1);
+    --v: clamp(0, calc((var(--p) - var(--s)) * 7), 1);
     display: block;
     opacity: var(--v);
     transform: translate3d(0, calc((1 - var(--v)) * 3.5svh), 0);
     filter: blur(calc((1 - var(--v)) * 8px));
   }
   .giro__sub {
-    --v: clamp(0, calc((var(--p) - 0.55) * 5), 1);
-    margin-top: 1.5rem;
+    --v: clamp(0, calc((var(--p) - 0.36) * 7), 1);
+    margin-top: 1.25rem;
     max-width: 32rem;
     font-size: clamp(1rem, 3.6vw, 1.25rem);
     line-height: 1.55;
@@ -142,9 +153,21 @@ const shards = [
     opacity: var(--v);
     transform: translate3d(0, calc((1 - var(--v)) * 2svh), 0);
   }
+  .giro__price {
+    --v: clamp(0, calc((var(--p) - 0.48) * 7), 1);
+    margin-top: 1rem;
+    padding: 0.35rem 0.9rem;
+    border: 1px solid rgba(255, 210, 74, 0.4);
+    border-radius: 999px;
+    font-family: var(--font-mono);
+    font-size: clamp(0.72rem, 3vw, 0.9rem);
+    color: var(--color-neon);
+    opacity: var(--v);
+    transform: translate3d(0, calc((1 - var(--v)) * 2svh), 0);
+  }
   .giro__cta {
-    --v: clamp(0, calc((var(--p) - 0.66) * 5), 1);
-    margin-top: 2rem;
+    --v: clamp(0, calc((var(--p) - 0.6) * 6), 1);
+    margin-top: 1.5rem;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -165,6 +188,7 @@ const shards = [
     .giro__content { position: relative; padding-block: 4rem; }
     .giro__line,
     .giro__sub,
+    .giro__price,
     .giro__cta {
       opacity: 1;
       transform: none;

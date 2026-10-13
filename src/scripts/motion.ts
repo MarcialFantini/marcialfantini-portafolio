@@ -42,6 +42,9 @@ const HEADER_PROBE = 36;
 let header: HTMLElement | null = null;
 let headerOver = false;
 let headerIo: IntersectionObserver | null = null;
+/* CTA persistente: visible desde que termina El giro hasta que arranca el cierre */
+let filmCta: HTMLElement | null = null;
+let ctaOn = false;
 const clamp01 = (n: number) => (n < 0 ? 0 : n > 1 ? 1 : n);
 const easeInOutCubic = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
 
@@ -125,12 +128,16 @@ function frame() {
   // Film: lecturas primero (todas), escrituras al final del frame
   const filmWrites: { l: Layer; p: number; o: number; active: boolean; late: boolean; done: boolean }[] = [];
   let overFilm = false;
+  let showCta = false;
   if (filmEl) {
     const r = filmEl.getBoundingClientRect();
     // El stage sticky cubre el viewport mientras el wrapper cruza la franja del header
     if (r.top <= HEADER_PROBE && r.bottom > HEADER_PROBE) overFilm = true;
     const span = r.height - vh;
     const P = span > 0 ? clamp01(-r.top / span) : 0;
+    if (layers.length > 2 && r.top <= 0 && r.bottom > vh * 0.5) {
+      showCta = P >= layers[1].to && P < layers[layers.length - 1].from - 0.005;
+    }
     for (const l of layers) {
       const p = clamp01((P - l.from) / (l.to - l.from));
       const o = l.first ? 1 : clamp01((P - l.from) / FADE);
@@ -159,6 +166,13 @@ function frame() {
   if (overFilm !== headerOver) {
     headerOver = overFilm;
     header?.classList.toggle("is-over-film", overFilm);
+  }
+
+  if (showCta !== ctaOn && filmCta) {
+    ctaOn = showCta;
+    filmCta.classList.toggle("is-on", showCta);
+    filmCta.tabIndex = showCta ? 0 : -1;
+    filmCta.setAttribute("aria-hidden", showCta ? "false" : "true");
   }
 
   for (const w of filmWrites) {
@@ -252,6 +266,8 @@ function setup() {
     late: false,
     done: false,
   }));
+  filmCta = document.querySelector<HTMLElement>("[data-film-cta]");
+  ctaOn = false;
   bar = document.querySelector<HTMLElement>(".page-progress");
   glow = document.querySelector<HTMLElement>(".spotlight");
   document.querySelectorAll<HTMLElement>(".btn-sunset, .btn-ghost").forEach(bindMagnet);

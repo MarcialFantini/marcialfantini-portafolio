@@ -1,4 +1,6 @@
 ---
+import site from "../../data/site.json";
+
 const { from, to } = Astro.props;
 ---
 
@@ -9,10 +11,16 @@ const { from, to } = Astro.props;
 
     <div class="cierre__content">
       <h2 class="cierre__h2 film-will">
-        Hablemos de <span class="text-glow-gold">tu sitio</span>.
+        Tu auditoría es <span class="text-glow-gold">gratis</span>.
       </h2>
+      <p class="cierre__sub film-will">
+        15 minutos. Te digo qué cambiaría en tu sitio para que consigas más consultas.
+      </p>
       <div class="cierre__cta film-will">
-        <a href="/contacto" class="cierre__btn">Quiero mi sitio</a>
+        <a href="/contacto?servicio=Auditor%C3%ADa%20gratis" class="cierre__btn">
+          Reservá tu auditoría gratis de 15 min
+        </a>
+        <a href={`mailto:${site.email}`} class="cierre__mail">o escribime a {site.email}</a>
       </div>
     </div>
 
@@ -33,7 +41,7 @@ const { from, to } = Astro.props;
     inset: 0;
     z-index: -2;
     background: radial-gradient(560px 380px at 50% 48%, rgba(255, 210, 74, 0.22), transparent 70%);
-    opacity: clamp(0, calc(var(--p) * 2.2), 1);
+    opacity: clamp(0, calc(var(--p) * 3), 1);
     pointer-events: none;
   }
   .cierre__content {
@@ -43,14 +51,14 @@ const { from, to } = Astro.props;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 5rem 1.25rem 3rem;
+    padding: 5rem 1.25rem 7rem;
     text-align: center;
   }
   .cierre__h2 {
-    --v: clamp(0, calc(var(--p) * 4), 1);
+    --v: clamp(0, calc(var(--p) * 6), 1);
     font-family: var(--font-display);
     font-weight: 600;
-    font-size: clamp(2.6rem, 11vw, 7rem);
+    font-size: clamp(2.4rem, 10vw, 6.4rem);
     line-height: 1;
     letter-spacing: -0.05em;
     text-transform: none;
@@ -59,8 +67,22 @@ const { from, to } = Astro.props;
     transform: translate3d(0, calc((1 - var(--v)) * 4svh), 0) scale(calc(0.96 + var(--v) * 0.04));
     filter: blur(calc((1 - var(--v)) * 8px));
   }
+  .cierre__sub {
+    --v: clamp(0, calc((var(--p) - 0.12) * 6), 1);
+    margin-top: 1.25rem;
+    max-width: 30rem;
+    font-size: clamp(1rem, 3.6vw, 1.25rem);
+    line-height: 1.5;
+    color: var(--color-ivory-dim);
+    opacity: var(--v);
+    transform: translate3d(0, calc((1 - var(--v)) * 2svh), 0);
+  }
   .cierre__cta {
-    --v: clamp(0, calc((var(--p) - 0.25) * 4), 1);
+    --v: clamp(0, calc((var(--p) - 0.24) * 5), 1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
     margin-top: 2rem;
     opacity: var(--v);
     transform: translate3d(0, calc((1 - var(--v)) * 3svh), 0);
@@ -69,17 +91,25 @@ const { from, to } = Astro.props;
   .cierre.is-late .cierre__cta { pointer-events: auto; }
   .cierre__btn {
     display: inline-block;
-    padding: 0.95rem 2rem;
+    padding: 0.95rem 1.6rem;
     border-radius: 14px;
     background: var(--color-neon);
     color: var(--color-navy-950);
     font-weight: 700;
-    font-size: clamp(1rem, 3.8vw, 1.2rem);
+    font-size: clamp(0.95rem, 3.8vw, 1.2rem);
     text-decoration: none;
     box-shadow: 0 0 40px rgba(255, 210, 74, 0.55), 0 0 110px rgba(255, 210, 74, 0.25);
     transition: transform 0.25s ease;
   }
   .cierre__btn:hover { transform: translateY(-2px); }
+  .cierre__mail {
+    font-size: 0.9rem;
+    color: var(--color-ivory-dim);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    overflow-wrap: anywhere;
+  }
+  .cierre__mail:hover { color: var(--color-neon); }
 
   /* Desvanece al color de página en el último tramo del scroll */
   .film-seam {
@@ -87,16 +117,17 @@ const { from, to } = Astro.props;
     left: 0;
     right: 0;
     bottom: 0;
-    height: 38svh;
+    height: 26svh;
     z-index: 1;
     background: linear-gradient(180deg, transparent 0%, var(--color-page) 100%);
-    opacity: clamp(0, calc((var(--p) - 0.55) * 2.4), 1);
+    opacity: clamp(0, calc((var(--p) - 0.5) * 3), 1);
     pointer-events: none;
   }
 
   @media (prefers-reduced-motion: reduce) {
     .cierre__content { position: relative; padding-block: 4rem; }
     .cierre__h2,
+    .cierre__sub,
     .cierre__cta {
       opacity: 1;
       transform: none;
