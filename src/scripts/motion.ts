@@ -42,12 +42,11 @@ const HEADER_PROBE = 36;
 let header: HTMLElement | null = null;
 let headerOver = false;
 let headerIo: IntersectionObserver | null = null;
-/* CTA flotante: disponible desde que el titular del hero se apaga (~40% de El peso) hasta que arranca el cierre,
-   que trae su propia CTA grande. El hero trae la suya en pantalla desde el primer frame. */
+/* CTA flotante: aparece al salir del hero (que trae la suya) y se retira cuando arranca el cierre,
+   que trae su propia CTA grande. Una sola CTA primaria por momento. */
 let filmCta: HTMLElement | null = null;
 let ctaOn = false;
-const CTA_FROM = 0.4;
-/* Salto "Ver servicios y precios": visible durante todo el film */
+/* Salto "Ver servicios y precios": visible desde que el hero termina hasta el final del film */
 let filmSkip: HTMLElement | null = null;
 let skipOn = false;
 const clamp01 = (n: number) => (n < 0 ? 0 : n > 1 ? 1 : n);
@@ -145,8 +144,9 @@ function frame() {
     const span = r.height - vh;
     const P = span > 0 ? clamp01(-r.top / span) : 0;
     if (layers.length > 2 && r.top <= 0 && r.bottom > vh * 0.5) {
-      showSkip = true;
-      showCta = P >= layers[0].from + (layers[0].to - layers[0].from) * CTA_FROM && P < layers[layers.length - 1].from - 0.005;
+      const afterHero = P >= layers[0].to - 0.01;
+      showSkip = afterHero;
+      showCta = afterHero && P < layers[layers.length - 1].from - 0.005;
     }
     for (const l of layers) {
       const p = clamp01((P - l.from) / (l.to - l.from));

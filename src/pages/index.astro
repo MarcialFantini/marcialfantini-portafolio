@@ -3,7 +3,6 @@ import Layout from "../layouts/Layout.astro";
 import Peso from "../components/film/Peso.astro";
 import Giro from "../components/film/Giro.astro";
 import Solucion from "../components/film/Solucion.astro";
-import Alivio from "../components/film/Alivio.astro";
 import Cierre from "../components/film/Cierre.astro";
 import SobreMi from "../components/SobreMi.astro";
 import Servicios from "../components/Servicios.astro";
@@ -21,10 +20,9 @@ const showBlog = await hasPublishedPosts();
 // contiguo [from, to] del progreso global P (0..1); motion.ts deriva su --p local.
 const scenes = [
   { key: "peso", chapter: "Inicio", len: 110 },
-  { key: "giro", chapter: "La oferta", len: 90 },
-  { key: "solucion", chapter: "Servicios", len: 120 },
-  { key: "alivio", chapter: "El alivio", len: 100 },
-  { key: "cierre", chapter: "Auditoría gratis", len: 80 },
+  { key: "giro", chapter: "La oferta", len: 75 },
+  { key: "solucion", chapter: "Servicios", len: 100 },
+  { key: "cierre", chapter: "Auditoría gratis", len: 100 },
 ];
 const total = scenes.reduce((a, s) => a + s.len, 0);
 let acc = 0;
@@ -34,7 +32,7 @@ const ranges = scenes.map((s) => {
   const to = acc / total;
   return { ...s, from: +from.toFixed(5), to: +to.toFixed(5) };
 });
-const [rPeso, rGiro, rSol, rAlivio, rCierre] = ranges;
+const [rPeso, rGiro, rSol, rCierre] = ranges;
 ---
 
 <Layout
@@ -61,7 +59,6 @@ const [rPeso, rGiro, rSol, rAlivio, rCierre] = ranges;
       <Peso from={rPeso.from} to={rPeso.to} />
       <Giro from={rGiro.from} to={rGiro.to} />
       <Solucion from={rSol.from} to={rSol.to} />
-      <Alivio from={rAlivio.from} to={rAlivio.to} />
       <Cierre from={rCierre.from} to={rCierre.to} />
     </div>
     <a
