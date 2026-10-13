@@ -2,13 +2,24 @@
 import site from "../data/site.json";
 import SectionAnchor from "./SectionAnchor.astro";
 
-const servicioParam = Astro.url.searchParams.get("servicio");
-const initialSubject = servicioParam
-  ? `Consulta sobre ${servicioParam}`
-  : "Consulta desde marcialfantini.com";
-const initialBody = servicioParam
+import servicios from "../data/servicios.json";
+
+const GENERIC_OPTION = "Quiero hablar de mi proyecto";
+const rawParam = Astro.url.searchParams.get("servicio");
+const isAudit = rawParam === "Auditoría gratis";
+// Cualquier valor que no sea un servicio conocido (p. ej. la auditoría gratis) cae en la opción genérica.
+const servicioParam =
+  rawParam && servicios.some((s) => s.titulo === rawParam) ? rawParam : rawParam ? GENERIC_OPTION : null;
+const initialSubject = isAudit
+  ? "Quiero la auditoría gratis de 15 min"
+  : servicioParam
+    ? `Consulta sobre ${servicioParam}`
+    : "Consulta desde marcialfantini.com";
+const initialBody = isAudit
+  ? "Hola Marcial,\n\nQuiero reservar la auditoría gratis de 15 minutos.\n\nMi nombre:\nMi empresa/negocio:\nQué necesito resolver:\n\nGracias."
+  : servicioParam && servicioParam !== GENERIC_OPTION
   ? `Hola Marcial,\n\nQuiero conversar sobre el servicio "${servicioParam}".\n\nMi nombre:\nMi empresa/negocio:\nQué necesito resolver:\n\nGracias.`
-  : "Hola Marcial,\n\nQuiero conversar sobre un proyecto.\n\nMi nombre:\nMi empresa/negocio:\nQué necesito resolver:\n\nGracias.";
+  :"Hola Marcial,\n\nQuiero conversar sobre un proyecto.\n\nMi nombre:\nMi empresa/negocio:\nQué necesito resolver:\n\nGracias.";
 
 const email = site.email;
 const gmailCompose = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(email)}&su=${encodeURIComponent(initialSubject)}&body=${encodeURIComponent(initialBody)}`;
@@ -160,17 +171,15 @@ const outlookCompose = `https://outlook.live.com/mail/0/deeplink/compose?to=${en
               class="w-full px-4 py-3 rounded-md border border-[var(--color-border)] bg-white text-[var(--color-ink)] transition-colors"
             >
               <option value="">Elegí uno</option>
-              <option value="Sistema de Ventas Online" selected={servicioParam === 'Sistema de Ventas Online'}>
-                Sistema de Ventas Online
-              </option>
-              <option value="Tienda Express 30d" selected={servicioParam === 'Tienda Express 30d'}>
-                Tienda Express 30d
-              </option>
-              <option value="Rescate de Conversión" selected={servicioParam === 'Rescate de Conversión'}>
-                Rescate de Conversión
-              </option>
-              <option value="Automatizaciones que Pagan" selected={servicioParam === 'Automatizaciones que Pagan'}>
-                Automatizaciones que Pagan
+              {
+                servicios.map((s) => (
+                  <option value={s.titulo} selected={servicioParam === s.titulo}>
+                    {s.titulo}
+                  </option>
+                ))
+              }
+              <option value={GENERIC_OPTION} selected={servicioParam === GENERIC_OPTION}>
+                {GENERIC_OPTION}
               </option>
               <option value="Otro">Otro / no estoy seguro</option>
             </select>
@@ -220,6 +229,15 @@ const outlookCompose = `https://outlook.live.com/mail/0/deeplink/compose?to=${en
   }}
 >
   (function () {
+    // El sitio es estático: ?servicio= solo se lee en el cliente. Valores desconocidos
+    // (p. ej. "Auditoría gratis") caen en la opción genérica.
+    const select = document.getElementById('servicio');
+    const param = new URLSearchParams(window.location.search).get('servicio');
+    if (select instanceof HTMLSelectElement && param) {
+      const known = Array.from(select.options).some((o) => o.value === param);
+      select.value = known ? param : 'Quiero hablar de mi proyecto';
+    }
+
     const form = document.getElementById('contact-form');
     if (form instanceof HTMLFormElement) {
       form.addEventListener('submit', (event) => {

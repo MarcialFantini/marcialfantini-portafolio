@@ -56,6 +56,14 @@
   --color-ivory-dim: #CFC9B8;
   --color-neon: #FFD24A;
   --color-gold-muted: #C8A24E;
+
+  /* Fondo secundario "oro marfil": resalta los servicios frente a los paneles blancos */
+  --color-oro-from: #FFF8E1;
+  --color-oro-to: #F2DD9A;
+  --color-oro-edge: #C8A24E;
+  --color-oro-ink: #0F1A3A;
+  --color-oro-ink-soft: #2B3558;
+  --color-oro-price: #6B4F0C;
   --shadow-glow-gold: 0 0 24px rgba(255, 210, 74, 0.45), 0 0 90px rgba(255, 210, 74, 0.22);
 
   /* Radius */
@@ -1045,6 +1053,39 @@
   @media (min-width: 768px) { .panel { margin: 18px max(16px, calc((100vw - 76rem) / 2)); border-radius: 36px; } }
   .panel > section { border: 0 !important; background-color: transparent; }
   .panel > section.bg-\[var\(--color-ink\)\] { background-color: var(--color-ink); }
+
+  /* Panel secundario oro marfil (servicios). Re-mapea tokens localmente: texto azul marino
+     sobre marfil, también bajo .dark, para que el contraste no dependa del tema. */
+  .panel--oro {
+    --color-ink: var(--color-oro-ink);
+    --color-ink-soft: var(--color-oro-ink-soft);
+    --color-mute: #5C4A1C;
+    --color-azul: #1B2B5C;
+    --color-border: rgba(166, 132, 58, 0.45);
+    --color-blanco: #FFFFFF;
+    --color-azul-soft: #EEF0F8;
+    --color-dorado: #C8A24E;
+    --color-dorado-deep: var(--color-oro-price);
+    background: linear-gradient(180deg, var(--color-oro-from) 0%, var(--color-oro-to) 100%);
+    border-color: var(--color-oro-edge);
+    border-top: 4px solid var(--color-oro-edge);
+    color: var(--color-oro-ink);
+  }
+  .panel--oro .btn-sunset {
+    background: var(--color-oro-ink);
+    color: var(--color-neon);
+    box-shadow: 0 8px 24px -10px rgba(15, 26, 58, 0.55);
+  }
+  .panel--oro .btn-sunset:hover { color: var(--color-oro-ink); }
+  .panel--oro .svc__price { color: var(--color-oro-price); }
+  .panel--oro .svc__quote { color: var(--color-oro-price); }
+  .panel--oro .svc { border-bottom-color: rgba(166, 132, 58, 0.45); }
+  .panel--oro .svc[open] {
+    background: rgba(255, 255, 255, 0.45);
+    border-radius: 14px;
+    padding-inline: 1rem;
+  }
+  @media (min-width: 768px) { .panel--oro .svc[open] { padding-inline: 1.5rem; } }
 
   /* Botones: rectángulo redondeado (no píldora) */
   .btn-sunset, .btn-ghost { border-radius: 14px; }

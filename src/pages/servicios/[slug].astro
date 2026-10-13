@@ -13,54 +13,70 @@ export const getStaticPaths = (async () => {
 
 const { servicio } = Astro.props;
 
-// Build 4-5 realistic FAQs per service
+// Preguntas frecuentes por servicio (plazos y precios orientativos).
 const faqsPorServicio: Record<string, { pregunta: string; respuesta: string }[]> = {
-  "sistema-ventas-online": [
+  "web-productos-servicios": [
     {
-      pregunta: "¿Cuánto tarda un sitio tipo 'sistema de ventas'?",
-      respuesta: "Entre 3 y 8 semanas. La mayoría de nuestros proyectos cierra en 4-5. Si necesitás algo más rápido, hay recargo express.",
+      pregunta: "¿Cuánto cuesta una página web para mi negocio?",
+      respuesta: "Arranca desde USD 300. El valor final depende de cuántas secciones necesites y de qué tengamos que armar; te lo pasamos por escrito antes de empezar.",
     },
     {
-      pregunta: "¿Qué incluye el SEO técnico?",
-      respuesta: "Schema markup, sitemap, robots.txt, meta tags, Open Graph, datos estructurados LocalBusiness. Lo que Google necesita para indexarte bien. No incluye link building.",
+      pregunta: "¿Cuánto tarda?",
+      respuesta: "Orientativamente entre 1 y 3 semanas. Depende de qué tan rápido nos pases textos, fotos y definiciones. Te confirmamos la fecha en la propuesta.",
     },
     {
-      pregunta: "¿Puedo editar el sitio después?",
-      respuesta: "Si contratás el paquete con CMS (Astro + Content Collections o headless Sanity), sí. Si contratás sitio estático, dependés de nosotros para cambios. Te lo aclaramos en la propuesta.",
-    },
-  ],
-  "tienda-express": [
-    {
-      pregunta: "¿30 días es realista?",
-      respuesta: "Sí, si nos das acceso a productos y fotos en la semana 1. Si hay demoras del lado del cliente, se corre. Si hay demoras nuestras, descontamos del saldo final.",
+      pregunta: "¿Tengo que tener los textos y las fotos listos?",
+      respuesta: "No es obligatorio. Te ayudamos a ordenar qué contar y cómo. Si ya tenés material, mejor; si no, lo vemos juntos.",
     },
     {
-      pregunta: "¿Mercado Pago o Stripe?",
-      respuesta: "Cualquiera de los dos. Elegimos según tu país y volumen. Para Argentina, Mercado Pago casi siempre. Para USD con tarjeta internacional, Stripe.",
-    },
-    {
-      pregunta: "¿Y los envíos?",
-      respuesta: "Calculamos envíos por código postal vía API propia (OCA, Correo Argentino, Andreani). Si querés usar Mercado Envíos, se integra directo.",
+      pregunta: "¿Podré hacer cambios después?",
+      respuesta: "Sí. Te mostramos cómo hacer cambios simples, o los hacemos por vos si preferís. Lo dejamos aclarado en la propuesta.",
     },
   ],
-  "rescate-conversion": [
+  "web-empresarial": [
     {
-      pregunta: "¿Cómo funciona la garantía de Lighthouse +20 puntos?",
-      respuesta: "Medimos antes, trabajamos 2-4 semanas, medimos después. Si Lighthouse mobile no subió al menos 20 puntos, te devolvemos el 100% del proyecto. Medimos en PageSpeed Insights, no en herramientas pagas que inflan.",
+      pregunta: "¿Cuánto cuesta una página empresarial?",
+      respuesta: "Arranca desde USD 400. Según la cantidad de secciones y el contenido, el valor puede variar; te pasamos el presupuesto cerrado por escrito.",
     },
     {
-      pregunta: "¿Qué hacen si mi sitio tiene 15 problemas?",
-      respuesta: "Rankeamos por impacto (los 3 que más mueven la aguja primero). Arreglamos esos en el sprint 1. El resto queda rankeado en el reporte para que decidas si seguís o no.",
+      pregunta: "¿En qué se diferencia de una página web simple?",
+      respuesta: "Tiene más secciones y más cuidado en la imagen: quiénes son, qué hacen, sus servicios y cómo contactarlos. Está pensada para generar confianza en clientes, proveedores y candidatos.",
+    },
+    {
+      pregunta: "¿Cuánto tarda?",
+      respuesta: "Orientativamente entre 2 y 4 semanas, según el alcance y la rapidez con la que tengamos el contenido.",
     },
   ],
-  "automatizaciones-pagan": [
+  "ecommerce": [
     {
-      pregunta: "¿Qué herramientas usan?",
-      respuesta: "Node.js + APIs nativas (MercadoLibre, AFIP, HubSpot, etc.) + n8n o Make para workflows no críticos. Nada de BlackBox AI. Las automatizaciones que mueven plata necesitan código auditable.",
+      pregunta: "¿Cuánto cuesta una tienda online?",
+      respuesta: "Arranca desde USD 800. El valor final depende de la cantidad de productos, los medios de pago y las funciones que necesites; te lo detallamos en la propuesta.",
     },
     {
-      pregunta: "¿Cuánto se ahorra?",
-      respuesta: "Típicamente 6 a 15 horas semanales en tareas repetitivas, medido en los primeros 30 días. Te lo cuantificamos en la propuesta con horas reales del flujo actual.",
+      pregunta: "¿Qué medios de pago puedo usar?",
+      respuesta: "Integramos medios de pago habituales, como Mercado Pago. Definimos cuál conviene según tu negocio y tu forma de cobrar.",
+    },
+    {
+      pregunta: "¿Voy a poder cargar mis propios productos?",
+      respuesta: "Sí. Te dejamos un panel para cargar productos y ver los pedidos, y te enseñamos a usarlo.",
+    },
+    {
+      pregunta: "¿Cuánto tarda?",
+      respuesta: "Orientativamente entre 4 y 8 semanas. Cuanto antes tengamos productos, fotos y precios, más rápido se publica.",
+    },
+  ],
+  "software-a-medida": [
+    {
+      pregunta: "¿Cuánto cuesta un software a medida?",
+      respuesta: "Depende de cada proyecto, por eso no hay un precio fijo. Empezamos con una conversación, entendemos qué necesitás y te pasamos una propuesta con alcance, etapas y presupuesto.",
+    },
+    {
+      pregunta: "¿Cómo empezamos?",
+      respuesta: "Con una charla. Contanos qué proceso querés mejorar o qué idea tenés y te decimos con honestidad si conviene hacerlo a medida o usar algo que ya exista.",
+    },
+    {
+      pregunta: "¿Voy a ver avances durante el desarrollo?",
+      respuesta: "Sí. Trabajamos por etapas para que puedas ver y probar lo que se va armando, y ajustar el rumbo a tiempo.",
     },
   ],
 };
@@ -103,7 +119,7 @@ const faqItems = faqsPorServicio[servicio.id] ?? [];
 
       <div class="flex flex-wrap items-center gap-4 text-sm font-mono uppercase tracking-[0.18em] text-[var(--color-mute)]">
         <span class="px-3 py-1.5 rounded-md bg-[var(--color-dorado-soft)] text-[var(--color-dorado-deep)] font-semibold">
-          Desde {servicio.precioOrientativo}
+          {servicio.precioOrientativo}
         </span>
         <span class="px-3 py-1.5 rounded-md bg-[var(--color-azul-soft)] text-[var(--color-azul-deep)] font-semibold">
           {servicio.duracion}
@@ -120,7 +136,7 @@ const faqItems = faqsPorServicio[servicio.id] ?? [];
   <section class="py-12 md:py-16 border-b border-[var(--color-border)] bg-[var(--color-azul)] text-white">
     <div class="container-page max-w-3xl reveal">
       <p class="font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--color-dorado)] mb-3">
-        Resultado esperado
+        Lo que conseguís
       </p>
       <p class="font-impact text-[clamp(1.5rem,3vw,2.5rem)] uppercase leading-[0.98] text-white">
         {servicio.resultadoCuantificado}
@@ -201,20 +217,20 @@ const faqItems = faqsPorServicio[servicio.id] ?? [];
   <section class="py-12 md:py-16 bg-[var(--color-ink)] text-white border-t border-[var(--color-ink)]">
     <div class="container-page text-center max-w-2xl reveal">
       <p class="font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--color-dorado)] mb-3">
-        Sumá este servicio
+        {servicio.precioDesdeUsd == null ? "Iniciemos una conversación" : "Empecemos"}
       </p>
       <h2 class="font-impact text-[clamp(1.75rem,4vw,3rem)] uppercase leading-[0.95] text-white mb-5">
         ¿Te encaja? <span class="text-[var(--color-dorado)]">Hablemos.</span>
       </h2>
       <p class="text-lg text-white/80 leading-relaxed mb-8">
-        30 minutos de auditoría gratis para confirmar que el servicio cubre tu caso. Si no entra, te lo decimos y te orientamos hacia otra opción.
+        Contanos qué necesitás y te respondemos con una primera lectura de tu proyecto. Si preferís, podés empezar por una auditoría gratis de 15 minutos. Si no es lo que te conviene, te lo decimos y te orientamos.
       </p>
       <div class="flex flex-col sm:flex-row gap-3 justify-center">
         <a
           href={`/contacto?servicio=${encodeURIComponent(servicio.titulo)}`}
           class="tactile inline-flex items-center justify-center gap-2 px-7 py-4 rounded-md bg-[var(--color-dorado)] text-[var(--color-azul-deep)] font-mono text-[11px] uppercase tracking-[0.18em] font-bold hover:bg-white"
         >
-          Quiero este servicio
+          {servicio.precioDesdeUsd == null ? servicio.cta : "Quiero este servicio"}
           <span aria-hidden="true">→</span>
         </a>
         <a

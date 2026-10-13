@@ -1,82 +1,85 @@
 [
   {
-    "id": "sistema-ventas-online",
-    "titulo": "Sistema de Ventas Online",
-    "subtitulo": "Tu sitio web como vendedor 24/7",
-    "descripcion": "Un sitio diseñado alrededor de un solo objetivo: que te contacten o te compren. Mobile-first, posicionamiento en Google, formulario de captura o pasarela de pago. Nada de 'páginas web bonitas'.",
-    "resultadoCuantificado": "Sitios que convierten entre 2% y 8% de visitas en consultas o ventas (mediana del sector: 0.5%).",
+    "id": "web-productos-servicios",
+    "titulo": "Página web de productos o servicios",
+    "subtitulo": "Mostrá lo que vendés y que te escriban",
+    "descripcion": "Una página web clara donde tus clientes ven qué ofrecés, cuánto vale y cómo contactarte. Pensada para que se vea bien en el celular y para que te encuentren en Google. Te ayudamos con la estructura y los textos para que no tengas que ocuparte de nada técnico.",
+    "resultadoCuantificado": "Tu negocio con presencia propia en internet: tus productos o servicios a la vista y un camino directo para que te consulten por WhatsApp o formulario.",
     "queIncluye": [
-      "Diseño mobile-first orientado a conversión",
-      "Desarrollo en Astro + TypeScript (carga <1s)",
-      "SEO técnico + on-page para Google",
-      "Analytics + búsqueda de conversiones",
-      "Deploy + hosting incluido 90 días",
-      "Garantía: si en 60 días no sube el tráfico orgánico un +20%, te devolvemos 30% del proyecto"
+      "Diseño a tu marca, adaptado a celular, tablet y computadora",
+      "Secciones para presentar tus productos o servicios",
+      "Botón de WhatsApp y formulario de contacto",
+      "Base de posicionamiento en Google (SEO inicial)",
+      "Publicación online con tu dominio",
+      "Te mostramos cómo hacer cambios simples o los hacemos por vos"
     ],
-    "idealPara": "PyMEs argentinas con servicio local que necesitan presencia digital seria para captar clientes o vender online.",
-    "duracion": "3 a 8 semanas",
-    "precioOrientativo": "USD 1.200 – 4.500",
-    "cta": "Quiero un sistema de ventas",
-    "badge": "MÁS POPULAR"
+    "idealPara": "Negocios, profesionales y emprendedores que ofrecen productos o servicios y todavía no tienen una página propia (o la que tienen no los representa).",
+    "duracion": "1 a 3 semanas (orientativo)",
+    "precioOrientativo": "Desde USD 300",
+    "precioDesdeUsd": 300,
+    "cta": "Quiero mi página web",
+    "badge": "PARA ARRANCAR"
   },
   {
-    "id": "tienda-express",
-    "titulo": "Tienda Express 30d",
-    "subtitulo": "E-commerce funcionando en 30 días, no en 6 meses",
-    "descripcion": "Tienda online con Mercado Pago o Stripe integrada, catálogo autogestionable, checkout optimizado. Si ya vendés por WhatsApp y querés automatizar sin perder el toque personal, esto es para vos.",
-    "resultadoCuantificado": "De 'tengo que copiar y pegar cada pedido' a 'los pedidos caen solos y los despacho' en 30 días.",
+    "id": "web-empresarial",
+    "titulo": "Página empresarial o institucional",
+    "subtitulo": "La cara profesional de tu empresa",
+    "descripcion": "Un sitio institucional para que tu empresa se vea seria, ordenada y confiable. Presentamos quiénes son, qué hacen, sus servicios y cómo contactarlos, con más secciones y más cuidado que una página simple.",
+    "resultadoCuantificado": "Una empresa que genera confianza desde el primer vistazo: clientes, proveedores y candidatos entienden rápido quiénes son y cómo trabajar con ustedes.",
     "queIncluye": [
-      "Catálogo autogestionable (panel simple)",
-      "Mercado Pago o Stripe integrado",
-      "Checkout en 2 pasos",
-      "Panel de pedidos básico",
-      "Carrito persistente",
-      "Bonus: capacitación 1h para que manejes el panel"
+      "Sitio de varias secciones: inicio, nosotros, servicios y contacto",
+      "Diseño profesional alineado a la identidad de tu empresa",
+      "Adaptado a celular, tablet y computadora",
+      "Formularios de contacto y mapa de ubicación",
+      "SEO inicial para que te encuentren en Google",
+      "Publicación online con tu dominio y correo de contacto"
     ],
-    "idealPara": "Marcas que ya venden por WhatsApp y quieren profesionalizar sin perder el toque personal.",
-    "duracion": "30 días garantizados",
-    "precioOrientativo": "USD 1.800 – 5.500",
-    "cta": "Quiero mi tienda online",
-    "badge": "ENTREGA RÁPIDA"
-  },
-  {
-    "id": "rescate-conversion",
-    "titulo": "Rescate de Conversión",
-    "subtitulo": "Si tu sitio tarda +3s en cargar, perdés ventas cada día",
-    "descripcion": "Auditoría completa de un sitio existente + reescritura de lo que está frenando conversiones. Te entregamos un reporte antes/después con métricas concretas. Si no mejora Lighthouse +20 puntos, no pagás.",
-    "resultadoCuantificado": "Mediana de mejora: tiempo de carga -60%, conversiones +35% (medido en 30 días post-deploy).",
-    "queIncluye": [
-      "Auditoría Lighthouse + Search Console + GTmetrix",
-      "Reescritura de cuellos de botella",
-      "Optimización de imágenes y fonts",
-      "Lazy loading + code splitting",
-      "Reporte antes/después con números",
-      "Garantía: si Lighthouse no sube +20 puntos, no pagás"
-    ],
-    "idealPara": "Negocios cuyo sitio web tarda más de 3 segundos en cargar y sospechan que están perdiendo ventas por eso.",
-    "duracion": "2 a 4 semanas",
-    "precioOrientativo": "USD 800 – 2.800",
-    "cta": "Quiero auditar mi sitio",
-    "badge": "GARANTÍA RESULTADO"
-  },
-  {
-    "id": "automatizaciones-pagan",
-    "titulo": "Automatizaciones que Pagan",
-    "subtitulo": "Lo que se pueda automatizar, se automatiza. Tu tiempo vale más.",
-    "descripcion": "Conectamos los sistemas que hoy se comunican a mano (CRM, ERP, hojas de cálculo, APIs externas) para que hablen solos. Lo que antes era 4 horas de copy-paste, ahora es un email que llega solo.",
-    "resultadoCuantificado": "Ahorro típico: 6 a 15 horas semanales en tareas repetitivas (medido en primeros 30 días).",
-    "queIncluye": [
-      "Mapeo de flujos actuales y cuellos de botella",
-      "Webhooks + APIs a medida",
-      "ETL liviano entre sistemas",
-      "Notificaciones automáticas (Slack, email, WhatsApp)",
-      "Documentación para tu equipo",
-      "Bonus: plantilla de Notion para trackear incidentes"
-    ],
-    "idealPara": "Equipos que pierden horas por semana copiando datos entre sistemas o respondiendo manualmente lo que podría ser automático.",
-    "duracion": "2 a 6 semanas",
-    "precioOrientativo": "USD 1.200 – 4.500",
-    "cta": "Quiero automatizar algo",
+    "idealPara": "Empresas, estudios, consultoras e instituciones que necesitan un sitio profesional para presentarse y generar confianza.",
+    "duracion": "2 a 4 semanas (orientativo)",
+    "precioOrientativo": "Desde USD 400",
+    "precioDesdeUsd": 400,
+    "cta": "Quiero la web de mi empresa",
     "badge": null
+  },
+  {
+    "id": "ecommerce",
+    "titulo": "Ecommerce (tienda online)",
+    "subtitulo": "Vendé online, todos los días",
+    "descripcion": "Una tienda online con catálogo, carrito y medios de pago para que tus clientes compren cuando quieran. Te la dejamos lista para que cargues y administres tus productos sin depender de nadie.",
+    "resultadoCuantificado": "Una tienda propia donde los pedidos y los pagos entran de forma ordenada, en lugar de coordinar cada venta a mano por mensajes.",
+    "queIncluye": [
+      "Catálogo de productos con fotos, precios y categorías",
+      "Carrito y proceso de compra simple",
+      "Integración de medios de pago (por ejemplo, Mercado Pago)",
+      "Panel para que cargues productos y veas los pedidos",
+      "Diseño adaptado a celular, donde compra la mayoría",
+      "Te enseñamos a usar el panel"
+    ],
+    "idealPara": "Marcas y comercios que quieren vender online o dejar de gestionar cada pedido a mano por WhatsApp o redes.",
+    "duracion": "4 a 8 semanas (orientativo)",
+    "precioOrientativo": "Desde USD 800",
+    "precioDesdeUsd": 800,
+    "cta": "Quiero mi tienda online",
+    "badge": "VENDÉ ONLINE"
+  },
+  {
+    "id": "software-a-medida",
+    "titulo": "Software a medida",
+    "subtitulo": "Si lo necesitás, lo desarrollamos",
+    "descripcion": "Sistemas y herramientas hechas para tu forma de trabajar: gestión interna, paneles, reservas, automatización de tareas o lo que tu negocio necesite y no encuentres armado. Empezamos escuchándote para entender el problema antes de proponer nada.",
+    "resultadoCuantificado": "Una herramienta pensada para tu operación, que reemplaza planillas y tareas manuales con algo que se adapta a vos y no al revés.",
+    "queIncluye": [
+      "Una charla inicial para entender qué necesitás",
+      "Propuesta con alcance, etapas y presupuesto",
+      "Desarrollo a medida, con avances que podés ver y probar",
+      "Puesta en marcha y acompañamiento",
+      "Soporte posterior a acordar según el proyecto"
+    ],
+    "idealPara": "Negocios y equipos con un proceso o una idea que no resuelve ninguna herramienta estándar y quieren conversarlo con un equipo que los escuche.",
+    "duracion": "A definir según el alcance",
+    "precioOrientativo": "A cotizar según tu proyecto",
+    "precioDesdeUsd": null,
+    "cta": "Iniciemos una conversación",
+    "badge": "CONTANOS QUÉ NECESITÁS"
   }
 ]

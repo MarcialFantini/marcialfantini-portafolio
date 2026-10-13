@@ -3,10 +3,10 @@ import servicios from "../data/servicios.json";
 import SectionAnchor from "./SectionAnchor.astro";
 
 const categoryById: Record<string, string> = {
-  "sistema-ventas-online": "Landing",
-  "tienda-express": "E-commerce",
-  "rescate-conversion": "Performance",
-  "automatizaciones-pagan": "Automation",
+  "web-productos-servicios": "Página web",
+  "web-empresarial": "Institucional",
+  "ecommerce": "Tienda online",
+  "software-a-medida": "Software",
 };
 ---
 
@@ -20,8 +20,8 @@ const categoryById: Record<string, string> = {
         </h2>
       </div>
       <p class="lg:col-span-4 lg:col-start-9 self-end text-[var(--color-ink-soft)] text-lg leading-relaxed reveal">
-        {servicios.length} servicios con precio cerrado, KPI pactado y garantía por escrito.
-        Abrí uno para ver qué incluye.
+        {servicios.length} servicios claros: página web, página empresarial, ecommerce y software a medida.
+        Abrí uno para ver qué incluye. Los precios son orientativos.
       </p>
     </div>
 
@@ -41,8 +41,7 @@ const categoryById: Record<string, string> = {
               </span>
 
               <span class="svc__price font-mono tabular-nums">
-                <small>Desde</small>
-                {s.precioOrientativo}
+                {s.precioDesdeUsd == null ? "A cotizar" : s.precioOrientativo}
               </span>
 
               <span class="svc__icon" aria-hidden="true"></span>
@@ -59,7 +58,7 @@ const categoryById: Record<string, string> = {
                   </p>
                   <p class="mt-6 pl-4 border-l-2 border-[var(--color-dorado)] text-[var(--color-ink)] font-medium leading-snug">
                     <span class="block font-mono text-[10px] uppercase tracking-[0.2em] text-[var(--color-mute)] mb-1">
-                      Resultado
+                      Lo que conseguís
                     </span>
                     {s.resultadoCuantificado}
                   </p>
@@ -84,6 +83,11 @@ const categoryById: Record<string, string> = {
                     <span class="font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-mute)]">
                       Entrega: {s.duracion}
                     </span>
+                    {s.precioDesdeUsd == null && (
+                      <span class="svc__quote font-mono text-[11px] uppercase tracking-[0.18em] font-semibold">
+                        {s.precioOrientativo}
+                      </span>
+                    )}
                   </div>
                 </div>
               </div>

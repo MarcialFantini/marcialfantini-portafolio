@@ -8,8 +8,10 @@ const cards = servicios.map((s, i) => ({
   id: s.id,
   titulo: s.titulo,
   resultado: s.subtitulo,
-  precio: s.precioOrientativo,
-  duracion: s.duracion,
+  // Servicios sin precio fijo (software a medida) muestran "A cotizar" y su CTA de conversación.
+  quote: s.precioDesdeUsd == null,
+  precio: s.precioDesdeUsd == null ? "A cotizar" : s.precioOrientativo,
+  duracion: s.precioDesdeUsd == null ? s.cta : s.duracion,
   s: 0.18 + i * 0.13,
   dx: i % 2 === 0 ? -1 : 1,
 }));
@@ -37,13 +39,13 @@ const cards = servicios.map((s, i) => ({
               cards.map((c) => (
                 <a
                   href={`/servicios/${c.id}`}
-                  class="sol__piece sol__card film-will"
+                  class={`sol__piece sol__card film-will${c.quote ? " sol__card--quote" : ""}`}
                   style={`--s:${c.s};--dx:${c.dx}`}
                 >
                   <span class="sol__card-t">{c.titulo}</span>
                   <span class="sol__card-r">{c.resultado}</span>
                   <span class="sol__card-p">{c.precio}</span>
-                  <span class="sol__card-d">{c.duracion}</span>
+                  <span class="sol__card-d">{c.quote ? <>{c.duracion} <span aria-hidden="true">→</span></> : c.duracion}</span>
                 </a>
               ))
             }
@@ -187,6 +189,11 @@ const cards = servicios.map((s, i) => ({
     font-family: var(--font-mono);
     font-size: clamp(0.58rem, 2.2vw, 0.72rem);
     color: rgba(246, 241, 228, 0.55);
+  }
+  /* Acento dorado: la tarjeta de software a medida invita a conversar */
+  .sol__card--quote .sol__card-d {
+    font-weight: 700;
+    color: var(--color-neon);
   }
   .sol.is-late .sol__card { pointer-events: auto; }
   .sol.is-late .sol__card:hover { border-color: var(--color-neon); }

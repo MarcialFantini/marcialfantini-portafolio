@@ -16,12 +16,10 @@ const shards = [
   { t: "“Pasame el link”", x: 31, y: 84, dy: 36, r: 5 },
 ];
 
-// Ancla de precio: el mínimo real de los rangos "USD a – b" de servicios.json
+// Ancla de precio: el mínimo real de precioDesdeUsd en servicios.json
+// (los servicios sin precio fijo, como software a medida, traen null y se ignoran).
 const minUsd = Math.min(
-  ...servicios
-    .map((s) => /USD\s*([\d.]+)/.exec(s.precioOrientativo)?.[1])
-    .filter((n): n is string => !!n)
-    .map((n) => Number(n.replace(/\./g, "")))
+  ...servicios.map((s) => s.precioDesdeUsd).filter((n): n is number => typeof n === "number")
 );
 const minLabel = `USD ${minUsd.toLocaleString("es-AR")}`;
 ---
@@ -50,9 +48,9 @@ const minLabel = `USD ${minUsd.toLocaleString("es-AR")}`;
         <span class="giro__line film-will" style="--s:0.26"><span class="text-glow-gold">mientras dormís</span>.</span>
       </h2>
       <p class="giro__sub film-will">
-        Empezá con una auditoría gratis de 15 minutos: te decimos qué te falta para que te encuentren y te escriban.
+        Páginas web, ecommerce y software a medida. Empezá con una auditoría gratis de 15 minutos: te contamos qué te falta para que te encuentren y te escriban.
       </p>
-      <p class="giro__price film-will">Proyectos desde {minLabel} · precios orientativos</p>
+      <p class="giro__price film-will">Desde {minLabel} · precios orientativos</p>
       <div class="giro__cta film-will">
         <a href="/contacto?servicio=Auditor%C3%ADa%20gratis" class="btn-sunset">
           Agendá tu auditoría gratis de 15 min

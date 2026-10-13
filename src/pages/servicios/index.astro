@@ -3,54 +3,47 @@ import Layout from "../../layouts/Layout.astro";
 import servicios from "../../data/servicios.json";
 import site from "../../data/site.json";
 
-const categorias = [
-  { id: "todos", label: "Todos" },
-  { id: "landing", label: "Landing" },
-  { id: "ecommerce", label: "E-commerce" },
-  { id: "performance", label: "Performance" },
-  { id: "integracion", label: "Integración" },
-];
-
 const faqsGenerales = [
   {
-    pregunta: "¿Cuánto cuesta un proyecto?",
+    pregunta: "¿Cuánto cuesta una página web o una tienda online?",
     respuesta:
-      "Cada servicio tiene un rango en la tarjeta. El precio final depende del alcance detallado que armamos en la auditoría. Si el proyecto es más chico que el piso del servicio, te recomendamos buscar una opción con tickets más bajos — no nos hacemos cargo.",
+      "Los precios de cada tarjeta son orientativos y marcan desde dónde arrancamos: página web de productos o servicios desde USD 300, página empresarial desde USD 400 y ecommerce desde USD 800. El valor final depende de lo que necesites y te lo pasamos por escrito antes de empezar.",
+  },
+  {
+    pregunta: "¿Cuánto cuesta el software a medida?",
+    respuesta:
+      "Depende de cada proyecto, por eso no tiene un precio fijo. Empezamos con una conversación para entender qué necesitás y después te pasamos una propuesta con alcance, etapas y presupuesto.",
   },
   {
     pregunta: "¿Cuánto tarda?",
     respuesta:
-      "De 2 a 8 semanas según alcance. Cada tarjeta muestra el plazo estimado. Si te urge, hay un recargo del 20% por sprint express.",
+      "Cada tarjeta muestra un plazo orientativo. El tiempo real depende del alcance y de qué tan rápido nos pases textos, fotos y definiciones. Te confirmamos fechas en la propuesta.",
   },
   {
-    pregunta: "¿Cómo se cobra?",
+    pregunta: "¿Y si no estoy seguro de qué necesito?",
     respuesta:
-      "40-50% de anticipo al firmar, saldo al entregar. Para proyectos largos hay hitos intermedios. No aceptamos pagar después del anticipo.",
-  },
-  {
-    pregunta: "¿Y si no me gusta el resultado?",
-    respuesta:
-      "Iteramos 2 rondas de revisión por etapa. Si después no estamos alineados, te quedás con todo el trabajo entregado hasta el momento y resolvemos por escrito. Sin cláusula de satisfacción 100% garantizada porque ningún proyecto real la cumple.",
+      "Escribinos igual. Con una charla corta te orientamos hacia la opción que mejor te sirve, aunque no sea la más cara. Podés empezar por la auditoría gratis de 15 minutos.",
   },
 ];
 ---
 
 <Layout
   title={`Servicios — ${site.name}`}
-  description="4 servicios con precio cerrado, KPI pactado y garantía por escrito. Sistemas de ventas online, e-commerce, rescate de conversión y automatizaciones."
+  description="Página web de productos o servicios desde USD 300, página empresarial desde USD 400, ecommerce desde USD 800 y software a medida. Contanos qué necesitás."
 >
+  <div class="panel--oro">
   <section class="pt-16 md:pt-24 pb-12 border-b border-[var(--color-border)]">
     <div class="container-page max-w-4xl reveal">
       <p class="font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--color-azul)] mb-3">
         Servicios
       </p>
       <h1 class="font-impact text-[clamp(2.25rem,5.5vw,4.75rem)] uppercase leading-[0.95] text-[var(--color-ink)] tracking-tight mb-6">
-        4 servicios con precio cerrado <span class="text-[var(--color-azul)]">y KPI pactado.</span>
+        Página web, ecommerce <span class="text-[var(--color-azul)]">y software a medida.</span>
       </h1>
       <p class="text-xl text-[var(--color-ink-soft)] leading-relaxed max-w-3xl">
-        Nada de retainer obligatorio, nada de "podemos charlar". Cada servicio tiene un
-        rango de precio y un entregable concreto. Si tu caso entra en uno, te conviene.
-        Si no, te lo decimos de frente.
+        Te ayudamos a tener tu página web, tu tienda online o el software que tu negocio
+        necesita. Precios orientativos y claros desde el principio; para software a medida,
+        empezamos con una conversación.
       </p>
     </div>
   </section>
@@ -96,7 +89,7 @@ const faqsGenerales = [
 
                 <div class="mb-6 p-4 rounded-md bg-[var(--color-azul-soft)] border-l-4 border-[var(--color-azul)]">
                   <p class="font-mono text-[10px] uppercase tracking-[0.18em] text-[var(--color-azul)] mb-1.5 font-semibold">
-                    Resultado cuantificado
+                    Lo que conseguís
                   </p>
                   <p class="text-sm text-[var(--color-ink)] font-medium leading-snug">
                     {s.resultadoCuantificado}
@@ -121,8 +114,8 @@ const faqsGenerales = [
 
                 <div class="flex items-end justify-between gap-3 pt-5 border-t border-[var(--color-border)]">
                   <div>
-                    <p class="font-mono text-[10px] uppercase tracking-[0.18em] text-[var(--color-mute)] mb-1">Desde</p>
-                    <p class="font-mono text-base md:text-lg text-[var(--color-ink)] font-bold tabular-nums">
+                    <p class="font-mono text-[10px] uppercase tracking-[0.18em] text-[var(--color-mute)] mb-1">Precio orientativo</p>
+                    <p class="font-mono text-base md:text-lg text-[var(--color-oro-price)] font-bold tabular-nums">
                       {s.precioOrientativo}
                     </p>
                   </div>
@@ -130,7 +123,7 @@ const faqsGenerales = [
                     href={`/servicios/${s.id}`}
                     class="tactile font-mono text-[11px] uppercase tracking-[0.18em] font-semibold text-white bg-[var(--color-ink)] px-4 py-2.5 rounded-md group-hover:bg-[var(--color-azul)] transition-colors"
                   >
-                    Ver detalle →
+                    {s.precioDesdeUsd == null ? s.cta : "Ver detalle"} →
                   </a>
                 </div>
 
@@ -144,6 +137,7 @@ const faqsGenerales = [
       </ol>
     </div>
   </section>
+  </div>
 
   <section class="py-16 md:py-20 border-b border-[var(--color-border)]">
     <div class="container-page max-w-3xl">
@@ -188,13 +182,13 @@ const faqsGenerales = [
         ¿Te encaja alguno? <span class="text-[var(--color-dorado)]">Hablemos.</span>
       </h2>
       <p class="text-lg text-white/80 leading-relaxed mb-8">
-        Auditoría gratis de 30 minutos para ver si tu caso entra en uno de estos servicios. Si no entra, te lo decimos y te orientamos hacia otra opción.
+        Contanos qué necesitás y te orientamos. Podés empezar por una auditoría gratis de 15 minutos o escribirnos directamente: si tu caso no entra en estos servicios, te lo decimos y te orientamos hacia otra opción.
       </p>
       <a
-        href="/contacto?servicio=Auditor%C3%ADa%20gratis"
+        href="/contacto?servicio=Quiero%20hablar%20de%20mi%20proyecto"
         class="tactile inline-flex items-center justify-center gap-2 px-7 py-4 rounded-md bg-[var(--color-dorado)] text-[var(--color-azul-deep)] font-mono text-[11px] uppercase tracking-[0.18em] font-bold hover:bg-white"
       >
-        Pedí tu auditoría
+        Contanos qué necesitás
         <span aria-hidden="true">→</span>
       </a>
     </div>
