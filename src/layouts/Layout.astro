@@ -63,6 +63,23 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site ?? `https://${site.n
 
     <ClientRouter />
 
+    <!-- Sin JS: el film cae al mismo layout estático que prefers-reduced-motion
+         (alto auto, stage sin sticky, capas visibles y opacas, estado final de cada escena) -->
+    <noscript>
+      <style>
+        .film { height: auto !important; }
+        .film-stage { position: relative !important; height: auto !important; overflow: visible !important; }
+        .film-anchor, .film-cta, .peso__chips, .giro__shards, .giro__flash, .giro__sweep { display: none !important; }
+        .film-layer { position: relative !important; inset: auto !important; opacity: 1 !important; visibility: visible !important; --p: 1; --e: 1; }
+        .film-layer.peso { --p: 0; --e: 0; }
+        .film-layer a { pointer-events: auto !important; }
+        .film-body { position: relative !important; inset: auto !important; min-height: 100svh; overflow: clip; }
+        .film-body > div:not([aria-hidden="true"]) { position: relative !important; inset: auto !important; }
+        .peso__stage { display: flex; flex-direction: column; justify-content: center; }
+        .film-skip { position: absolute !important; top: calc(var(--header-h) + 0.5rem); left: 1rem; bottom: auto !important; opacity: 1 !important; visibility: visible !important; }
+      </style>
+    </noscript>
+
     <!-- Pre-paint theme sync — runs before body to avoid FOUC -->
     <script is:inline>
       (function () {

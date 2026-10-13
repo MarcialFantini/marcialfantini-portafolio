@@ -20,11 +20,11 @@ const showBlog = await hasPublishedPosts();
 // Un solo film: alto total = suma de las escenas (svh). Cada escena ocupa un tramo
 // contiguo [from, to] del progreso global P (0..1); motion.ts deriva su --p local.
 const scenes = [
-  { key: "peso", chapter: "Inicio", len: 160 },
-  { key: "giro", chapter: "La oferta", len: 130 },
-  { key: "solucion", chapter: "Servicios", len: 180 },
-  { key: "alivio", chapter: "El alivio", len: 150 },
-  { key: "cierre", chapter: "Auditoría gratis", len: 110 },
+  { key: "peso", chapter: "Inicio", len: 110 },
+  { key: "giro", chapter: "La oferta", len: 90 },
+  { key: "solucion", chapter: "Servicios", len: 120 },
+  { key: "alivio", chapter: "El alivio", len: 100 },
+  { key: "cierre", chapter: "Auditoría gratis", len: 80 },
 ];
 const total = scenes.reduce((a, s) => a + s.len, 0);
 let acc = 0;
@@ -37,7 +37,10 @@ const ranges = scenes.map((s) => {
 const [rPeso, rGiro, rSol, rAlivio, rCierre] = ranges;
 ---
 
-<Layout description={site.description}>
+<Layout
+  title={`${site.name} — Agencia de desarrollo web en ${site.location}`}
+  description={site.description}
+>
   <div class="film" data-film style={`--film-len: ${total}`}>
     {
       ranges.map((r) => (
@@ -51,6 +54,9 @@ const [rPeso, rGiro, rSol, rAlivio, rCierre] = ranges;
         />
       ))
     }
+    <a href="#servicios-precios" class="film-skip" data-film-skip>
+      Ver servicios y precios <span aria-hidden="true">↓</span>
+    </a>
     <div class="film-stage">
       <Peso from={rPeso.from} to={rPeso.to} />
       <Giro from={rGiro.from} to={rGiro.to} />

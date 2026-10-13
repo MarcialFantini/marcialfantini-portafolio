@@ -35,8 +35,8 @@ const minLabel = `USD ${minUsd.toLocaleString("es-AR")}`;
 
     <div class="giro__content">
       <h2 class="giro__h2">
-        <span class="giro__line film-will" style="--s:0.16">Un sitio que vende</span>
-        <span class="giro__line film-will" style="--s:0.26"><span class="text-glow-gold">mientras dormís</span>.</span>
+        <span class="giro__line film-will" style="--s:0.1">Un sitio que vende</span>
+        <span class="giro__line film-will" style="--s:0.2"><span class="text-gold">mientras dormís</span>.</span>
       </h2>
       <p class="giro__sub film-will">
         Páginas web, ecommerce y software a medida. Empezá con una auditoría gratis de 15 minutos: te contamos qué te falta para que te encuentren y te escriban.
@@ -44,7 +44,7 @@ const minLabel = `USD ${minUsd.toLocaleString("es-AR")}`;
       <p class="giro__price film-will">Desde {minLabel} · precios orientativos</p>
       <p class="giro__note film-will">Precios orientativos en USD. No incluyen hosting ni dominio.</p>
       <div class="giro__cta film-will">
-        <a href="/contacto?servicio=Auditor%C3%ADa%20gratis" class="btn-sunset">
+        <a href="/contacto?servicio=Auditor%C3%ADa%20gratis" class="btn-sunset film-halo film-btn">
           Agendá tu auditoría gratis de 15 min
         </a>
         <a href="#servicios-precios" class="btn-ghost">Ver servicios y precios</a>
@@ -127,14 +127,13 @@ const minLabel = `USD ${minUsd.toLocaleString("es-AR")}`;
     color: var(--color-ivory);
   }
   .giro__line {
-    --v: clamp(0, calc((var(--p) - var(--s)) * 7), 1);
+    --v: clamp(0, calc((var(--p) - var(--s)) * 6), 1);
     display: block;
     opacity: var(--v);
     transform: translate3d(0, calc((1 - var(--v)) * 3.5svh), 0);
-    filter: blur(calc((1 - var(--v)) * 8px));
   }
   .giro__sub {
-    --v: clamp(0, calc((var(--p) - 0.36) * 7), 1);
+    --v: clamp(0, calc((var(--p) - 0.32) * 6), 1);
     margin-top: 1.25rem;
     max-width: 32rem;
     font-size: clamp(1rem, 3.6vw, 1.25rem);
@@ -144,7 +143,7 @@ const minLabel = `USD ${minUsd.toLocaleString("es-AR")}`;
     transform: translate3d(0, calc((1 - var(--v)) * 2svh), 0);
   }
   .giro__price {
-    --v: clamp(0, calc((var(--p) - 0.48) * 7), 1);
+    --v: clamp(0, calc((var(--p) - 0.42) * 6), 1);
     margin-top: 1rem;
     padding: 0.35rem 0.9rem;
     border: 1px solid rgba(255, 210, 74, 0.4);
@@ -156,7 +155,7 @@ const minLabel = `USD ${minUsd.toLocaleString("es-AR")}`;
     transform: translate3d(0, calc((1 - var(--v)) * 2svh), 0);
   }
   .giro__note {
-    --v: clamp(0, calc((var(--p) - 0.52) * 7), 1);
+    --v: clamp(0, calc((var(--p) - 0.46) * 6), 1);
     margin-top: 0.6rem;
     font-size: clamp(0.7rem, 2.8vw, 0.82rem);
     color: var(--color-ivory-dim);
@@ -164,7 +163,7 @@ const minLabel = `USD ${minUsd.toLocaleString("es-AR")}`;
     transform: translate3d(0, calc((1 - var(--v)) * 2svh), 0);
   }
   .giro__cta {
-    --v: clamp(0, calc((var(--p) - 0.6) * 6), 1);
+    --v: clamp(0, calc((var(--p) - 0.55) * 5), 1);
     margin-top: 1.5rem;
     display: flex;
     flex-direction: column;
@@ -191,7 +190,6 @@ const minLabel = `USD ${minUsd.toLocaleString("es-AR")}`;
     .giro__cta {
       opacity: 1;
       transform: none;
-      filter: none;
       pointer-events: auto;
     }
     .giro__halo { opacity: 1; }

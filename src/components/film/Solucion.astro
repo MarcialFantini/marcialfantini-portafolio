@@ -12,7 +12,7 @@ const cards = servicios.map((s, i) => ({
   quote: s.precioDesdeUsd == null,
   precio: s.precioDesdeUsd == null ? "A cotizar" : s.precioOrientativo,
   duracion: s.precioDesdeUsd == null ? s.cta : s.duracion,
-  s: 0.18 + i * 0.13,
+  s: 0.16 + i * 0.12,
   dx: i % 2 === 0 ? -1 : 1,
 }));
 ---
@@ -23,7 +23,7 @@ const cards = servicios.map((s, i) => ({
 
     <div class="sol__content">
       <h2 class="sol__h2 film-will">
-        Cuatro servicios. <span class="text-glow-gold">Un resultado</span> cada uno.
+        Cuatro servicios. <span class="text-gold">Un resultado</span> cada uno.
       </h2>
       <p class="sol__sub film-will">Elegí lo que tu negocio necesita hoy. Precios orientativos en USD.</p>
 
@@ -51,8 +51,8 @@ const cards = servicios.map((s, i) => ({
             }
           </div>
 
-          <div class="sol__piece sol__btn film-will" style="--s:0.7">
-            <a href="/contacto?servicio=Auditor%C3%ADa%20gratis" class="sol__btn-a">Pedí tu auditoría gratis</a>
+          <div class="sol__piece sol__btn film-will" style="--s:0.62">
+            <a href="/contacto?servicio=Auditor%C3%ADa%20gratis" class="sol__btn-a film-halo">Pedí tu auditoría gratis</a>
           </div>
         </div>
       </div>
@@ -107,7 +107,7 @@ const cards = servicios.map((s, i) => ({
     border-radius: 16px;
     border: 1px solid rgba(246, 241, 228, 0.18);
     background: rgba(10, 19, 48, 0.85);
-    box-shadow: 0 40px 80px -30px rgba(0, 0, 0, 0.8), 0 0 calc(var(--e) * 60px) rgba(255, 210, 74, 0.18);
+    box-shadow: 0 40px 80px -30px rgba(0, 0, 0, 0.8);
     opacity: var(--v);
     transform: translate3d(0, calc((1 - var(--v)) * 6svh - var(--p) * 2svh), 0) scale(calc(0.94 + var(--v) * 0.06));
     text-align: left;
@@ -140,18 +140,28 @@ const cards = servicios.map((s, i) => ({
     padding: 0.7rem;
   }
 
-  /* Pieza genérica: aterriza con luz dorada en el borde */
+  /* Pieza genérica: aterriza con un aro dorado que se apaga (pseudo-elemento, solo opacity) */
   .sol__piece {
     --v: clamp(0, calc((var(--p) - var(--s)) * 7), 1);
     --edge: clamp(0, calc(1 - (var(--p) - var(--s)) * 5), 1);
+    position: relative;
     opacity: var(--v);
     transform: translate3d(calc((1 - var(--v)) * var(--dx, 0) * 8vw), calc((1 - var(--v)) * 5svh), 0)
       scale(calc(0.96 + var(--v) * 0.04));
-    border: 1px solid rgba(255, 210, 74, calc(0.12 + var(--v) * var(--edge) * 0.7));
+    border: 1px solid rgba(255, 210, 74, 0.12);
     border-radius: 10px;
     background: rgba(27, 43, 92, 0.6);
-    box-shadow: 0 0 calc(var(--v) * var(--edge) * 22px) rgba(255, 210, 74, 0.45);
   }
+  .sol__piece::after {
+    content: "";
+    position: absolute;
+    inset: -1px;
+    border: 1px solid var(--color-neon);
+    border-radius: inherit;
+    opacity: calc(var(--v) * var(--edge) * 0.75);
+    pointer-events: none;
+  }
+  .sol__btn::after { display: none; }
   .sol__cards {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -206,7 +216,6 @@ const cards = servicios.map((s, i) => ({
     justify-self: start;
     border: 0;
     background: none;
-    box-shadow: none;
   }
   .sol__btn-a {
     display: inline-block;
@@ -217,7 +226,6 @@ const cards = servicios.map((s, i) => ({
     font-weight: 700;
     font-size: 0.85rem;
     text-decoration: none;
-    box-shadow: 0 0 calc(var(--v) * var(--edge) * 30px) rgba(255, 210, 74, 0.7);
     pointer-events: none;
   }
   .sol.is-late .sol__btn-a { pointer-events: auto; }
@@ -230,8 +238,8 @@ const cards = servicios.map((s, i) => ({
     .sol__piece {
       opacity: 1;
       transform: none;
-      box-shadow: none;
     }
+    .sol__piece::after { opacity: 0; }
     .sol__piece { border-color: rgba(255, 210, 74, 0.25); }
     .sol__btn { border: 0; }
     .sol__card,

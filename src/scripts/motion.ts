@@ -42,9 +42,14 @@ const HEADER_PROBE = 36;
 let header: HTMLElement | null = null;
 let headerOver = false;
 let headerIo: IntersectionObserver | null = null;
-/* CTA persistente: visible desde que termina El giro hasta que arranca el cierre */
+/* CTA flotante: disponible desde que el titular del hero se apaga (~40% de El peso) hasta que arranca el cierre,
+   que trae su propia CTA grande. El hero trae la suya en pantalla desde el primer frame. */
 let filmCta: HTMLElement | null = null;
 let ctaOn = false;
+const CTA_FROM = 0.4;
+/* Salto "Ver servicios y precios": visible durante todo el film */
+let filmSkip: HTMLElement | null = null;
+let skipOn = false;
 const clamp01 = (n: number) => (n < 0 ? 0 : n > 1 ? 1 : n);
 const easeInOutCubic = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
 
@@ -129,6 +134,7 @@ function frame() {
   const filmWrites: { l: Layer; p: number; o: number; active: boolean; late: boolean; done: boolean }[] = [];
   let overFilm = false;
   let showCta = false;
+  let showSkip = false;
   if (filmEl) {
     const r = filmEl.getBoundingClientRect();
     // El stage sticky cubre el viewport mientras el wrapper cruza la franja del header
@@ -136,14 +142,15 @@ function frame() {
     const span = r.height - vh;
     const P = span > 0 ? clamp01(-r.top / span) : 0;
     if (layers.length > 2 && r.top <= 0 && r.bottom > vh * 0.5) {
-      showCta = P >= layers[1].to && P < layers[layers.length - 1].from - 0.005;
+      showSkip = true;
+      showCta = P >= layers[0].from + (layers[0].to - layers[0].from) * CTA_FROM && P < layers[layers.length - 1].from - 0.005;
     }
     for (const l of layers) {
       const p = clamp01((P - l.from) / (l.to - l.from));
       const o = l.first ? 1 : clamp01((P - l.from) / FADE);
       const active = P >= l.from - PAD && P <= l.to + FADE + PAD;
       const done = P > l.to;
-      const late = p >= 0.6;
+      const late = p >= 0.5;
       if (Math.abs(p - l.p) > 0.0004 || Math.abs(o - l.o) > 0.004 || active !== l.active || late !== l.late || done !== l.done) {
         filmWrites.push({ l, p, o, active, late, done });
       }
@@ -173,6 +180,11 @@ function frame() {
     filmCta.classList.toggle("is-on", showCta);
     filmCta.tabIndex = showCta ? 0 : -1;
     filmCta.setAttribute("aria-hidden", showCta ? "false" : "true");
+  }
+
+  if (showSkip !== skipOn && filmSkip) {
+    skipOn = showSkip;
+    filmSkip.classList.toggle("is-on", showSkip);
   }
 
   for (const w of filmWrites) {
@@ -268,6 +280,8 @@ function setup() {
   }));
   filmCta = document.querySelector<HTMLElement>("[data-film-cta]");
   ctaOn = false;
+  filmSkip = document.querySelector<HTMLElement>("[data-film-skip]");
+  skipOn = false;
   bar = document.querySelector<HTMLElement>(".page-progress");
   glow = document.querySelector<HTMLElement>(".spotlight");
   document.querySelectorAll<HTMLElement>(".btn-sunset, .btn-ghost").forEach(bindMagnet);

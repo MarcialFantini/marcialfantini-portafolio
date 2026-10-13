@@ -23,14 +23,14 @@ const pasos = [
 
     <div class="alivio__content">
       <h2 class="alivio__h2">
-        <span class="alivio__line film-will" style="--s:0.04">Vos atendés tu negocio.</span>
-        <span class="alivio__line film-will" style="--s:0.12">El sitio <span class="text-glow-gold">hace el resto</span>.</span>
+        <span class="alivio__line film-will" style="--s:0.03">Vos atendés tu negocio.</span>
+        <span class="alivio__line film-will" style="--s:0.1">El sitio <span class="text-gold">hace el resto</span>.</span>
       </h2>
 
       <ul class="alivio__gains">
         {
           alivios.map((a, i) => (
-            <li class="alivio__gain film-will" style={`--s:${0.2 + i * 0.07}`}>
+            <li class="alivio__gain film-will" style={`--s:${0.18 + i * 0.07}`}>
               {a}
             </li>
           ))
@@ -40,7 +40,7 @@ const pasos = [
       <ol class="alivio__steps">
         {
           pasos.map((p, i) => (
-            <li class="alivio__step film-will" style={`--s:${0.5 + i * 0.1}`}>
+            <li class="alivio__step film-will" style={`--s:${0.46 + i * 0.1}`}>
               <span class="alivio__n">{p.n}</span>
               <span class="alivio__t">{p.t}</span>
             </li>
@@ -90,7 +90,6 @@ const pasos = [
     display: block;
     opacity: var(--v);
     transform: translate3d(0, calc((1 - var(--v)) * 3svh), 0);
-    filter: blur(calc((1 - var(--v)) * 6px));
   }
   .alivio__gains {
     display: grid;
@@ -157,7 +156,6 @@ const pasos = [
     .alivio__step {
       opacity: 1;
       transform: none;
-      filter: none;
     }
     .alivio__glow { opacity: 1; }
   }

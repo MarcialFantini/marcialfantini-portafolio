@@ -11,13 +11,13 @@ const { from, to } = Astro.props;
 
     <div class="cierre__content">
       <h2 class="cierre__h2 film-will">
-        Tu auditoría es <span class="text-glow-gold">gratis</span>.
+        Tu auditoría es <span class="text-gold">gratis</span>.
       </h2>
       <p class="cierre__sub film-will">
         15 minutos. Te decimos qué cambiaríamos en tu sitio para que consigas más consultas.
       </p>
       <div class="cierre__cta film-will">
-        <a href="/contacto?servicio=Auditor%C3%ADa%20gratis" class="cierre__btn">
+        <a href="/contacto?servicio=Auditor%C3%ADa%20gratis" class="cierre__btn film-halo">
           Agendá tu auditoría gratis de 15 min
         </a>
         {site.whatsapp && (
@@ -48,7 +48,7 @@ const { from, to } = Astro.props;
     position: absolute;
     inset: 0;
     z-index: -2;
-    background: radial-gradient(560px 380px at 50% 48%, rgba(255, 210, 74, 0.22), transparent 70%);
+    background: radial-gradient(560px 380px at 50% 48%, rgba(255, 210, 74, 0.12), transparent 70%);
     opacity: clamp(0, calc(var(--p) * 3), 1);
     pointer-events: none;
   }
@@ -63,7 +63,7 @@ const { from, to } = Astro.props;
     text-align: center;
   }
   .cierre__h2 {
-    --v: clamp(0, calc(var(--p) * 6), 1);
+    --v: clamp(0, calc(var(--p) * 8), 1);
     font-family: var(--font-display);
     font-weight: 600;
     font-size: clamp(2.4rem, 10vw, 6.4rem);
@@ -73,10 +73,9 @@ const { from, to } = Astro.props;
     color: var(--color-ivory);
     opacity: var(--v);
     transform: translate3d(0, calc((1 - var(--v)) * 4svh), 0) scale(calc(0.96 + var(--v) * 0.04));
-    filter: blur(calc((1 - var(--v)) * 8px));
   }
   .cierre__sub {
-    --v: clamp(0, calc((var(--p) - 0.12) * 6), 1);
+    --v: clamp(0, calc((var(--p) - 0.08) * 7), 1);
     margin-top: 1.25rem;
     max-width: 30rem;
     font-size: clamp(1rem, 3.6vw, 1.25rem);
@@ -86,7 +85,7 @@ const { from, to } = Astro.props;
     transform: translate3d(0, calc((1 - var(--v)) * 2svh), 0);
   }
   .cierre__cta {
-    --v: clamp(0, calc((var(--p) - 0.24) * 5), 1);
+    --v: clamp(0, calc((var(--p) - 0.18) * 5), 1);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -106,7 +105,6 @@ const { from, to } = Astro.props;
     font-weight: 700;
     font-size: clamp(0.95rem, 3.8vw, 1.2rem);
     text-decoration: none;
-    box-shadow: 0 0 40px rgba(255, 210, 74, 0.55), 0 0 110px rgba(255, 210, 74, 0.25);
     transition: transform 0.25s ease;
   }
   .cierre__btn:hover { transform: translateY(-2px); }
@@ -139,7 +137,6 @@ const { from, to } = Astro.props;
     .cierre__cta {
       opacity: 1;
       transform: none;
-      filter: none;
       pointer-events: auto;
     }
     .cierre__glow { opacity: 1; }

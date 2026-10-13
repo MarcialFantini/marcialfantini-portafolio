@@ -1100,9 +1100,19 @@
 @layer utilities {
   .text-glow-gold {
     color: var(--color-neon);
-    text-shadow: 0 0 18px rgba(255, 210, 74, 0.55), 0 0 64px rgba(255, 210, 74, 0.3);
+    text-shadow: 0 0 22px rgba(255, 210, 74, 0.45);
   }
-  .box-glow-gold { box-shadow: var(--shadow-glow-gold); }
+  /* Un solo halo neón en el film: las CTA principales (.film-halo) y una palabra del H1 (.text-glow-gold).
+     El resto del dorado es color plano (.text-gold). */
+  .text-gold { color: var(--color-neon); }
+  .film-halo { box-shadow: 0 0 26px rgba(255, 210, 74, 0.38); }
+  /* Botones largos del film: el texto puede partirse en móvil (375px) sin desbordar */
+  .film-btn {
+    max-width: 100%;
+    white-space: normal;
+    justify-content: center;
+    text-align: center;
+  }
 
   /* Un único film: wrapper alto + un stage sticky con las escenas apiladas */
   .film {
@@ -1171,6 +1181,38 @@
     box-shadow: 0 14px 30px -14px rgba(0, 0, 0, 0.7);
   }
 
+  /* Salto persistente: visible durante todo el film (motion.ts alterna .is-on). Siempre alcanzable por teclado
+     cuando está visible; oculto con visibility para no entrar en el orden de tab fuera del film. */
+  .film-skip {
+    position: fixed;
+    left: 1rem;
+    bottom: calc(3.8rem + env(safe-area-inset-bottom, 0px));
+    z-index: 44;
+    padding: 0.35rem 0.8rem;
+    border: 1px solid rgba(246, 241, 228, 0.28);
+    border-radius: 999px;
+    background: rgba(10, 19, 48, 0.62);
+    color: var(--color-ivory);
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-decoration: none;
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0s linear 0.3s;
+  }
+  .film-skip.is-on,
+  .film-skip:focus-visible {
+    opacity: 1;
+    visibility: visible;
+    transition-delay: 0s;
+  }
+  .film-skip:hover { color: var(--color-neon); border-color: rgba(255, 210, 74, 0.6); }
+  .film-skip:focus-visible { outline: 2px solid var(--color-ivory); outline-offset: 3px; }
+  @media (min-width: 768px) {
+    .film-skip { left: 1.5rem; bottom: 1.5rem; }
+  }
+
   /* CTA persistente del film: barra fina en móvil, píldora dorada abajo a la derecha en desktop.
      motion.ts alterna .is-on entre El giro y el cierre. */
   .film-cta {
@@ -1207,7 +1249,7 @@
       bottom: 1.5rem;
       padding: 0.75rem 1.4rem;
       border-radius: 999px;
-      box-shadow: 0 0 28px rgba(255, 210, 74, 0.45), 0 10px 30px -10px rgba(0, 0, 0, 0.7);
+      box-shadow: 0 0 26px rgba(255, 210, 74, 0.38), 0 10px 30px -10px rgba(0, 0, 0, 0.7);
       transform: translate3d(0, 16px, 0);
     }
     .film-cta:hover { filter: brightness(1.08); }
@@ -1217,6 +1259,14 @@
 
   @media (prefers-reduced-motion: reduce) {
     .film-cta { display: none; }
+    .film-skip {
+      position: absolute;
+      top: calc(var(--header-h) + 0.5rem);
+      left: 1rem;
+      bottom: auto;
+      opacity: 1;
+      visibility: visible;
+    }
     .film { height: auto; }
     .film-stage { position: relative; height: auto; overflow: visible; }
     .film-anchor { display: none; }
@@ -1268,6 +1318,14 @@ main:not(:has([data-film])) { padding-top: var(--header-h); }
 .site-header.is-over-film .sh-link:hover { color: var(--color-neon); background-color: rgba(255, 210, 74, 0.1); }
 .site-header.is-over-film .sh-link[aria-current="page"] { color: var(--color-neon); background-color: rgba(255, 210, 74, 0.14); }
 .site-header.is-over-film .sh-link[aria-current="page"]::before { background-color: var(--color-neon); }
+.site-header.is-over-film .sh-cta-m {
+  background-color: var(--color-neon);
+  color: var(--color-navy-950);
+}
+.site-header.is-over-film .sh-cta-m:hover {
+  background-color: var(--color-ivory);
+  color: var(--color-navy-950);
+}
 .site-header.is-over-film a[href="/contacto"].inline-flex:hover,
 .site-header.is-over-film a[href="/contacto"].hidden:hover {
   background-color: var(--color-ivory);
