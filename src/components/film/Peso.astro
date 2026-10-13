@@ -34,6 +34,7 @@ const { from, to } = Astro.props;
       <a href="/contacto?servicio=Auditor%C3%ADa%20gratis" class="peso__cta btn-sunset film-halo film-btn">
         Agendá tu auditoría gratis de 15 min
       </a>
+      <p class="peso__by">Soy <strong>Marcial Fantini</strong>. Te atiendo yo, desde Córdoba.</p>
     </div>
   </div>
 </div>
@@ -116,6 +117,12 @@ const { from, to } = Astro.props;
     margin-top: 2rem;
     pointer-events: auto;
   }
+  .peso__by {
+    margin-top: 1rem;
+    font-size: 0.9rem;
+    color: var(--color-ivory-dim);
+  }
+  .peso__by strong { color: var(--color-ivory); font-weight: 600; }
   /* Titular ya apagado (opacity 0): fuera del orden de tab y del arbol de accesibilidad visual */
   .peso.is-late .peso__title { visibility: hidden; }
   .peso.is-late .peso__cta,
