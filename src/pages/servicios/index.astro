@@ -7,7 +7,7 @@ const faqsGenerales = [
   {
     pregunta: "¿Cuánto cuesta una página web o una tienda online?",
     respuesta:
-      "Los precios de cada tarjeta son orientativos y marcan desde dónde arrancamos: página web de productos o servicios desde USD 300, página empresarial desde USD 400 y ecommerce desde USD 800. Son valores en USD y no incluyen hosting ni dominio. El valor final depende de lo que necesites y te lo pasamos por escrito antes de empezar.",
+      "Los precios de cada servicio son orientativos y marcan desde dónde arrancamos: página web de productos o servicios desde USD 300, página empresarial desde USD 400 y ecommerce desde USD 800. Son valores en USD y no incluyen hosting ni dominio. El valor final depende de lo que necesites y te lo pasamos por escrito antes de empezar.",
   },
   {
     pregunta: "¿Cuánto cuesta el software a medida?",
@@ -17,13 +17,33 @@ const faqsGenerales = [
   {
     pregunta: "¿Cuánto tarda?",
     respuesta:
-      "Cada tarjeta muestra un plazo orientativo. El tiempo real depende del alcance y de qué tan rápido nos pases textos, fotos y definiciones. Te confirmamos fechas en la propuesta.",
+      "Cada servicio muestra un plazo orientativo. El tiempo real depende del alcance y de qué tan rápido nos pases textos, fotos y definiciones. Te confirmamos fechas en la propuesta.",
   },
   {
     pregunta: "¿Y si no estoy seguro de qué necesito?",
     respuesta:
       "Escribinos igual. Con una charla corta te orientamos hacia la opción que mejor te sirve, aunque no sea la más cara. Podés empezar por la auditoría gratis de 15 minutos.",
   },
+];
+
+const incluyeTodos = [
+  "Un presupuesto claro, por escrito, antes de arrancar.",
+  "Una persona real del equipo que te responde en 24 horas hábiles.",
+  "2 rondas de revisión incluidas.",
+  "Una auditoría de 15 minutos, sin costo.",
+];
+
+const noIncluye = [
+  "Hosting ni dominio: los precios orientativos no los incluyen.",
+  "Promesas de resultados que dependen de cosas que no controlamos.",
+  "Empezar sin propuesta: no arrancamos sin que sepas qué hacemos y cuánto cuesta.",
+];
+
+const steps = [
+  { t: "Hablamos 15 minutos", d: "Nos contás qué vendés y qué necesitás. Sin costo y sin compromiso." },
+  { t: "Propuesta con precio claro", d: "Alcance y presupuesto por escrito antes de empezar." },
+  { t: "Armamos y te mostramos avances", d: "Vas viendo cómo queda mientras se arma, no solo al final." },
+  { t: "Entrega con 2 rondas de revisión", d: "Ajustamos lo que haga falta. Cada servicio muestra su duración orientativa." },
 ];
 ---
 
@@ -32,168 +52,177 @@ const faqsGenerales = [
   description="Página web de productos o servicios desde USD 300, página empresarial desde USD 400, ecommerce desde USD 800 y software a medida. Contanos qué necesitás."
 >
   <div class="panel--oro">
-  <section class="pt-16 md:pt-24 pb-12 border-b border-[var(--color-border)]">
-    <div class="container-page max-w-4xl reveal">
-      <p class="font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--color-azul)] mb-3">
-        Servicios
-      </p>
-      <h1 class="font-impact text-[clamp(2.25rem,5.5vw,4.75rem)] uppercase leading-[0.95] text-[var(--color-ink)] tracking-tight mb-6">
-        Página web, ecommerce <span class="text-[var(--color-azul)]">y software a medida.</span>
-      </h1>
-      <p class="text-xl text-[var(--color-ink-soft)] leading-relaxed max-w-3xl">
-        Te ayudamos a tener tu página web, tu tienda online o el software que tu negocio
-        necesita. Precios orientativos y claros desde el principio; para software a medida,
-        empezamos con una conversación.
-      </p>
-      <p class="mt-4 text-sm text-[var(--color-mute)] max-w-3xl">
-        Precios orientativos en USD. No incluyen hosting ni dominio. El valor en pesos se confirma en la propuesta.
-      </p>
+    <section class="pt-16 md:pt-24 pb-14 md:pb-20 border-b border-[var(--color-border)]">
+      <div class="container-page">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-end">
+          <div class="lg:col-span-9 reveal">
+            <p class="eyebrow mb-5">Servicios y precios</p>
+            <h1 class="display-xl">
+              Página web, ecommerce <span class="display-accent">y software a medida.</span>
+            </h1>
+          </div>
+          <div class="lg:col-span-3 reveal">
+            <p class="text-base md:text-lg text-[var(--color-ink-soft)] leading-relaxed">
+              Te ayudamos a tener tu página web, tu tienda online o el software que tu negocio
+              necesita. Precios orientativos y claros desde el principio; para software a medida,
+              empezamos con una conversación.
+            </p>
+            <p class="mt-4 text-sm text-[var(--color-mute)]">
+              Precios orientativos en USD. No incluyen hosting ni dominio. El valor en pesos se confirma en la propuesta.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="py-12 md:py-20">
+      <div class="container-page">
+        <ol class="ptab reveal-stagger">
+          {
+            servicios.map((s, i) => {
+              const isQuote = s.precioDesdeUsd == null;
+              const isLead = s.id === "ecommerce";
+              return (
+                <li
+                  id={s.id}
+                  class:list={["ptab__row", isLead && "ptab__row--lead", isQuote && "ptab__row--quote surface-night"]}
+                >
+                  <span class="font-mono text-xs tracking-[0.18em] text-[var(--color-mute)] tabular-nums pt-2">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+
+                  <div>
+                    {s.badge && (
+                      <p class="font-mono text-[10px] uppercase tracking-[0.22em] text-[var(--color-mute)] mb-3">
+                        {s.badge}
+                      </p>
+                    )}
+                    <h2 class="m-0">
+                      <a href={`/servicios/${s.id}`} class="ptab__name">{s.titulo}</a>
+                    </h2>
+                    <p class="mt-4 text-[var(--color-ink)] font-medium leading-snug">{s.subtitulo}</p>
+                    <p class="mt-3 text-[var(--color-ink-soft)] leading-relaxed max-w-[54ch]">{s.descripcion}</p>
+                  </div>
+
+                  <div class="flex flex-col gap-5">
+                    <div>
+                      <p class="svc__label">Para quién</p>
+                      <p class="svc__text text-sm">{s.idealPara}</p>
+                    </div>
+                    <div>
+                      <p class="svc__label">Duración orientativa</p>
+                      <p class="svc__dur font-mono">{s.duracion}</p>
+                    </div>
+                    <div class="flex flex-wrap items-center gap-x-6 gap-y-3">
+                      <a href={`/contacto?servicio=${encodeURIComponent(s.titulo)}`} class="btn-sunset">
+                        {isQuote ? s.cta : "Quiero este servicio"} <span aria-hidden="true">→</span>
+                      </a>
+                      <a href={`/servicios/${s.id}`} class="svc__more">
+                        Ver el detalle <span aria-hidden="true">→</span>
+                      </a>
+                    </div>
+                  </div>
+
+                  <p class="price price--end">
+                    <span class="sr-only">{s.precioOrientativo}</span>
+                    <span class="price__from" aria-hidden="true">{isQuote ? "según tu proyecto" : "desde"}</span>
+                    <strong class="price__amount" aria-hidden="true">
+                      {isQuote ? "A cotizar" : <><span class="price__cur">USD</span>{s.precioDesdeUsd}</>}
+                    </strong>
+                  </p>
+                </li>
+              );
+            })
+          }
+        </ol>
+      </div>
+    </section>
+  </div>
+
+  <section class="py-16 md:py-28 border-b border-[var(--color-border)]">
+    <div class="container-page">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-x-10">
+        <div class="lg:col-span-5">
+          <p class="eyebrow mb-5">Para quién</p>
+          <h2 class="display-md">
+            Para PyMEs, comercios y profesionales que quieren <span class="display-accent">verse bien y vender online.</span>
+          </h2>
+        </div>
+        <div class="lg:col-span-3 lg:col-start-7">
+          <p class="svc__label">Qué incluye, siempre</p>
+          <ul class="hair-list">
+            {incluyeTodos.map((t) => <li>{t}</li>)}
+          </ul>
+        </div>
+        <div class="lg:col-span-3">
+          <p class="svc__label">Qué no incluye</p>
+          <ul class="hair-list">
+            {noIncluye.map((t) => <li>{t}</li>)}
+          </ul>
+        </div>
+      </div>
     </div>
   </section>
 
-  <section class="py-12 md:py-16 border-b border-[var(--color-border)]">
+  <section class="py-16 md:py-28 border-b border-[var(--color-border)]">
     <div class="container-page">
-      <ol class="grid grid-cols-1 md:grid-cols-2 gap-5 reveal-stagger">
+      <p class="eyebrow mb-4">Cómo trabajamos</p>
+      <h2 class="display-lg max-w-[18ch] mb-10 md:mb-14">Cuatro pasos, de la primera charla a la entrega.</h2>
+      <ol class="process">
         {
-          servicios.map((s, i) => (
-            <li
-              id={s.id}
-              class="group relative rounded-card bg-[var(--color-blanco)] border border-[var(--color-line)] tactile transition-all duration-200 hover:-translate-y-1 hover:shadow-lg hover:border-[var(--color-azul)] overflow-hidden"
-            >
-              <div class="h-1 bg-[var(--color-dorado)]" aria-hidden="true"></div>
-              {s.badge && (
-                <div class="absolute top-4 right-4 z-10">
-                  <span class="inline-flex items-center px-2.5 py-1 rounded-control bg-[var(--color-deep)] text-white font-mono text-[9px] uppercase tracking-[0.22em] font-bold">
-                    {s.badge}
-                  </span>
-                </div>
-              )}
-
-              <div class="p-7 md:p-9">
-                <div class="flex items-start justify-between gap-3 mb-4">
-                  <span class="font-mono text-[10px] uppercase tracking-[0.22em] text-[var(--color-mute)] tabular-nums">
-                    0{i + 1}
-                  </span>
-                  <span class="font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-mute)]">
-                    {s.duracion}
-                  </span>
-                </div>
-
-                <h2 class="font-impact text-[clamp(1.5rem,2.5vw,2.25rem)] uppercase leading-[0.98] text-[var(--color-ink)] tracking-tight mb-2">
-                  {s.titulo}
-                </h2>
-                <p class="font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--color-azul)] font-semibold mb-5">
-                  {s.subtitulo}
-                </p>
-
-                <p class="text-base text-[var(--color-ink-soft)] leading-relaxed mb-6">
-                  {s.descripcion}
-                </p>
-
-                <div class="mb-6 p-4 rounded-control bg-[var(--color-azul-soft)] border-l-4 border-[var(--color-azul)]">
-                  <p class="font-mono text-[10px] uppercase tracking-[0.18em] text-[var(--color-azul)] mb-1.5 font-semibold">
-                    Lo que conseguís
-                  </p>
-                  <p class="text-sm text-[var(--color-ink)] font-medium leading-snug">
-                    {s.resultadoCuantificado}
-                  </p>
-                </div>
-
-                <ul class="space-y-2 mb-6">
-                  {s.queIncluye.slice(0, 4).map((item) => (
-                    <li class="flex items-start gap-2 text-sm text-[var(--color-ink-soft)] leading-relaxed">
-                      <svg class="w-4 h-4 mt-0.5 shrink-0 text-[var(--color-azul)]" fill="none" viewBox="0 0 16 16" aria-hidden="true">
-                        <path d="M3 8l3 3 7-7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
-                      </svg>
-                      <span>{item}</span>
-                    </li>
-                  ))}
-                  {s.queIncluye.length > 4 && (
-                    <li class="text-xs text-[var(--color-mute)] pl-6">
-                      +{s.queIncluye.length - 4} ítems más — ver detalle
-                    </li>
-                  )}
-                </ul>
-
-                <div class="flex items-end justify-between gap-3 pt-5 border-t border-[var(--color-border)]">
-                  <div>
-                    <p class="font-mono text-[10px] uppercase tracking-[0.18em] text-[var(--color-mute)] mb-1">Precio orientativo</p>
-                    <p class="font-mono text-base md:text-lg text-[var(--color-oro-price)] font-bold tabular-nums">
-                      {s.precioOrientativo}
-                    </p>
-                  </div>
-                  <a
-                    href={`/servicios/${s.id}`}
-                    class="tactile font-mono text-[11px] uppercase tracking-[0.18em] font-semibold text-white bg-[var(--color-deep)] px-4 py-2.5 rounded-control group-hover:bg-[var(--color-action)] transition-colors"
-                  >
-                    {s.precioDesdeUsd == null ? s.cta : "Ver detalle"} →
-                  </a>
-                </div>
-
-                <p class="mt-4 font-mono text-[10px] uppercase tracking-[0.18em] text-[var(--color-mute)]">
-                  Ideal para: {s.idealPara}
-                </p>
-              </div>
+          steps.map((st, i) => (
+            <li class="process__step">
+              <span class="process__num">{String(i + 1).padStart(2, "0")}</span>
+              <h3 class="process__t">{st.t}</h3>
+              <p class="process__d">{st.d}</p>
             </li>
           ))
         }
       </ol>
     </div>
   </section>
-  </div>
 
-  <section class="py-16 md:py-20 border-b border-[var(--color-border)]">
-    <div class="container-page max-w-3xl">
-      <p class="font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--color-azul)] mb-3">
-        FAQ
-      </p>
-      <h2 class="font-impact text-[clamp(1.75rem,4vw,3rem)] uppercase leading-[0.95] text-[var(--color-ink)] tracking-tight mb-10">
-        Lo que nos preguntan{" "}<span class="text-[var(--color-azul)]">antes de firmar.</span>
-      </h2>
-      <div class="space-y-3">
-        {
-          faqsGenerales.map((faq) => (
-            <details class="group rounded-control bg-[var(--color-blanco)] border border-[var(--color-line)] tactile">
-              <summary class="flex items-start justify-between gap-4 p-5 cursor-pointer list-none">
-                <h3 class="font-display font-semibold text-base md:text-lg text-[var(--color-ink)] leading-snug flex-1">
-                  {faq.pregunta}
-                </h3>
-                <span class="shrink-0 inline-flex items-center justify-center w-9 h-9 rounded-full border border-[var(--color-line)] text-[var(--color-ink)] group-open:bg-[var(--color-action)] group-open:border-[var(--color-action)] group-open:text-white transition-all" aria-hidden="true">
-                  <svg class="w-4 h-4 transition-transform group-open:rotate-45" fill="none" viewBox="0 0 16 16">
-                    <path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-                  </svg>
-                </span>
-              </summary>
-              <div class="px-5 pb-5">
-                <p class="text-sm md:text-base text-[var(--color-ink-soft)] leading-relaxed">
-                  {faq.respuesta}
-                </p>
-              </div>
-            </details>
-          ))
-        }
+  <section class="py-16 md:py-24 border-b border-[var(--color-border)]">
+    <div class="container-page">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
+        <div class="lg:col-span-4">
+          <p class="eyebrow mb-4">FAQ</p>
+          <h2 class="display-md">Lo que nos preguntan <span class="display-accent">antes de firmar.</span></h2>
+        </div>
+        <div class="lg:col-span-7 lg:col-start-6">
+          {
+            faqsGenerales.map((faq) => (
+              <details class="qa">
+                <summary>
+                  <h3 class="font-display font-semibold text-base md:text-xl text-[var(--color-ink)] leading-snug flex-1">
+                    {faq.pregunta}
+                  </h3>
+                </summary>
+                <div class="qa__body">
+                  <p class="text-sm md:text-base text-[var(--color-ink-soft)] leading-relaxed">{faq.respuesta}</p>
+                </div>
+              </details>
+            ))
+          }
+        </div>
       </div>
     </div>
   </section>
 
-  <section class="py-16 md:py-20 bg-[var(--color-deep)] text-white border-t border-[var(--color-ink)]">
-    <div class="container-page text-center max-w-2xl reveal">
-      <p class="font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--color-dorado)] mb-3">
-        Próximo paso
-      </p>
-      <h2 class="font-impact text-[clamp(2rem,5vw,3.5rem)] uppercase leading-[0.95] text-white mb-5">
-        ¿Te encaja alguno? <span class="text-[var(--color-dorado)]">Hablemos.</span>
-      </h2>
-      <p class="text-lg text-white/80 leading-relaxed mb-8">
-        Contanos qué necesitás y te orientamos. Podés empezar por una auditoría gratis de 15 minutos o escribirnos directamente: si tu caso no entra en estos servicios, te lo decimos y te orientamos hacia otra opción.
-      </p>
-      <a
-        href="/contacto?servicio=Quiero%20hablar%20de%20mi%20proyecto"
-        class="tactile inline-flex items-center justify-center gap-2 px-7 py-4 rounded-control bg-[var(--color-dorado)] text-[var(--color-on-gold)] font-mono text-[11px] uppercase tracking-[0.18em] font-bold hover:bg-[var(--color-ivory)]"
-      >
-        Contanos qué necesitás
-        <span aria-hidden="true">→</span>
-      </a>
+  <section class="surface-night py-16 md:py-24">
+    <div class="container-page grid grid-cols-1 lg:grid-cols-12 gap-10 items-end">
+      <div class="lg:col-span-8 reveal">
+        <p class="eyebrow mb-4">Próximo paso</p>
+        <h2 class="display-lg">¿Te encaja alguno? <span class="display-accent">Hablemos.</span></h2>
+        <p class="mt-6 text-lg text-[var(--color-ink-soft)] leading-relaxed max-w-[56ch]">
+          Contanos qué necesitás y te orientamos. Podés empezar por una auditoría gratis de 15 minutos o escribirnos directamente: si tu caso no entra en estos servicios, te lo decimos y te orientamos hacia otra opción.
+        </p>
+      </div>
+      <div class="lg:col-span-4 lg:justify-self-end">
+        <a href="/contacto?servicio=Quiero%20hablar%20de%20mi%20proyecto" class="btn-sunset">
+          Contanos qué necesitás <span aria-hidden="true">→</span>
+        </a>
+      </div>
     </div>
   </section>
 </Layout>

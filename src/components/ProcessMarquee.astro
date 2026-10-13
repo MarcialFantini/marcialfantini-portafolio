@@ -1,17 +1,25 @@
 ---
-const steps = ["Auditoría", "Diseño", "Código", "Lanzamiento", "Medición"];
-const loop = [...steps, ...steps, ...steps, ...steps];
+// Una sola línea, lenta y decorativa: solo términos de servicio, sin nombres de clientes.
+const terms = [
+  "Páginas web",
+  "Landing pages",
+  "Catálogos online",
+  "Ecommerce",
+  "Software a medida",
+  "Automatizaciones",
+  "Integraciones",
+];
 ---
 
-<div class="marquee py-5 md:py-7 bg-[var(--color-blanco-humo)] text-[var(--color-ink)]" aria-hidden="true">
+<div class="marquee marquee--terms" aria-hidden="true">
   <div class="marquee__track">
     {
       [0, 1].map(() => (
         <div class="flex shrink-0">
-          {loop.map((step) => (
-            <span class="process-marquee__item">
-              {step}
-              <i>→</i>
+          {[...terms, ...terms].map((t) => (
+            <span class="terms__item">
+              {t}
+              <i>·</i>
             </span>
           ))}
         </div>

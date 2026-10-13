@@ -1,65 +1,76 @@
 ---
 import site from "../data/site.json";
+
+const aboutPhoto = (site as { aboutPhoto?: string }).aboutPhoto ?? "";
+
+const principios = [
+  { t: "Precio claro, por escrito.", d: "Alcance y presupuesto antes de empezar. Sabés qué recibís y cuánto cuesta." },
+  { t: "Lenguaje simple.", d: "Nos ocupamos de lo técnico: no tenés que entender de tecnología para trabajar con nosotros." },
+  { t: "Avances que se ven.", d: "Te mostramos cómo va quedando y entregamos con 2 rondas de revisión." },
+];
 ---
 
-<section class="relative py-20 md:py-28 border-b border-[var(--color-border)] overflow-hidden">
-  <div class="container-page reveal">
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
-      <div class="lg:col-span-4 flex flex-col items-start gap-6">
-        <div
-          class="relative w-36 h-36 md:w-44 md:h-44"
-          role="img"
-          aria-label="Iniciales MF"
-        >
-          <div class="absolute inset-0 rounded-control bg-[var(--color-dorado)] translate-x-2 translate-y-2"></div>
-          <div class="absolute inset-0 rounded-control bg-[var(--color-azul)] flex items-center justify-center">
-            <span class="font-impact text-6xl md:text-7xl text-white leading-none">
-              MF
-            </span>
-          </div>
-        </div>
-        <div>
-          <p class="font-impact text-xl md:text-2xl tracking-tight text-[var(--color-ink)] leading-tight">
-            Marcial Fantini
-          </p>
-          <p class="font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--color-mute)] mt-1.5">
-            Agencia full-stack · Córdoba AR
-          </p>
-        </div>
+<section class="relative py-20 md:py-32 overflow-hidden">
+  <div class="container-page">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-x-10 items-start">
+      <div class="lg:col-span-5">
+        {
+          aboutPhoto ? (
+            <figure class="about-media">
+              <img src={aboutPhoto} alt={`El equipo de ${site.name}`} loading="lazy" decoding="async" />
+              <span class="about-media__frame" aria-hidden="true"></span>
+            </figure>
+          ) : (
+            <div class="about-media" role="img" aria-label="Iniciales MF">
+              <span class="about-media__frame" aria-hidden="true"></span>
+              <span class="about-media__mono" aria-hidden="true">M<i>F</i></span>
+              <span class="about-media__cap" aria-hidden="true">
+                <span>{site.name}</span>
+                <span>Córdoba AR</span>
+              </span>
+            </div>
+          )
+        }
       </div>
 
-      <div class="lg:col-span-8">
-        <p class="font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--color-azul)] mb-4">
-          Quiénes somos
-        </p>
+      <div class="lg:col-span-6 lg:col-start-7">
+        <p class="eyebrow mb-5">Quiénes somos</p>
 
-        <h2 class="font-impact text-[clamp(2rem,5vw,3.75rem)] leading-[0.95] text-[var(--color-ink)] max-w-3xl">
-          Armamos sitios web para que tu PyME <span class="text-[var(--color-azul)]">consiga más clientes</span> y se haga ver.
+        <h2 class="display-md">
+          Armamos sitios web para que tu PyME <span class="display-accent">consiga más clientes</span> y se haga ver.
         </h2>
 
-        <div class="mt-7 max-w-3xl space-y-5 text-[var(--color-ink-soft)] text-lg leading-relaxed">
+        <div class="mt-8 max-w-[62ch] space-y-5 text-[var(--color-ink-soft)] text-lg leading-relaxed">
           <p>
             Somos {site.name}, una agencia de desarrollo full-stack. Hacemos páginas web,
             páginas empresariales, ecommerce y software a medida para
             <strong class="text-[var(--color-ink)] font-semibold">PyMEs argentinas</strong> que
             necesitan una presencia digital seria.
           </p>
-          <p>
-            Trabajamos <strong class="text-[var(--color-ink)] font-semibold">por proyecto, con un
-            presupuesto claro por escrito</strong> antes de empezar. Hablamos 15 minutos, te pasamos
-            una propuesta y entregamos con 2 rondas de revisión.
-          </p>
+          <p>Trabajamos por proyecto y empezamos con una charla de 15 minutos, sin costo.</p>
         </div>
 
-        <div class="mt-9 flex flex-col sm:flex-row gap-4 sm:gap-6">
+        <ol class="numlist mt-10 max-w-[62ch]">
+          {
+            principios.map((p, i) => (
+              <li>
+                <span class="numlist__n">{String(i + 1).padStart(2, "0")}</span>
+                <h3 class="numlist__t">{p.t}</h3>
+                <p class="numlist__d">{p.d}</p>
+              </li>
+            ))
+          }
+        </ol>
+
+        <p class="mt-10">
           <a
             href="/sobre-mi"
-            class="tactile inline-flex items-center gap-2 text-sm font-mono uppercase tracking-[0.18em] text-[var(--color-ink)] hover:text-[var(--color-azul)] border-b border-[var(--color-ink)] hover:border-[var(--color-azul)] pb-1"
+            class="tactile inline-flex items-center gap-2 text-sm font-mono uppercase tracking-[0.18em] text-[var(--color-ink)] hover:text-[var(--color-azul)] border-b border-[var(--color-hair-strong)] hover:border-[var(--color-azul)] pb-1"
           >
             Cómo trabajamos
             <span aria-hidden="true">→</span>
           </a>
-        </div>
+        </p>
       </div>
     </div>
   </div>

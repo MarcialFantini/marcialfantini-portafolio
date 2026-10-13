@@ -1,5 +1,8 @@
 ---
+import fs from "node:fs";
+import path from "node:path";
 import servicios from "../data/servicios.json";
+import ProcessMarquee from "./ProcessMarquee.astro";
 
 const categoryById: Record<string, string> = {
   "web-productos-servicios": "Página web",
@@ -7,100 +10,128 @@ const categoryById: Record<string, string> = {
   "ecommerce": "Tienda online",
   "software-a-medida": "Software",
 };
+
+// Slot de imagen por servicio: si existe public/servicios/<id>.<ext> se renderiza adentro del
+// <figure data-service-image>; si no, el figure queda vacío y oculto (sin cambios de markup después).
+const imageExts = ["avif", "webp", "jpg", "jpeg", "png"];
+const serviceImage = (id: string): string | null => {
+  for (const ext of imageExts) {
+    if (fs.existsSync(path.join(process.cwd(), "public", "servicios", `${id}.${ext}`))) {
+      return `/servicios/${id}.${ext}`;
+    }
+  }
+  return null;
+};
+
+const steps = [
+  { t: "Hablamos 15 minutos", d: "Nos contás qué vendés y qué necesitás. Sin costo y sin compromiso." },
+  { t: "Propuesta con precio claro", d: "Alcance y presupuesto por escrito antes de empezar." },
+  { t: "Armamos y te mostramos avances", d: "Vas viendo cómo queda mientras se arma, no solo al final." },
+  {
+    t: "Entrega con 2 rondas de revisión",
+    d: "Ajustamos lo que haga falta. Cada servicio muestra su duración orientativa.",
+  },
+];
 ---
 
-<section id="servicios" class="relative py-20 md:py-32 border-b border-[var(--color-border)] overflow-hidden">
+<section id="servicios" class="relative py-20 md:py-32 overflow-hidden">
   <div class="container-page">
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-12 md:mb-20">
-      <div class="lg:col-span-7 reveal">
-        <p class="font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--color-azul)] mb-3">Servicios</p>
-        <h2 class="font-impact text-[clamp(2.25rem,6vw,5rem)] uppercase leading-[0.92] text-[var(--color-ink)] mt-2">
-          Qué podemos hacer{" "}<span class="text-[var(--color-azul)]">por tu negocio.</span>
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 mb-14 md:mb-24 items-end">
+      <div class="lg:col-span-9">
+        <p class="eyebrow mb-5">Servicios y precios</p>
+        <h2 class="display-xl">
+          Tu local, tu catálogo, tu tienda <span class="display-accent">vendiendo</span> online.
         </h2>
       </div>
-      <p class="lg:col-span-4 lg:col-start-9 self-end text-[var(--color-ink-soft)] text-lg leading-relaxed reveal">
-        {servicios.length} servicios claros: página web, página empresarial, ecommerce y software a medida.
-        Abrí uno para ver qué incluye. Los precios son orientativos.
+      <p class="lg:col-span-3 text-[var(--color-ink-soft)] text-base md:text-lg leading-relaxed">
+        {servicios.length} servicios claros, con precio orientativo desde el primer día. Abrí uno para ver qué incluye.
       </p>
     </div>
 
-    <div class="svc-list reveal-stagger border-t border-[var(--color-ink)]">
+    <div class="svc-list reveal-stagger">
       {
-        servicios.map((s, i) => (
-          <details id={s.id} name="servicios" class="svc group" open={i === 0}>
-            <summary class="svc__summary">
-              <span class="svc__num font-mono tabular-nums">{String(i + 1).padStart(2, "0")}</span>
+        servicios.map((s, i) => {
+          const isQuote = s.precioDesdeUsd == null;
+          const isLead = s.id === "ecommerce";
+          const img = serviceImage(s.id);
+          return (
+            <div class:list={["svc-row", isLead && "svc-row--lead", isQuote && "svc-row--quote surface-night"]}>
+              <details id={s.id} name="servicios" class="svc" open={i === 0}>
+                <summary class="svc__summary">
+                  <span class="svc__num font-mono tabular-nums">{String(i + 1).padStart(2, "0")}</span>
 
-              <span class="svc__title">
-                <span class="svc__name font-impact uppercase">{s.titulo}</span>
-                <span class="svc__cat font-mono">
-                  {categoryById[s.id] ?? "Servicio"}
-                  {s.badge && <> · {s.badge}</>}
-                </span>
-              </span>
-
-              <span class="svc__price font-mono tabular-nums">
-                {s.precioDesdeUsd == null ? "A cotizar" : s.precioOrientativo}
-              </span>
-
-              <span class="svc__icon" aria-hidden="true"></span>
-            </summary>
-
-            <div class="svc__panel">
-              <div class="svc__panel-inner">
-                <div class="svc__col">
-                  <p class="font-mono text-[11px] uppercase tracking-[0.2em] text-[var(--color-azul)] font-semibold mb-3">
-                    {s.subtitulo}
-                  </p>
-                  <p class="text-base md:text-lg text-[var(--color-ink-soft)] leading-relaxed">
-                    {s.descripcion}
-                  </p>
-                  <p class="mt-6 pl-4 border-l-2 border-[var(--color-dorado)] text-[var(--color-ink)] font-medium leading-snug">
-                    <span class="block font-mono text-[10px] uppercase tracking-[0.2em] text-[var(--color-mute)] mb-1">
-                      Lo que conseguís
+                  <span class="svc__title">
+                    <span class="svc__cat">
+                      {categoryById[s.id] ?? "Servicio"}
+                      {s.badge && <> · {s.badge}</>}
                     </span>
-                    {s.resultadoCuantificado}
-                  </p>
-                </div>
+                    <span class="svc__name font-impact">{s.titulo}</span>
+                    <span class="svc__out">{s.subtitulo}</span>
+                  </span>
 
-                <div class="svc__col">
-                  <ul class="space-y-2">
-                    {s.queIncluye.slice(0, 5).map((item) => (
-                      <li class="flex items-start gap-3 text-sm md:text-base text-[var(--color-ink-soft)] leading-relaxed">
-                        <span class="mt-2 h-1 w-3 shrink-0 bg-[var(--color-dorado)]" aria-hidden="true" />
-                        <span>{item}</span>
-                      </li>
-                    ))}
-                  </ul>
-                  <div class="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3">
-                    <a
-                      href={`/contacto?servicio=${encodeURIComponent(s.titulo)}`}
-                      class="btn-sunset"
-                    >
-                      {s.cta} <span aria-hidden="true">→</span>
-                    </a>
-                    <span class="font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-mute)]">
-                      Entrega: {s.duracion}
-                    </span>
-                    {s.precioDesdeUsd == null && (
-                      <span class="svc__quote font-mono text-[11px] uppercase tracking-[0.18em] font-semibold">
-                        {s.precioOrientativo}
-                      </span>
+                  <span class="svc__price price price--end">
+                    <span class="sr-only">{s.precioOrientativo}</span>
+                    <span class="price__from" aria-hidden="true">{isQuote ? "según tu proyecto" : "desde"}</span>
+                    <strong class="price__amount" aria-hidden="true">
+                      {isQuote ? "A cotizar" : <><span class="price__cur">USD</span>{s.precioDesdeUsd}</>}
+                    </strong>
+                  </span>
+
+                  <span class="svc__icon" aria-hidden="true"></span>
+                </summary>
+
+                <div class="svc__panel-inner">
+                  <div>
+                    <p class="svc__label">Para quién</p>
+                    <p class="svc__text">{s.idealPara}</p>
+                    <p class="svc__label svc__label--gap">Duración orientativa</p>
+                    <p class="svc__dur font-mono">{s.duracion}</p>
+                  </div>
+
+                  <div>
+                    <p class="svc__label">Qué incluye</p>
+                    <ul class="hair-list">
+                      {s.queIncluye.slice(0, 5).map((item) => (
+                        <li class="text-sm md:text-base">{item}</li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  <div class="svc__links">
+                    {!isQuote && (
+                      <a href={`/contacto?servicio=${encodeURIComponent(s.titulo)}`} class="btn-sunset">
+                        {s.cta} <span aria-hidden="true">→</span>
+                      </a>
                     )}
+                    <a href={`/servicios/${s.id}`} class="svc__more">
+                      Ver el detalle <span aria-hidden="true">→</span>
+                    </a>
                   </div>
                 </div>
-              </div>
+              </details>
+
+              {isQuote && (
+                <div class="svc-row__cta">
+                  <a href={`/contacto?servicio=${encodeURIComponent(s.titulo)}`} class="btn-sunset">
+                    {s.cta} <span aria-hidden="true">→</span>
+                  </a>
+                </div>
+              )}
+
+              <figure class="svc__media" data-service-image data-service={s.id} aria-hidden="true">
+                {img && <img src={img} alt="" loading="lazy" decoding="async" />}
+              </figure>
             </div>
-          </details>
-        ))
+          );
+        })
       }
     </div>
 
-    <p class="mt-6 text-sm text-[var(--color-mute)] reveal">
+    <p class="mt-8 text-sm text-[var(--color-mute)]">
       Precios orientativos en USD. No incluyen hosting ni dominio.
     </p>
 
-    <p class="mt-6 reveal">
+    <p class="mt-5">
       <a
         href="/servicios"
         class="tactile font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-ink)] border-b border-[var(--color-ink)] pb-1 hover:text-[var(--color-azul)] hover:border-[var(--color-azul)]"
@@ -108,5 +139,25 @@ const categoryById: Record<string, string> = {
         Ver comparativa completa →
       </a>
     </p>
+
+    <div class="mt-20 md:mt-32">
+      <p class="eyebrow mb-4">Cómo trabajamos</p>
+      <h3 class="display-lg max-w-[18ch] mb-10 md:mb-14">Cuatro pasos, de la primera charla a la entrega.</h3>
+      <ol class="process">
+        {
+          steps.map((st, i) => (
+            <li class="process__step">
+              <span class="process__num">{String(i + 1).padStart(2, "0")}</span>
+              <h4 class="process__t">{st.t}</h4>
+              <p class="process__d">{st.d}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </div>
+
+  <div class="mt-16 md:mt-24">
+    <ProcessMarquee />
   </div>
 </section>

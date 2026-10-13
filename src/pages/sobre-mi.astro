@@ -54,75 +54,63 @@ const dont = [
   title="Nosotros — Marcial Fantini"
   description="Somos Marcial Fantini, una agencia que desarrolla páginas web, ecommerce y software a medida. Conocé cómo trabajamos y pedí tu auditoría gratuita de 15 minutos."
 >
-  <section class="relative pt-28 md:pt-36 pb-16 md:pb-24 border-b border-[var(--color-border)] overflow-hidden">
-    <div class="container-page reveal">
-      <p class="font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--color-azul)] mb-4">
-        Sobre nosotros
-      </p>
-      <h1 class="font-impact text-[clamp(2.25rem,6vw,4.5rem)] leading-[0.95] text-[var(--color-ink)] max-w-4xl">
-        Somos {site.name}. Hacemos que tu negocio
-        <span class="text-[var(--color-azul)]">se vea y venda online.</span>
-      </h1>
-      <p class="mt-7 max-w-2xl text-lg text-[var(--color-ink-soft)] leading-relaxed">
-        Somos una agencia de desarrollo que construye páginas web, tiendas online y software a medida
-        para PyMEs, comercios y profesionales. Trabajamos con un lenguaje simple y con las reglas
-        claras desde el primer día.
-      </p>
+  <section class="surface-night relative pt-20 md:pt-28 pb-16 md:pb-28 overflow-hidden">
+    <div class="container-page">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-x-10 items-start">
+        <!--
+          SLOT: foto o video del equipo.
+          Para activarlo, completá `aboutPhoto` en src/data/site.json con la ruta de la imagen
+          (por ejemplo "/equipo.jpg", guardada en /public). Si queda vacío, se muestra el monograma.
+        -->
+        <div class="lg:col-span-5 lg:order-1 order-2">
+          {
+            aboutPhoto ? (
+              <figure class="about-media">
+                <img src={aboutPhoto} alt={`El equipo de ${site.name}`} loading="lazy" decoding="async" />
+                <span class="about-media__frame" aria-hidden="true"></span>
+              </figure>
+            ) : (
+              <div class="about-media" role="img" aria-label="Iniciales MF">
+                <span class="about-media__frame" aria-hidden="true"></span>
+                <span class="about-media__mono" aria-hidden="true">M<i>F</i></span>
+                <span class="about-media__cap" aria-hidden="true">
+                  <span>{site.name}</span>
+                  <span>Córdoba AR</span>
+                </span>
+              </div>
+            )
+          }
+        </div>
 
-      <!--
-        SLOT: foto o video del equipo.
-        Para activarlo, completá `aboutPhoto` en src/data/site.json con la ruta de la imagen
-        (por ejemplo "/equipo.jpg", guardada en /public). Si queda vacío, no se muestra nada.
-      -->
-      {
-        aboutPhoto && (
-          <figure class="mt-10 max-w-3xl">
-            <img
-              src={aboutPhoto}
-              alt={`El equipo de ${site.name}`}
-              loading="lazy"
-              class="w-full rounded-card border border-[var(--color-border)]"
-            />
-          </figure>
-        )
-      }
+        <div class="lg:col-span-6 lg:col-start-7 lg:order-2 order-1 reveal">
+          <p class="eyebrow mb-5">Sobre nosotros</p>
+          <h1 class="display-lg">
+            Somos {site.name}. Hacemos que tu negocio
+            <span class="display-accent">se vea y venda online.</span>
+          </h1>
+          <p class="mt-8 max-w-[62ch] text-lg text-[var(--color-ink-soft)] leading-relaxed">
+            Somos una agencia de desarrollo que construye páginas web, tiendas online y software a medida
+            para PyMEs, comercios y profesionales. Trabajamos con un lenguaje simple y con las reglas
+            claras desde el primer día.
+          </p>
+        </div>
+      </div>
     </div>
   </section>
 
-  <section class="py-16 md:py-24 border-b border-[var(--color-border)]">
-    <div class="container-page">
-      <p class="font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--color-azul)] mb-4">Qué hacemos</p>
-      <h2 class="font-impact text-[clamp(1.75rem,4vw,3rem)] leading-[1] text-[var(--color-ink)] max-w-3xl mb-10">
-        Tres cosas, bien hechas.
-      </h2>
-      <ul class="grid grid-cols-1 md:grid-cols-3 gap-5">
+  <section class="py-16 md:py-28 border-b border-[var(--color-border)]">
+    <div class="container-page grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-x-10">
+      <div class="lg:col-span-4">
+        <p class="eyebrow mb-5">Qué hacemos</p>
+        <h2 class="display-md">Tres cosas, <span class="display-accent">bien hechas.</span></h2>
+      </div>
+      <ol class="numlist lg:col-span-7 lg:col-start-6">
         {
-          build.map((b) => (
-            <li class="rounded-card border border-[var(--color-line)] bg-[var(--color-blanco)] p-6">
-              <h3 class="font-impact text-xl uppercase leading-tight text-[var(--color-ink)] mb-3">{b.title}</h3>
-              <p class="text-[var(--color-ink-soft)] leading-relaxed">{b.text}</p>
-            </li>
-          ))
-        }
-      </ul>
-    </div>
-  </section>
-
-  <section class="py-16 md:py-24 border-b border-[var(--color-border)]">
-    <div class="container-page">
-      <p class="font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--color-azul)] mb-4">Cómo trabajamos</p>
-      <h2 class="font-impact text-[clamp(1.75rem,4vw,3rem)] leading-[1] text-[var(--color-ink)] max-w-3xl mb-10">
-        Simple, en tres pasos.
-      </h2>
-      <ol class="grid grid-cols-1 md:grid-cols-3 gap-5">
-        {
-          steps.map((s, i) => (
-            <li class="rounded-card border border-[var(--color-border)] bg-[var(--color-blanco)] p-6">
-              <span class="font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--color-dorado)]">
-                Paso {String(i + 1).padStart(2, "0")}
-              </span>
-              <h3 class="font-impact text-xl uppercase leading-tight text-[var(--color-ink)] mt-2 mb-3">{s.title}</h3>
-              <p class="text-[var(--color-ink-soft)] leading-relaxed">{s.text}</p>
+          build.map((b, i) => (
+            <li>
+              <span class="numlist__n">{String(i + 1).padStart(2, "0")}</span>
+              <h3 class="numlist__t">{b.title}</h3>
+              <p class="numlist__d">{b.text}</p>
             </li>
           ))
         }
@@ -130,45 +118,56 @@ const dont = [
     </div>
   </section>
 
-  <section class="py-16 md:py-24 border-b border-[var(--color-border)]">
-    <div class="container-page grid grid-cols-1 md:grid-cols-2 gap-12">
+  <section class="py-16 md:py-28 border-b border-[var(--color-border)]">
+    <div class="container-page">
+      <p class="eyebrow mb-4">Cómo trabajamos</p>
+      <h2 class="display-lg max-w-[14ch] mb-10 md:mb-14">Simple, en tres pasos.</h2>
+      <ol class="process" style="--steps: 3">
+        {
+          steps.map((s, i) => (
+            <li class="process__step">
+              <span class="process__num">{String(i + 1).padStart(2, "0")}</span>
+              <h3 class="process__t">{s.title}</h3>
+              <p class="process__d">{s.text}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <section class="py-16 md:py-28 border-b border-[var(--color-border)]">
+    <div class="container-page grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-x-20">
       <div>
-        <p class="font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--color-azul)] mb-4">Qué recibís</p>
-        <ul class="space-y-3 text-[var(--color-ink-soft)] text-lg leading-relaxed">
-          {get.map((g) => <li class="flex gap-3"><span aria-hidden="true" class="text-[var(--color-azul)]">✓</span><span>{g}</span></li>)}
+        <p class="svc__label">Qué recibís</p>
+        <ul class="hair-list text-lg">
+          {get.map((g) => <li>{g}</li>)}
         </ul>
       </div>
       <div>
-        <p class="font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--color-azul)] mb-4">Qué no hacemos</p>
-        <ul class="space-y-3 text-[var(--color-ink-soft)] text-lg leading-relaxed">
-          {dont.map((d) => <li class="flex gap-3"><span aria-hidden="true" class="text-[var(--color-mute)]">×</span><span>{d}</span></li>)}
+        <p class="svc__label">Qué no hacemos</p>
+        <ul class="hair-list text-lg">
+          {dont.map((d) => <li>{d}</li>)}
         </ul>
       </div>
     </div>
   </section>
 
-  <section class="py-16 md:py-24">
-    <div class="container-page">
-      <h2 class="font-impact text-[clamp(1.75rem,4vw,3rem)] leading-[1] text-[var(--color-ink)] max-w-3xl mb-4">
-        Empecemos por una auditoría gratis de 15 minutos.
-      </h2>
-      <p class="max-w-2xl text-lg text-[var(--color-ink-soft)] leading-relaxed mb-8">
-        Contanos qué necesitás y te respondemos en 24 horas hábiles.
-      </p>
-      <div class="flex flex-col sm:flex-row gap-3 sm:gap-4">
-        <a
-          href="/contacto?servicio=Auditor%C3%ADa%20gratis"
-          class="tactile inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-control bg-[var(--color-dorado)] text-[var(--color-on-gold)] font-mono text-[11px] uppercase tracking-[0.18em] font-bold hover:bg-[var(--color-deep)] hover:text-white"
-        >
-          Pedir auditoría gratis
-          <span aria-hidden="true">→</span>
+  <section class="surface-night py-16 md:py-28">
+    <div class="container-page grid grid-cols-1 lg:grid-cols-12 gap-10 items-end">
+      <div class="lg:col-span-8">
+        <h2 class="display-lg">
+          Empecemos por una <span class="display-accent">auditoría gratis</span> de 15 minutos.
+        </h2>
+        <p class="mt-6 max-w-[56ch] text-lg text-[var(--color-ink-soft)] leading-relaxed">
+          Contanos qué necesitás y te respondemos en 24 horas hábiles.
+        </p>
+      </div>
+      <div class="lg:col-span-4 lg:justify-self-end flex flex-col sm:flex-row lg:flex-col gap-4 items-start">
+        <a href="/contacto?servicio=Auditor%C3%ADa%20gratis" class="btn-sunset">
+          Pedir auditoría gratis <span aria-hidden="true">→</span>
         </a>
-        <a
-          href="/servicios"
-          class="tactile inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-control border border-[var(--color-ink)] text-[var(--color-ink)] font-mono text-[11px] uppercase tracking-[0.18em] font-semibold hover:border-[var(--color-azul)] hover:text-[var(--color-azul)]"
-        >
-          Ver servicios
-        </a>
+        <a href="/servicios" class="svc__more">Ver servicios <span aria-hidden="true">→</span></a>
       </div>
     </div>
   </section>

@@ -82,134 +82,156 @@ const faqsPorServicio: Record<string, { pregunta: string; respuesta: string }[]>
 };
 
 const faqItems = faqsPorServicio[servicio.id] ?? [];
+
+const isQuote = servicio.precioDesdeUsd == null;
+const index = servicios.findIndex((s) => s.id === servicio.id) + 1;
+
+const noIncluye = [
+  "Hosting ni dominio: los precios orientativos no los incluyen.",
+  "Promesas de resultados que dependen de cosas que no controlamos.",
+  "Empezar sin propuesta: no arrancamos sin que sepas qué hacemos y cuánto cuesta.",
+];
+
+const steps = [
+  { t: "Hablamos 15 minutos", d: "Nos contás qué necesitás. Sin costo y sin compromiso." },
+  { t: "Propuesta con precio claro", d: "Alcance y presupuesto por escrito antes de empezar." },
+  { t: "Armamos y te mostramos avances", d: "Vas viendo cómo queda mientras se arma." },
+  { t: "Entrega con 2 rondas de revisión", d: "Ajustamos lo que haga falta y lo dejamos andando." },
+];
 ---
 
 <Layout
   title={`${servicio.titulo} — ${site.name}`}
   description={servicio.descripcion}
 >
-  <section class="pt-16 md:pt-20 pb-12 border-b border-[var(--color-border)]">
-    <div class="container-page max-w-4xl reveal">
-      <nav class="mb-8 font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-mute)]">
-        <ol class="flex flex-wrap items-center gap-2">
-          <li><a href="/servicios" class="hover:text-[var(--color-azul)]">Servicios</a></li>
-          <li aria-hidden="true">/</li>
-          <li class="text-[var(--color-ink)]">{servicio.titulo}</li>
-        </ol>
-      </nav>
+  <div class="panel--oro">
+    <section class="pt-16 md:pt-20 pb-14 md:pb-20 border-b border-[var(--color-border)]">
+      <div class="container-page">
+        <nav class="mb-10 font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-mute)]" aria-label="Migas de pan">
+          <ol class="flex flex-wrap items-center gap-2">
+            <li><a href="/servicios" class="hover:text-[var(--color-azul)]">Servicios</a></li>
+            <li aria-hidden="true">/</li>
+            <li class="text-[var(--color-ink)]">{servicio.titulo}</li>
+          </ol>
+        </nav>
 
-      <div class="flex items-center gap-3 mb-4">
-        <span class="font-mono text-[10px] uppercase tracking-[0.22em] text-[var(--color-mute)] tabular-nums">
-          0{servicios.findIndex((s) => s.id === servicio.id) + 1}
-        </span>
-        <span class="h-px flex-1 bg-[var(--color-border)]"></span>
-        <span class="font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-mute)]">
-          {servicio.duracion}
-        </span>
-      </div>
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-x-10 items-end">
+          <div class="lg:col-span-9 reveal">
+            <p class="font-mono text-xs tracking-[0.18em] text-[var(--color-mute)] tabular-nums mb-5">
+              {String(index).padStart(2, "0")}
+              {servicio.badge && <> · <span class="uppercase tracking-[0.22em] text-[10px]">{servicio.badge}</span></>}
+            </p>
+            <h1 class="display-xl">
+              {servicio.titulo}. <span class="display-accent">{servicio.subtitulo}</span>
+            </h1>
+          </div>
 
-      <h1 class="font-impact text-[clamp(2.25rem,5.5vw,4.5rem)] uppercase leading-[0.95] text-[var(--color-ink)] tracking-tight mb-5">
-        {servicio.titulo}.<br />
-        <span class="text-[var(--color-azul)]">{servicio.subtitulo}</span>
-      </h1>
+          <div class="lg:col-span-3 reveal border-t border-[var(--color-hair-strong)] pt-6">
+            <p class="price">
+              <span class="sr-only">{servicio.precioOrientativo}</span>
+              <span class="price__from" aria-hidden="true">{isQuote ? "según tu proyecto" : "desde"}</span>
+              <strong class="price__amount" aria-hidden="true">
+                {isQuote ? "A cotizar" : <><span class="price__cur">USD</span>{servicio.precioDesdeUsd}</>}
+              </strong>
+            </p>
+            <p class="svc__label mt-6">Duración orientativa</p>
+            <p class="svc__dur font-mono">{servicio.duracion}</p>
+            {!isQuote && (
+              <p class="mt-4 text-sm text-[var(--color-mute)]">
+                Precios orientativos en USD. No incluyen hosting ni dominio.
+              </p>
+            )}
+          </div>
+        </div>
 
-      <p class="text-xl text-[var(--color-ink-soft)] leading-relaxed max-w-3xl mb-8">
-        {servicio.descripcion}
-      </p>
-
-      <div class="flex flex-wrap items-center gap-4 text-sm font-mono uppercase tracking-[0.18em] text-[var(--color-mute)]">
-        <span class="px-3 py-1.5 rounded-control bg-[var(--color-dorado-soft)] text-[var(--color-dorado-deep)] font-semibold">
-          {servicio.precioOrientativo}
-        </span>
-        <span class="px-3 py-1.5 rounded-control bg-[var(--color-azul-soft)] text-[var(--color-azul-deep)] font-semibold">
-          {servicio.duracion}
-        </span>
-        {servicio.badge && (
-          <span class="px-3 py-1.5 rounded-control bg-[var(--color-deep)] text-white font-semibold">
-            {servicio.badge}
-          </span>
-        )}
-      </div>
-      {servicio.precioDesdeUsd != null && (
-        <p class="mt-3 text-sm text-[var(--color-mute)]">
-          Precios orientativos en USD. No incluyen hosting ni dominio.
+        <p class="mt-10 text-lg md:text-xl text-[var(--color-ink-soft)] leading-relaxed max-w-[60ch]">
+          {servicio.descripcion}
         </p>
-      )}
-    </div>
-  </section>
+      </div>
+    </section>
+  </div>
 
-  <section class="py-12 md:py-16 border-b border-[var(--color-border)] bg-[var(--color-action)] text-white">
-    <div class="container-page max-w-3xl reveal">
-      <p class="font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--color-dorado)] mb-3">
-        Lo que conseguís
-      </p>
-      <p class="font-impact text-[clamp(1.5rem,3vw,2.5rem)] uppercase leading-[0.98] text-white">
+  <section class="surface-night py-16 md:py-28">
+    <div class="container-page grid grid-cols-1 lg:grid-cols-12 gap-8">
+      <p class="eyebrow lg:col-span-3">Lo que conseguís</p>
+      <p class="lg:col-span-9 font-impact text-[clamp(1.5rem,1rem+2.4vw,3rem)] leading-[1.05] text-[var(--color-ink)] max-w-[34ch]">
         {servicio.resultadoCuantificado}
       </p>
     </div>
   </section>
 
-  <section class="py-12 md:py-16 border-b border-[var(--color-border)]">
-    <div class="container-page max-w-3xl">
-      <p class="font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--color-azul)] mb-3">
-        Qué incluye
-      </p>
-      <h2 class="font-impact text-[clamp(1.75rem,3.5vw,2.75rem)] uppercase leading-[0.95] text-[var(--color-ink)] tracking-tight mb-10">
-        Todo lo que entregamos,{" "}<span class="text-[var(--color-azul)]">por escrito.</span>
-      </h2>
-      <ul class="space-y-3">
+  <section class="py-16 md:py-28 border-b border-[var(--color-border)]">
+    <div class="container-page grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-x-10">
+      <div class="lg:col-span-4">
+        <p class="eyebrow mb-5">Qué incluye</p>
+        <h2 class="display-md">Todo lo que entregamos, <span class="display-accent">por escrito.</span></h2>
+      </div>
+      <ol class="numlist numlist--plain lg:col-span-7 lg:col-start-6">
         {
-          servicio.queIncluye.map((item) => (
-            <li class="flex items-start gap-3 text-base md:text-lg text-[var(--color-ink)] leading-relaxed">
-              <span class="shrink-0 inline-flex items-center justify-center w-6 h-6 rounded-full bg-[var(--color-action)] text-white font-mono text-xs mt-1">
-                ✓
-              </span>
-              <span>{item}</span>
+          servicio.queIncluye.map((item, i) => (
+            <li>
+              <span class="numlist__n">{String(i + 1).padStart(2, "0")}</span>
+              <p class="numlist__t">{item}</p>
             </li>
           ))
         }
-      </ul>
+      </ol>
     </div>
   </section>
 
-  <section class="py-12 md:py-16 border-b border-[var(--color-border)] bg-[var(--color-blanco)]">
-    <div class="container-page max-w-3xl">
-      <p class="font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--color-azul)] mb-3">
-        Para quién es
-      </p>
-      <p class="text-xl md:text-2xl text-[var(--color-ink)] leading-snug font-medium">
-        {servicio.idealPara}
-      </p>
+  <section class="py-16 md:py-28 border-b border-[var(--color-border)]">
+    <div class="container-page grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-x-10">
+      <div class="lg:col-span-6">
+        <p class="eyebrow mb-5">Para quién es</p>
+        <p class="text-2xl md:text-3xl text-[var(--color-ink)] leading-snug font-medium max-w-[28ch]">
+          {servicio.idealPara}
+        </p>
+      </div>
+      <div class="lg:col-span-5 lg:col-start-8">
+        <p class="svc__label">Qué no incluye</p>
+        <ul class="hair-list">
+          {noIncluye.map((t) => <li>{t}</li>)}
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-16 md:py-28 border-b border-[var(--color-border)]">
+    <div class="container-page">
+      <p class="eyebrow mb-4">Cómo trabajamos</p>
+      <h2 class="display-lg max-w-[18ch] mb-10 md:mb-14">Cuatro pasos, de la primera charla a la entrega.</h2>
+      <ol class="process">
+        {
+          steps.map((st, i) => (
+            <li class="process__step">
+              <span class="process__num">{String(i + 1).padStart(2, "0")}</span>
+              <h3 class="process__t">{st.t}</h3>
+              <p class="process__d">{st.d}</p>
+            </li>
+          ))
+        }
+      </ol>
     </div>
   </section>
 
   {faqItems.length > 0 && (
-    <section class="py-12 md:py-16 border-b border-[var(--color-border)]">
-      <div class="container-page max-w-3xl">
-        <p class="font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--color-azul)] mb-3">
-          FAQ del servicio
-        </p>
-        <h2 class="font-impact text-[clamp(1.75rem,3.5vw,2.75rem)] uppercase leading-[0.95] text-[var(--color-ink)] tracking-tight mb-10">
-          Preguntas <span class="text-[var(--color-azul)]">concretas.</span>
-        </h2>
-        <div class="space-y-3">
+    <section class="py-16 md:py-24 border-b border-[var(--color-border)]">
+      <div class="container-page grid grid-cols-1 lg:grid-cols-12 gap-10">
+        <div class="lg:col-span-4">
+          <p class="eyebrow mb-4">FAQ del servicio</p>
+          <h2 class="display-md">Preguntas <span class="display-accent">concretas.</span></h2>
+        </div>
+        <div class="lg:col-span-7 lg:col-start-6">
           {
             faqItems.map((faq) => (
-              <details class="group rounded-control bg-[var(--color-blanco)] border border-[var(--color-line)] tactile">
-                <summary class="flex items-start justify-between gap-4 p-5 cursor-pointer list-none">
-                  <h3 class="font-display font-semibold text-base md:text-lg text-[var(--color-ink)] leading-snug flex-1">
+              <details class="qa">
+                <summary>
+                  <h3 class="font-display font-semibold text-base md:text-xl text-[var(--color-ink)] leading-snug flex-1">
                     {faq.pregunta}
                   </h3>
-                  <span class="shrink-0 inline-flex items-center justify-center w-9 h-9 rounded-full border border-[var(--color-line)] text-[var(--color-ink)] group-open:bg-[var(--color-action)] group-open:border-[var(--color-action)] group-open:text-white transition-all" aria-hidden="true">
-                    <svg class="w-4 h-4 transition-transform group-open:rotate-45" fill="none" viewBox="0 0 16 16">
-                      <path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-                    </svg>
-                  </span>
                 </summary>
-                <div class="px-5 pb-5">
-                  <p class="text-sm md:text-base text-[var(--color-ink-soft)] leading-relaxed">
-                    {faq.respuesta}
-                  </p>
+                <div class="qa__body">
+                  <p class="text-sm md:text-base text-[var(--color-ink-soft)] leading-relaxed">{faq.respuesta}</p>
                 </div>
               </details>
             ))
@@ -219,31 +241,20 @@ const faqItems = faqsPorServicio[servicio.id] ?? [];
     </section>
   )}
 
-  <section class="py-12 md:py-16 bg-[var(--color-deep)] text-white border-t border-[var(--color-ink)]">
-    <div class="container-page text-center max-w-2xl reveal">
-      <p class="font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--color-dorado)] mb-3">
-        {servicio.precioDesdeUsd == null ? "Iniciemos una conversación" : "Empecemos"}
-      </p>
-      <h2 class="font-impact text-[clamp(1.75rem,4vw,3rem)] uppercase leading-[0.95] text-white mb-5">
-        ¿Te encaja? <span class="text-[var(--color-dorado)]">Hablemos.</span>
-      </h2>
-      <p class="text-lg text-white/80 leading-relaxed mb-8">
-        Contanos qué necesitás y te respondemos con una primera lectura de tu proyecto. Si preferís, podés empezar por una auditoría gratis de 15 minutos. Si no es lo que te conviene, te lo decimos y te orientamos.
-      </p>
-      <div class="flex flex-col sm:flex-row gap-3 justify-center">
-        <a
-          href={`/contacto?servicio=${encodeURIComponent(servicio.titulo)}`}
-          class="tactile inline-flex items-center justify-center gap-2 px-7 py-4 rounded-control bg-[var(--color-dorado)] text-[var(--color-on-gold)] font-mono text-[11px] uppercase tracking-[0.18em] font-bold hover:bg-[var(--color-ivory)]"
-        >
-          {servicio.precioDesdeUsd == null ? servicio.cta : "Quiero este servicio"}
-          <span aria-hidden="true">→</span>
+  <section class="surface-night py-16 md:py-24">
+    <div class="container-page grid grid-cols-1 lg:grid-cols-12 gap-10 items-end">
+      <div class="lg:col-span-8 reveal">
+        <p class="eyebrow mb-4">{isQuote ? "Iniciemos una conversación" : "Empecemos"}</p>
+        <h2 class="display-lg">¿Te encaja? <span class="display-accent">Hablemos.</span></h2>
+        <p class="mt-6 text-lg text-[var(--color-ink-soft)] leading-relaxed max-w-[56ch]">
+          Contanos qué necesitás y te respondemos con una primera lectura de tu proyecto. Si preferís, podés empezar por una auditoría gratis de 15 minutos. Si no es lo que te conviene, te lo decimos y te orientamos.
+        </p>
+      </div>
+      <div class="lg:col-span-4 lg:justify-self-end flex flex-col sm:flex-row lg:flex-col gap-4 items-start">
+        <a href={`/contacto?servicio=${encodeURIComponent(servicio.titulo)}`} class="btn-sunset">
+          {isQuote ? servicio.cta : "Quiero este servicio"} <span aria-hidden="true">→</span>
         </a>
-        <a
-          href="/servicios"
-          class="tactile inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-control border border-white/30 text-white font-mono text-[11px] uppercase tracking-[0.18em] font-semibold hover:border-[var(--color-dorado)] hover:text-[var(--color-dorado)]"
-        >
-          Ver otros servicios
-        </a>
+        <a href="/servicios" class="svc__more">Ver otros servicios <span aria-hidden="true">→</span></a>
       </div>
     </div>
   </section>

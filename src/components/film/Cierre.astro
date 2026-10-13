@@ -59,7 +59,7 @@ const { from, to } = Astro.props;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 5rem 1.25rem 7rem;
+    padding: 5rem 1.25rem 9rem;
     text-align: center;
   }
   .cierre__h2 {
@@ -117,16 +117,27 @@ const { from, to } = Astro.props;
   }
   .cierre__mail:hover { color: var(--color-neon); }
 
-  /* Desvanece al color de página en el último tramo del scroll */
+  /* Costura larga navy -> color de página: ~34svh con paradas suavizadas (sin banda dura),
+     empieza antes y llega a opacidad plena sobre el final del scroll. Opera en claro y oscuro
+     porque el destino es --color-page. */
   .film-seam {
     position: absolute;
     left: 0;
     right: 0;
     bottom: 0;
-    height: 26svh;
+    height: 34svh;
     z-index: 1;
-    background: linear-gradient(180deg, transparent 0%, var(--color-page) 100%);
-    opacity: clamp(0, calc((var(--p) - 0.5) * 3), 1);
+    background: linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--color-page) 0%, transparent) 0%,
+      color-mix(in srgb, var(--color-page) 6%, transparent) 18%,
+      color-mix(in srgb, var(--color-page) 22%, transparent) 38%,
+      color-mix(in srgb, var(--color-page) 50%, transparent) 58%,
+      color-mix(in srgb, var(--color-page) 80%, transparent) 78%,
+      color-mix(in srgb, var(--color-page) 96%, transparent) 92%,
+      var(--color-page) 100%
+    );
+    opacity: clamp(0, calc((var(--p) - 0.4) * 3), 1);
     pointer-events: none;
   }
 
@@ -140,6 +151,6 @@ const { from, to } = Astro.props;
       pointer-events: auto;
     }
     .cierre__glow { opacity: 1; }
-    .film-seam { opacity: 1; height: 20svh; }
+    .film-seam { opacity: 1; height: 24svh; }
   }
 </style>
