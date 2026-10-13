@@ -1,0 +1,108 @@
+---
+---
+
+<div class="film-scene cierre" data-film-scene="cierre" data-chapter="Cierre" style="--film-len: 220">
+  <div class="film-stage cierre__stage">
+    <div class="cierre__bg" aria-hidden="true"></div>
+    <div class="cierre__glow" aria-hidden="true"></div>
+
+    <div class="cierre__content">
+      <h2 class="cierre__h2 film-will">
+        Hablemos de <span class="text-glow-gold">tu sitio</span>.
+      </h2>
+      <div class="cierre__cta film-will">
+        <a href="/contacto" class="cierre__btn">Quiero mi sitio</a>
+      </div>
+    </div>
+
+    <!-- Costura: navy -> color de página, para entrar a los paneles claros sin corte -->
+    <div class="film-seam" aria-hidden="true"></div>
+  </div>
+</div>
+
+<style>
+  .cierre__bg {
+    position: absolute;
+    inset: 0;
+    z-index: -3;
+    background: var(--color-navy-950);
+  }
+  .cierre__glow {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    background: radial-gradient(560px 380px at 50% 48%, rgba(255, 210, 74, 0.22), transparent 70%);
+    opacity: clamp(0, calc(var(--p) * 2.2), 1);
+    pointer-events: none;
+  }
+  .cierre__content {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 5rem 1.25rem 3rem;
+    text-align: center;
+  }
+  .cierre__h2 {
+    --v: clamp(0, calc(var(--p) * 4), 1);
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(2.6rem, 11vw, 7rem);
+    line-height: 1;
+    letter-spacing: -0.05em;
+    text-transform: none;
+    color: var(--color-ivory);
+    opacity: var(--v);
+    transform: translate3d(0, calc((1 - var(--v)) * 4svh), 0) scale(calc(0.96 + var(--v) * 0.04));
+    filter: blur(calc((1 - var(--v)) * 8px));
+  }
+  .cierre__cta {
+    --v: clamp(0, calc((var(--p) - 0.25) * 4), 1);
+    margin-top: 2rem;
+    opacity: var(--v);
+    transform: translate3d(0, calc((1 - var(--v)) * 3svh), 0);
+    pointer-events: none;
+  }
+  .cierre.is-late .cierre__cta { pointer-events: auto; }
+  .cierre__btn {
+    display: inline-block;
+    padding: 0.95rem 2rem;
+    border-radius: 14px;
+    background: var(--color-neon);
+    color: var(--color-navy-950);
+    font-weight: 700;
+    font-size: clamp(1rem, 3.8vw, 1.2rem);
+    text-decoration: none;
+    box-shadow: 0 0 40px rgba(255, 210, 74, 0.55), 0 0 110px rgba(255, 210, 74, 0.25);
+    transition: transform 0.25s ease;
+  }
+  .cierre__btn:hover { transform: translateY(-2px); }
+
+  /* Desvanece al color de página en el último tramo del scroll */
+  .film-seam {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 38svh;
+    z-index: 1;
+    background: linear-gradient(180deg, transparent 0%, var(--color-page) 100%);
+    opacity: clamp(0, calc((var(--p) - 0.55) * 2.4), 1);
+    pointer-events: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cierre__content { position: relative; padding-block: 4rem; }
+    .cierre__h2,
+    .cierre__cta {
+      opacity: 1;
+      transform: none;
+      filter: none;
+      pointer-events: auto;
+    }
+    .cierre__glow { opacity: 1; }
+    .film-seam { opacity: 1; height: 20svh; }
+  }
+</style>

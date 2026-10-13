@@ -25,7 +25,7 @@ Home page behaves like a perfect cinematic motion-graphics film (Apple product-v
 - [x] T1 Palette tokens: navy / ivory / neon gold in global.css (+ glow utilities)
 - [x] T2 Film engine: pinned scene stage + progress (0..1) per scene in motion.ts, reduced-motion fallback
 - [x] T3 Scenes 1-2 (El peso, El giro) in Hero/new Film components
-- [ ] T4 Scenes 3-5 (La solucion, El alivio, Cierre) wired to existing data (servicios, metricas, contacto)
+- [x] T4 Scenes 3-5 (La solucion, El alivio, Cierre) wired to existing data (servicios, metricas, contacto)
 - [ ] T5 Polish: chapter rail, mobile pass, `pnpm check` + `pnpm build`
 
 ## Progress / evidence

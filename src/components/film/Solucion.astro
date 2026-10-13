@@ -1,0 +1,253 @@
+---
+import servicios from "../../data/servicios.json";
+
+// Cada pieza entra en un tramo de --p: --s = inicio, cae durante 0.12.
+const cards = servicios.map((s, i) => ({
+  id: s.id,
+  titulo: s.titulo,
+  s: 0.34 + i * 0.1,
+  dx: i % 2 === 0 ? -1 : 1,
+}));
+---
+
+<div class="film-scene sol" data-film-scene="solucion" data-chapter="La solución" style="--film-len: 380">
+  <div class="film-stage sol__stage">
+    <div class="sol__bg" aria-hidden="true"></div>
+
+    <div class="sol__content">
+      <h2 class="sol__h2 film-will">
+        Lo armo <span class="text-glow-gold">pieza por pieza</span>.
+      </h2>
+      <p class="sol__sub film-will">Cada bloque tiene un trabajo: que te encuentren y que te escriban.</p>
+
+      <div class="sol__frame film-will">
+        <div class="sol__bar" aria-hidden="true">
+          <i></i><i></i><i></i>
+          <span class="sol__url">tunegocio.com.ar</span>
+        </div>
+
+        <div class="sol__page">
+          <div class="sol__piece sol__head film-will" style="--s:0.14" aria-hidden="true">
+            <b></b>
+            <span></span><span></span><span></span>
+          </div>
+
+          <div class="sol__piece sol__hero film-will" style="--s:0.22">
+            <strong>Tu negocio, abierto 24/7</strong>
+            <em>Más consultas, menos mensajes sueltos.</em>
+          </div>
+
+          <div class="sol__cards">
+            {
+              cards.map((c) => (
+                <a
+                  href={`/servicios/${c.id}`}
+                  class="sol__piece sol__card film-will"
+                  style={`--s:${c.s};--dx:${c.dx}`}
+                >
+                  {c.titulo}
+                </a>
+              ))
+            }
+          </div>
+
+          <div class="sol__piece sol__btn film-will" style="--s:0.76">
+            <a href="/contacto" class="sol__btn-a">Escribime</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .sol__bg {
+    position: absolute;
+    inset: 0;
+    z-index: -3;
+    background: linear-gradient(180deg, var(--color-navy-700) 0%, var(--color-navy-900) 45%, var(--color-navy-950) 100%);
+  }
+  .sol__content {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 4.5rem 1rem 2rem;
+    text-align: center;
+  }
+  .sol__h2 {
+    --v: clamp(0, calc(var(--p) * 10), 1);
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(1.7rem, 7vw, 3.6rem);
+    line-height: 1.05;
+    letter-spacing: -0.04em;
+    text-transform: none;
+    color: var(--color-ivory);
+    opacity: var(--v);
+    transform: translate3d(0, calc((1 - var(--v)) * 3svh), 0);
+  }
+  .sol__sub {
+    --v: clamp(0, calc((var(--p) - 0.04) * 10), 1);
+    margin-top: 0.6rem;
+    max-width: 30rem;
+    font-size: clamp(0.9rem, 3.4vw, 1.1rem);
+    color: var(--color-ivory-dim);
+    opacity: var(--v);
+  }
+
+  /* Marco de navegador: flota con parallax suave */
+  .sol__frame {
+    --v: clamp(0, calc((var(--p) - 0.06) * 8), 1);
+    position: relative;
+    width: min(100%, 52rem);
+    margin-top: 1.4rem;
+    border-radius: 16px;
+    border: 1px solid rgba(246, 241, 228, 0.18);
+    background: rgba(10, 19, 48, 0.85);
+    box-shadow: 0 40px 80px -30px rgba(0, 0, 0, 0.8), 0 0 calc(var(--e) * 60px) rgba(255, 210, 74, 0.18);
+    opacity: var(--v);
+    transform: translate3d(0, calc((1 - var(--v)) * 6svh - var(--p) * 2svh), 0) scale(calc(0.94 + var(--v) * 0.06));
+    text-align: left;
+  }
+  .sol__bar {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0.55rem 0.8rem;
+    border-bottom: 1px solid rgba(246, 241, 228, 0.12);
+  }
+  .sol__bar i {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(246, 241, 228, 0.25);
+  }
+  .sol__url {
+    margin-left: 0.6rem;
+    padding: 0.15rem 0.7rem;
+    border-radius: 999px;
+    background: rgba(246, 241, 228, 0.08);
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    color: var(--color-ivory-dim);
+  }
+  .sol__page {
+    display: grid;
+    gap: 0.6rem;
+    padding: 0.8rem;
+  }
+
+  /* Pieza genérica: aterriza con luz dorada en el borde */
+  .sol__piece {
+    --v: clamp(0, calc((var(--p) - var(--s)) * 8), 1);
+    --edge: clamp(0, calc(1 - (var(--p) - var(--s)) * 6), 1);
+    opacity: var(--v);
+    transform: translate3d(calc((1 - var(--v)) * var(--dx, 0) * 8vw), calc((1 - var(--v)) * 5svh), 0)
+      scale(calc(0.96 + var(--v) * 0.04));
+    border: 1px solid rgba(255, 210, 74, calc(0.12 + var(--v) * var(--edge) * 0.7));
+    border-radius: 10px;
+    background: rgba(27, 43, 92, 0.6);
+    box-shadow: 0 0 calc(var(--v) * var(--edge) * 22px) rgba(255, 210, 74, 0.45);
+  }
+  .sol__head {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.55rem 0.7rem;
+  }
+  .sol__head b {
+    width: 1.4rem;
+    height: 0.9rem;
+    border-radius: 4px;
+    background: var(--color-neon);
+    margin-right: auto;
+  }
+  .sol__head span {
+    width: 1.6rem;
+    height: 0.35rem;
+    border-radius: 3px;
+    background: rgba(246, 241, 228, 0.35);
+  }
+  .sol__hero {
+    padding: clamp(0.8rem, 3vw, 1.6rem) 0.9rem;
+    --dx: 0;
+  }
+  .sol__hero strong {
+    display: block;
+    font-family: var(--font-display);
+    font-size: clamp(1.1rem, 4.6vw, 2rem);
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    color: var(--color-ivory);
+  }
+  .sol__hero em {
+    display: block;
+    margin-top: 0.3rem;
+    font-style: normal;
+    font-size: clamp(0.78rem, 2.8vw, 1rem);
+    color: var(--color-ivory-dim);
+  }
+  .sol__cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.6rem;
+  }
+  .sol__card {
+    display: flex;
+    align-items: center;
+    min-height: 3.2rem;
+    padding: 0.6rem 0.7rem;
+    font-size: clamp(0.72rem, 2.9vw, 0.95rem);
+    font-weight: 600;
+    line-height: 1.2;
+    color: var(--color-ivory);
+    text-decoration: none;
+    pointer-events: none;
+    overflow-wrap: anywhere;
+  }
+  .sol.is-late .sol__card { pointer-events: auto; }
+  .sol.is-late .sol__card:hover { border-color: var(--color-neon); }
+  @media (min-width: 768px) {
+    .sol__cards { grid-template-columns: repeat(4, 1fr); }
+    .sol__card { min-height: 4.4rem; padding: 0.9rem; }
+  }
+  .sol__btn {
+    --dx: 0;
+    justify-self: start;
+    border: 0;
+    background: none;
+    box-shadow: none;
+  }
+  .sol__btn-a {
+    display: inline-block;
+    padding: 0.55rem 1.2rem;
+    border-radius: 10px;
+    background: var(--color-neon);
+    color: var(--color-navy-950);
+    font-weight: 700;
+    font-size: 0.85rem;
+    text-decoration: none;
+    box-shadow: 0 0 calc(var(--v) * var(--edge) * 30px) rgba(255, 210, 74, 0.7);
+    pointer-events: none;
+  }
+  .sol.is-late .sol__btn-a { pointer-events: auto; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .sol__content { position: relative; padding-block: 4rem; }
+    .sol__h2,
+    .sol__sub,
+    .sol__frame,
+    .sol__piece {
+      opacity: 1;
+      transform: none;
+      box-shadow: none;
+    }
+    .sol__piece { border-color: rgba(255, 210, 74, 0.25); }
+    .sol__btn { border: 0; }
+    .sol__card,
+    .sol__btn-a { pointer-events: auto; }
+  }
+</style>

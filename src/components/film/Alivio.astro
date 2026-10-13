@@ -1,0 +1,133 @@
+---
+import metricas from "../../data/metricas.json";
+---
+
+<div class="film-scene alivio" data-film-scene="alivio" data-chapter="El alivio" style="--film-len: 300">
+  <div class="film-stage alivio__stage">
+    <div class="alivio__bg" aria-hidden="true"></div>
+    <div class="alivio__glow" aria-hidden="true"></div>
+
+    <div class="alivio__content">
+      <h2 class="alivio__h2">
+        <span class="alivio__line film-will" style="--s:0.04">Volvés a respirar.</span>
+        <span class="alivio__line film-will" style="--s:0.14">El negocio <span class="text-glow-gold">sigue</span>.</span>
+      </h2>
+
+      <ul class="alivio__kpis">
+        {
+          metricas.map((m, i) => (
+            <li class="alivio__kpi film-will" style={`--s:${0.3 + i * 0.1};--i:${i}`}>
+              <span class="alivio__num">
+                {m.value}
+                {m.sufijo}
+              </span>
+              <span class="alivio__label">{m.label}</span>
+            </li>
+          ))
+        }
+      </ul>
+
+      <p class="alivio__relief film-will">
+        Recuperás tiempo, dormís tranquilo y los clientes siguen llegando.
+      </p>
+    </div>
+  </div>
+</div>
+
+<style>
+  .alivio__bg {
+    position: absolute;
+    inset: 0;
+    z-index: -3;
+    background: linear-gradient(180deg, var(--color-navy-950) 0%, var(--color-navy-900) 100%);
+  }
+  .alivio__glow {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    background: radial-gradient(600px 420px at 50% 45%, rgba(246, 241, 228, 0.09), transparent 70%);
+    opacity: var(--e);
+    pointer-events: none;
+  }
+  .alivio__content {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 5rem 1.25rem 3rem;
+    text-align: center;
+  }
+  .alivio__h2 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(2.1rem, 8.5vw, 5rem);
+    line-height: 1.05;
+    letter-spacing: -0.045em;
+    text-transform: none;
+    color: var(--color-ivory);
+  }
+  .alivio__line {
+    --v: clamp(0, calc((var(--p) - var(--s)) * 5), 1);
+    display: block;
+    opacity: var(--v);
+    transform: translate3d(0, calc((1 - var(--v)) * 3svh), 0);
+    filter: blur(calc((1 - var(--v)) * 6px));
+  }
+  .alivio__kpis {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.4rem 1rem;
+    width: min(100%, 44rem);
+    margin-top: 2.2rem;
+    padding: 0;
+    list-style: none;
+  }
+  @media (min-width: 768px) {
+    .alivio__kpis { grid-template-columns: repeat(4, 1fr); }
+  }
+  .alivio__kpi {
+    --v: clamp(0, calc((var(--p) - var(--s)) * 5), 1);
+    opacity: var(--v);
+    /* "Sube": arranca más abajo y se asienta con la curva suave */
+    transform: translate3d(0, calc((1 - var(--v)) * 9svh), 0);
+  }
+  .alivio__num {
+    display: block;
+    font-family: var(--font-mono);
+    font-weight: 700;
+    font-size: clamp(2rem, 9vw, 3.4rem);
+    line-height: 1;
+    color: var(--color-neon);
+    text-shadow: 0 0 calc(var(--v) * 22px) rgba(255, 210, 74, 0.4);
+  }
+  .alivio__label {
+    display: block;
+    margin-top: 0.45rem;
+    font-size: clamp(0.78rem, 2.9vw, 0.95rem);
+    color: var(--color-ivory-dim);
+  }
+  .alivio__relief {
+    --v: clamp(0, calc((var(--p) - 0.72) * 6), 1);
+    margin-top: 2.2rem;
+    max-width: 28rem;
+    font-size: clamp(1rem, 3.6vw, 1.3rem);
+    line-height: 1.5;
+    color: var(--color-ivory);
+    opacity: var(--v);
+    transform: translate3d(0, calc((1 - var(--v)) * 2svh), 0);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .alivio__content { position: relative; padding-block: 4rem; }
+    .alivio__line,
+    .alivio__kpi,
+    .alivio__relief {
+      opacity: 1;
+      transform: none;
+      filter: none;
+    }
+    .alivio__glow { opacity: 1; }
+  }
+</style>
