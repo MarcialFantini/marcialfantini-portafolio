@@ -46,8 +46,10 @@ const resourceLinks = [
         </p>
       </div>
 
+      {site.newsletterEndpoint && (
       <form
         id="newsletter-form"
+        data-endpoint={site.newsletterEndpoint}
         class="rounded-lg bg-[var(--color-azul-deep)] p-6 md:p-7 border border-white/10"
         aria-label="Newsletter — recibí un email mensual con lo que aprendimos"
       >
@@ -61,6 +63,14 @@ const resourceLinks = [
           Un email por mes con lo que vale la pena. Cero newsletters de marketing.
           Te podés dar de baja en un click.
         </p>
+        <input
+          type="text"
+          name="website"
+          tabindex="-1"
+          autocomplete="off"
+          aria-hidden="true"
+          class="hidden"
+        />
         <div class="flex flex-col sm:flex-row gap-2">
           <label class="sr-only" for="newsletter-email">Tu email</label>
           <input
@@ -85,9 +95,9 @@ const resourceLinks = [
           role="status"
           aria-live="polite"
         >
-          ¡Listo! Te suscribiste.
         </p>
       </form>
+      )}
     </div>
 
     <div class="grid grid-cols-2 md:grid-cols-[2fr_1fr_1fr_1fr] gap-10 md:gap-8 mb-12">
@@ -183,25 +193,47 @@ const resourceLinks = [
     const input = document.getElementById('newsletter-email') as HTMLInputElement | null;
     if (!form || !msg || !input) return;
 
-    // Check if already subscribed
+    const endpoint = form.getAttribute('data-endpoint');
+    if (!endpoint) return;
+    const button = form.querySelector('button[type="submit"]') as HTMLButtonElement | null;
+    const honeypot = form.querySelector('input[name="website"]') as HTMLInputElement | null;
+
+    const show = (text: string) => {
+      msg.textContent = text;
+      msg.classList.remove('hidden');
+    };
+
     try {
       if (localStorage.getItem('mf-newsletter-subscribed') === '1') {
-        msg.textContent = 'Ya estás suscrito. Gracias.';
-        msg.classList.remove('hidden');
+        show('Ya estás suscripto. Gracias.');
       }
     } catch {}
 
-    form.addEventListener('submit', (e) => {
+    form.addEventListener('submit', async (e) => {
       e.preventDefault();
-      const value = input.value.trim();
-      if (!value) return;
+      const email = input.value.trim();
+      if (!email || (honeypot && honeypot.value)) return;
+      if (button) button.disabled = true;
+      show('Enviando…');
       try {
-        localStorage.setItem('mf-newsletter-subscribed', '1');
-        localStorage.setItem('mf-newsletter-email', value);
-      } catch {}
-      msg.textContent = '¡Listo! Te suscribiste.';
-      msg.classList.remove('hidden');
-      input.value = '';
+        // Apps Script no devuelve CORS: no-cors envía el POST y la respuesta es opaca.
+        // Solo un fallo de red cae en catch; el éxito real se confirma en la hoja.
+        await fetch(endpoint, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify({ email, source: location.pathname }),
+        });
+        try {
+          localStorage.setItem('mf-newsletter-subscribed', '1');
+        } catch {}
+        show('¡Listo! Te anotamos.');
+        input.value = '';
+      } catch {
+        show('No pudimos anotarte. Probá de nuevo en un rato.');
+      } finally {
+        if (button) button.disabled = false;
+      }
     });
   })();
 </script>
