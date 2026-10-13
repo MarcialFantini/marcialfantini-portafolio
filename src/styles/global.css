@@ -604,14 +604,6 @@
   }
   @media (hover: none) { .spotlight { display: none; } }
 
-  /* Texto con gradiente atardecer */
-  .text-sunset {
-    background: linear-gradient(95deg, #E0B96B 0%, #C8A24E 50%, #A6843A 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-  }
-
   /* Display gigante estilo cartel */
   .display-xxl {
     font-family: var(--font-display);
@@ -816,7 +808,7 @@
 
 /* =========================================================
    SIGNATURE LAYER — lo que hace reconocible al sitio.
-   Sello giratorio y foil dorado.
+   Sello giratorio.
    ========================================================= */
 @layer utilities {
   /* Sello giratorio del hero */
@@ -846,17 +838,8 @@
   }
   @keyframes seal-spin { to { transform: rotate(360deg); } }
 
-  /* Foil dorado con brillo que recorre el texto */
-  .text-sunset {
-    background-image: linear-gradient(100deg, #A6843A 0%, #E0B96B 30%, #FFF1C9 46%, #E0B96B 60%, #A6843A 100%);
-    background-size: 220% 100%;
-    animation: foil 7s ease-in-out infinite alternate;
-  }
-  @keyframes foil { from { background-position: 0% 50%; } to { background-position: 100% 50%; } }
-
   @media (prefers-reduced-motion: reduce) {
     .seal, .seal__ring { transform: none; animation: none; }
-    .text-sunset { animation: none; }
   }
 }
 
