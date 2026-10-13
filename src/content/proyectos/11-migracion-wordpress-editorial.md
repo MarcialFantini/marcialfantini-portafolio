@@ -18,6 +18,7 @@ metricas:
   - { label: "URLs redirigidas", value: "100%" }
   - { label: "Tiempo de carga", value: "0.6s" }
   - { label: "Errores 404 post-migración", value: "0" }
+draft: true
 ---
 
 Revista digital argentina con 8 años de archivo y 1.200 posts publicados en WordPress. Su hosting compartido se caía cada vez que un post se viralizaba, el editor tardaba 8 segundos en guardar un borrador, y tenían 40 errores críticos en Search Console.

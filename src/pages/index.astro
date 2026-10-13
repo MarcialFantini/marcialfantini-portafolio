@@ -12,6 +12,10 @@ import BlogPreview from "../components/BlogPreview.astro";
 import FAQ from "../components/FAQ.astro";
 import Contacto from "../components/Contacto.astro";
 import site from "../data/site.json";
+import { hasPublishedPosts, hasPublishedProjects } from "../lib/content";
+
+const showProyectos = await hasPublishedProjects();
+const showBlog = await hasPublishedPosts();
 
 // Un solo film: alto total = suma de las escenas (svh). Cada escena ocupa un tramo
 // contiguo [from, to] del progreso global P (0..1); motion.ts deriva su --p local.
@@ -64,10 +68,10 @@ const [rPeso, rGiro, rSol, rAlivio, rCierre] = ranges;
       Auditoría gratis de 15 min
     </a>
   </div>
-  <div class="panel" data-chapter="Sobre mí"><SobreMi /></div>
+  <div class="panel" data-chapter="Nosotros"><SobreMi /></div>
   <div class="panel panel--oro" id="servicios-precios" data-chapter="Servicios"><Servicios /></div>
-  <div class="panel" data-chapter="Proyectos"><Proyectos /></div>
-  <div class="panel" data-chapter="Escritos"><BlogPreview /></div>
+  {showProyectos && <div class="panel" data-chapter="Proyectos"><Proyectos /></div>}
+  {showBlog && <div class="panel" data-chapter="Escritos"><BlogPreview /></div>}
   <div class="panel" data-chapter="Dudas"><FAQ /></div>
   <div class="panel" data-chapter="Contacto"><Contacto /></div>
 </Layout>

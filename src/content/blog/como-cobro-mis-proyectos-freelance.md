@@ -7,6 +7,7 @@ category: "carrera"
 readingTime: 6
 tags: ["freelance", "pricing", "negocio"]
 featured: true
+draft: true
 ---
 
 Cobro por proyecto, no por hora. Cobro tres tipos distintos de monto según el tipo de entrega. Si me preguntás por hora te digo que el número existe solo como referencia para mí: nunca lo paso al cliente como vara de comparación.

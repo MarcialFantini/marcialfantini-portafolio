@@ -6,6 +6,7 @@ category: "carrera"
 readingTime: 6
 tags: ["retainer", "freelance", "pricing", "pymes"]
 featured: false
+draft: true
 ---
 
 En 2023 probé ofrecer planes mensuales de mantenimiento a tres clientes. Cobraba USD 400/mes con 8 horas incluidas. La idea era estabilizar el ingreso. Después de seis meses, lo dejé. Esta es la historia de por qué.

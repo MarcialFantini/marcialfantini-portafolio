@@ -18,6 +18,7 @@ metricas:
   - { label: "Tasa de conversión landing", value: "11.4%" }
   - { label: "Segmentos trackeados", value: "3" }
   - { label: "Tiempo de carga", value: "0.5s" }
+draft: true
 ---
 
 Startup agtech en Córdoba que desarrolla una herramienta de IA para planificación de siembra. Estaban por lanzar el producto y necesitaban validar demanda con preventa antes de invertir más en desarrollo.

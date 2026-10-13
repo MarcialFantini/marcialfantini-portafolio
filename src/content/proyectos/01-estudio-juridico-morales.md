@@ -18,6 +18,7 @@ metricas:
   - { label: "Áreas de práctica", value: "6" }
   - { label: "Secciones editables", value: "12" }
   - { label: "Tiempo de carga", value: "0.9s" }
+draft: true
 ---
 
 Estudio jurídico ficticio en CABA con 25 años de ejercicio. Necesitaban presencia digital que estuviera a la altura de su reputación offline. Les entregué un sitio editorial con tipografía institucional sobria y un formulario que dispara tanto email como WhatsApp al abogado responsable de cada área.

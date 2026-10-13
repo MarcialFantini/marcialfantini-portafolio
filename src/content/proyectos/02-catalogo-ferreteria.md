@@ -18,6 +18,7 @@ metricas:
   - { label: "Categorías", value: "12" }
   - { label: "Filtros de búsqueda", value: "8" }
   - { label: "PDF exportable", value: "Sí" }
+draft: true
 ---
 
 Ferretería familiar del barrio de Once. Venden a corralones y constructoras hace tres generaciones. El dueño quería que sus clientes mayoristas pudieran consultar el catálogo desde el celular mientras caminaban el depósito, y bajar un PDF filtrado por categoría para hacer pedidos semanales.

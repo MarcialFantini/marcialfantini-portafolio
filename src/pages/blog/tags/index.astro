@@ -1,8 +1,8 @@
 ---
 import Layout from "../../../layouts/Layout.astro";
-import { getCollection } from "astro:content";
+import { getPublishedPosts } from "../../../lib/content";
 
-const posts = await getCollection("blog");
+const posts = await getPublishedPosts();
 const tagCounts = new Map<string, number>();
 for (const post of posts) {
   for (const tag of post.data.tags) {
@@ -15,6 +15,7 @@ const tags = Array.from(tagCounts.entries()).sort((a, b) => b[1] - a[1]);
 <Layout
   title="Tags — Blog"
   description={`${tags.length} tags en el blog. Filtrá por tema.`}
+  noindex={tags.length === 0}
 >
   <section class="pt-16 md:pt-24 pb-12 border-b border-[var(--color-border)]">
     <div class="container-page max-w-4xl reveal">

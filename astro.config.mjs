@@ -8,5 +8,13 @@ export default defineConfig({
   vite: {
     plugins: [tailwindcss()]
   },
-  trailingSlash: 'ignore'
+  trailingSlash: 'ignore',
+  // Paginas despublicadas: se unificaron en /sobre-mi.
+  redirects: {
+    '/testimonios': '/sobre-mi',
+    '/cv': '/sobre-mi',
+    '/ahora': '/sobre-mi',
+    '/recurso': '/sobre-mi',
+    '/lectura': '/sobre-mi',
+  }
 });

@@ -18,6 +18,7 @@ metricas:
   - { label: "Duplicaciones eliminadas", value: "100%" }
   - { label: "Tiempo de check-in", value: "<10s" }
   - { label: "Lista de espera automática", value: "Sí" }
+draft: true
 ---
 
 Restaurante de cocina de mar en Mar del Plata con 80 cubiertos por turno, 3 turnos por noche (21h, 23h, 01h). Antes de mi panel, las reservas se anotaban en una planilla Google compartida entre 4 mozos y la dueña. Sobregulación, frecuentes duplicaciones.

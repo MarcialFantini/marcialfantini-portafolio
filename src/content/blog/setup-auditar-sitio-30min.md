@@ -6,6 +6,7 @@ category: "desarrollo"
 readingTime: 6
 tags: ["performance", "auditoria", "tools", "lighthouse"]
 featured: true
+draft: true
 ---
 
 La auditoría de 30 minutos es uno de mis servicios más rentables. Cuesta poco tiempo y le da al cliente una lectura concreta que justifica el proyecto siguiente. Si todavía no cobrás por esto, te dejo el flujo exacto que uso.

@@ -18,6 +18,7 @@ metricas:
   - { label: "KPIs en tiempo real", value: "12" }
   - { label: "Fuentes de datos integradas", value: "3" }
   - { label: "Latencia de actualización", value: "<5min" }
+draft: true
 ---
 
 Distribuidora mayorista de bebidas con 30 vendedores en ruta por Mendoza y San Juan. La gerencia comercial tomaba decisiones con datos de hasta 48 horas de atraso, en planillas que cada vendedor cargaba distinto.

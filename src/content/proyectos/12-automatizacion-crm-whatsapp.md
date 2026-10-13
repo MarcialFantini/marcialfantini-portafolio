@@ -18,6 +18,7 @@ metricas:
   - { label: "Tasa de confirmación", value: "78%" }
   - { label: "Horas recepcionista liberadas", value: "30/sem" }
   - { label: "Leads respondidos en <5min", value: "92%" }
+draft: true
 ---
 
 Clínica privada en Rosario con 12 especialidades. La recepcionista dedicaba 8 horas diarias a mandar recordatorios de turnos por WhatsApp y responder consultas que llegaban por el mismo canal. El ausentismo a turnos era del 22%.

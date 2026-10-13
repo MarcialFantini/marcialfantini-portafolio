@@ -7,6 +7,7 @@ category: "escritura"
 readingTime: 8
 tags: ["lecciones", "freelance", "casos"]
 featured: false
+draft: true
 ---
 
 Hice un sitio que me costó USD 15.000 aprender a no repetir. No fue el proyecto más caro que entregué ese año. Fue el más caro en plata. Y la cifra incluyó plata que perdió el cliente, plata que perdí yo, y horas que ninguno nos olvidamos. Cuento la historia porque es la mejor clase de negocios que pagué.

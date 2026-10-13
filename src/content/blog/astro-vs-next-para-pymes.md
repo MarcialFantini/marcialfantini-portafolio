@@ -7,6 +7,7 @@ category: "desarrollo"
 readingTime: 7
 tags: ["astro", "next", "performance", "stack"]
 featured: true
+draft: true
 ---
 
 Trabajo con ambos. Para mí, Next.js es excelente; para la mayoría de mis clientes (PyMEs argentinas con sitios de marketing, catálogos y SaaS incipientes), Astro es la decisión correcta. Explico por qué con números reales de proyectos entregados.

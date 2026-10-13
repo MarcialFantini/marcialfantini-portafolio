@@ -2,229 +2,127 @@
 import Layout from "../layouts/Layout.astro";
 import site from "../data/site.json";
 
-const timeline = [
+const aboutPhoto = (site as { aboutPhoto?: string }).aboutPhoto ?? "";
+
+const build = [
   {
-    year: "2017",
-    title: "Arranca como freelance",
-    detail: "Primer sitio cobrado USD 80. Sin saber cotizar ni hablar con clientes.",
+    title: "Páginas web",
+    text: "Para mostrar lo que ofrecés y que te escriban. Desde una página simple hasta un sitio institucional de varias secciones.",
   },
   {
-    year: "2019",
-    title: "Pivot a proyecto cerrado con KPI",
-    detail: "Dejo de cobrar por hora. Empiezo a vender resultados medibles.",
+    title: "Ecommerce",
+    text: "Tiendas online con catálogo, carrito y medios de pago, con un panel para que administres tus productos.",
   },
   {
-    year: "2021",
-    title: "Estabiliza el stack",
-    detail: "Astro + TypeScript + Tailwind como default. Menos bugs, más velocidad de entrega.",
-  },
-  {
-    year: "2023",
-    title: "Piso de USD 2.500",
-    detail: "Rechaza proyectos chicos. La facturación sube 25% el primer año con menos clientes.",
-  },
-  {
-    year: "2025",
-    title: "Garantía por escrito en algunos servicios",
-    detail: "Rescate de Conversión garantiza +20 puntos Lighthouse o devuelve el 100%.",
-  },
-  {
-    year: "2026",
-    title: "Newsletter mensual + herramientas de IA",
-    detail: "Empieza a publicar posts sobre su flujo freelance real. Suscriptores arrancan.",
+    title: "Software a medida",
+    text: "Herramientas pensadas para tu forma de trabajar: paneles, reservas, gestión interna o automatización de tareas.",
   },
 ];
 
-const process = [
+const steps = [
   {
-    title: "Auditoría gratuita",
-    description:
-      "Reviso tu sitio actual o la idea que tengas y te devuelvo un diagnóstico concreto en 30 minutos: qué falla, qué falta, qué sobra. Sin compromiso.",
-    duration: "30 min",
+    title: "Hablamos 15 minutos",
+    text: "Te escuchamos y hacemos una auditoría gratuita de tu sitio o de tu idea. Sin compromiso.",
   },
   {
-    title: "Propuesta cerrada",
-    description:
-      "Te envío un PDF con alcance, precio cerrado, hitos y KPI. Si firmás, cobro 50% de anticipo y arranco. Si no encaja, te recomiendo otro freelance.",
-    duration: "5-7 días",
+    title: "Te pasamos una propuesta",
+    text: "Alcance, plazos y presupuesto por escrito antes de empezar. Sabés qué recibís y cuánto cuesta.",
   },
   {
-    title: "Construcción iterativa",
-    description:
-      "Trabajo en sprints semanales con demos en vivo cada viernes. Ves progreso real, no PowerPoint. El feedback se incorpora en cada vuelta.",
-    duration: "según alcance",
-  },
-  {
-    title: "Entrega + medición",
-    description:
-      "Entrego, deployo y mido por 90 días. Si las métricas pactadas no se cumplen, devuelvo plata. Es la única garantía que importa.",
-    duration: "90 días post",
+    title: "Construimos y entregamos",
+    text: "Vas viendo avances reales. Entregamos con 2 rondas de revisión para ajustar lo que haga falta.",
   },
 ];
 
-const stack = {
-  "Lenguajes y runtime": ["TypeScript", "JavaScript", "SQL", "Node.js", "HTML", "CSS"],
-  "Frontend y estilos": ["Astro", "React", "Next.js", "Tailwind CSS v4", "MDX"],
-  "Datos y backend": ["SQLite / libSQL", "PostgreSQL", "REST APIs", "WebSockets"],
-  "Pagos e integraciones": ["Stripe", "Mercado Pago", "HubSpot", "Cal.com", "AFIP SDK", "WhatsApp Business API"],
-  "Deploy y herramientas": ["Vercel", "Cloudflare Pages", "GitHub Actions", "Beehiiv", "Plausible"],
-  "IA en mi flujo": ["GitHub Copilot", "Cursor", "Vercel v0", "NotebookLM"],
-};
+const get = [
+  "Un presupuesto claro, por escrito, antes de arrancar.",
+  "Un sitio que se ve bien en el celular, la tablet y la computadora.",
+  "Una base de posicionamiento en Google para que te encuentren.",
+  "Una persona real del equipo que te responde en 24 horas hábiles.",
+  "2 rondas de revisión incluidas.",
+];
 
-const principios = [
-  {
-    title: "Outcome > output",
-    description: "Mido éxito en resultados de negocio, no en pantallas entregadas.",
-  },
-  {
-    title: "Stack simple",
-    description:
-      "Elijo la herramienta más aburrida que resuelva. Menos partes móviles = menos roturas.",
-  },
-  {
-    title: "Comunicación directa",
-    description: "Respondo en menos de 24h hábiles. Si me trabo, lo digo antes de que me preguntes.",
-  },
-  {
-    title: "Transparencia total",
-    description:
-      "Horas invertidas, decisiones tomadas, costos asociados. Todo en una planilla compartida.",
-  },
+const dont = [
+  "No te pedimos que entiendas de tecnología: nos ocupamos de lo técnico.",
+  "No te cobramos nada por la auditoría de 15 minutos.",
+  "No empezamos sin que sepas qué vamos a hacer y cuánto cuesta.",
+  "No te prometemos resultados que dependen de cosas que no controlamos.",
 ];
 ---
 
 <Layout
-  title={`Sobre mí — ${site.name}`}
-  description={`Bio extendida, principios, timeline y proceso de trabajo de ${site.name}, desarrollador freelance full-stack desde Córdoba, Argentina.`}
+  title="Nosotros — Marcial Fantini"
+  description="Somos Marcial Fantini, una agencia que desarrolla páginas web, ecommerce y software a medida. Conocé cómo trabajamos y pedí tu auditoría gratuita de 15 minutos."
 >
-  <section class="relative pt-16 md:pt-24 pb-16 md:pb-20 border-b border-[var(--color-border)]">
-    <div class="container-page max-w-4xl reveal">
-      <nav class="mb-8 font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-mute)]">
-        <ol class="flex flex-wrap items-center gap-2">
-          <li><a href="/" class="hover:text-[var(--color-azul)]">Inicio</a></li>
-          <li aria-hidden="true">/</li>
-          <li class="text-[var(--color-ink)]">Sobre mí</li>
-        </ol>
-      </nav>
-
-      <p class="font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--color-azul)] mb-3">
-        Sobre mí
+  <section class="relative pt-28 md:pt-36 pb-16 md:pb-24 border-b border-[var(--color-border)] overflow-hidden">
+    <div class="container-page reveal">
+      <p class="font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--color-azul)] mb-4">
+        Sobre nosotros
       </p>
-      <h1 class="font-impact text-[clamp(2.25rem,5.5vw,4.75rem)] uppercase leading-[0.95] text-[var(--color-ink)] tracking-tight mb-8">
-        Construyo software para que tu PyME cierre más ventas <span class="text-[var(--color-azul)]">y deje de depender de mí.</span>
+      <h1 class="font-impact text-[clamp(2.25rem,6vw,4.5rem)] leading-[0.95] text-[var(--color-ink)] max-w-4xl">
+        Somos {site.name}. Hacemos que tu negocio
+        <span class="text-[var(--color-azul)]">se vea y venda online.</span>
       </h1>
-      <p class="text-xl text-[var(--color-ink-soft)] leading-relaxed max-w-3xl">
-        Soy Marcial Fantini. Desarrollo freelance desde 2017, especializado en productos digitales
-        para PyMEs argentinas. No quiero clientes cautivos: quiero clientes que aprendan a medir
-        su canal online y eventualmente prescindan de mí.
+      <p class="mt-7 max-w-2xl text-lg text-[var(--color-ink-soft)] leading-relaxed">
+        Somos una agencia de desarrollo que construye páginas web, tiendas online y software a medida
+        para PyMEs, comercios y profesionales. Trabajamos con un lenguaje simple y con las reglas
+        claras desde el primer día.
       </p>
+
+      <!--
+        SLOT: foto o video del equipo.
+        Para activarlo, completá `aboutPhoto` en src/data/site.json con la ruta de la imagen
+        (por ejemplo "/equipo.jpg", guardada en /public). Si queda vacío, no se muestra nada.
+      -->
+      {
+        aboutPhoto && (
+          <figure class="mt-10 max-w-3xl">
+            <img
+              src={aboutPhoto}
+              alt={`El equipo de ${site.name}`}
+              loading="lazy"
+              class="w-full rounded-xl border border-[var(--color-border)]"
+            />
+          </figure>
+        )
+      }
     </div>
   </section>
 
   <section class="py-16 md:py-24 border-b border-[var(--color-border)]">
     <div class="container-page">
-      <div class="grid grid-cols-1 md:grid-cols-12 gap-10 reveal">
-        <div class="md:col-span-3">
-          <div
-            class="placeholder-image placeholder-image--azul w-32 h-32 md:w-40 md:h-40 rounded-lg flex items-center justify-center"
-            aria-label="Avatar con iniciales MF"
-          >
-            <span class="font-impact text-5xl md:text-6xl uppercase text-white">
-              MF
-            </span>
-          </div>
-          <p class="mt-4 font-mono text-sm text-[var(--color-mute)] leading-relaxed">
-            Córdoba, Argentina<br />
-            8+ años en producción<br />
-            40+ proyectos entregados
-          </p>
-        </div>
-
-        <div class="md:col-span-9 space-y-5 text-[var(--color-ink-soft)] text-lg leading-relaxed max-w-3xl">
-          <p>
-            Mi historia es la clásica del freelance que arrancó por necesidad y se quedó por
-            preferencia. En 2017 hice mi primer sitio cobrando USD 80. Hoy mis tickets van de USD
-            2.500 a USD 12.000, no porque me haya vuelto mejor codero (también), sino porque
-            aprendí a vender resultados en vez de horas.
-          </p>
-          <p>
-            Trabajo casi exclusivamente con PyMEs: estudios, distribuidoras, marcas de producto,
-            consultorías, e-commerce incipientes. Son clientes que tienen presupuesto limitado y
-            necesitan que cada peso cuente. Esa restricción me obligó a elegir bien el stack, no
-            a usar la herramienta de moda. Hoy, eso significa que el 90% de mis proyectos son
-            en <strong class="text-[var(--color-ink)] font-semibold">Astro + TypeScript + Tailwind</strong> con deploy en
-            Vercel o Cloudflare.
-          </p>
-          <p>
-            Lo que más disfruto del trabajo freelance no es la libertad horaria (que existe) ni
-            la escala de los proyectos (que no es enorme). Es esa llamada post-entrega donde el
-            cliente me dice <em class="not-italic text-[var(--color-ink)] font-medium">"cerré tres ventas esta semana atribuibles al sitio nuevo"</em>.
-            Eso es lo que me paga la hipoteca, no la pantalla a 1280px.
-          </p>
-          <p>
-            Si tu PyME necesita presencia digital seria y querés hablar con alguien que piense en
-            números antes que en tendencias, empezá por la auditoría gratuita. Es 30 minutos, sin
-            compromiso, y suele ser el primer paso hacia algo concreto.
-          </p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="relative py-16 md:py-24 border-b border-[var(--color-border)] bg-[var(--color-azul)] text-white overflow-hidden">
-    <div class="container-page relative z-[1]">
-      <p class="font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--color-dorado)] mb-3">
-        Timeline
-      </p>
-      <h2 class="font-impact text-[clamp(1.75rem,4vw,3rem)] uppercase leading-[0.95] text-white tracking-tight max-w-2xl mb-12 reveal">
-        9 años, <span class="text-[var(--color-dorado)]">6 decisiones.</span>
+      <p class="font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--color-azul)] mb-4">Qué hacemos</p>
+      <h2 class="font-impact text-[clamp(1.75rem,4vw,3rem)] leading-[1] text-[var(--color-ink)] max-w-3xl mb-10">
+        Tres cosas, bien hechas.
       </h2>
-
-      <ol class="relative space-y-8 reveal-stagger">
-        <span class="absolute left-[7px] md:left-[10px] top-2 bottom-2 w-px bg-[var(--color-dorado)] opacity-50" aria-hidden="true"></span>
+      <ul class="grid grid-cols-1 md:grid-cols-3 gap-5">
         {
-          timeline.map((step) => (
-            <li class="relative pl-10 md:pl-14">
-              <span class="absolute left-0 top-2 w-4 h-4 rounded-full bg-[var(--color-dorado)] border-4 border-[var(--color-azul)]" aria-hidden="true"></span>
-              <div class="grid grid-cols-1 md:grid-cols-[5rem_1fr] gap-3">
-                <span class="font-impact text-2xl text-[var(--color-dorado)] tabular-nums leading-none">
-                  {step.year}
-                </span>
-                <div>
-                  <h3 class="font-display font-semibold text-lg text-white leading-tight mb-1">
-                    {step.title}
-                  </h3>
-                  <p class="text-base text-white/80 leading-relaxed">
-                    {step.detail}
-                  </p>
-                </div>
-              </div>
+          build.map((b) => (
+            <li class="rounded-xl border-2 border-[var(--color-ink)] bg-[var(--color-blanco)] p-6">
+              <h3 class="font-impact text-xl uppercase leading-tight text-[var(--color-ink)] mb-3">{b.title}</h3>
+              <p class="text-[var(--color-ink-soft)] leading-relaxed">{b.text}</p>
             </li>
           ))
         }
-      </ol>
+      </ul>
     </div>
   </section>
 
-  <section class="relative py-16 md:py-24 border-b border-[var(--color-border)] bg-[var(--color-blanco)]">
-    <div class="container-page relative z-[1]">
-      <h2 class="font-impact text-[clamp(1.75rem,4vw,3.25rem)] uppercase leading-[0.95] text-[var(--color-ink)] tracking-tight max-w-xl mb-12 reveal">
-        Cómo pienso <span class="text-[var(--color-azul)]">el trabajo.</span>
+  <section class="py-16 md:py-24 border-b border-[var(--color-border)]">
+    <div class="container-page">
+      <p class="font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--color-azul)] mb-4">Cómo trabajamos</p>
+      <h2 class="font-impact text-[clamp(1.75rem,4vw,3rem)] leading-[1] text-[var(--color-ink)] max-w-3xl mb-10">
+        Simple, en tres pasos.
       </h2>
-
-      <ol class="grid grid-cols-1 sm:grid-cols-2 gap-5 reveal-stagger">
+      <ol class="grid grid-cols-1 md:grid-cols-3 gap-5">
         {
-          principios.map((p, i) => (
-            <li class="rounded-lg border border-[var(--color-border)] bg-white p-6 tactile transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md hover:border-[var(--color-azul)]">
-              <p class="font-impact text-3xl md:text-4xl text-[var(--color-azul)] tabular-nums mb-4">
-                {String(i + 1).padStart(2, "0")}
-              </p>
-              <h3 class="font-display font-semibold text-xl tracking-tight mb-3 text-[var(--color-ink)]">
-                {p.title}
-              </h3>
-              <p class="text-[var(--color-ink-soft)] leading-relaxed text-base">
-                {p.description}
-              </p>
+          steps.map((s, i) => (
+            <li class="rounded-xl border border-[var(--color-border)] bg-[var(--color-blanco)] p-6">
+              <span class="font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--color-dorado)]">
+                Paso {String(i + 1).padStart(2, "0")}
+              </span>
+              <h3 class="font-impact text-xl uppercase leading-tight text-[var(--color-ink)] mt-2 mb-3">{s.title}</h3>
+              <p class="text-[var(--color-ink-soft)] leading-relaxed">{s.text}</p>
             </li>
           ))
         }
@@ -233,96 +131,45 @@ const principios = [
   </section>
 
   <section class="py-16 md:py-24 border-b border-[var(--color-border)]">
+    <div class="container-page grid grid-cols-1 md:grid-cols-2 gap-12">
+      <div>
+        <p class="font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--color-azul)] mb-4">Qué recibís</p>
+        <ul class="space-y-3 text-[var(--color-ink-soft)] text-lg leading-relaxed">
+          {get.map((g) => <li class="flex gap-3"><span aria-hidden="true" class="text-[var(--color-azul)]">✓</span><span>{g}</span></li>)}
+        </ul>
+      </div>
+      <div>
+        <p class="font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--color-azul)] mb-4">Qué no hacemos</p>
+        <ul class="space-y-3 text-[var(--color-ink-soft)] text-lg leading-relaxed">
+          {dont.map((d) => <li class="flex gap-3"><span aria-hidden="true" class="text-[var(--color-mute)]">×</span><span>{d}</span></li>)}
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-16 md:py-24">
     <div class="container-page">
-      <div class="max-w-2xl mb-14 reveal">
-        <p class="font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--color-azul)] mb-3">
-          Cómo trabajo
-        </p>
-        <h2 class="font-impact text-[clamp(1.75rem,4vw,3.25rem)] uppercase leading-[0.95] text-[var(--color-ink)] tracking-tight">
-          De la primera llamada al sitio <span class="text-[var(--color-azul)]">en producción.</span>
-        </h2>
-      </div>
-
-      <ol class="reveal-stagger">
-        {
-          process.map((step, i) => (
-            <li class="grid grid-cols-[40px_1fr] md:grid-cols-[60px_1fr_auto] gap-4 md:gap-8 py-7 border-b border-[var(--color-border)] first:border-t last:border-b-0 items-start">
-              <span class="font-impact text-3xl md:text-4xl text-[var(--color-azul)] tabular-nums">
-                {String(i + 1).padStart(2, "0")}
-              </span>
-              <div>
-                <h3 class="font-display font-semibold text-xl tracking-tight text-[var(--color-ink)] mb-2">
-                  {step.title}
-                </h3>
-                <p class="text-[var(--color-ink-soft)] leading-relaxed max-w-2xl">
-                  {step.description}
-                </p>
-              </div>
-              <span class="font-mono text-xs uppercase tracking-[0.18em] text-[var(--color-mute)] pt-2 hidden md:inline whitespace-nowrap">
-                {step.duration}
-              </span>
-            </li>
-          ))
-        }
-      </ol>
-    </div>
-  </section>
-
-  <section class="relative py-16 md:py-24 border-b border-[var(--color-border)] bg-[var(--color-blanco)]">
-    <div class="container-page relative z-[1]">
-      <p class="font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--color-azul)] mb-3">
-        Stack
-      </p>
-      <h2 class="font-impact text-[clamp(1.75rem,4vw,3.25rem)] uppercase leading-[0.95] text-[var(--color-ink)] tracking-tight max-w-xl mb-10 reveal">
-        Las herramientas <span class="text-[var(--color-azul)]">que conozco.</span>
+      <h2 class="font-impact text-[clamp(1.75rem,4vw,3rem)] leading-[1] text-[var(--color-ink)] max-w-3xl mb-4">
+        Empecemos por una auditoría gratis de 15 minutos.
       </h2>
-
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 reveal-stagger">
-        {
-          Object.entries(stack).map(([category, items]) => (
-            <div>
-              <h3 class="font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-mute)] mb-2">
-                {category}
-              </h3>
-              <ul class="flex flex-wrap gap-1.5">
-                {
-                  items.map((s) => (
-                    <li class="font-mono text-sm px-3 py-1.5 rounded-md border border-[var(--color-border)] bg-white text-[var(--color-ink-soft)]">
-                      {s}
-                    </li>
-                  ))
-                }
-              </ul>
-            </div>
-          ))
-        }
+      <p class="max-w-2xl text-lg text-[var(--color-ink-soft)] leading-relaxed mb-8">
+        Contanos qué necesitás y te respondemos en 24 horas hábiles.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-3 sm:gap-4">
+        <a
+          href="/contacto?servicio=Auditor%C3%ADa%20gratis"
+          class="tactile inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-md bg-[var(--color-dorado)] text-[var(--color-azul-deep)] font-mono text-[11px] uppercase tracking-[0.18em] font-bold hover:bg-[var(--color-ink)] hover:text-white"
+        >
+          Pedir auditoría gratis
+          <span aria-hidden="true">→</span>
+        </a>
+        <a
+          href="/servicios"
+          class="tactile inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-md border border-[var(--color-ink)] text-[var(--color-ink)] font-mono text-[11px] uppercase tracking-[0.18em] font-semibold hover:border-[var(--color-azul)] hover:text-[var(--color-azul)]"
+        >
+          Ver servicios
+        </a>
       </div>
-    </div>
-  </section>
-
-  <section class="py-12 md:py-16">
-    <div class="container-page flex flex-col sm:flex-row gap-4 items-center justify-center">
-      <a
-        href="/cv"
-        class="tactile inline-flex items-center gap-2 px-6 py-3 rounded-md bg-[var(--color-ink)] text-white font-mono text-[11px] uppercase tracking-[0.18em] font-semibold hover:bg-[var(--color-azul)]"
-      >
-        Ver CV completo
-        <span aria-hidden="true">→</span>
-      </a>
-      <a
-        href="/ahora"
-        class="tactile inline-flex items-center gap-2 px-6 py-3 rounded-md border-2 border-[var(--color-ink)] text-[var(--color-ink)] font-mono text-[11px] uppercase tracking-[0.18em] font-semibold hover:bg-[var(--color-ink)] hover:text-white"
-      >
-        En qué estoy trabajando
-        <span aria-hidden="true">→</span>
-      </a>
-      <a
-        href="/contacto"
-        class="tactile inline-flex items-center gap-2 px-6 py-3 rounded-md bg-[var(--color-azul)] text-white font-mono text-[11px] uppercase tracking-[0.18em] font-semibold hover:bg-[var(--color-azul-deep)]"
-      >
-        Hablemos
-        <span aria-hidden="true">→</span>
-      </a>
     </div>
   </section>
 </Layout>

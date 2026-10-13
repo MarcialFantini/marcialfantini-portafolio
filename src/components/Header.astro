@@ -1,11 +1,12 @@
 ---
 import site from "../data/site.json";
+import { hasPublishedPosts, hasPublishedProjects } from "../lib/content";
 
 const navItems = [
-  { href: "/sobre-mi", label: "Sobre mí" },
   { href: "/servicios", label: "Servicios" },
-  { href: "/proyectos", label: "Proyectos" },
-  { href: "/blog", label: "Blog" },
+  { href: "/sobre-mi", label: "Nosotros" },
+  ...((await hasPublishedProjects()) ? [{ href: "/proyectos", label: "Proyectos" }] : []),
+  ...((await hasPublishedPosts()) ? [{ href: "/blog", label: "Blog" }] : []),
   { href: "/contacto", label: "Contacto" },
 ];
 
@@ -96,20 +97,6 @@ const pathname = Astro.url.pathname;
           </a>
         ))
       }
-      <a
-        href="/cv"
-        class="tactile mobile-menu-link flex items-center justify-between min-h-[48px] py-3 font-mono text-[12px] uppercase tracking-[0.18em] text-[var(--color-ink-soft)] hover:text-[var(--color-azul)] border-b border-[var(--color-border)]"
-      >
-        CV
-        <span aria-hidden="true" class="text-[var(--color-mute)]">↗</span>
-      </a>
-      <a
-        href="/ahora"
-        class="tactile mobile-menu-link flex items-center justify-between min-h-[48px] py-3 font-mono text-[12px] uppercase tracking-[0.18em] text-[var(--color-ink-soft)] hover:text-[var(--color-azul)] border-b border-[var(--color-border)]"
-      >
-        Ahora
-        <span aria-hidden="true" class="text-[var(--color-mute)]">→</span>
-      </a>
       <a
         href="/contacto"
         class="tactile mt-4 mb-2 inline-flex items-center justify-center gap-2 min-h-[48px] px-5 py-3 rounded-md bg-[var(--color-azul)] text-white font-mono text-[11px] uppercase tracking-[0.18em] font-semibold hover:bg-[var(--color-azul-deep)]"

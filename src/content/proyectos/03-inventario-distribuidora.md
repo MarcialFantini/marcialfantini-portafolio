@@ -18,6 +18,7 @@ metricas:
   - { label: "SKUs administrados", value: "850" }
   - { label: "Reportes automáticos", value: "4" }
   - { label: "Tiempo respuesta stock", value: "real-time" }
+draft: true
 ---
 
 Distribuidora de artículos de librería y escolar con tres depósitos en CABA y GBA. Manejaban 850 SKUs y atendían 200+ colegios y librerías mayoristas. El problema clásico de muchas PyMEs en crecimiento: planillas que no se hablan entre sí.

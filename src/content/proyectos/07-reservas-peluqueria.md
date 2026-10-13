@@ -17,6 +17,7 @@ metricas:
   - { label: "Servicios disponibles", value: "12" }
   - { label: "Profesionales", value: "8" }
   - { label: "Reservas online / total", value: "70%" }
+draft: true
 ---
 
 Red de peluquerías de barrio con tres sucursales en CABA. Cada una con cuatro profesionales. La dueña manejaba turnos por WhatsApp Business, respondía entre 8 y 22hs, perdía mensajes, confirmaba turnos que después nadie respetaba.

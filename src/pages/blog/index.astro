@@ -1,11 +1,10 @@
 ---
 import Layout from "../../layouts/Layout.astro";
 import FormattedDate from "../../components/FormattedDate.astro";
-import { getCollection } from "astro:content";
+import { getPublishedPosts } from "../../lib/content";
 
-const posts = (await getCollection("blog")).sort(
-  (a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime()
-);
+const posts = await getPublishedPosts();
+const empty = posts.length === 0;
 
 // Build category counts
 const categoryLabels: Record<string, string> = {
@@ -36,7 +35,28 @@ const topTags = Array.from(tagCounts.entries()).sort((a, b) => b[1] - a[1]).slic
 <Layout
   title="Blog — Marcial Fantini"
   description="Ensayos sobre freelance, producto, código y decisiones que aprendí trabajando con PyMEs."
+  noindex={empty}
 >
+  {
+    empty ? (
+      <section class="pt-28 md:pt-36 pb-24 border-b border-[var(--color-border)]">
+        <div class="container-page max-w-3xl reveal">
+          <h1 class="font-impact text-[clamp(2.25rem,5.5vw,4rem)] uppercase leading-[0.95] text-[var(--color-ink)] tracking-tight mb-6">
+            Próximamente.
+          </h1>
+          <p class="text-lg text-[var(--color-ink-soft)] leading-relaxed mb-8">
+            Estamos preparando artículos y novedades. Mientras tanto, contanos qué necesitás y te respondemos en 24 horas hábiles.
+          </p>
+          <a
+            href="/contacto"
+            class="tactile inline-flex items-center gap-2 px-6 py-3.5 rounded-md bg-[var(--color-dorado)] text-[var(--color-azul-deep)] font-mono text-[11px] uppercase tracking-[0.18em] font-bold hover:bg-[var(--color-ink)] hover:text-white"
+          >
+            Hablemos <span aria-hidden="true">→</span>
+          </a>
+        </div>
+      </section>
+    ) : (
+      <>
   <section class="pt-16 md:pt-24 pb-12 border-b border-[var(--color-border)]">
     <div class="container-page max-w-4xl reveal">
       <nav class="mb-8 font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-mute)]">
@@ -161,4 +181,7 @@ const topTags = Array.from(tagCounts.entries()).sort((a, b) => b[1] - a[1]).slic
       </div>
     </section>
   )}
+      </>
+    )
+  }
 </Layout>

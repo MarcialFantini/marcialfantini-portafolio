@@ -6,6 +6,7 @@ category: "ia"
 readingTime: 6
 tags: ["ia", "tools", "stack", "freelance"]
 featured: false
+draft: true
 ---
 
 De las 11 herramientas de IA que probé en los últimos 18 meses, 4 están en mi flujo semanal. Las otras 7 las pagué y abandoné. Este es el balance honesto.

@@ -6,6 +6,7 @@ category: "ia"
 readingTime: 6
 tags: ["ia", "contenido", "writing", "herramientas"]
 featured: true
+draft: true
 ---
 
 Hace 14 meses uso IA en mi flujo de trabajo. Lo que sigue es lo que aprendí, sin موقف de vendor.

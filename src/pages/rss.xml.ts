@@ -1,12 +1,11 @@
 import type { APIRoute } from 'astro';
-import { getCollection } from 'astro:content';
+import { getPublishedPosts } from '../lib/content';
 import site from '../data/site.json';
 
 export const prerender = true;
 
 export const GET: APIRoute = async ({ site: astroSite }) => {
-  const posts = await getCollection('blog');
-  const sorted = posts.sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
+  const sorted = await getPublishedPosts();
   const baseUrl = astroSite?.toString() ?? 'https://marcialfantini.com';
 
   const escapeXml = (s: string) => s

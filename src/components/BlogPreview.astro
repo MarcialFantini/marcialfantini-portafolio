@@ -1,15 +1,13 @@
 ---
-import { getCollection } from "astro:content";
+import { getPublishedPosts } from "../lib/content";
 import FormattedDate from "./FormattedDate.astro";
 
-const allPosts = await getCollection("blog");
-const posts = allPosts
-  .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime())
-  .slice(0, 3);
+const posts = (await getPublishedPosts()).slice(0, 3);
 
 const gradients = ["azul", "azul-card", "dorado"] as const;
 ---
 
+{posts.length > 0 && (
 <section class="relative py-20 md:py-28 border-b-2 border-[var(--color-ink)] bg-[var(--color-blanco)] overflow-hidden">
   <div class="container-page">
     <div class="flex items-end justify-between flex-wrap gap-6 mb-12 reveal">
@@ -72,3 +70,4 @@ const gradients = ["azul", "azul-card", "dorado"] as const;
     </ul>
   </div>
 </section>
+)}

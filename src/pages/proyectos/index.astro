@@ -1,11 +1,9 @@
 ---
 import Layout from "../../layouts/Layout.astro";
-import { getCollection } from "astro:content";
+import { getPublishedProjects } from "../../lib/content";
 
-const allProyectos = await getCollection("proyectos");
-const proyectos = allProyectos.sort(
-  (a, b) => b.data.fecha.getTime() - a.data.fecha.getTime()
-);
+const proyectos = await getPublishedProjects();
+const empty = proyectos.length === 0;
 
 const [hero, ...rest] = proyectos;
 const heroIndex = String(proyectos.findIndex((p) => p.id === hero?.id) + 1).padStart(2, "0");
@@ -32,7 +30,28 @@ const categories = Array.from(categoryCounts.entries()).sort((a, b) => b[1] - a[
 <Layout
   title="Proyectos — Marcial Fantini"
   description="Casos donde mis decisiones importaron: cada proyecto con problema, solución, resultado y métricas concretas."
+  noindex={empty}
 >
+  {
+    empty ? (
+      <section class="pt-28 md:pt-36 pb-24 border-b border-[var(--color-border)]">
+        <div class="container-page max-w-3xl reveal">
+          <h1 class="font-impact text-[clamp(2.25rem,5.5vw,4rem)] uppercase leading-[0.95] text-[var(--color-ink)] tracking-tight mb-6">
+            Estamos preparando casos reales.
+          </h1>
+          <p class="text-lg text-[var(--color-ink-soft)] leading-relaxed mb-8">
+            Estamos preparando casos reales. Mientras tanto, contanos qué necesitás y te respondemos en 24 horas hábiles.
+          </p>
+          <a
+            href="/contacto"
+            class="tactile inline-flex items-center gap-2 px-6 py-3.5 rounded-md bg-[var(--color-dorado)] text-[var(--color-azul-deep)] font-mono text-[11px] uppercase tracking-[0.18em] font-bold hover:bg-[var(--color-ink)] hover:text-white"
+          >
+            Hablemos <span aria-hidden="true">→</span>
+          </a>
+        </div>
+      </section>
+    ) : (
+      <>
   <section class="pt-16 md:pt-24 pb-12 border-b border-[var(--color-border)]">
     <div class="container-page max-w-4xl reveal">
       <nav class="mb-8 font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-mute)]">
@@ -157,4 +176,7 @@ const categories = Array.from(categoryCounts.entries()).sort((a, b) => b[1] - a[
       </ol>
     </div>
   </section>
+      </>
+    )
+  }
 </Layout>

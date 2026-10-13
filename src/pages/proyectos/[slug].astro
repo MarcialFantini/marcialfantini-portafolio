@@ -2,11 +2,12 @@
 import Layout from "../../layouts/Layout.astro";
 import FormattedDate from "../../components/FormattedDate.astro";
 import ProyectoCard from "../../components/ProyectoCard.astro";
-import { getCollection, render } from "astro:content";
+import { render } from "astro:content";
+import { getPublishedProjects } from "../../lib/content";
 import type { GetStaticPaths } from "astro";
 
 export const getStaticPaths = (async () => {
-  const proyectos = await getCollection("proyectos");
+  const proyectos = await getPublishedProjects();
   return proyectos.map((proyecto) => ({
     params: { slug: proyecto.id },
     props: { proyecto },
@@ -18,8 +19,7 @@ const { Content } = await render(proyecto);
 const { title, cliente, descripcion, problema, resultado, stack, fecha, duracion, role, repo, url, tags, categoria, metricas } =
   proyecto.data;
 
-const allProyectos = await getCollection("proyectos");
-const sortedAll = allProyectos.sort((a, b) => b.data.fecha.getTime() - a.data.fecha.getTime());
+const sortedAll = await getPublishedProjects();
 const projectIndex = sortedAll.findIndex((p) => p.id === proyecto.id) + 1;
 const placeholderIndex = String(projectIndex).padStart(2, "0");
 const related = sortedAll

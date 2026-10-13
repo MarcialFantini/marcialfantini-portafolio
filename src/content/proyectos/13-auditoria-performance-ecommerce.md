@@ -17,6 +17,7 @@ metricas:
   - { label: "LCP después quick win", value: "1.5s" }
   - { label: "Problemas rankeados", value: "12" }
   - { label: "Sprints de remediación", value: "3" }
+draft: true
 ---
 
 Tienda de indumentaria outdoor con sede en Bariloche y envíos a todo el país. 800 productos, 6 años online, facturando USD 60k/mes. Sabían que el sitio cargaba lento pero no sabían por dónde empezar.

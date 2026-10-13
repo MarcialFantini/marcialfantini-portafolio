@@ -18,6 +18,7 @@ metricas:
   - { label: "Sobreventa eliminada", value: "100%" }
   - { label: "Tiempo sync stock", value: "<10s" }
   - { label: "Pedidos automatizados / mes", value: "800" }
+draft: true
 ---
 
 Distribuidora de artículos de limpieza con 3 canales online: MercadoLibre, TiendaNube, sitio propio. Tenían 4 personas dedicadas a mover stock entre plataformas. La sobreventa era del 8% (un cliente compraba, descubrían que no había stock, había que avisar y cancelar).

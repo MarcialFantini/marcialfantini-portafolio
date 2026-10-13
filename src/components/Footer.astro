@@ -1,5 +1,6 @@
 ---
 import site from "../data/site.json";
+import { hasPublishedPosts, hasPublishedProjects } from "../lib/content";
 
 const year = new Date().getFullYear();
 
@@ -11,19 +12,15 @@ const socials = [
 ];
 
 const links = [
-  { href: "/sobre-mi", label: "Sobre mí" },
   { href: "/servicios", label: "Servicios" },
-  { href: "/proyectos", label: "Proyectos" },
-  { href: "/blog", label: "Blog" },
-  { href: "/testimonios", label: "Testimonios" },
+  { href: "/sobre-mi", label: "Nosotros" },
+  ...((await hasPublishedProjects()) ? [{ href: "/proyectos", label: "Proyectos" }] : []),
+  ...((await hasPublishedPosts()) ? [{ href: "/blog", label: "Blog" }] : []),
   { href: "/contacto", label: "Contacto" },
 ];
 
 const resourceLinks = [
-  { href: "/cv", label: "CV" },
-  { href: "/ahora", label: "Ahora" },
-  { href: "/lectura", label: "Lectura" },
-  { href: "/rss.xml", label: "RSS" },
+  ...((await hasPublishedPosts()) ? [{ href: "/rss.xml", label: "RSS" }] : []),
 ];
 ---
 
@@ -131,6 +128,8 @@ const resourceLinks = [
         </ul>
       </div>
 
+      {
+        resourceLinks.length > 0 && (
       <div>
         <p class="font-mono text-[11px] uppercase tracking-[0.18em] text-white/55 mb-4">
           Recursos
@@ -149,6 +148,8 @@ const resourceLinks = [
           }
         </ul>
       </div>
+        )
+      }
 
       <div>
         <p class="font-mono text-[11px] uppercase tracking-[0.18em] text-white/55 mb-4">

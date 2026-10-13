@@ -18,6 +18,7 @@ metricas:
   - { label: "Tiempo de carga antes", value: "2.8s" }
   - { label: "Tiempo de carga después", value: "0.7s" }
   - { label: "Conversión mobile", value: "+34%" }
+draft: true
 ---
 
 Marca de indumentaria urbana con showroom en Palermo y tienda Shopify online. El tema que usaban tardaba 2.8s en cargar mobile. La dueña quería velocidad sub-1s sin perder la comodidad del panel admin de Shopify.

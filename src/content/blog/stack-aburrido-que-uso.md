@@ -6,6 +6,7 @@ category: "desarrollo"
 readingTime: 5
 tags: ["stack", "astro", "typescript", "tailwind", "sqlite"]
 featured: false
+draft: true
 ---
 
 Tengo una regla que me cambió la vida profesional: si una herramienta más nueva no resuelve un problema concreto que ya tengo, no la adopto. El resultado es que el 90% de mis proyectos terminan siendo la misma combinación aburrida.

@@ -18,6 +18,7 @@ metricas:
   - { label: "Filtros de búsqueda", value: "10" }
   - { label: "Leads cualificados / mes", value: "40+" }
   - { label: "Tiempo de respuesta a lead", value: "15 min" }
+draft: true
 ---
 
 Inmobiliaria de zona norte con 200 propiedades activas. Su presencia online era un Joomla obsoleto que renderizaba mal en mobile y no tenía filtros funcionando. Captar leads en ese estado era casi un milagro.

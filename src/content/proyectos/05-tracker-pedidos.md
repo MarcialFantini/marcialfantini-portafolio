@@ -18,6 +18,7 @@ metricas:
   - { label: "Estados por pedido", value: "5" }
   - { label: "Llamadas al call center", value: "-60%" }
   - { label: "Actualización", value: "tiempo real" }
+draft: true
 ---
 
 Operador logístico de la Patagonia que mueve mercadería entre Trelew, Comodoro y Bariloche. Antes de la app, el call center era la única forma de saber dónde estaba un envío. Llegaban 200 llamadas diarias y la mitad eran exactamente la misma pregunta.

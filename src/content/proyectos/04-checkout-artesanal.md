@@ -18,6 +18,7 @@ metricas:
   - { label: "Pasarela integrada", value: "Mercado Pago" }
   - { label: "Pasos de checkout", value: "2" }
   - { label: "Tiempo de carga", value: "0.8s" }
+draft: true
 ---
 
 Panificadora de Nordelta que vende facturas, panes de molde y budines artesanales. Hacen todo a mano, sin conservantes, y eso justifica un precio premium. Querían vender online sin perder la sensación de "compra a un negocio chico".

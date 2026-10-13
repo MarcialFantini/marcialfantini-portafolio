@@ -1,12 +1,10 @@
 ---
-import { getCollection } from "astro:content";
+import { getPublishedProjects } from "../lib/content";
 import FormattedDate from "./FormattedDate.astro";
 import CornerBrackets from "./CornerBrackets.astro";
 
-const allProyectos = await getCollection("proyectos");
-const featured = allProyectos
-  .filter((p) => p.data.featured)
-  .sort((a, b) => b.data.fecha.getTime() - a.data.fecha.getTime());
+const allProyectos = await getPublishedProjects();
+const featured = allProyectos.filter((p) => p.data.featured);
 
 const [hero, ...rest] = featured.slice(0, 3);
 const rows = rest.slice(0, 2);
@@ -14,6 +12,7 @@ const rows = rest.slice(0, 2);
 const gradients = ["azul", "azul-card", "dorado"] as const;
 ---
 
+{hero && (
 <section class="relative py-20 md:py-28 border-b-2 border-[var(--color-ink)] overflow-hidden">
   <div class="container-page">
     <div class="flex items-end justify-between flex-wrap gap-6 mb-12 reveal">
@@ -155,3 +154,4 @@ const gradients = ["azul", "azul-card", "dorado"] as const;
     }
   </div>
 </section>
+)}

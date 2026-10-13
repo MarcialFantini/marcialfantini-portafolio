@@ -18,6 +18,7 @@ metricas:
   - { label: "Tramos de mora", value: "6" }
   - { label: "Proyección recupero", value: "diaria" }
   - { label: "Reducción mora 30+", value: "-22%" }
+draft: true
 ---
 
 Empresa de gestión de cobranzas con 25 gestores y cartera de USD 80M. Cada viernes armaban un reporte en Excel que el directorio leía el lunes — tarde para tomar decisiones. La mora a 30+ días estaba en 18%, el doble del benchmark del sector.

@@ -6,6 +6,7 @@ category: "escritura"
 readingTime: 7
 tags: ["freelance", "burnout", "lecciones", "casos"]
 featured: false
+draft: true
 ---
 
 No hablo seguido de esto, pero en 2022 tuve un semestre donde casi dejo el freelance. Bajé de facturar USD 4.000/mes a USD 800/mes. No por falta de clientes, sino por exceso. Esta es la historia.

@@ -6,6 +6,7 @@ category: "carrera"
 readingTime: 5
 tags: ["pricing", "freelance", "minimos"]
 featured: false
+draft: true
 ---
 
 En 2020 facturé un proyecto por USD 450. Tres semanas después, USD 450. La lección: ese proyecto me costó USD 1.200 en horas, me dejó sin energía para buscar el siguiente, y me hizo postergar cobrar a otro cliente porque "estaba ocupado". Decidí fijar un piso.

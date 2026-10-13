@@ -37,6 +37,7 @@ const proyectos = defineCollection({
     repo: z.string().url().optional(),
     tags: z.array(z.string()),
     featured: z.boolean().default(false),
+    draft: z.boolean().default(false),
     metricas: z
       .array(
         z.object({

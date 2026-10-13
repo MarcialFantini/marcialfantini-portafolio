@@ -6,6 +6,7 @@ category: "productos"
 readingTime: 5
 tags: ["ventas", "leads", "freelance", "consulta"]
 featured: false
+draft: true
 ---
 
 Si trabajás como freelance, recibís cada semana el clásico "necesito un sitio web". El pedido es vago. La intención es real. La pregunta es: ¿cómo convertís ese pedido vago en un proyecto concreto sin sonar a vendedor de autos usados?

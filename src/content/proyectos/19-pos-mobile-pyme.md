@@ -18,6 +18,7 @@ metricas:
   - { label: "Sucursales integradas", value: "2" }
   - { label: "Facturación AFIP", value: "automática" }
   - { label: "Tiempo de venta", value: "<8s" }
+draft: true
 ---
 
 Dietética de barrio con 2 sucursales y 600 SKUs (alimentos saludables, suplementos, cosmética natural). La dueña manejaba la caja registradora y la facturación AFIP en planillas separadas. AFIP le rechazó 8 facturas el primer mes por errores de carga.

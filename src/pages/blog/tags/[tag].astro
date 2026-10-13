@@ -1,11 +1,11 @@
 ---
 import Layout from "../../../layouts/Layout.astro";
 import FormattedDate from "../../../components/FormattedDate.astro";
-import { getCollection } from "astro:content";
+import { getPublishedPosts } from "../../../lib/content";
 import type { GetStaticPaths } from "astro";
 
 export const getStaticPaths = (async () => {
-  const posts = await getCollection("blog");
+  const posts = await getPublishedPosts();
   const tagMap = new Map<string, typeof posts>();
   for (const post of posts) {
     for (const tag of post.data.tags) {

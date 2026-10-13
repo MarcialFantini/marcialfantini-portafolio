@@ -7,6 +7,7 @@ category: "productos"
 readingTime: 6
 tags: ["producto", "mobile", "pymes"]
 featured: false
+draft: true
 ---
 
 Aproximadamente el 60% de los clientes PyME que me llegan pidiendo "una app" no la necesitan. Lo que necesitan es otra cosa que están nombrando mal. Si trabajás en tech o vendés desarrollos, este número te va a resultar familiar.

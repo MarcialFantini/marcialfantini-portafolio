@@ -18,6 +18,7 @@ metricas:
   - { label: "Pasarela integrada", value: "Stripe" }
   - { label: "Tiempo de producción", value: "15 días" }
   - { label: "Conversión mobile", value: "3.1%" }
+draft: true
 ---
 
 Marca de muebles de diseño fabricada en Tucumán. Vendían exclusivamente por showroom en Buenos Aires. Querían expandir a todo el país sin abrir locales físicos y manteniendo el control sobre qué se produce y cuándo (fabricación a pedido, sin stock).

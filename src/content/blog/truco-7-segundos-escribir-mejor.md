@@ -6,6 +6,7 @@ category: "escritura"
 readingTime: 4
 tags: ["escritura", "comunicacion", "freelance"]
 featured: false
+draft: true
 ---
 
 Escribo mal. Escribí mal durante años. Lo que me salvó fue aprender una sola regla de estructura que llamo "el truco de los 7 segundos".

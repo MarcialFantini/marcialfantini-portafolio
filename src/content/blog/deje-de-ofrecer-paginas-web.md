@@ -7,6 +7,7 @@ category: "carrera"
 readingTime: 5
 tags: ["pricing", "freelance", "producto"]
 featured: true
+draft: true
 ---
 
 Durante cuatro años facturé como freelance con la misma fórmula de toda la vida: presupuesto por página web, precio según cantidad de pantallas, ajuste por complejidad. Era predecible, fácil de explicar, y me estaba dejando dinero en la mesa mientras quemaba clientes a los que les iba mucho mejor.

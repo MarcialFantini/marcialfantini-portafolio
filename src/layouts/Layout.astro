@@ -4,12 +4,14 @@ import { ClientRouter } from "astro:transitions";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import site from "../data/site.json";
+import { hasPublishedPosts } from "../lib/content";
 
 interface Props {
   title?: string;
   description?: string;
   ogImage?: string;
   pageType?: string;
+  noindex?: boolean;
 }
 
 const {
@@ -17,7 +19,10 @@ const {
   description = site.description,
   ogImage = "/og-default.svg",
   pageType = "website",
+  noindex = false,
 } = Astro.props;
+
+const showRss = await hasPublishedPosts();
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site ?? `https://${site.name.toLowerCase().replace(/\s+/g, "-")}.com`);
 ---
@@ -35,7 +40,8 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site ?? `https://${site.n
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonicalURL} />
-    <link rel="alternate" type="application/rss+xml" title={`${site.name} — Blog`} href="/rss.xml" />
+    {noindex && <meta name="robots" content="noindex" />}
+    {showRss && <link rel="alternate" type="application/rss+xml" title={`${site.name} — Blog`} href="/rss.xml" />}
 
     <!-- Open Graph -->
     <meta property="og:type" content={pageType} />
