@@ -48,6 +48,16 @@
 
   --gradient-hero: linear-gradient(180deg, #0F1A3A 0%, #1B2B5C 55%, #243A75 100%);
 
+  /* Film palette — navy profundo, marfil, dorado neón */
+  --color-navy-950: #0A1330;
+  --color-navy-900: #0F1A3A;
+  --color-navy-700: #1B2B5C;
+  --color-ivory: #F6F1E4;
+  --color-ivory-dim: #CFC9B8;
+  --color-neon: #FFD24A;
+  --color-gold-muted: #C8A24E;
+  --shadow-glow-gold: 0 0 24px rgba(255, 210, 74, 0.45), 0 0 90px rgba(255, 210, 74, 0.22);
+
   /* Radius */
   --radius-sm: 4px;
   --radius-md: 6px;
@@ -1037,4 +1047,60 @@
 
   /* Botones: rectángulo redondeado (no píldora) */
   .btn-sunset, .btn-ghost { border-radius: 14px; }
+}
+
+/* ---------------------------------------------------------
+   Film — escenas ligadas al scroll.
+   .film-scene es el wrapper alto (--film-len = alto en svh);
+   .film-stage queda sticky a 100svh. motion.ts escribe --p / --e
+   (0..1) en el wrapper y alterna .is-active / .is-late.
+   --------------------------------------------------------- */
+@layer utilities {
+  .text-glow-gold {
+    color: var(--color-neon);
+    text-shadow: 0 0 18px rgba(255, 210, 74, 0.55), 0 0 64px rgba(255, 210, 74, 0.3);
+  }
+  .box-glow-gold { box-shadow: var(--shadow-glow-gold); }
+
+  .film-scene {
+    position: relative;
+    height: calc(var(--film-len, 300) * 100vh / 100);
+    height: calc(var(--film-len, 300) * 1svh);
+    --p: 0;
+    --e: 0;
+  }
+  .film-stage {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    height: 100svh;
+    overflow: clip;
+    isolation: isolate;
+    background: var(--color-navy-950);
+    color: var(--color-ivory);
+  }
+  .film-scene.is-active .film-stage .film-will { will-change: transform, opacity; }
+
+  /* Chip de "ruido" compartido por El peso y El giro */
+  .film-chip {
+    position: absolute;
+    left: calc(var(--x) * 1%);
+    top: calc(var(--y) * 1%);
+    max-width: 62vw;
+    padding: 0.55em 0.95em;
+    border: 1px solid rgba(246, 241, 228, 0.18);
+    border-radius: 12px;
+    background: rgba(27, 43, 92, 0.72);
+    color: var(--color-ivory-dim);
+    font-family: var(--font-mono);
+    font-size: clamp(0.68rem, 2.9vw, 0.95rem);
+    line-height: 1.25;
+    white-space: nowrap;
+    box-shadow: 0 14px 30px -14px rgba(0, 0, 0, 0.7);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .film-scene { height: auto; }
+    .film-stage { position: relative; height: auto; min-height: 100svh; }
+  }
 }

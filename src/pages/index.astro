@@ -1,6 +1,7 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import Hero from "../components/Hero.astro";
+import Peso from "../components/film/Peso.astro";
+import Giro from "../components/film/Giro.astro";
 import SobreMi from "../components/SobreMi.astro";
 import Metricas from "../components/Metricas.astro";
 import Servicios from "../components/Servicios.astro";
@@ -12,7 +13,8 @@ import site from "../data/site.json";
 ---
 
 <Layout description={site.description}>
-  <div data-chapter="Inicio"><Hero /></div>
+  <Peso />
+  <Giro />
   <div class="panel" data-chapter="Sobre mí"><SobreMi /></div>
   <div class="panel" data-chapter="Resultados"><Metricas /></div>
   <div class="panel" data-chapter="Servicios"><Servicios /></div>

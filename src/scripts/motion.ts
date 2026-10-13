@@ -17,6 +17,19 @@ let my = -999;
 let pointerDirty = false;
 let ticking = false;
 
+/* Film: cada [data-film-scene] es un wrapper alto con un stage sticky.
+   El progreso 0..1 del scroll dentro del wrapper se escribe en el propio
+   elemento como --p (lineal) y --e (easeInOutCubic). */
+interface Film {
+  el: HTMLElement;
+  p: number;
+  active: boolean;
+  late: boolean;
+}
+let films: Film[] = [];
+const clamp01 = (n: number) => (n < 0 ? 0 : n > 1 ? 1 : n);
+const easeInOutCubic = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
+
 function revealAll() {
   document.querySelectorAll(".reveal, .reveal-stagger").forEach((el) => {
     el.setAttribute("data-revealed", "in");
@@ -94,6 +107,19 @@ function frame() {
 
   if (bar) bar.style.transform = `scaleX(${(max > 0 ? Math.min(y / max, 1) : 0).toFixed(4)})`;
 
+  // Film: lecturas primero (todas), escrituras al final del frame
+  const filmWrites: { f: Film; p: number; active: boolean; late: boolean }[] = [];
+  for (const f of films) {
+    const r = f.el.getBoundingClientRect();
+    const span = r.height - vh;
+    const p = span > 0 ? clamp01(-r.top / span) : 0;
+    const active = r.bottom > -vh * 0.25 && r.top < vh * 1.25;
+    const late = p >= 0.6;
+    if (Math.abs(p - f.p) > 0.0004 || active !== f.active || late !== f.late) {
+      filmWrites.push({ f, p, active, late });
+    }
+  }
+
   if (hero) {
     const hr = hero.getBoundingClientRect();
     const hp = Math.max(0, Math.min(1, -hr.top / (hr.height * 0.85)));
@@ -107,6 +133,17 @@ function frame() {
     el.style.setProperty("--p", `${((r.top + r.height / 2 - vh / 2) * -speed).toFixed(1)}px`);
   }
 
+  for (const w of filmWrites) {
+    const { f } = w;
+    f.el.style.setProperty("--p", w.p.toFixed(4));
+    f.el.style.setProperty("--e", easeInOutCubic(w.p).toFixed(4));
+    if (w.active !== f.active) f.el.classList.toggle("is-active", w.active);
+    if (w.late !== f.late) f.el.classList.toggle("is-late", w.late);
+    f.p = w.p;
+    f.active = w.active;
+    f.late = w.late;
+  }
+
   if (pointerDirty && glow) {
     glow.style.transform = `translate3d(${mx}px,${my}px,0)`;
     pointerDirty = false;
@@ -116,7 +153,7 @@ function frame() {
 function setup() {
   // Titulares de sección entran solos, sin tocar cada componente
   document.querySelectorAll("main h2").forEach((h) => {
-    if (!h.closest(".reveal, .reveal-stagger, [data-scene]")) h.classList.add("reveal");
+    if (!h.closest(".reveal, .reveal-stagger, [data-scene], [data-film-scene]")) h.classList.add("reveal");
   });
 
   if (reduce) {
@@ -142,6 +179,12 @@ function setup() {
 
   parallax = Array.from(document.querySelectorAll<HTMLElement>("[data-parallax]"));
   hero = document.querySelector<HTMLElement>("[data-scene]");
+  films = Array.from(document.querySelectorAll<HTMLElement>("[data-film-scene]")).map((el) => ({
+    el,
+    p: -1,
+    active: false,
+    late: false,
+  }));
   bar = document.querySelector<HTMLElement>(".page-progress");
   glow = document.querySelector<HTMLElement>(".spotlight");
   document.querySelectorAll<HTMLElement>(".btn-sunset, .btn-ghost").forEach(bindMagnet);
