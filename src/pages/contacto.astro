@@ -1,13 +1,12 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import Contacto from "../components/Contacto.astro";
-import Servicios from "../components/Servicios.astro";
 import site from "../data/site.json";
 ---
 
 <Layout
   title={`Contacto — ${site.name}`}
-  description={`Contanos qué necesitás: página web, ecommerce o software a medida. Escribinos a ${site.email} o usá el formulario y te respondemos con una primera lectura de tu proyecto.`}
+  description={`Contanos qué necesitás: página web, ecommerce o software a medida. Escribinos a ${site.email} o usá el formulario y te respondemos en 24 h hábiles.`}
 >
   <section class="pt-16 md:pt-24 pb-12 border-b border-[var(--color-border)]">
     <div class="container-page max-w-4xl reveal">
@@ -15,13 +14,11 @@ import site from "../data/site.json";
         Empecemos por <span class="text-[var(--color-dorado)]">una conversación.</span>
       </h1>
       <p class="text-xl text-[var(--color-ink-soft)] leading-relaxed max-w-3xl">
-        Antes de hablar de presupuesto necesitamos entender qué problema querés resolver. Cuando nos
-        escribas, contanos brevemente tres cosas: qué negocio tenés, qué duele hoy, y por qué
-        ahora. Con eso podemos devolverte una primera lectura seria.
+        Contanos tres cosas: qué negocio tenés, qué te duele hoy y por qué ahora. Te respondemos en
+        24 h hábiles, y si querés arrancamos con una auditoría gratis de 15 minutos.
       </p>
     </div>
   </section>
 
-  <div class="panel--oro"><Servicios /></div>
-  <Contacto />
+  <Contacto compact />
 </Layout>

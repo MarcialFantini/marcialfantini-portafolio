@@ -20,7 +20,15 @@ const { from, to } = Astro.props;
         <a href="/contacto?servicio=Auditor%C3%ADa%20gratis" class="cierre__btn">
           Agendá tu auditoría gratis de 15 min
         </a>
-        <a href={`mailto:${site.email}`} class="cierre__mail">o escribinos a {site.email}</a>
+        {site.whatsapp && (
+          <a
+            href={`https://wa.me/${site.whatsapp}?text=${encodeURIComponent(site.whatsappMessage)}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="cierre__mail"
+          >escribinos por WhatsApp</a>
+        )}
+        <a href={`mailto:${site.email}`} class="cierre__mail">{site.whatsapp ? "o por email a" : "o escribinos a"} {site.email}</a>
       </div>
     </div>
 

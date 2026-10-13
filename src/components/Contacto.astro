@@ -13,15 +13,13 @@ const initialSubject = isAudit
   : servicioParam
     ? `Consulta sobre ${servicioParam}`
     : "Consulta desde marcialfantini.com";
-const initialBody = isAudit
-  ? "Hola Marcial,\n\nQuiero reservar la auditoría gratis de 15 minutos.\n\nMi nombre:\nMi empresa/negocio:\nQué necesito resolver:\n\nGracias."
-  : servicioParam && servicioParam !== GENERIC_OPTION
-  ? `Hola Marcial,\n\nQuiero conversar sobre el servicio "${servicioParam}".\n\nMi nombre:\nMi empresa/negocio:\nQué necesito resolver:\n\nGracias.`
-  :"Hola Marcial,\n\nQuiero conversar sobre un proyecto.\n\nMi nombre:\nMi empresa/negocio:\nQué necesito resolver:\n\nGracias.";
 
 const email = site.email;
-const gmailCompose = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(email)}&su=${encodeURIComponent(initialSubject)}&body=${encodeURIComponent(initialBody)}`;
-const outlookCompose = `https://outlook.live.com/mail/0/deeplink/compose?to=${encodeURIComponent(email)}&subject=${encodeURIComponent(initialSubject)}&body=${encodeURIComponent(initialBody)}`;
+const endpoint = site.formEndpoint || "";
+const whatsappUrl = site.whatsapp
+  ? `https://wa.me/${site.whatsapp}?text=${encodeURIComponent(site.whatsappMessage || "")}`
+  : "";
+const { compact = false } = Astro.props;
 ---
 
 <section
@@ -30,6 +28,7 @@ const outlookCompose = `https://outlook.live.com/mail/0/deeplink/compose?to=${en
   aria-label="Contacto"
 >
   <div class="container-page relative z-[1]">
+    {!compact && (
     <div class="max-w-3xl mb-14 reveal">
       <p class="font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--color-dorado)] mb-3">
         Contacto
@@ -38,17 +37,27 @@ const outlookCompose = `https://outlook.live.com/mail/0/deeplink/compose?to=${en
         Hablemos sobre <span class="text-[var(--color-dorado)]">tu proyecto.</span>
       </h2>
       <p class="text-lg text-white/85 leading-relaxed max-w-2xl">
-        Si tenés una PyME que necesita presencia digital seria o un producto a medida, mandanos un mensaje.
-        Respondemos en menos de 24h hábiles con una primera lectura y, si tiene sentido, agendamos una llamada
-        de 30 minutos.
+        Si tenés una PyME que necesita presencia digital seria o un producto a medida, escribinos.
+        Te respondemos en 24 h hábiles. Si querés, arrancamos con una auditoría gratis de 15 minutos.
       </p>
     </div>
+    )}
 
     <div class="grid grid-cols-1 lg:grid-cols-[1fr_1.5fr] gap-8 lg:gap-12 reveal">
       <div class="space-y-7">
+        {whatsappUrl && (
+          <a
+            href={whatsappUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="tactile flex w-full items-center justify-center gap-2 px-6 py-4 rounded-md bg-[var(--color-dorado)] text-[var(--color-azul-deep)] font-mono text-[12px] uppercase tracking-[0.18em] font-bold hover:bg-white"
+          >
+            Escribinos por WhatsApp <span aria-hidden="true">↗</span>
+          </a>
+        )}
         <div class="rounded-lg bg-[var(--color-blanco-humo)] text-[var(--color-ink)] p-7 border-l-4 border-[var(--color-dorado)]">
           <p class="font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-mute)] mb-3">
-            Email directo
+            {whatsappUrl ? "O por email" : "Email directo"}
           </p>
           <a
             id="email-link"
@@ -66,26 +75,7 @@ const outlookCompose = `https://outlook.live.com/mail/0/deeplink/compose?to=${en
               <span aria-hidden="true" id="copy-email-icon">⎘</span>
               <span id="copy-email-label">Copiar email</span>
             </button>
-            <a
-              href={gmailCompose}
-              target="_blank"
-              rel="noopener noreferrer"
-              class="tactile inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md border border-[var(--color-border)] text-[var(--color-ink-soft)] font-mono text-[10px] uppercase tracking-[0.18em] font-semibold hover:border-[var(--color-azul)] hover:text-[var(--color-azul)]"
-            >
-              Abrir en Gmail <span aria-hidden="true">↗</span>
-            </a>
-            <a
-              href={outlookCompose}
-              target="_blank"
-              rel="noopener noreferrer"
-              class="tactile inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md border border-[var(--color-border)] text-[var(--color-ink-soft)] font-mono text-[10px] uppercase tracking-[0.18em] font-semibold hover:border-[var(--color-azul)] hover:text-[var(--color-azul)]"
-            >
-              Abrir en Outlook <span aria-hidden="true">↗</span>
-            </a>
           </div>
-          <p class="mt-3 text-xs text-[var(--color-mute)] leading-relaxed">
-            Tu cliente de email local también funciona. El mailto abre con el mensaje pre-armado.
-          </p>
         </div>
 
         <div>
@@ -127,6 +117,7 @@ const outlookCompose = `https://outlook.live.com/mail/0/deeplink/compose?to=${en
 
       <form
         id="contact-form"
+        novalidate
         class="rounded-lg bg-[var(--color-blanco-humo)] text-[var(--color-ink)] p-7 md:p-10"
         aria-label="Formulario de contacto"
       >
@@ -141,8 +132,10 @@ const outlookCompose = `https://outlook.live.com/mail/0/deeplink/compose?to=${en
               name="name"
               required
               autocomplete="name"
+              aria-describedby="name-error"
               class="w-full px-4 py-3 rounded-md border border-[var(--color-border)] bg-white text-[var(--color-ink)] placeholder:text-[var(--color-mute)] transition-colors"
             />
+            <p id="name-error" class="hidden mt-1.5 text-sm text-red-700" role="alert"></p>
           </div>
 
           <div>
@@ -155,8 +148,10 @@ const outlookCompose = `https://outlook.live.com/mail/0/deeplink/compose?to=${en
               name="email"
               required
               autocomplete="email"
+              aria-describedby="email-error"
               class="w-full px-4 py-3 rounded-md border border-[var(--color-border)] bg-white text-[var(--color-ink)] placeholder:text-[var(--color-mute)] transition-colors"
             />
+            <p id="email-error" class="hidden mt-1.5 text-sm text-red-700" role="alert"></p>
           </div>
 
           <div>
@@ -179,7 +174,7 @@ const outlookCompose = `https://outlook.live.com/mail/0/deeplink/compose?to=${en
               <option value={GENERIC_OPTION} selected={servicioParam === GENERIC_OPTION}>
                 {GENERIC_OPTION}
               </option>
-              <option value="Otro">Otro / no estoy seguro</option>
+              <option value="Otro">Otro</option>
             </select>
           </div>
 
@@ -192,26 +187,51 @@ const outlookCompose = `https://outlook.live.com/mail/0/deeplink/compose?to=${en
               name="message"
               required
               rows={5}
+              aria-describedby="message-error"
               class="w-full px-4 py-3 rounded-md border border-[var(--color-border)] bg-white text-[var(--color-ink)] placeholder:text-[var(--color-mute)] resize-y transition-colors"
             ></textarea>
+            <p id="message-error" class="hidden mt-1.5 text-sm text-red-700" role="alert"></p>
           </div>
+
+          <input
+            type="text"
+            name="_gotcha"
+            tabindex="-1"
+            autocomplete="off"
+            aria-hidden="true"
+            class="hidden"
+          />
 
           <button
             type="submit"
-            class="tactile w-full inline-flex items-center justify-center gap-2 px-6 py-4 rounded-md bg-[var(--color-azul)] text-white font-mono text-[11px] uppercase tracking-[0.18em] font-semibold hover:bg-[var(--color-azul-deep)]"
+            id="contact-submit"
+            class="tactile w-full inline-flex items-center justify-center gap-2 px-6 py-4 rounded-md bg-[var(--color-azul)] text-white font-mono text-[11px] uppercase tracking-[0.18em] font-semibold hover:bg-[var(--color-azul-deep)] disabled:opacity-60 disabled:cursor-not-allowed"
           >
-            Abrir tu cliente de email
+            <span id="contact-submit-label">{endpoint ? "Enviar mensaje" : "Abrir mi app de email"}</span>
             <span aria-hidden="true">→</span>
           </button>
 
+          <p
+            id="contact-status"
+            class="hidden text-sm leading-relaxed rounded-md px-4 py-3"
+            role="status"
+            aria-live="polite"
+          ></p>
+
           <p class="text-xs text-[var(--color-mute)] leading-relaxed">
-            Sin backend. Al enviar se abre tu cliente de email con todo pre-armado. También
-            podés escribirnos directo a{" "}
+            {endpoint
+              ? "Te respondemos en 24 h hábiles. "
+              : "Al tocar el botón se abre tu app de email con el mensaje armado: tenés que enviarlo desde ahí. "}
+            También podés escribirnos directo a{" "}
             <a
               href={`mailto:${email}`}
               class="text-[var(--color-azul)] underline hover:text-[var(--color-dorado)]">
               {email}
             </a>.
+          </p>
+          <p class="text-xs text-[var(--color-mute)] leading-relaxed">
+            Usamos tus datos solo para responderte. Más en nuestra{" "}
+            <a href="/privacidad" class="text-[var(--color-azul)] underline hover:text-[var(--color-dorado)]">política de privacidad</a>.
           </p>
         </div>
       </form>
@@ -223,7 +243,7 @@ const outlookCompose = `https://outlook.live.com/mail/0/deeplink/compose?to=${en
   define:vars={{
     toEmail: email,
     initialSubject,
-    initialBody,
+    endpoint,
   }}
 >
   (function () {
@@ -237,28 +257,89 @@ const outlookCompose = `https://outlook.live.com/mail/0/deeplink/compose?to=${en
     }
 
     const form = document.getElementById('contact-form');
+    const submit = document.getElementById('contact-submit');
+    const submitLabel = document.getElementById('contact-submit-label');
+    const status = document.getElementById('contact-status');
+    const idleLabel = submitLabel ? submitLabel.textContent : '';
+
+    const setStatus = (kind, text) => {
+      if (!status) return;
+      status.textContent = text;
+      status.className =
+        'text-sm leading-relaxed rounded-md px-4 py-3 ' +
+        (kind === 'success'
+          ? 'bg-green-100 text-green-900'
+          : kind === 'error'
+            ? 'bg-red-100 text-red-900'
+            : 'bg-[var(--color-azul-soft)] text-[var(--color-azul-deep)]');
+    };
+
+    const fieldError = (id, text) => {
+      const el = document.getElementById(id + '-error');
+      const input = document.getElementById(id);
+      if (el) {
+        el.textContent = text;
+        el.classList.toggle('hidden', !text);
+      }
+      if (input) input.setAttribute('aria-invalid', text ? 'true' : 'false');
+    };
+
+    const validate = (data) => {
+      const name = String(data.get('name') ?? '').trim();
+      const mail = String(data.get('email') ?? '').trim();
+      const message = String(data.get('message') ?? '').trim();
+      const okMail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(mail);
+      fieldError('name', name ? '' : 'Decinos tu nombre.');
+      fieldError('email', okMail ? '' : 'Ingresá un email válido.');
+      fieldError('message', message ? '' : 'Contanos brevemente qué necesitás.');
+      return Boolean(name && okMail && message);
+    };
+
     if (form instanceof HTMLFormElement) {
-      form.addEventListener('submit', (event) => {
+      form.addEventListener('submit', async (event) => {
         event.preventDefault();
         const data = new FormData(form);
-        const name = String(data.get('name') ?? '');
-        const fromEmail = String(data.get('email') ?? '');
-        const servicio = String(data.get('servicio') ?? '');
-        const message = String(data.get('message') ?? '');
+        if (!validate(data)) return;
+        // Honeypot: si un bot lo completó, no enviamos nada.
+        if (String(data.get('_gotcha') ?? '')) return;
 
+        const name = String(data.get('name')).trim();
+        const fromEmail = String(data.get('email')).trim();
+        const servicio = String(data.get('servicio') ?? '');
+        const message = String(data.get('message')).trim();
         const subject = servicio
           ? `[${servicio}] Mensaje de ${name || 'contacto'}`
           : initialSubject;
 
-        const body =
-          `${message}\n\n` +
-          `---\n` +
-          `Nombre: ${name}\n` +
-          `Email: ${fromEmail}\n` +
-          `Servicio: ${servicio || 'no especificado'}\n`;
+        if (!endpoint) {
+          // Sin endpoint configurado: abrimos la app de email, sin simular un envío.
+          const body =
+            `${message}\n\n---\nNombre: ${name}\nEmail: ${fromEmail}\nServicio: ${servicio || 'no especificado'}\n`;
+          setStatus('info', 'Abrimos tu app de email. Tenés que enviar el mensaje desde ahí.');
+          window.location.href =
+            `mailto:${toEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+          return;
+        }
 
-        const mailto = `mailto:${toEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-        window.location.href = mailto;
+        data.set('_subject', subject);
+        if (submit) submit.disabled = true;
+        if (submitLabel) submitLabel.textContent = 'Enviando...';
+        setStatus('info', 'Enviando tu mensaje...');
+        try {
+          const res = await fetch(endpoint, {
+            method: 'POST',
+            body: data,
+            headers: { Accept: 'application/json' },
+          });
+          if (!res.ok) throw new Error('HTTP ' + res.status);
+          setStatus('success', 'Recibimos tu mensaje. Te respondemos en 24 h hábiles.');
+          form.reset();
+        } catch (e) {
+          setStatus('error', `No pudimos enviar el mensaje. Probá de nuevo o escribinos a ${toEmail}.`);
+        } finally {
+          if (submit) submit.disabled = false;
+          if (submitLabel) submitLabel.textContent = idleLabel;
+        }
       });
     }
 

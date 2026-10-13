@@ -42,6 +42,7 @@ const minLabel = `USD ${minUsd.toLocaleString("es-AR")}`;
         Páginas web, ecommerce y software a medida. Empezá con una auditoría gratis de 15 minutos: te contamos qué te falta para que te encuentren y te escriban.
       </p>
       <p class="giro__price film-will">Desde {minLabel} · precios orientativos</p>
+      <p class="giro__note film-will">Precios orientativos en USD. No incluyen hosting ni dominio.</p>
       <div class="giro__cta film-will">
         <a href="/contacto?servicio=Auditor%C3%ADa%20gratis" class="btn-sunset">
           Agendá tu auditoría gratis de 15 min
@@ -154,6 +155,14 @@ const minLabel = `USD ${minUsd.toLocaleString("es-AR")}`;
     opacity: var(--v);
     transform: translate3d(0, calc((1 - var(--v)) * 2svh), 0);
   }
+  .giro__note {
+    --v: clamp(0, calc((var(--p) - 0.52) * 7), 1);
+    margin-top: 0.6rem;
+    font-size: clamp(0.7rem, 2.8vw, 0.82rem);
+    color: var(--color-ivory-dim);
+    opacity: var(--v);
+    transform: translate3d(0, calc((1 - var(--v)) * 2svh), 0);
+  }
   .giro__cta {
     --v: clamp(0, calc((var(--p) - 0.6) * 6), 1);
     margin-top: 1.5rem;
@@ -178,6 +187,7 @@ const minLabel = `USD ${minUsd.toLocaleString("es-AR")}`;
     .giro__line,
     .giro__sub,
     .giro__price,
+    .giro__note,
     .giro__cta {
       opacity: 1;
       transform: none;

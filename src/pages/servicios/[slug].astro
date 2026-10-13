@@ -130,6 +130,11 @@ const faqItems = faqsPorServicio[servicio.id] ?? [];
           </span>
         )}
       </div>
+      {servicio.precioDesdeUsd != null && (
+        <p class="mt-3 text-sm text-[var(--color-mute)]">
+          Precios orientativos en USD. No incluyen hosting ni dominio.
+        </p>
+      )}
     </div>
   </section>
 
