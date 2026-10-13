@@ -24,145 +24,100 @@ const { compact = false } = Astro.props;
 
 <section
   id="contacto"
-  class="relative py-20 md:py-28 bg-gradient-azul text-white border-y border-[var(--color-azul-deep)] overflow-hidden"
+  class="surface-night relative py-20 md:py-28"
   aria-label="Contacto"
 >
-  <div class="container-page relative z-[1]">
-    {!compact && (
-    <div class="max-w-3xl mb-14 reveal">
-      <p class="font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--color-dorado)] mb-3">
-        Contacto
-      </p>
-      <h2 class="font-impact text-[clamp(2.5rem,6vw,5rem)] leading-[0.92] text-white mb-6">
-        Hablemos sobre <span class="text-[var(--color-dorado)]">tu proyecto.</span>
-      </h2>
-      <p class="text-lg text-white/85 leading-relaxed max-w-2xl">
-        Si tenés una PyME que necesita presencia digital seria o un producto a medida, escribinos.
-        Te respondemos en 24 h hábiles. Si querés, arrancamos con una auditoría gratis de 15 minutos.
-      </p>
-    </div>
-    )}
+  <div class="container-page relative z-[1] grid grid-cols-1 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] gap-12 lg:gap-20">
+    <div class="lg:sticky lg:top-28 lg:self-start space-y-8">
+      {!compact && (
+      <div>
+        <p class="eyebrow mb-4">Contacto</p>
+        <h2 class="display-lg">
+          Contanos qué querés <span class="display-accent">vender online.</span>
+        </h2>
+      </div>
+      )}
 
-    <div class="grid grid-cols-1 lg:grid-cols-[1fr_1.5fr] gap-8 lg:gap-12 reveal">
-      <div class="space-y-7">
-        {whatsappUrl && (
-          <a
-            href={whatsappUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            class="tactile flex w-full items-center justify-center gap-2 px-6 py-4 rounded-control bg-[var(--color-dorado)] text-[var(--color-on-gold)] font-mono text-[12px] uppercase tracking-[0.18em] font-bold hover:bg-[var(--color-ivory)]"
-          >
-            Escribinos por WhatsApp <span aria-hidden="true">↗</span>
-          </a>
-        )}
-        <div class="rounded-card bg-[var(--color-blanco-humo)] text-[var(--color-ink)] p-7 border-l-4 border-[var(--color-dorado)]">
-          <p class="font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-mute)] mb-3">
-            {whatsappUrl ? "O por email" : "Email directo"}
-          </p>
-          <a
-            id="email-link"
-            href={`mailto:${email}`}
-            class="font-display text-xl md:text-2xl font-semibold tracking-tight text-[var(--color-azul)] hover:text-[var(--color-azul-deep)] break-all"
-          >
-            {email}
-          </a>
-          <div class="mt-4 flex flex-wrap gap-2">
-            <button
-              type="button"
-              id="copy-email-btn"
-              class="tactile inline-flex items-center gap-1.5 px-3 py-1.5 rounded-control bg-[var(--color-azul-soft)] text-[var(--color-azul-deep)] font-mono text-[10px] uppercase tracking-[0.18em] font-semibold hover:bg-[var(--color-action)] hover:text-white"
-            >
-              <span aria-hidden="true" id="copy-email-icon">⎘</span>
-              <span id="copy-email-label">Copiar email</span>
-            </button>
-          </div>
-        </div>
+      {whatsappUrl && (
+        <a
+          href={whatsappUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="tactile sd-reveal flex w-full min-h-14 items-center justify-center gap-2 px-6 py-4 rounded-control bg-[var(--color-dorado)] text-[var(--color-on-gold)] font-mono text-[12px] uppercase tracking-[0.18em] font-bold hover:bg-[var(--color-ivory)]"
+        >
+          Escribinos por WhatsApp <span aria-hidden="true">↗</span>
+        </a>
+      )}
 
-        <div>
-          <p class="font-mono text-[11px] uppercase tracking-[0.18em] text-white/70 mb-2">
-            Ubicación
-          </p>
-          <p class="text-white font-medium">{site.location}</p>
-        </div>
-
-        <div>
-          <p class="font-mono text-[11px] uppercase tracking-[0.18em] text-white/70 mb-3">
-            Conectá
-          </p>
-          <ul class="flex flex-col gap-2 text-sm">
-            <li>
-              <a
-                href={site.social.github}
-                class="tactile text-white hover:text-[var(--color-dorado)] inline-flex items-center gap-1.5 font-medium"
-                rel="noopener noreferrer"
-                target="_blank">GitHub <span aria-hidden="true">↗</span></a>
-            </li>
-            <li>
-              <a
-                href={site.social.linkedin}
-                class="tactile text-white hover:text-[var(--color-dorado)] inline-flex items-center gap-1.5 font-medium"
-                rel="noopener noreferrer"
-                target="_blank">LinkedIn <span aria-hidden="true">↗</span></a>
-            </li>
-            <li>
-              <a
-                href={site.social.twitter}
-                class="tactile text-white hover:text-[var(--color-dorado)] inline-flex items-center gap-1.5 font-medium"
-                rel="noopener noreferrer"
-                target="_blank">X <span aria-hidden="true">↗</span></a>
-            </li>
-          </ul>
-        </div>
+      <div class="sd-reveal">
+        <p class="field-label">{whatsappUrl ? "O por email" : "Email directo"}</p>
+        <a
+          id="email-link"
+          href={`mailto:${email}`}
+          class="block font-display text-xl md:text-2xl font-semibold tracking-tight text-[var(--color-ink)] hover:text-[var(--color-dorado)] break-all py-1"
+        >
+          {email}
+        </a>
+        <button
+          type="button"
+          id="copy-email-btn"
+          class="tactile mt-2 inline-flex min-h-11 items-center gap-2 px-4 py-2 rounded-control border border-[var(--color-hair-strong)] text-[var(--color-ink)] font-mono text-[11px] uppercase tracking-[0.18em] font-semibold hover:border-[var(--color-dorado)] hover:text-[var(--color-dorado)] focus-visible:outline-2 focus-visible:outline-offset-2"
+        >
+          <span aria-hidden="true" id="copy-email-icon">⎘</span>
+          <span id="copy-email-label">Copiar email</span>
+        </button>
       </div>
 
-      <form
-        id="contact-form"
-        novalidate
-        class="rounded-card bg-[var(--color-blanco-humo)] text-[var(--color-ink)] p-7 md:p-10"
-        aria-label="Formulario de contacto"
-      >
-        <div class="space-y-5">
-          <div>
-            <label for="name" class="block text-sm font-medium text-[var(--color-ink)] mb-1.5">
-              Nombre
-            </label>
-            <input
-              type="text"
-              id="name"
-              name="name"
-              required
-              autocomplete="name"
-              aria-describedby="name-error"
-              class="w-full px-4 py-3 rounded-control border border-[var(--color-line)] bg-[var(--color-field)] text-[var(--color-ink)] placeholder:text-[var(--color-mute)] transition-colors"
-            />
-            <p id="name-error" class="hidden mt-1.5 text-sm text-[var(--color-err-ink)]" role="alert"></p>
-          </div>
+      <div class="sd-reveal">
+        <p class="text-base md:text-lg text-[var(--color-ink)] leading-snug font-medium">
+          Auditoría gratis de 15 minutos. Te respondemos en 24 h hábiles.
+        </p>
+        <p class="mt-3 text-sm text-[var(--color-ink-soft)] leading-relaxed">
+          {site.location}. Usamos tus datos solo para responderte. Más en nuestra{" "}
+          <a href="/privacidad" class="underline underline-offset-2 hover:text-[var(--color-dorado)]">política de privacidad</a>.
+        </p>
+      </div>
+    </div>
 
-          <div>
-            <label for="email" class="block text-sm font-medium text-[var(--color-ink)] mb-1.5">
-              Tu email
-            </label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              required
-              autocomplete="email"
-              aria-describedby="email-error"
-              class="w-full px-4 py-3 rounded-control border border-[var(--color-line)] bg-[var(--color-field)] text-[var(--color-ink)] placeholder:text-[var(--color-mute)] transition-colors"
-            />
-            <p id="email-error" class="hidden mt-1.5 text-sm text-[var(--color-err-ink)]" role="alert"></p>
-          </div>
+    <form
+      id="contact-form"
+      novalidate
+      class="contact-form sd-reveal lg:border-l lg:border-[var(--color-hair)] lg:pl-14"
+      aria-label="Formulario de contacto"
+    >
+      <div class="space-y-7">
+        <div>
+          <label for="name" class="field-label">Nombre</label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            required
+            autocomplete="name"
+            aria-describedby="name-error"
+            class="field"
+          />
+          <p id="name-error" class="field-error hidden" role="alert"></p>
+        </div>
 
+        <div>
+          <label for="email" class="field-label">Tu email</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            required
+            autocomplete="email"
+            aria-describedby="email-error"
+            class="field"
+          />
+          <p id="email-error" class="field-error hidden" role="alert"></p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-7">
           <div>
-            <label for="servicio" class="block text-sm font-medium text-[var(--color-ink)] mb-1.5">
-              Servicio que te interesa (opcional)
-            </label>
-            <select
-              id="servicio"
-              name="servicio"
-              class="w-full px-4 py-3 rounded-control border border-[var(--color-line)] bg-[var(--color-field)] text-[var(--color-ink)] transition-colors"
-            >
+            <label for="servicio" class="field-label">Servicio (opcional)</label>
+            <select id="servicio" name="servicio" class="field">
               <option value="">Elegí uno</option>
               {
                 servicios.map((s) => (
@@ -179,63 +134,68 @@ const { compact = false } = Astro.props;
           </div>
 
           <div>
-            <label for="message" class="block text-sm font-medium text-[var(--color-ink)] mb-1.5">
-              Contanos brevemente qué necesitás
-            </label>
-            <textarea
-              id="message"
-              name="message"
-              required
-              rows={5}
-              aria-describedby="message-error"
-              class="w-full px-4 py-3 rounded-control border border-[var(--color-line)] bg-[var(--color-field)] text-[var(--color-ink)] placeholder:text-[var(--color-mute)] resize-y transition-colors"
-            ></textarea>
-            <p id="message-error" class="hidden mt-1.5 text-sm text-[var(--color-err-ink)]" role="alert"></p>
+            <label for="presupuesto" class="field-label">Presupuesto (opcional)</label>
+            <select id="presupuesto" name="presupuesto" class="field">
+              <option value="">Elegí un rango</option>
+              <option value="Hasta USD 500">Hasta USD 500</option>
+              <option value="USD 500 - 1.500">USD 500 - 1.500</option>
+              <option value="Más de USD 1.500">Más de USD 1.500</option>
+              <option value="No lo sé todavía">No lo sé todavía</option>
+            </select>
           </div>
-
-          <input
-            type="text"
-            name="_gotcha"
-            tabindex="-1"
-            autocomplete="off"
-            aria-hidden="true"
-            class="hidden"
-          />
-
-          <button
-            type="submit"
-            id="contact-submit"
-            class="tactile w-full inline-flex items-center justify-center gap-2 px-6 py-4 rounded-control bg-[var(--color-action)] text-white font-mono text-[11px] uppercase tracking-[0.18em] font-semibold hover:bg-[var(--color-action-hover)] disabled:opacity-60 disabled:cursor-not-allowed"
-          >
-            <span id="contact-submit-label">{endpoint ? "Enviar mensaje" : "Abrir mi app de email"}</span>
-            <span aria-hidden="true">→</span>
-          </button>
-
-          <p
-            id="contact-status"
-            class="hidden text-sm leading-relaxed rounded-control px-4 py-3"
-            role="status"
-            aria-live="polite"
-          ></p>
-
-          <p class="text-xs text-[var(--color-mute)] leading-relaxed">
-            {endpoint
-              ? "Te respondemos en 24 h hábiles. "
-              : "Al tocar el botón se abre tu app de email con el mensaje armado: tenés que enviarlo desde ahí. "}
-            También podés escribirnos directo a{" "}
-            <a
-              href={`mailto:${email}`}
-              class="text-[var(--color-azul)] underline hover:text-[var(--color-dorado)]">
-              {email}
-            </a>.
-          </p>
-          <p class="text-xs text-[var(--color-mute)] leading-relaxed">
-            Usamos tus datos solo para responderte. Más en nuestra{" "}
-            <a href="/privacidad" class="text-[var(--color-azul)] underline hover:text-[var(--color-dorado)]">política de privacidad</a>.
-          </p>
         </div>
-      </form>
-    </div>
+
+        <div>
+          <label for="message" class="field-label">Contanos brevemente qué necesitás</label>
+          <textarea
+            id="message"
+            name="message"
+            required
+            rows={4}
+            aria-describedby="message-error"
+            class="field"
+          ></textarea>
+          <p id="message-error" class="field-error hidden" role="alert"></p>
+        </div>
+
+        <input
+          type="text"
+          name="_gotcha"
+          tabindex="-1"
+          autocomplete="off"
+          aria-hidden="true"
+          class="hidden"
+        />
+
+        <button
+          type="submit"
+          id="contact-submit"
+          class="tactile w-full min-h-14 inline-flex items-center justify-center gap-2 px-6 py-4 rounded-control bg-[var(--color-ivory)] text-[var(--color-navy-950)] font-mono text-[12px] uppercase tracking-[0.18em] font-bold hover:bg-[var(--color-neon)] disabled:opacity-60 disabled:cursor-not-allowed focus-visible:outline-2 focus-visible:outline-offset-2"
+        >
+          <span id="contact-submit-label">{endpoint ? "Enviar mensaje" : "Abrir mi app de email"}</span>
+          <span aria-hidden="true">→</span>
+        </button>
+
+        <p
+          id="contact-status"
+          class="hidden text-sm leading-relaxed rounded-control px-4 py-3"
+          role="status"
+          aria-live="polite"
+        ></p>
+
+        <p class="text-sm text-[var(--color-ink-soft)] leading-relaxed">
+          {endpoint
+            ? "Te respondemos en 24 h hábiles. "
+            : "Al tocar el botón se abre tu app de email con el mensaje armado: tenés que enviarlo desde ahí. "}
+          También podés escribirnos directo a{" "}
+          <a
+            href={`mailto:${email}`}
+            class="underline underline-offset-2 hover:text-[var(--color-dorado)]">
+            {email}
+          </a>.
+        </p>
+      </div>
+    </form>
   </div>
 </section>
 
@@ -314,7 +274,7 @@ const { compact = false } = Astro.props;
         if (!endpoint) {
           // Sin endpoint configurado: abrimos la app de email, sin simular un envío.
           const body =
-            `${message}\n\n---\nNombre: ${name}\nEmail: ${fromEmail}\nServicio: ${servicio || 'no especificado'}\n`;
+            `${message}\n\n---\nNombre: ${name}\nEmail: ${fromEmail}\nServicio: ${servicio || 'no especificado'}\nPresupuesto: ${String(data.get('presupuesto') ?? '') || 'no especificado'}\n`;
           setStatus('info', 'Abrimos tu app de email. Tenés que enviar el mensaje desde ahí.');
           window.location.href =
             `mailto:${toEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;

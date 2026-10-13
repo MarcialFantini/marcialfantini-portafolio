@@ -1,4 +1,6 @@
 ---
+import site from "../data/site.json";
+
 interface FAQItem {
   pregunta: string;
   respuesta: string;
@@ -36,47 +38,65 @@ const faqs: FAQItem[] = [
       "Sí. En la primera charla te mostramos proyectos de complejidad parecida a lo que necesitás, sin compromiso, para que veas qué tipo de trabajo hacemos.",
   },
   {
-    pregunta: "¿Qué necesito tener listo antes de escribirles?",
+    pregunta: "¿Qué necesito para empezar?",
     respuesta:
-      "Nada. Si tenés una idea de lo que necesitás, un presupuesto aproximado y una fecha, mejor. Si no, charlamos 15 minutos, te hacemos unas preguntas y armamos el brief entre todos. La auditoría gratis de 15 minutos existe justamente para esto, y te respondemos en menos de 24 h hábiles.",
+      "Tu logo si lo tenés, textos o ideas de lo que querés contar y fotos de tus productos. Si no tenés algo de eso, no pasa nada: charlamos 15 minutos, te hacemos unas preguntas y armamos el brief entre todos. La auditoría gratis de 15 minutos existe justamente para esto, y te respondemos en menos de 24 h hábiles.",
+  },
+  {
+    pregunta: "¿De quién es el código y el sitio?",
+    respuesta:
+      "Al terminar y pagar el proyecto, el sitio es tuyo. Si querés aclarar algún detalle de la entrega, lo charlamos antes de empezar.",
   },
 ];
+
+const whatsappUrl = site.whatsapp
+  ? `https://wa.me/${site.whatsapp}?text=${encodeURIComponent(site.whatsappMessage || "")}`
+  : "";
 ---
 
-<section id="faq" class="relative py-20 md:py-28 border-b border-[var(--color-border)] bg-[var(--color-blanco)] overflow-hidden">
-  <div class="container-page">
-    <div class="max-w-3xl mb-12 md:mb-16 reveal">
-      <p class="font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--color-azul)] mb-3">Preguntas frecuentes</p>
-      <h2 class="font-impact text-[clamp(2rem,5vw,4rem)] uppercase leading-[0.95] text-[var(--color-ink)] mt-2">
-        Las preguntas que <span class="text-[var(--color-azul)]">nos hacen seguido.</span>
+<section id="faq" class="relative py-20 md:py-28" aria-label="Preguntas frecuentes">
+  <div class="container-page faq-split grid grid-cols-1 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] gap-10 lg:gap-20">
+    <div class="lg:sticky lg:top-28 lg:self-start">
+      <p class="eyebrow mb-4">Preguntas frecuentes</p>
+      <h2 class="display-lg">
+        Lo que suelen preguntarnos <span class="display-accent">antes de arrancar.</span>
       </h2>
+      <p class="mt-6 max-w-md text-base md:text-lg text-[var(--color-ink-soft)] leading-relaxed">
+        Si tu duda no está acá, escribinos. Te respondemos en 24 h hábiles.
+      </p>
+      <div class="mt-8 flex flex-col sm:flex-row lg:flex-col xl:flex-row gap-3">
+        {whatsappUrl && (
+          <a
+            href={whatsappUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="tactile inline-flex min-h-12 items-center justify-center gap-2 px-6 py-3 rounded-control bg-[var(--color-action)] text-white font-mono text-[12px] uppercase tracking-[0.18em] font-semibold hover:bg-[var(--color-action-hover)]"
+          >
+            Escribinos por WhatsApp <span aria-hidden="true">↗</span>
+          </a>
+        )}
+        <a
+          href="/contacto"
+          class={`tactile inline-flex min-h-12 items-center justify-center gap-2 px-6 py-3 rounded-control font-mono text-[12px] uppercase tracking-[0.18em] font-semibold ${
+            whatsappUrl
+              ? "border border-[var(--color-hair-strong)] text-[var(--color-ink)] hover:border-[var(--color-ink)]"
+              : "bg-[var(--color-action)] text-white hover:bg-[var(--color-action-hover)]"
+          }`}
+        >
+          Ir al formulario <span aria-hidden="true">→</span>
+        </a>
+      </div>
     </div>
 
-    <div class="max-w-3xl space-y-3 reveal-stagger">
+    <div>
       {
-        faqs.map((faq, i) => (
-          <details
-            class="group rounded-card bg-[var(--color-blanco-humo)] border border-[var(--color-line)] overflow-hidden tactile"
-          >
-            <summary class="flex items-start justify-between gap-4 p-5 md:p-6 cursor-pointer list-none">
-              <div class="flex items-start gap-3 flex-1 min-w-0">
-                <span class="font-impact text-xl md:text-2xl text-[var(--color-azul)] tabular-nums leading-none shrink-0">
-                  {String(i + 1).padStart(2, "0")}
-                </span>
-                <h3 class="font-display font-semibold text-base md:text-lg text-[var(--color-ink)] leading-snug">
-                  {faq.pregunta}
-                </h3>
-              </div>
-              <span class="shrink-0 inline-flex items-center justify-center w-9 h-9 rounded-full border border-[var(--color-line)] text-[var(--color-ink)] group-open:bg-[var(--color-action)] group-open:border-[var(--color-action)] group-open:text-white transition-all" aria-hidden="true">
-                <svg class="w-4 h-4 transition-transform group-open:rotate-45" fill="none" viewBox="0 0 16 16">
-                  <path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-                </svg>
-              </span>
+        faqs.map((faq) => (
+          <details class="qa sd-reveal">
+            <summary>
+              <h3>{faq.pregunta}</h3>
             </summary>
-            <div class="px-5 md:px-6 pb-5 md:pb-6 pl-12 md:pl-16">
-              <p class="text-sm md:text-base text-[var(--color-ink-soft)] leading-relaxed">
-                {faq.respuesta}
-              </p>
+            <div class="qa__body">
+              <p class="text-base text-[var(--color-ink-soft)] leading-relaxed">{faq.respuesta}</p>
             </div>
           </details>
         ))

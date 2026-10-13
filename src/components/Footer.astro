@@ -8,8 +8,11 @@ const socials = [
   { href: site.social.github, label: "GitHub" },
   { href: site.social.linkedin, label: "LinkedIn" },
   { href: site.social.twitter, label: "X" },
-  { href: `mailto:${site.email}`, label: "Email" },
 ];
+
+const whatsappUrl = site.whatsapp
+  ? `https://wa.me/${site.whatsapp}?text=${encodeURIComponent(site.whatsappMessage || "")}`
+  : "";
 
 const links = [
   { href: "/servicios", label: "Servicios" },
@@ -25,40 +28,47 @@ const resourceLinks = [
 ];
 ---
 
-<footer class="relative bg-[var(--color-deep)] text-white overflow-hidden">
-  <div class="container-page py-14 md:py-20">
-    <div class="mb-10 md:mb-14 reveal grid grid-cols-1 lg:grid-cols-[2fr_3fr] gap-10 items-end">
+<footer class="site-footer surface-night relative overflow-hidden">
+  <div class="container-page pt-14 md:pt-20">
+    <nav aria-label="Pie de página" class="flex flex-wrap gap-x-7 gap-y-1 pb-6 border-b border-[var(--color-hair)]">
+      {
+        [...links, ...resourceLinks].map((l) => (
+          <a href={l.href} class="tactile footer-link">{l.label}</a>
+        ))
+      }
+    </nav>
+
+    <div class="sd-reveal grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-20 py-10 md:py-14">
       <div>
-        <p class="font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--color-dorado)] mb-3">
-          {site.location} · {year}
-        </p>
+        <p class="field-label">Contacto</p>
         <a
-          href="/"
-          class="block font-impact leading-[0.9] tracking-[-0.04em] text-white hover:text-[var(--color-dorado)] transition-colors text-[clamp(2.5rem,10vw,7rem)]"
-          aria-label={`${site.name} — ir al inicio`}
+          href={`mailto:${site.email}`}
+          class="tactile block py-1 font-display text-xl md:text-2xl font-semibold tracking-tight text-[var(--color-ink)] hover:text-[var(--color-dorado)] break-all"
         >
-          {site.name}
+          {site.email}
         </a>
-        <p class="mt-4 max-w-md text-sm text-white/70 leading-relaxed">
-          {site.description}
-        </p>
+        {whatsappUrl && (
+          <a
+            href={whatsappUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="tactile mt-1 inline-flex min-h-11 items-center gap-1.5 font-mono text-[12px] uppercase tracking-[0.16em] text-[var(--color-ink-soft)] hover:text-[var(--color-dorado)]"
+          >
+            WhatsApp <span aria-hidden="true">↗</span>
+          </a>
+        )}
+        <p class="mt-3 max-w-sm text-sm text-[var(--color-ink-soft)] leading-relaxed">{site.description}</p>
       </div>
 
       {site.newsletterEndpoint && (
       <form
         id="newsletter-form"
         data-endpoint={site.newsletterEndpoint}
-        class="rounded-card bg-[var(--color-navy-900)] p-6 md:p-7 border border-white/10"
         aria-label="Newsletter — recibí un email mensual con lo que aprendimos"
       >
-        <p class="font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--color-dorado)] mb-2">
-          Newsletter mensual
-        </p>
-        <h2 class="font-impact text-2xl md:text-3xl uppercase leading-[0.95] text-white mb-2">
-          Lo que aprendimos este mes.
-        </h2>
-        <p class="text-sm text-white/70 mb-5 leading-relaxed">
-          Un email por mes con novedades y consejos para tu sitio. Te podés dar de baja cuando quieras.
+        <p class="field-label">Newsletter mensual</p>
+        <p class="text-sm text-[var(--color-ink-soft)] mb-2 leading-relaxed">
+          Un email por mes con lo que aprendimos. Te podés dar de baja cuando quieras.
         </p>
         <input
           type="text"
@@ -68,7 +78,7 @@ const resourceLinks = [
           aria-hidden="true"
           class="hidden"
         />
-        <div class="flex flex-col sm:flex-row gap-2">
+        <div class="footer-news">
           <label class="sr-only" for="newsletter-email">Tu email</label>
           <input
             type="email"
@@ -77,13 +87,9 @@ const resourceLinks = [
             required
             autocomplete="email"
             placeholder="tu@email.com"
-            class="flex-1 min-w-0 px-4 py-3 rounded-control bg-[var(--color-field)] text-[var(--color-ink)] placeholder:text-[var(--color-mute)] focus:outline-none focus:ring-2 focus:ring-[var(--color-dorado)]"
           />
-          <button
-            type="submit"
-            class="tactile px-5 py-3 rounded-control bg-[var(--color-dorado)] text-[var(--color-on-gold)] font-mono text-[11px] uppercase tracking-[0.18em] font-bold hover:bg-[var(--color-ivory)]"
-          >
-            Suscribirme
+          <button type="submit" class="tactile" aria-label="Suscribirme al newsletter">
+            <span aria-hidden="true">→</span>
           </button>
         </div>
         <p
@@ -93,99 +99,41 @@ const resourceLinks = [
           aria-live="polite"
         >
         </p>
-        <p class="mt-3 text-xs text-white/60 leading-relaxed">
+        <p class="mt-3 text-xs text-[var(--color-ink-soft)] leading-relaxed">
           Usamos tu email solo para el newsletter. Más en nuestra
-          <a href="/privacidad" class="underline hover:text-[var(--color-dorado)]">política de privacidad</a>.
+          <a href="/privacidad" class="underline underline-offset-2 hover:text-[var(--color-dorado)]">política de privacidad</a>.
         </p>
       </form>
       )}
     </div>
 
-    <div class="grid grid-cols-2 md:grid-cols-[2fr_1fr_1fr_1fr] gap-10 md:gap-8 mb-12">
-      <div class="col-span-2 md:col-span-1">
-        <p class="font-mono text-[11px] uppercase tracking-[0.18em] text-white/55 mb-3">
-          Contacto
-        </p>
-        <a
-          href={`mailto:${site.email}`}
-          class="tactile font-mono text-sm text-[var(--color-dorado)] hover:text-white font-semibold inline-flex items-center gap-1.5 break-all"
-        >
-          {site.email} <span aria-hidden="true">→</span>
-        </a>
-      </div>
-
-      <div>
-        <p class="font-mono text-[11px] uppercase tracking-[0.18em] text-white/55 mb-4">
-          Navegación
-        </p>
-        <ul class="space-y-2 text-sm">
-          {
-            links.map((l) => (
-              <li>
-                <a
-                  href={l.href}
-                  class="tactile text-white/80 hover:text-[var(--color-dorado)] font-medium">
-                  {l.label}
-                </a>
-              </li>
-            ))
-          }
-        </ul>
-      </div>
-
-      {
-        resourceLinks.length > 0 && (
-      <div>
-        <p class="font-mono text-[11px] uppercase tracking-[0.18em] text-white/55 mb-4">
-          Recursos
-        </p>
-        <ul class="space-y-2 text-sm">
-          {
-            resourceLinks.map((l) => (
-              <li>
-                <a
-                  href={l.href}
-                  class="tactile text-white/80 hover:text-[var(--color-dorado)] font-medium">
-                  {l.label}
-                </a>
-              </li>
-            ))
-          }
-        </ul>
-      </div>
-        )
-      }
-
-      <div>
-        <p class="font-mono text-[11px] uppercase tracking-[0.18em] text-white/55 mb-4">
-          Conectá
-        </p>
-        <ul class="space-y-2 text-sm">
-          {
-            socials.map((s) => (
-              <li>
-                <a
-                  href={s.href}
-                  rel={s.href.startsWith('http') ? 'noopener noreferrer' : undefined}
-                  target={s.href.startsWith('http') ? '_blank' : undefined}
-                  class="tactile text-white/80 hover:text-[var(--color-dorado)] font-medium inline-flex items-center gap-1"
-                >
-                  {s.label}
-                  <span aria-hidden="true">↗</span>
-                </a>
-              </li>
-            ))
-          }
-        </ul>
-      </div>
-    </div>
-
-    <div class="pt-6 border-t border-white/15 flex flex-col md:flex-row items-start md:items-center justify-between gap-3">
-      <p class="font-mono text-[11px] uppercase tracking-[0.18em] text-white/55">
+    <div class="py-5 border-t border-[var(--color-hair)] flex flex-col md:flex-row md:items-center justify-between gap-1">
+      <ul class="flex flex-wrap gap-x-6">
+        {
+          socials.map((s) => (
+            <li>
+              <a
+                href={s.href}
+                rel="noopener noreferrer"
+                target="_blank"
+                class="tactile footer-link"
+              >
+                {s.label}<span aria-hidden="true" class="ml-1">↗</span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+      <p class="font-mono text-[11px] uppercase tracking-[0.16em] text-[var(--color-mute)]">
         © {year} {site.name} · Córdoba, Argentina
       </p>
     </div>
   </div>
+
+  <p class="footer-mark sd-reveal" aria-hidden="true">
+    <span>Marcial</span>
+    <span>Fantini</span>
+  </p>
 </footer>
 
 <script>

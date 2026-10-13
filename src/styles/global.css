@@ -1405,6 +1405,8 @@
     margin: 14px 12px;
     border-radius: var(--radius-panel);
     overflow: hidden;
+    /* clip (no crea scroll container): permite columnas sticky dentro del panel */
+    overflow: clip;
     background: var(--color-blanco);
     border: 1px solid var(--color-border);
   }
@@ -1717,4 +1719,157 @@ main:not(:has([data-film])) { padding-top: var(--header-h); }
 .site-header.is-over-film .sh-menu a[href="/contacto"]:not(.mobile-menu-link) {
   background-color: var(--color-neon);
   color: var(--color-navy-950);
+}
+
+/* ---------------------------------------------------------
+   T18 — FAQ / Contacto / Footer (editorial, hairlines)
+   Solo tokens existentes (--color-hair*, --color-night, --color-ink...),
+   que ya tienen contraparte .dark. Sin tokens nuevos.
+   --------------------------------------------------------- */
+@layer utilities {
+  /* FAQ: filas con filete, glifo "+" mono que rota, tap target >= 48px */
+  .faq-split .qa > summary { min-height: 3rem; padding: 1.1rem 0; align-items: center; }
+  .faq-split .qa > summary h3 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(1.0625rem, 0.95rem + 0.5vw, 1.375rem);
+    letter-spacing: -0.015em;
+    line-height: 1.25;
+    color: var(--color-ink);
+  }
+  .faq-split .qa > summary::after,
+  .faq-split .qa[open] > summary::after {
+    content: "+";
+    font-size: 1.5rem;
+    color: var(--color-azul);
+    transition: transform 240ms var(--ease-out-quart);
+  }
+  .faq-split .qa[open] > summary::after { transform: rotate(45deg); }
+  .faq-split .qa > summary:focus-visible { outline: 2px solid var(--color-azul); outline-offset: 4px; border-radius: 2px; }
+  @media (prefers-reduced-motion: reduce) {
+    .faq-split .qa > summary::after { transition: none; }
+  }
+
+  /* Campos del formulario: filete inferior, sin cajas. Se usan sobre superficie navy. */
+  .contact-form { color-scheme: dark; }
+  .field-label {
+    display: block;
+    margin-bottom: 0.25rem;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--color-ink-soft);
+  }
+  .field {
+    display: block;
+    width: 100%;
+    min-height: 3rem;
+    padding: 0.7rem 0;
+    border: 0;
+    border-bottom: 1px solid var(--color-hair-strong);
+    border-radius: 0;
+    background-color: transparent;
+    color: var(--color-ink);
+    font: inherit;
+    font-size: 1rem;
+    line-height: 1.4;
+    transition: border-color 200ms var(--ease-out-quart);
+  }
+  .field::placeholder { color: var(--color-mute); }
+  .field:hover { border-bottom-color: var(--color-ink-soft); }
+  .field:focus-visible {
+    outline: 2px solid var(--color-neon);
+    outline-offset: 4px;
+    border-bottom-color: var(--color-neon);
+  }
+  .field[aria-invalid="true"] { border-bottom-color: #FCA5A5; }
+  textarea.field { min-height: 7rem; resize: vertical; }
+  select.field {
+    appearance: none;
+    padding-right: 1.75rem;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5 6 6.5l5-5' stroke='%23CFC9B8' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.25rem center;
+  }
+  .field option { background-color: var(--color-night); color: var(--color-ivory); }
+  .field-error { margin-top: 0.4rem; font-size: 0.875rem; color: #FECACA; }
+
+  /* Footer: navy profundo, mismos tokens que .surface-night */
+  .site-footer { background-color: var(--color-navy-950); }
+  .footer-link {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--color-ink-soft);
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+    transition: color 200ms var(--ease-out-quart);
+  }
+  .footer-link:hover { color: var(--color-neon); }
+  .footer-news {
+    display: flex;
+    align-items: stretch;
+    border-bottom: 1px solid var(--color-hair-strong);
+  }
+  .footer-news:focus-within { border-bottom-color: var(--color-neon); }
+  .footer-news input[type="email"] {
+    flex: 1;
+    min-width: 0;
+    min-height: 3rem;
+    padding: 0.6rem 0;
+    background: transparent;
+    border: 0;
+    color: var(--color-ink);
+    font: inherit;
+  }
+  .footer-news input[type="email"]::placeholder { color: var(--color-mute); }
+  .footer-news input[type="email"]:focus { outline: none; }
+  .footer-news button {
+    flex: none;
+    width: 3rem;
+    min-height: 3rem;
+    font-size: 1.25rem;
+    color: var(--color-neon);
+  }
+  .footer-news button:hover { color: var(--color-ivory); }
+  .footer-news button:disabled { opacity: 0.6; }
+  .footer-news button:focus-visible { outline: 2px solid var(--color-neon); outline-offset: -2px; }
+
+  /* Wordmark gigante recortado, decorativo (aria-hidden en el markup) */
+  .footer-mark {
+    margin: 0;
+    padding: 0.06em 1rem 0;
+    height: 1.38em;
+    overflow: hidden;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-variation-settings: "wght" 800;
+    font-size: clamp(4.5rem, 21vw, 22rem);
+    line-height: 0.75;
+    letter-spacing: -0.06em;
+    color: var(--color-ivory);
+    user-select: none;
+    pointer-events: none;
+    -webkit-mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.75) 10%, transparent 96%);
+    mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.75) 10%, transparent 96%);
+  }
+  .footer-mark span { display: block; }
+
+  /* Reveal ligado al scroll: mejora progresiva. Sin soporte o con reduced-motion, todo visible. */
+  @keyframes sd-in {
+    from { opacity: 0; transform: translateY(18px); }
+    to { opacity: 1; transform: none; }
+  }
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .sd-reveal {
+        animation: sd-in linear both;
+        animation-timeline: view();
+        animation-range: entry 5% cover 28%;
+      }
+    }
+  }
 }
