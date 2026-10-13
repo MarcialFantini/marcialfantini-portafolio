@@ -29,7 +29,7 @@
   --color-azul-deep: #0F1A3A;
   --color-azul-soft: #E6E9F2;
   --color-dorado: #C8A24E;
-  --color-dorado-deep: #A6843A;
+  --color-dorado-deep: #7A5C14;  /* texto dorado sobre claro: 5.5:1 sobre --color-page (#A6843A daba 3.2:1) */
   --color-dorado-soft: #F5EFE0;
   --color-blanco-humo: #FFFFFF;
   --color-blanco: #FFFFFF;
@@ -1465,14 +1465,26 @@
    (0..1) en el wrapper y alterna .is-active / .is-late.
    --------------------------------------------------------- */
 @layer utilities {
-  .text-glow-gold {
-    color: var(--color-neon);
-    text-shadow: 0 0 22px rgba(255, 210, 74, 0.45);
-  }
-  /* Un solo halo neón en el film: las CTA principales (.film-halo) y una palabra del H1 (.text-glow-gold).
-     El resto del dorado es color plano (.text-gold). */
+  /* El dorado del film es color plano, sin halo ni sombra de texto. */
   .text-gold { color: var(--color-neon); }
-  .film-halo { box-shadow: 0 0 26px rgba(255, 210, 74, 0.38); }
+  /* Botón principal del film: relleno plano, sin degradado ni glow (mismo lenguaje que Servicios). */
+  .btn-solid {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.95rem 1.6rem;
+    border-radius: var(--radius-control);
+    background: var(--color-neon);
+    color: var(--color-on-gold);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    text-decoration: none;
+    transition: background-color 200ms ease, transform 300ms var(--ease-out-expo);
+  }
+  .btn-solid:hover { background: var(--color-ivory); transform: translateY(-2px); }
+  .btn-solid:focus-visible { outline: 2px solid var(--color-ivory); outline-offset: 3px; }
   /* Botones largos del film: el texto puede partirse en móvil (375px) sin desbordar */
   .film-btn {
     max-width: 100%;
@@ -1555,13 +1567,14 @@
     left: 1rem;
     bottom: calc(3.8rem + env(safe-area-inset-bottom, 0px));
     z-index: var(--z-film-skip);
-    padding: 0.35rem 0.8rem;
-    border: 1px solid rgba(246, 241, 228, 0.28);
+    padding: 0.6rem 1rem;
+    border: 1px solid rgba(246, 241, 228, 0.5);
     border-radius: var(--radius-control);
-    background: rgba(10, 19, 48, 0.62);
+    background: var(--color-navy-950);
     color: var(--color-ivory);
-    font-size: 0.75rem;
-    font-weight: 600;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    font-weight: 700;
     text-decoration: none;
     white-space: nowrap;
     opacity: 0;
@@ -1591,11 +1604,14 @@
     padding: 0.8rem 1rem calc(0.8rem + env(safe-area-inset-bottom, 0px));
     background: var(--color-neon);
     color: var(--color-navy-950);
+    font-family: var(--font-mono);
     font-weight: 700;
-    font-size: 0.95rem;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
     text-align: center;
     text-decoration: none;
-    box-shadow: 0 -10px 30px -12px rgba(0, 0, 0, 0.6);
+    box-shadow: 0 -8px 24px -14px rgba(0, 0, 0, 0.6);
     opacity: 0;
     transform: translate3d(0, 100%, 0);
     visibility: hidden;
@@ -1616,7 +1632,7 @@
       bottom: 1.5rem;
       padding: 0.75rem 1.4rem;
       border-radius: var(--radius-control);
-      box-shadow: 0 0 26px rgba(255, 210, 74, 0.38), 0 10px 30px -10px rgba(0, 0, 0, 0.7);
+      box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.7);
       transform: translate3d(0, 16px, 0);
     }
     .film-cta:hover { filter: brightness(1.08); }
