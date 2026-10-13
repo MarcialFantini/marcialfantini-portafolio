@@ -28,6 +28,7 @@ Home page behaves like a perfect cinematic motion-graphics film (Apple product-v
 - [x] T4 Scenes 3-5 (La solucion, El alivio, Cierre) wired to existing data (servicios, metricas, contacto)
 - [x] T6 Single-stage film: one sticky stage with all 5 scenes as stacked layers crossfading by global progress (fixes duplicated chips / double motion at scene seams; user-reported)
 - [x] T7 Sell-focused cut: shorten film 1500 -> ~730 svh, offer-first copy, real proof (data files only) inside the film, persistent CTA, skip link (user goal: sell)
+- [x] T8 Agency voice: commercial copy in warm plural ("te ayudamos", "te damos", "hablamos"), brand name stays Marcial Fantini; no invented team claims (user: it's his agency page)
 - [ ] T5 Polish: chapter rail, mobile pass, `pnpm check` + `pnpm build`
 
 ## Progress / evidence

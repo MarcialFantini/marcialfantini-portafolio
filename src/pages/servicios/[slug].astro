@@ -18,49 +18,49 @@ const faqsPorServicio: Record<string, { pregunta: string; respuesta: string }[]>
   "sistema-ventas-online": [
     {
       pregunta: "¿Cuánto tarda un sitio tipo 'sistema de ventas'?",
-      respuesta: "Entre 3 y 8 semanas. La mayoría de mis proyectos cierra en 4-5. Si necesitás algo más rápido, hay recargo express.",
+      respuesta: "Entre 3 y 8 semanas. La mayoría de nuestros proyectos cierra en 4-5. Si necesitás algo más rápido, hay recargo express.",
     },
     {
       pregunta: "¿Qué incluye el SEO técnico?",
       respuesta: "Schema markup, sitemap, robots.txt, meta tags, Open Graph, datos estructurados LocalBusiness. Lo que Google necesita para indexarte bien. No incluye link building.",
     },
     {
-      pregunta: "¿Puedo editar el sitio yo después?",
-      respuesta: "Si contratás el paquete con CMS (Astro + Content Collections o headless Sanity), sí. Si contratás sitio estático, dependés de mí para cambios. Te lo aclaro en la propuesta.",
+      pregunta: "¿Puedo editar el sitio después?",
+      respuesta: "Si contratás el paquete con CMS (Astro + Content Collections o headless Sanity), sí. Si contratás sitio estático, dependés de nosotros para cambios. Te lo aclaramos en la propuesta.",
     },
   ],
   "tienda-express": [
     {
       pregunta: "¿30 días es realista?",
-      respuesta: "Sí, si me das acceso a productos y fotos en la semana 1. Si hay demoras del lado del cliente, se corre. Si hay demoras mías, descuento del saldo final.",
+      respuesta: "Sí, si nos das acceso a productos y fotos en la semana 1. Si hay demoras del lado del cliente, se corre. Si hay demoras nuestras, descontamos del saldo final.",
     },
     {
       pregunta: "¿Mercado Pago o Stripe?",
-      respuesta: "Cualquiera de los dos. Elijo según tu país y volumen. Para Argentina, Mercado Pago casi siempre. Para USD con tarjeta internacional, Stripe.",
+      respuesta: "Cualquiera de los dos. Elegimos según tu país y volumen. Para Argentina, Mercado Pago casi siempre. Para USD con tarjeta internacional, Stripe.",
     },
     {
       pregunta: "¿Y los envíos?",
-      respuesta: "Calculo envíos por código postal vía API propia (OCA, Correo Argentino, Andreani). Si querés usar Mercado Envíos, se integra directo.",
+      respuesta: "Calculamos envíos por código postal vía API propia (OCA, Correo Argentino, Andreani). Si querés usar Mercado Envíos, se integra directo.",
     },
   ],
   "rescate-conversion": [
     {
       pregunta: "¿Cómo funciona la garantía de Lighthouse +20 puntos?",
-      respuesta: "Mido antes, trabajo 2-4 semanas, mido después. Si Lighthouse mobile no subió al menos 20 puntos, te devuelvo el 100% del proyecto. Mido en PageSpeed Insights, no en herramientas pagas que inflan.",
+      respuesta: "Medimos antes, trabajamos 2-4 semanas, medimos después. Si Lighthouse mobile no subió al menos 20 puntos, te devolvemos el 100% del proyecto. Medimos en PageSpeed Insights, no en herramientas pagas que inflan.",
     },
     {
-      pregunta: "¿Qué hacés si mi sitio tiene 15 problemas?",
-      respuesta: "Rankeo por impacto (los 3 que más mueven la aguja primero). Arreglo esos en el sprint 1. El resto queda rankeado en el reporte para que decidas si seguís o no.",
+      pregunta: "¿Qué hacen si mi sitio tiene 15 problemas?",
+      respuesta: "Rankeamos por impacto (los 3 que más mueven la aguja primero). Arreglamos esos en el sprint 1. El resto queda rankeado en el reporte para que decidas si seguís o no.",
     },
   ],
   "automatizaciones-pagan": [
     {
-      pregunta: "¿Qué herramientas usás?",
+      pregunta: "¿Qué herramientas usan?",
       respuesta: "Node.js + APIs nativas (MercadoLibre, AFIP, HubSpot, etc.) + n8n o Make para workflows no críticos. Nada de BlackBox AI. Las automatizaciones que mueven plata necesitan código auditable.",
     },
     {
       pregunta: "¿Cuánto se ahorra?",
-      respuesta: "Típicamente 6 a 15 horas semanales en tareas repetitivas, medido en los primeros 30 días. Te lo cuantifico en la propuesta con horas reales del flujo actual.",
+      respuesta: "Típicamente 6 a 15 horas semanales en tareas repetitivas, medido en los primeros 30 días. Te lo cuantificamos en la propuesta con horas reales del flujo actual.",
     },
   ],
 };
@@ -134,7 +134,7 @@ const faqItems = faqsPorServicio[servicio.id] ?? [];
         Qué incluye
       </p>
       <h2 class="font-impact text-[clamp(1.75rem,3.5vw,2.75rem)] uppercase leading-[0.95] text-[var(--color-ink)] tracking-tight mb-10">
-        Todo lo que entrego, <span class="text-[var(--color-azul)]">por escrito.</span>
+        Todo lo que entregamos,<span class="text-[var(--color-azul)]">por escrito.</span>
       </h2>
       <ul class="space-y-3">
         {
@@ -201,13 +201,13 @@ const faqItems = faqsPorServicio[servicio.id] ?? [];
   <section class="py-12 md:py-16 bg-[var(--color-ink)] text-white border-t border-[var(--color-ink)]">
     <div class="container-page text-center max-w-2xl reveal">
       <p class="font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--color-dorado)] mb-3">
-        Reservá este servicio
+        Sumá este servicio
       </p>
       <h2 class="font-impact text-[clamp(1.75rem,4vw,3rem)] uppercase leading-[0.95] text-white mb-5">
         ¿Te encaja? <span class="text-[var(--color-dorado)]">Hablemos.</span>
       </h2>
       <p class="text-lg text-white/80 leading-relaxed mb-8">
-        30 minutos de auditoría gratis para confirmar que el servicio cubre tu caso. Si no entra, te recomiendo otro freelance.
+        30 minutos de auditoría gratis para confirmar que el servicio cubre tu caso. Si no entra, te lo decimos y te orientamos hacia otra opción.
       </p>
       <div class="flex flex-col sm:flex-row gap-3 justify-center">
         <a

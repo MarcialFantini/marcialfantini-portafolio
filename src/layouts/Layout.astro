@@ -75,12 +75,12 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site ?? `https://${site.n
       })();
     </script>
 
-    <!-- Person structured data -->
+    <!-- Organization structured data -->
     <script type="application/ld+json" is:inline set:html={JSON.stringify({
       "@context": "https://schema.org",
-      "@type": "Person",
+      "@type": "Organization",
       "name": site.name,
-      "jobTitle": "Full-stack Developer",
+      "slogan": site.tagline,
       "description": site.description,
       "url": Astro.site?.toString() ?? "/",
       "email": `mailto:${site.email}`,
