@@ -1,0 +1,21 @@
+---
+const steps = ["Auditoría", "Diseño", "Código", "Lanzamiento", "Medición"];
+const loop = [...steps, ...steps, ...steps, ...steps];
+---
+
+<div class="marquee py-5 md:py-7 bg-[var(--color-blanco-humo)] text-[var(--color-ink)]" aria-hidden="true">
+  <div class="marquee__track">
+    {
+      [0, 1].map(() => (
+        <div class="flex shrink-0">
+          {loop.map((step) => (
+            <span class="process-marquee__item">
+              {step}
+              <i>→</i>
+            </span>
+          ))}
+        </div>
+      ))
+    }
+  </div>
+</div>

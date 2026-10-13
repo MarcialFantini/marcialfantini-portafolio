@@ -102,41 +102,36 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site ?? `https://${site.n
   </head>
   <body class="min-h-[100dvh] flex flex-col antialiased">
     <a href="#main-content" class="skip-link">Saltar al contenido principal</a>
+    {
+      Astro.url.pathname === "/" && (
+        <>
+          <div class="intro" aria-hidden="true">
+            <div>
+              <span class="intro__mark">MF</span>
+              <span class="intro__line" />
+              <span class="intro__tag">Marcial Fantini · Full-stack</span>
+            </div>
+          </div>
+          <script is:inline>
+            try {
+              if (sessionStorage.getItem('mf-intro')) document.querySelector('.intro')?.remove();
+              else sessionStorage.setItem('mf-intro', '1');
+            } catch (e) {}
+          </script>
+        </>
+      )
+    }
+    <div class="page-progress" aria-hidden="true"></div>
+    <div class="spotlight" aria-hidden="true"></div>
+    <div class="grain" aria-hidden="true"></div>
     <Header />
     <main id="main-content" class="flex-1">
       <slot />
     </main>
     <Footer />
 
-    <!-- Reveal-on-scroll — vanilla IntersectionObserver, sin dependencias -->
     <script>
-      (function () {
-        var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-        if (reduce) {
-          document.querySelectorAll('.reveal, .reveal-stagger').forEach(function (el) {
-            el.setAttribute('data-revealed', 'in');
-          });
-          return;
-        }
-
-        var io = new IntersectionObserver(function (entries) {
-          entries.forEach(function (entry) {
-            if (entry.isIntersecting) {
-              entry.target.setAttribute('data-revealed', 'in');
-              io.unobserve(entry.target);
-            }
-          });
-        }, { rootMargin: '0px 0px -10% 0px', threshold: 0.05 });
-
-        function observe() {
-          document.querySelectorAll('.reveal:not([data-revealed]), .reveal-stagger:not([data-revealed])').forEach(function (el) {
-            io.observe(el);
-          });
-        }
-
-        observe();
-        document.addEventListener('astro:page-load', observe);
-      })();
+      import "../scripts/motion.ts";
     </script>
   </body>
 </html>

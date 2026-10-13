@@ -12,12 +12,12 @@ import site from "../data/site.json";
 ---
 
 <Layout description={site.description}>
-  <Hero />
-  <SobreMi />
-  <Metricas />
-  <Servicios />
-  <Proyectos />
-  <BlogPreview />
-  <FAQ />
-  <Contacto />
+  <div data-chapter="Inicio"><Hero /></div>
+  <div class="panel" data-chapter="Sobre mí"><SobreMi /></div>
+  <div class="panel" data-chapter="Resultados"><Metricas /></div>
+  <div class="panel" data-chapter="Servicios"><Servicios /></div>
+  <div class="panel" data-chapter="Proyectos"><Proyectos /></div>
+  <div class="panel" data-chapter="Escritos"><BlogPreview /></div>
+  <div class="panel" data-chapter="Dudas"><FAQ /></div>
+  <div class="panel" data-chapter="Contacto"><Contacto /></div>
 </Layout>

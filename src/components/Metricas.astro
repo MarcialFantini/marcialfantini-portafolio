@@ -21,7 +21,7 @@ const parseCount = (v: string): number | null => {
       <div>
         <SectionAnchor number="02" label="TRACK RECORD" />
         <h2 class="font-impact text-[clamp(2rem,5vw,4rem)] uppercase leading-[0.95] text-[var(--color-blanco-humo)] max-w-xl mt-2">
-          Resultados <span class="text-[var(--color-azul)]">medibles</span> en producción.
+          Resultados <span class="text-[var(--color-dorado)]">medibles</span> en producción.
         </h2>
       </div>
       <p class="font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-blanco-humo)]/60 max-w-xs leading-relaxed">
@@ -29,7 +29,7 @@ const parseCount = (v: string): number | null => {
       </p>
     </div>
 
-    <div class="timeline-line text-[var(--color-azul)] mb-12 md:mb-16" aria-hidden="true">
+    <div class="timeline-line text-[var(--color-dorado)] mb-12 md:mb-16" aria-hidden="true">
       <span class="timeline-line__dot" style="margin-left: 0;"></span>
       <span class="timeline-line__dot"></span>
       <span class="timeline-line__dot"></span>
@@ -55,10 +55,10 @@ const parseCount = (v: string): number | null => {
                   ) : (
                     <span>{m.value}</span>
                   )}
-                  <span class="text-[var(--color-azul)]">{m.sufijo}</span>
+                  <span class="text-[var(--color-dorado)]">{m.sufijo}</span>
                 </dd>
               ) : (
-                <dd class="font-mono text-base md:text-lg font-semibold text-[var(--color-azul)] leading-tight break-words">
+                <dd class="font-mono text-base md:text-lg font-semibold text-[var(--color-dorado)] leading-tight break-words">
                   {m.value}
                 </dd>
               )}
@@ -71,7 +71,7 @@ const parseCount = (v: string): number | null => {
 </section>
 
 <script>
-  (function () {
+  function initStats() {
     var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     var stats = Array.from(document.querySelectorAll('.stat-count[data-value]')) as HTMLElement[];
 
@@ -124,5 +124,7 @@ const parseCount = (v: string): number | null => {
     stats.forEach(function (el) {
       io.observe(el);
     });
-  })();
+  }
+  initStats();
+  document.addEventListener("astro:page-load", initStats);
 </script>

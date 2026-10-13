@@ -29,7 +29,7 @@ const pathname = Astro.url.pathname;
       </span>
     </a>
 
-    <nav aria-label="Principal" class="hidden md:flex items-center gap-1">
+    <nav aria-label="Principal" class="hidden md:flex items-center gap-1 rounded-xl border border-[var(--color-border)] bg-[var(--color-blanco)] p-1">
       {
         navItems.map((item) => {
           const active =
@@ -40,7 +40,7 @@ const pathname = Astro.url.pathname;
             <a
               href={item.href}
               class:list={[
-                "tactile font-mono text-[11px] uppercase tracking-[0.18em] px-3 py-2 rounded-md",
+                "tactile font-mono text-[11px] uppercase tracking-[0.18em] px-3.5 py-2 rounded-lg",
                 active
                   ? "text-[var(--color-ink)] bg-[var(--color-azul-soft)]"
                   : "text-[var(--color-ink-soft)] hover:text-[var(--color-ink)] hover:bg-[var(--color-azul-soft)]/50",
@@ -56,7 +56,7 @@ const pathname = Astro.url.pathname;
 
     <a
       href="/contacto"
-      class="tactile hidden md:inline-flex items-center gap-2 px-5 py-2.5 rounded-md bg-[var(--color-azul)] text-white text-[11px] font-mono uppercase tracking-[0.18em] font-semibold hover:bg-[var(--color-azul-deep)]"
+      class="tactile hidden md:inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[var(--color-dorado)] text-[#0F1A3A] text-[11px] font-mono uppercase tracking-[0.18em] font-semibold hover:bg-[var(--color-ink)] hover:text-[var(--color-blanco-humo)]"
     >
       Hablemos
       <span aria-hidden="true">→</span>

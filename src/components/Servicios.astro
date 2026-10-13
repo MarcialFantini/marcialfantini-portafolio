@@ -3,188 +3,103 @@ import servicios from "../data/servicios.json";
 import SectionAnchor from "./SectionAnchor.astro";
 
 const categoryById: Record<string, string> = {
-  "sistema-ventas-online": "LANDING",
-  "tienda-express": "ECOMMERCE",
-  "rescate-conversion": "PERFORMANCE",
-  "automatizaciones-pagan": "AUTOMATION",
+  "sistema-ventas-online": "Landing",
+  "tienda-express": "E-commerce",
+  "rescate-conversion": "Performance",
+  "automatizaciones-pagan": "Automation",
 };
 ---
 
-<section id="servicios" class="relative py-20 md:py-28 border-b-2 border-[var(--color-ink)] overflow-hidden">
+<section id="servicios" class="relative py-20 md:py-32 border-b border-[var(--color-border)] overflow-hidden">
   <div class="container-page">
-    <div class="flex items-end justify-between flex-wrap gap-6 mb-12 md:mb-16 reveal">
-      <div class="max-w-2xl">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-12 md:mb-20">
+      <div class="lg:col-span-7 reveal">
         <SectionAnchor number="03" label="SERVICIOS" />
-        <h2 class="font-impact text-[clamp(2rem,5vw,4rem)] uppercase leading-[0.95] text-[var(--color-ink)] mt-2">
+        <h2 class="font-impact text-[clamp(2.25rem,6vw,5rem)] uppercase leading-[0.92] text-[var(--color-ink)] mt-2">
           Qué puedo hacer <span class="text-[var(--color-azul)]">por tu negocio.</span>
         </h2>
-        <p class="mt-5 text-[var(--color-ink-soft)] text-lg max-w-xl leading-relaxed">
-          4 servicios con precio cerrado, KPI pactado y garantía por escrito. Sin sorpresas, sin retainer obligatorio.
-        </p>
       </div>
-      <div class="flex flex-col items-end gap-2">
-        <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[var(--color-azul-soft)] text-[var(--color-azul-deep)] font-mono text-[10px] uppercase tracking-[0.18em] font-semibold">
-          <span class="w-1.5 h-1.5 rounded-full bg-[var(--color-azul)] animate-pulse" aria-hidden="true"></span>
-          Cupos limitados Q1 2026
-        </span>
-        <p class="font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-mute)] max-w-xs leading-relaxed text-right">
-          Precio de lanzamiento sube el 28/02 · Reservá ahora
-        </p>
-      </div>
+      <p class="lg:col-span-4 lg:col-start-9 self-end text-[var(--color-ink-soft)] text-lg leading-relaxed reveal">
+        {servicios.length} servicios con precio cerrado, KPI pactado y garantía por escrito.
+        Abrí uno para ver qué incluye.
+      </p>
     </div>
 
-    <ul class="grid grid-cols-1 md:grid-cols-2 gap-5 reveal-stagger">
+    <div class="svc-list reveal-stagger border-t border-[var(--color-ink)]">
       {
         servicios.map((s, i) => (
-          <li
-            id={s.id}
-            class="group relative rounded-xl bg-[var(--color-blanco)] shadow-md border-2 border-[var(--color-ink)] tactile transition-all duration-200 hover:-translate-y-1 hover:shadow-xl hover:border-[var(--color-azul)] overflow-hidden"
-          >
-            <div class="h-1.5 bg-[var(--color-azul)]" aria-hidden="true"></div>
-            {s.badge && (
-              <div class="absolute top-4 right-4 z-10">
-                <span class="inline-flex items-center px-2.5 py-1 rounded-full bg-[var(--color-ink)] text-[var(--color-blanco-humo)] font-mono text-[9px] uppercase tracking-[0.22em] font-bold">
-                  {s.badge}
+          <details id={s.id} name="servicios" class="svc group" open={i === 0}>
+            <summary class="svc__summary">
+              <span class="svc__num font-mono tabular-nums">{String(i + 1).padStart(2, "0")}</span>
+
+              <span class="svc__title">
+                <span class="svc__name font-impact uppercase">{s.titulo}</span>
+                <span class="svc__cat font-mono">
+                  {categoryById[s.id] ?? "Servicio"}
+                  {s.badge && <> · {s.badge}</>}
                 </span>
-              </div>
-            )}
-            <a
-              href={`/contacto?servicio=${encodeURIComponent(s.titulo)}`}
-              class="block p-7 md:p-9"
-            >
-              <div class="flex items-start justify-between gap-3 mb-4">
-                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[var(--color-azul-soft)] text-[var(--color-azul-deep)] font-mono text-[10px] uppercase tracking-[0.18em] font-semibold">
-                  <span class="w-1 h-1 rounded-full bg-[var(--color-azul)]" aria-hidden="true"></span>
-                  {categoryById[s.id] ?? "SERVICE"}
-                </span>
-                <span class="font-mono text-xs text-[var(--color-mute)] tabular-nums">
-                  {String(i + 1).padStart(2, "0")} / {String(servicios.length).padStart(2, "0")}
-                </span>
-              </div>
+              </span>
 
-              <h3 class="font-impact text-[clamp(1.5rem,2.5vw,2.25rem)] uppercase leading-[0.98] text-[var(--color-ink)] tracking-tight mb-1">
-                {s.titulo}
-              </h3>
-              <p class="font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--color-azul)] font-semibold mb-4">
-                {s.subtitulo}
-              </p>
+              <span class="svc__price font-mono tabular-nums">
+                <small>Desde</small>
+                {s.precioOrientativo}
+              </span>
 
-              <p class="text-sm md:text-base text-[var(--color-ink-soft)] leading-relaxed mb-5">
-                {s.descripcion}
-              </p>
+              <span class="svc__icon" aria-hidden="true"></span>
+            </summary>
 
-              <div class="mb-5 p-4 rounded-lg bg-[var(--color-blanco-humo)] border-l-4 border-[var(--color-azul)]">
-                <p class="font-mono text-[10px] uppercase tracking-[0.18em] text-[var(--color-mute)] mb-1.5 font-semibold">
-                  Resultado cuantificado
-                </p>
-                <p class="text-sm md:text-base text-[var(--color-ink)] font-medium leading-snug">
-                  {s.resultadoCuantificado}
-                </p>
-              </div>
-
-              <ul class="space-y-1.5 mb-6">
-                {s.queIncluye.slice(0, 5).map((item) => (
-                  <li class="flex items-start gap-2 text-sm text-[var(--color-ink-soft)] leading-relaxed">
-                    <svg class="w-4 h-4 mt-0.5 shrink-0 text-[var(--color-azul)]" fill="none" viewBox="0 0 16 16" aria-hidden="true">
-                      <path d="M3 8l3 3 7-7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
-                    </svg>
-                    <span>{item}</span>
-                  </li>
-                ))}
-              </ul>
-
-              <div class="flex items-end justify-between gap-3 pt-5 border-t border-[var(--color-border)]">
-                <div>
-                  <p class="font-mono text-[10px] uppercase tracking-[0.18em] text-[var(--color-mute)] mb-1">Desde</p>
-                  <p class="font-mono text-base md:text-lg text-[var(--color-ink)] font-bold tabular-nums">
-                    {s.precioOrientativo}
+            <div class="svc__panel">
+              <div class="svc__panel-inner">
+                <div class="svc__col">
+                  <p class="font-mono text-[11px] uppercase tracking-[0.2em] text-[var(--color-azul)] font-semibold mb-3">
+                    {s.subtitulo}
+                  </p>
+                  <p class="text-base md:text-lg text-[var(--color-ink-soft)] leading-relaxed">
+                    {s.descripcion}
+                  </p>
+                  <p class="mt-6 pl-4 border-l-2 border-[var(--color-dorado)] text-[var(--color-ink)] font-medium leading-snug">
+                    <span class="block font-mono text-[10px] uppercase tracking-[0.2em] text-[var(--color-mute)] mb-1">
+                      Resultado
+                    </span>
+                    {s.resultadoCuantificado}
                   </p>
                 </div>
-                <span class="font-mono text-[11px] uppercase tracking-[0.18em] font-semibold text-[var(--color-blanco-humo)] bg-[var(--color-ink)] px-4 py-2.5 rounded-md group-hover:bg-[var(--color-azul)] group-hover:text-[var(--color-ink)] transition-colors">
-                  {s.cta} →
-                </span>
-              </div>
 
-              <p class="mt-3 font-mono text-[10px] uppercase tracking-[0.18em] text-[var(--color-mute)] text-center">
-                Entrega: {s.duracion}
-              </p>
-            </a>
-          </li>
+                <div class="svc__col">
+                  <ul class="space-y-2">
+                    {s.queIncluye.slice(0, 5).map((item) => (
+                      <li class="flex items-start gap-3 text-sm md:text-base text-[var(--color-ink-soft)] leading-relaxed">
+                        <span class="mt-2 h-1 w-3 shrink-0 bg-[var(--color-dorado)]" aria-hidden="true" />
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                  <div class="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3">
+                    <a
+                      href={`/contacto?servicio=${encodeURIComponent(s.titulo)}`}
+                      class="btn-sunset"
+                    >
+                      {s.cta} <span aria-hidden="true">→</span>
+                    </a>
+                    <span class="font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-mute)]">
+                      Entrega: {s.duracion}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </details>
         ))
       }
-    </ul>
-
-    <div class="mt-14 md:mt-20 reveal">
-      <h3 class="font-impact text-[clamp(1.5rem,3vw,2.25rem)] uppercase leading-[0.98] text-[var(--color-ink)] mb-6 max-w-2xl">
-        Compará los planes <span class="text-[var(--color-azul)]">lado a lado.</span>
-      </h3>
-      <div class="overflow-x-auto rounded-xl border-2 border-[var(--color-ink)] bg-[var(--color-blanco)]">
-        <table class="w-full text-sm">
-          <thead>
-            <tr class="border-b-2 border-[var(--color-ink)] bg-[var(--color-blanco-humo)]">
-              <th class="text-left p-4 font-mono text-[10px] uppercase tracking-[0.18em] text-[var(--color-mute)] font-semibold">Incluye</th>
-              {servicios.map((s, i) => (
-                <th class="p-4 font-impact text-sm uppercase tracking-tight text-[var(--color-ink)] text-center min-w-[120px]">
-                  <div class="flex flex-col items-center gap-1">
-                    <span class="text-[10px] text-[var(--color-mute)] font-mono">0{i + 1}</span>
-                    <span>{s.titulo.split(' ')[0]}</span>
-                  </div>
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody class="font-mono text-[11px]">
-            <tr class="border-b border-[var(--color-border)]">
-              <td class="p-4 text-[var(--color-ink-soft)]">Sitio mobile-first optimizado</td>
-              {servicios.map(() => (
-                <td class="p-4 text-center text-[var(--color-azul)] text-base">✓</td>
-              ))}
-            </tr>
-            <tr class="border-b border-[var(--color-border)] bg-[var(--color-blanco-humo)]/40">
-              <td class="p-4 text-[var(--color-ink-soft)]">SEO técnico + on-page</td>
-              {servicios.map((s) => (
-                <td class="p-4 text-center text-[var(--color-azul)] text-base">{s.id === "rescate-conversion" || s.id === "automatizaciones-pagan" ? "—" : "✓"}</td>
-              ))}
-            </tr>
-            <tr class="border-b border-[var(--color-border)]">
-              <td class="p-4 text-[var(--color-ink-soft)]">E-commerce con pasarela</td>
-              {servicios.map((s) => (
-                <td class="p-4 text-center text-[var(--color-azul)] text-base">{s.id === "tienda-express" ? "✓" : "—"}</td>
-              ))}
-            </tr>
-            <tr class="border-b border-[var(--color-border)] bg-[var(--color-blanco-humo)]/40">
-              <td class="p-4 text-[var(--color-ink-soft)]">Auditoría Lighthouse + fix</td>
-              {servicios.map((s) => (
-                <td class="p-4 text-center text-[var(--color-azul)] text-base">{s.id === "rescate-conversion" ? "✓" : "—"}</td>
-              ))}
-            </tr>
-            <tr class="border-b border-[var(--color-border)]">
-              <td class="p-4 text-[var(--color-ink-soft)]">Automatizaciones + APIs</td>
-              {servicios.map((s) => (
-                <td class="p-4 text-center text-[var(--color-azul)] text-base">{s.id === "automatizaciones-pagan" ? "✓" : "—"}</td>
-              ))}
-            </tr>
-            <tr class="border-b border-[var(--color-border)] bg-[var(--color-blanco-humo)]/40">
-              <td class="p-4 text-[var(--color-ink-soft)]">Garantía por escrito</td>
-              {servicios.map((s) => (
-                <td class="p-4 text-center text-[var(--color-azul)] text-base">{s.id === "rescate-conversion" ? "✓" : "✓"}</td>
-              ))}
-            </tr>
-            <tr class="border-b border-[var(--color-border)]">
-              <td class="p-4 text-[var(--color-ink-soft)]">Capacitación post-entrega</td>
-              {servicios.map((s) => (
-                <td class="p-4 text-center text-[var(--color-azul)] text-base">{s.id === "tienda-express" || s.id === "automatizaciones-pagan" ? "✓" : "—"}</td>
-              ))}
-            </tr>
-            <tr class="bg-[var(--color-blanco-humo)]">
-              <td class="p-4 font-impact text-[var(--color-ink)] uppercase text-xs tracking-tight">Desde</td>
-              {servicios.map((s) => (
-                <td class="p-4 text-center font-mono text-[10px] font-semibold text-[var(--color-ink)] whitespace-nowrap">{s.precioOrientativo}</td>
-              ))}
-            </tr>
-          </tbody>
-        </table>
-      </div>
     </div>
+
+    <p class="mt-10 reveal">
+      <a
+        href="/servicios"
+        class="tactile font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-ink)] border-b border-[var(--color-ink)] pb-1 hover:text-[var(--color-azul)] hover:border-[var(--color-azul)]"
+      >
+        Ver comparativa completa →
+      </a>
+    </p>
   </div>
 </section>

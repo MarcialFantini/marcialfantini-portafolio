@@ -37,6 +37,7 @@
   --color-ink-soft: #3F3F46;
   --color-mute: #71717A;
   --color-border: #E7E5E4;
+  --color-page: #F3F4F8;
 
   /* Acentos derivados — usados en gradients sutiles y dividers.
      Mantengo registro editorial sin caer en "creative agency"
@@ -44,6 +45,8 @@
   --color-gradient-azul: linear-gradient(180deg, #1B2B5C 0%, #0F1A3A 100%);
   --color-gradient-azul-card: linear-gradient(135deg, #1B2B5C 0%, #243A75 100%);
   --color-gradient-dorado: linear-gradient(135deg, #C8A24E 0%, #A6843A 100%);
+
+  --gradient-hero: linear-gradient(180deg, #0F1A3A 0%, #1B2B5C 55%, #243A75 100%);
 
   /* Radius */
   --radius-sm: 4px;
@@ -72,6 +75,7 @@
   --color-ink-soft: #B8B8B8;
   --color-mute: #71717A;
   --color-border: #2A2A2E;
+  --color-page: #0A0A0A;
 }
 
 /* ---------------------------------------------------------
@@ -83,12 +87,12 @@
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
     scroll-behavior: smooth;
-    background-color: var(--color-blanco-humo);
+    background-color: var(--color-page);
     overflow-x: hidden;
   }
 
   body {
-    background-color: var(--color-blanco-humo);
+    background-color: var(--color-page);
     color: var(--color-ink);
     font-family: var(--font-display);
     font-feature-settings: "kern", "liga", "calt";
@@ -96,8 +100,7 @@
     line-height: 1.55;
     overflow-x: hidden;
     -webkit-tap-highlight-color: transparent;
-    word-break: break-word;
-    overflow-wrap: anywhere;
+    overflow-wrap: break-word;
   }
 
   .min-w-0 { min-width: 0; }
@@ -337,6 +340,7 @@
      del sistema anterior. */
   .placeholder-image {
     position: relative;
+    width: 100%;
     overflow: hidden;
     border-radius: 10px;
     aspect-ratio: 16 / 9;
@@ -500,4 +504,537 @@
     section { page-break-inside: avoid; }
     .prose-editorial { max-width: none; }
   }
+}
+/* =========================================================
+   CINEMATIC LAYER — dusk palette, grain, motion primitives.
+   Todo animado usa transform/opacity (compositor-only).
+   ========================================================= */
+@layer utilities {
+  /* Film grain — overlay fijo, un solo layer, sin repaint */
+  .grain {
+    position: fixed;
+    inset: -50%;
+    z-index: 90;
+    pointer-events: none;
+    opacity: 0.07;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+    animation: grain-shift 1.2s steps(6) infinite;
+  }
+  @keyframes grain-shift {
+    0% { transform: translate(0, 0); }
+    20% { transform: translate(-3%, 2%); }
+    40% { transform: translate(2%, -3%); }
+    60% { transform: translate(-2%, -1%); }
+    80% { transform: translate(3%, 3%); }
+    100% { transform: translate(0, 0); }
+  }
+
+  /* Cursor spotlight (desktop). Posición via CSS vars → solo transform */
+  .spotlight {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 520px;
+    height: 520px;
+    margin: -260px 0 0 -260px;
+    z-index: 1;
+    pointer-events: none;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(200, 162, 78, 0.14), transparent 62%);
+    transform: translate3d(-999px, -999px, 0);
+    will-change: transform;
+  }
+  @media (hover: none) { .spotlight { display: none; } }
+
+  /* Texto con gradiente atardecer */
+  .text-sunset {
+    background: linear-gradient(95deg, #E0B96B 0%, #C8A24E 50%, #A6843A 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  /* Display gigante estilo cartel */
+  .display-xxl {
+    font-family: var(--font-display);
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: -0.045em;
+    line-height: 0.88;
+    font-size: clamp(3rem, 11vw, 10rem);
+    overflow-wrap: normal;
+    word-break: normal;
+    hyphens: none;
+  }
+
+  /* Línea de titular con máscara: el hijo sube desde abajo */
+  .mask-line { display: block; overflow: hidden; padding: 0.08em 0.04em 0.16em; margin: -0.08em -0.04em -0.16em; }
+  .mask-line > span {
+    display: block;
+    transform: translateY(110%);
+    transition: transform 1100ms var(--ease-out-expo);
+    transition-delay: calc(var(--i, 0) * 110ms + 150ms);
+  }
+  [data-revealed="in"] .mask-line > span,
+  .is-loaded .mask-line > span { transform: translateY(0); }
+
+  /* Parallax: JS escribe --p (px) por elemento con data-parallax */
+  [data-parallax] {
+    transform: translate3d(0, var(--p, 0px), 0);
+    will-change: transform;
+  }
+
+  /* Botón principal */
+  .btn-sunset, .btn-ghost { white-space: nowrap; }
+  .btn-sunset {
+    position: relative;
+    isolation: isolate;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.95rem 1.6rem;
+    border-radius: 999px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: #0F1A3A;
+    background: var(--color-gradient-dorado);
+    overflow: hidden;
+    transition: transform 300ms var(--ease-out-expo), box-shadow 300ms var(--ease-out-expo);
+    box-shadow: 0 8px 30px -8px rgba(200, 162, 78, 0.45);
+  }
+  .btn-sunset::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: #fff;
+    transform: translateY(101%);
+    transition: transform 450ms var(--ease-out-expo);
+  }
+  .btn-sunset:hover { color: #0F1A3A; transform: translateY(-2px); box-shadow: 0 14px 40px -8px rgba(200, 162, 78, 0.6); }
+  .btn-sunset:hover::before { transform: translateY(0); }
+
+  .btn-ghost {
+    display: inline-flex;
+    color: #fff;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.95rem 1.4rem;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: #fff;
+    transition: border-color 250ms, background-color 250ms, transform 300ms var(--ease-out-expo);
+  }
+  .btn-ghost:hover { color: #fff; border-color: var(--color-azul); background: rgba(200, 162, 78, 0.12); transform: translateY(-2px); }
+
+  /* Marquee infinito (transform-only) */
+  .marquee { overflow: hidden; border-block: 1px solid var(--color-border); }
+  .marquee__track {
+    display: flex;
+    width: max-content;
+    animation: marquee 38s linear infinite;
+  }
+  .marquee:hover .marquee__track { animation-play-state: paused; }
+  @keyframes marquee { to { transform: translateX(-50%); } }
+
+  /* Scroll-driven progress (CSS puro donde hay soporte) */
+  .page-progress {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    z-index: 95;
+    transform-origin: 0 50%;
+    transform: scaleX(0);
+    background: linear-gradient(90deg, #C8A24E, #E0B96B);
+    pointer-events: none;
+  }
+
+  /* Tarjetas: glass + glow en hover */
+  .card-pop {
+    background: var(--color-blanco);
+    border: 1px solid var(--color-border);
+    transition: transform 500ms var(--ease-out-expo), border-color 300ms, box-shadow 500ms var(--ease-out-expo);
+  }
+  .card-pop:hover {
+    transform: translateY(-6px);
+    border-color: var(--color-dorado);
+    box-shadow: 0 30px 60px -20px rgba(27, 43, 92, 0.25);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .grain, .marquee__track { animation: none; }
+    .mask-line > span { transform: none; transition: none; }
+    [data-parallax] { transform: none; }
+    .spotlight { display: none; }
+  }
+}
+
+/* View transitions (ClientRouter): fundido corto, sin saltos */
+::view-transition-old(root) { animation: 220ms var(--ease-out-quart) both vt-out; }
+::view-transition-new(root) { animation: 420ms var(--ease-out-expo) both vt-in; }
+@keyframes vt-out { to { opacity: 0; transform: translateY(-8px); } }
+@keyframes vt-in { from { opacity: 0; transform: translateY(12px); } }
+
+/* ---------------------------------------------------------
+   Story layer — escena del hero ligada al scroll, rail de
+   capítulos, marquee de proceso. Solo transform/opacity.
+   --------------------------------------------------------- */
+@layer utilities {
+  .scene-title {
+    transform: translate3d(0, calc(var(--hp, 0) * -7vh), 0);
+    opacity: calc(1 - var(--hp, 0) * 1.25);
+    will-change: transform, opacity;
+  }
+  .scene-sun {
+    transform: translate3d(0, calc(var(--hp, 0) * 26vh), 0) scale(calc(1 + var(--hp, 0) * 0.3));
+    opacity: calc(1 - var(--hp, 0) * 0.5);
+    will-change: transform;
+  }
+  .scene-sky {
+    filter: brightness(calc(1 - var(--hp, 0) * 0.35));
+  }
+
+  .chapter-rail {
+    position: fixed;
+    right: 1.25rem;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 70;
+    display: none;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.9rem;
+    mix-blend-mode: difference;
+    color: #fff;
+  }
+  @media (min-width: 1100px) { .chapter-rail { display: flex; } }
+  .chapter-rail a {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    color: #fff;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+  }
+  .chapter-rail a:hover { color: #fff; }
+  .chapter-rail__label {
+    opacity: 0;
+    transform: translateX(8px);
+    transition: opacity 400ms var(--ease-out-expo), transform 400ms var(--ease-out-expo);
+  }
+  .chapter-rail__dot {
+    width: 6px; height: 6px;
+    border-radius: 999px;
+    background: currentColor;
+    opacity: 0.45;
+    transition: transform 400ms var(--ease-out-expo), opacity 300ms;
+  }
+  .chapter-rail a[aria-current="true"] .chapter-rail__label,
+  .chapter-rail a:hover .chapter-rail__label { opacity: 1; transform: none; }
+  .chapter-rail a[aria-current="true"] .chapter-rail__dot { opacity: 1; transform: scale(1.9); }
+
+  .process-marquee__item {
+    display: inline-flex;
+    align-items: center;
+    gap: 1.5rem;
+    padding-right: 1.5rem;
+    font-family: var(--font-display);
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: -0.03em;
+    font-size: clamp(1.5rem, 3.4vw, 2.75rem);
+    white-space: nowrap;
+  }
+  .process-marquee__item i { color: var(--color-dorado); font-style: normal; }
+
+  .magnetic { transition: transform 300ms var(--ease-out-expo); will-change: transform; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .scene-title, .scene-sun { transform: none; opacity: 1; }
+    .scene-sky { filter: none; }
+    .chapter-rail__label { transition: none; }
+  }
+}
+
+/* =========================================================
+   SIGNATURE LAYER — lo que hace reconocible al sitio.
+   Intro con cortina, sello giratorio, cursor, foil, tilt.
+   ========================================================= */
+@layer utilities {
+  /* Intro: 100% CSS (keyframes); el JS solo espera para liberar el hero.
+     La animación termina en visibility:hidden aunque falle el script. */
+  .intro {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    display: grid;
+    place-items: center;
+    background: linear-gradient(180deg, #0F1A3A, #1B2B5C);
+    color: #fff;
+    animation: intro-curtain 900ms var(--ease-out-expo) 1.35s forwards;
+    pointer-events: none;
+  }
+  .intro__mark {
+    display: block;
+    text-align: center;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: clamp(4rem, 14vw, 9rem);
+    letter-spacing: -0.06em;
+    line-height: 1;
+    opacity: 0;
+    animation: intro-mark 1000ms var(--ease-out-expo) 100ms forwards;
+  }
+  .intro__line {
+    display: block;
+    height: 1px;
+    width: min(240px, 50vw);
+    margin: 1.25rem auto 0.9rem;
+    background: var(--color-dorado);
+    transform: scaleX(0);
+    transform-origin: 0 50%;
+    animation: intro-line 900ms var(--ease-out-expo) 350ms forwards;
+  }
+  .intro__tag {
+    display: block;
+    text-align: center;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.65);
+    opacity: 0;
+    animation: intro-mark 800ms var(--ease-out-expo) 600ms forwards;
+  }
+  @keyframes intro-mark { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+  @keyframes intro-line { to { transform: scaleX(1); } }
+  @keyframes intro-curtain {
+    0% { transform: translateY(0); visibility: visible; }
+    99% { visibility: visible; }
+    100% { transform: translateY(-101%); visibility: hidden; }
+  }
+
+  /* Sello giratorio del hero */
+  .seal {
+    position: absolute;
+    z-index: 1;
+    right: 8%;
+    top: 8%;
+    width: 132px;
+    height: 132px;
+    display: none;
+    transform: rotate(calc(var(--hp, 0) * 220deg));
+    color: var(--color-dorado);
+  }
+  @media (min-width: 1100px) { .seal { display: block; } }
+  .seal__ring { width: 100%; height: 100%; animation: seal-spin 28s linear infinite; }
+  .seal__core {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 26px;
+    letter-spacing: -0.05em;
+    color: #fff;
+  }
+  @keyframes seal-spin { to { transform: rotate(360deg); } }
+
+  /* Foil dorado con brillo que recorre el texto */
+  .text-sunset {
+    background-image: linear-gradient(100deg, #A6843A 0%, #E0B96B 30%, #FFF1C9 46%, #E0B96B 60%, #A6843A 100%);
+    background-size: 220% 100%;
+    animation: foil 7s ease-in-out infinite alternate;
+  }
+  @keyframes foil { from { background-position: 0% 50%; } to { background-position: 100% 50%; } }
+
+  /* Cursor propio (solo mouse) */
+  .cursor-ring {
+    position: fixed;
+    top: 0; left: 0;
+    width: 34px; height: 34px;
+    margin: -17px 0 0 -17px;
+    z-index: 120;
+    pointer-events: none;
+    border: 1px solid #fff;
+    border-radius: 50%;
+    mix-blend-mode: difference;
+    opacity: 0;
+    transition: opacity 300ms, width 350ms var(--ease-out-expo), height 350ms var(--ease-out-expo), margin 350ms var(--ease-out-expo), background-color 300ms;
+    will-change: transform;
+  }
+  .cursor-ring.is-on { opacity: 1; }
+  .cursor-ring.is-hot { width: 64px; height: 64px; margin: -32px 0 0 -32px; background: rgba(255, 255, 255, 0.14); }
+  @media (hover: none) { .cursor-ring { display: none; } }
+
+  /* Tarjetas: inclinación 3D + brillo que sigue al cursor */
+  .card-pop { position: relative; }
+  .card-pop::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    opacity: 0;
+    background: radial-gradient(260px circle at var(--sx, 50%) var(--sy, 50%), rgba(200, 162, 78, 0.22), transparent 60%);
+    transition: opacity 300ms;
+  }
+  .card-pop:hover::after { opacity: 1; }
+  .card-pop:hover {
+    transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) translateY(-6px);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .intro { display: none; }
+    .seal, .seal__ring { transform: none; animation: none; }
+    .text-sunset { animation: none; }
+    .cursor-ring { display: none; }
+  }
+}
+
+/* ---------------------------------------------------------
+   Servicios — lista editorial con acordeón nativo (<details>)
+   --------------------------------------------------------- */
+:root { interpolate-size: allow-keywords; }
+
+@layer components {
+  .svc { border-bottom: 1px solid var(--color-border); }
+  .svc__summary {
+    display: grid;
+    grid-template-columns: 2.5rem 1fr auto 2rem;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.5rem 0;
+    cursor: pointer;
+    list-style: none;
+  }
+  .svc__summary::-webkit-details-marker { display: none; }
+  @media (min-width: 768px) {
+    .svc__summary { grid-template-columns: 4rem 1fr 11rem 2.5rem; gap: 1.5rem; padding: 2.1rem 0; }
+  }
+  .svc__num { font-size: 12px; letter-spacing: 0.18em; color: var(--color-mute); transition: color 300ms; }
+  .svc__title { display: flex; flex-direction: column; gap: 0.35rem; min-width: 0; }
+  .svc__name {
+    font-size: clamp(1.4rem, 3.4vw, 2.75rem);
+    line-height: 0.98;
+    letter-spacing: -0.03em;
+    color: var(--color-ink);
+    transition: transform 500ms var(--ease-out-expo), color 300ms;
+  }
+  .svc__cat { font-size: 10px; text-transform: uppercase; letter-spacing: 0.22em; color: var(--color-mute); }
+  .svc__price { display: none; text-align: right; font-weight: 700; font-size: 1rem; color: var(--color-ink); }
+  .svc__price small { display: block; font-size: 9px; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase; color: var(--color-mute); }
+  @media (min-width: 640px) { .svc__price { display: block; } }
+  @media (max-width: 639px) { .svc__summary { grid-template-columns: 2rem 1fr 1.5rem; } }
+
+  .svc__icon { position: relative; width: 1.5rem; height: 1.5rem; justify-self: end; }
+  .svc__icon::before, .svc__icon::after {
+    content: "";
+    position: absolute;
+    left: 50%; top: 50%;
+    width: 14px; height: 1.5px;
+    background: var(--color-ink);
+    transform: translate(-50%, -50%);
+    transition: transform 450ms var(--ease-out-expo), background-color 300ms;
+  }
+  .svc__icon::after { transform: translate(-50%, -50%) rotate(90deg); }
+  .svc[open] .svc__icon::after { transform: translate(-50%, -50%) rotate(0deg); }
+
+  .svc__summary:hover .svc__name { transform: translateX(10px); color: var(--color-azul); }
+  .svc__summary:hover .svc__num, .svc[open] .svc__num { color: var(--color-dorado-deep); }
+  .svc__summary:hover .svc__icon::before, .svc__summary:hover .svc__icon::after { background: var(--color-dorado-deep); }
+
+  .svc::details-content {
+    block-size: 0;
+    overflow: clip;
+    transition: block-size 600ms var(--ease-out-expo), content-visibility 600ms allow-discrete;
+  }
+  .svc[open]::details-content { block-size: auto; }
+
+  .svc__panel-inner {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    padding: 0.25rem 0 2.5rem;
+  }
+  @media (min-width: 768px) {
+    .svc__panel-inner { grid-template-columns: 1fr 1fr; gap: 3.5rem; padding-left: 5.5rem; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .svc::details-content { transition: none; }
+    .svc__summary:hover .svc__name { transform: none; }
+  }
+}
+
+/* =========================================================
+   LAYOUT "PAGEFLOWS" — hero centrado, pared de tiles,
+   paneles redondeados sobre fondo suave. Misma paleta.
+   ========================================================= */
+@layer utilities {
+  .scene-sun { display: none; }
+
+  /* Pared de tiles */
+  .tile-wall { display: grid; gap: 14px; padding-top: 0.5rem; }
+  .tile-row {
+    overflow: hidden;
+    transform: translate3d(calc(var(--hp, 0) * var(--dx, 90px)), 0, 0);
+    will-change: transform;
+  }
+  .tile-row[data-dir="l"] { --dx: -90px; }
+  .tile-row[data-dir="r"] { --dx: 90px; }
+  .tile-track { display: flex; width: max-content; }
+  .tile-row[data-dir="l"] .tile-track { animation: tile-l 70s linear infinite; }
+  .tile-row[data-dir="r"] .tile-track { animation: tile-r 80s linear infinite; }
+  .tile-wall:hover .tile-track { animation-play-state: paused; }
+  .tile-set { display: flex; gap: 14px; padding-right: 14px; }
+  @keyframes tile-l { to { transform: translateX(-50%); } }
+  @keyframes tile-r { from { transform: translateX(-50%); } to { transform: translateX(0); } }
+
+  .tile {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 84px;
+    height: 84px;
+    border-radius: 22px;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 2.1rem;
+    letter-spacing: -0.04em;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.18) inset, 0 10px 24px -12px rgba(0, 0, 0, 0.55);
+    transition: transform 400ms var(--ease-out-expo), box-shadow 400ms;
+  }
+  .tile:hover { color: inherit; transform: translateY(-6px) scale(1.06); box-shadow: 0 18px 34px -12px rgba(200, 162, 78, 0.55); }
+  @media (min-width: 768px) { .tile { width: 98px; height: 98px; border-radius: 26px; font-size: 2.4rem; } }
+
+  @media (prefers-reduced-motion: reduce) {
+    .tile-track { animation: none !important; }
+    .tile-row { transform: none; }
+  }
+
+  /* Paneles redondeados (cards grandes de Pageflows) */
+  .panel {
+    margin: 14px 12px;
+    border-radius: 28px;
+    overflow: hidden;
+    background: var(--color-blanco);
+    border: 1px solid var(--color-border);
+  }
+  @media (min-width: 768px) { .panel { margin: 18px max(16px, calc((100vw - 76rem) / 2)); border-radius: 36px; } }
+  .panel > section { border: 0 !important; background-color: transparent; }
+  .panel > section.bg-\[var\(--color-ink\)\] { background-color: var(--color-ink); }
+
+  /* Botones: rectángulo redondeado (no píldora) */
+  .btn-sunset, .btn-ghost { border-radius: 14px; }
 }
