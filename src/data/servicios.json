@@ -1,5 +1,26 @@
 [
   {
+    "id": "software-a-medida",
+    "titulo": "Software a medida",
+    "subtitulo": "Inventario, procesos, automatizaciones, KPIs e informes",
+    "descripcion": "Sistemas hechos a la medida del problema puntual de tu PyME: control de stock, flujos de trabajo, automatización de tareas, monitoreo con alertas, tableros de indicadores e informes automáticos. Partimos de un diagnóstico y construimos lo justo para resolverlo, ni más ni menos.",
+    "resultadoCuantificado": "Una operación ordenada y medible: menos tareas manuales, menos errores y los números de tu empresa a la vista.",
+    "queIncluye": [
+      "Diagnóstico gratis de 30 minutos",
+      "Propuesta cerrada con alcance, etapas, plazos y precio",
+      "Desarrollo por etapas, con entregas que tu equipo puede usar",
+      "Integración con las herramientas que ya usan",
+      "Capacitación, puesta en marcha y soporte",
+      "Código y datos a nombre de tu empresa"
+    ],
+    "idealPara": "PyMEs que operan con planillas, tareas manuales o sistemas que no se comunican, y necesitan una herramienta que se adapte a su forma de trabajar.",
+    "duracion": "A definir según el alcance",
+    "precioOrientativo": "A cotizar según tu proyecto",
+    "precioDesdeUsd": null,
+    "cta": "Contanos el problema",
+    "badge": "FOCO PRINCIPAL"
+  },
+  {
     "id": "web-productos-servicios",
     "titulo": "Página web de productos o servicios",
     "subtitulo": "Mostrá lo que vendés y que te escriban",
@@ -61,25 +82,5 @@
     "precioDesdeUsd": 800,
     "cta": "Quiero mi tienda online",
     "badge": "VENDÉ ONLINE"
-  },
-  {
-    "id": "software-a-medida",
-    "titulo": "Software a medida",
-    "subtitulo": "Si lo necesitás, lo desarrollamos",
-    "descripcion": "Sistemas y herramientas hechas para tu forma de trabajar: gestión interna, paneles, reservas, automatización de tareas o lo que tu negocio necesite y no encuentres armado. Empezamos escuchándote para entender el problema antes de proponer nada.",
-    "resultadoCuantificado": "Una herramienta pensada para tu operación, que reemplaza planillas y tareas manuales con algo que se adapta a vos y no al revés.",
-    "queIncluye": [
-      "Una charla inicial para entender qué necesitás",
-      "Propuesta con alcance, etapas y presupuesto",
-      "Desarrollo a medida, con avances que podés ver y probar",
-      "Puesta en marcha y acompañamiento",
-      "Soporte posterior a acordar según el proyecto"
-    ],
-    "idealPara": "Negocios y equipos con un proceso o una idea que no resuelve ninguna herramienta estándar y quieren conversarlo con un equipo que los escuche.",
-    "duracion": "A definir según el alcance",
-    "precioOrientativo": "A cotizar según tu proyecto",
-    "precioDesdeUsd": null,
-    "cta": "Iniciemos una conversación",
-    "badge": "CONTANOS QUÉ NECESITÁS"
   }
 ]

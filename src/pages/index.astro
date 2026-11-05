@@ -1,11 +1,9 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import Peso from "../components/film/Peso.astro";
-import Giro from "../components/film/Giro.astro";
-import Solucion from "../components/film/Solucion.astro";
-import Cierre from "../components/film/Cierre.astro";
+import Hero from "../components/Hero.astro";
+import Problemas from "../components/Problemas.astro";
+import Metodo from "../components/Metodo.astro";
 import SobreMi from "../components/SobreMi.astro";
-import Servicios from "../components/Servicios.astro";
 import Proyectos from "../components/Proyectos.astro";
 import BlogPreview from "../components/BlogPreview.astro";
 import FAQ from "../components/FAQ.astro";
@@ -15,63 +13,12 @@ import { hasPublishedPosts, hasPublishedProjects } from "../lib/content";
 
 const showProyectos = await hasPublishedProjects();
 const showBlog = await hasPublishedPosts();
-
-// Un solo film: alto total = suma de las escenas (svh). Cada escena ocupa un tramo
-// contiguo [from, to] del progreso global P (0..1); motion.ts deriva su --p local.
-const scenes = [
-  { key: "peso", chapter: "Inicio", len: 110 },
-  { key: "giro", chapter: "La oferta", len: 75 },
-  { key: "solucion", chapter: "Servicios", len: 100 },
-  { key: "cierre", chapter: "Auditoría gratis", len: 100 },
-];
-const total = scenes.reduce((a, s) => a + s.len, 0);
-let acc = 0;
-const ranges = scenes.map((s) => {
-  const from = acc / total;
-  acc += s.len;
-  const to = acc / total;
-  return { ...s, from: +from.toFixed(5), to: +to.toFixed(5) };
-});
-const [rPeso, rGiro, rSol, rCierre] = ranges;
 ---
 
-<Layout
-  title={`${site.name} · Desarrollo web en Córdoba`}
-  description={site.description}
->
-  <div class="film" data-film style={`--film-len: ${total}`}>
-    {
-      ranges.map((r) => (
-        <span
-          class="film-anchor"
-          id={`film-${r.key}`}
-          data-chapter={r.chapter}
-          data-film-anchor={r.key}
-          style={`--a-top:${(r.from * 100).toFixed(3)}%;--a-h:${((r.to - r.from) * 100).toFixed(3)}%`}
-          aria-hidden="true"
-        />
-      ))
-    }
-    <a href="#servicios-precios" class="film-skip" data-film-skip>
-      Ver servicios y precios <span aria-hidden="true">↓</span>
-    </a>
-    <div class="film-stage">
-      <Peso from={rPeso.from} to={rPeso.to} />
-      <Giro from={rGiro.from} to={rGiro.to} />
-      <Solucion from={rSol.from} to={rSol.to} />
-      <Cierre from={rCierre.from} to={rCierre.to} />
-    </div>
-    <a
-      href="/contacto?servicio=Auditor%C3%ADa%20gratis"
-      class="film-cta"
-      data-film-cta
-      tabindex="-1"
-      aria-hidden="true"
-    >
-      Auditoría gratis de 15 min
-    </a>
-  </div>
-  <div class="panel panel--oro" id="servicios-precios" data-chapter="Servicios"><Servicios /></div>
+<Layout title={`${site.name} · Software a medida para PyMEs`} description={site.description}>
+  <Hero />
+  <div class="panel" data-chapter="Qué resolvemos"><Problemas /></div>
+  <div class="panel" data-chapter="Cómo trabajamos"><Metodo /></div>
   <div class="panel panel--night" data-chapter="Nosotros"><SobreMi /></div>
   {showProyectos && <div class="panel" data-chapter="Proyectos"><Proyectos /></div>}
   {showBlog && <div class="panel" data-chapter="Escritos"><BlogPreview /></div>}

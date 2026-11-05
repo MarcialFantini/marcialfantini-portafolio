@@ -17,41 +17,6 @@ let my = -999;
 let pointerDirty = false;
 let ticking = false;
 
-/* Film: UN wrapper alto [data-film] con un único stage sticky; las escenas son
-   capas apiladas [data-film-scene] con un tramo [data-from, data-to] del progreso
-   global P (0..1). Cada capa recibe --p (local, lineal), --e (easeInOutCubic) y
-   --o (opacidad de entrada: la capa nueva se funde encima de la saliente). */
-interface Layer {
-  el: HTMLElement;
-  from: number;
-  to: number;
-  first: boolean;
-  p: number;
-  o: number;
-  active: boolean;
-  late: boolean;
-  done: boolean;
-}
-let filmEl: HTMLElement | null = null;
-let layers: Layer[] = [];
-/* Tramo (fracción de P) del fundido de entrada y margen de activación */
-const FADE = 0.02;
-const PAD = 0.01;
-/* Header fijo: .is-over-film cuando una escena del film cruza la franja del header. */
-const HEADER_PROBE = 36;
-let header: HTMLElement | null = null;
-let headerOver = false;
-let headerIo: IntersectionObserver | null = null;
-/* CTA flotante: aparece al salir del hero (que trae la suya) y se retira cuando arranca el cierre,
-   que trae su propia CTA grande. Una sola CTA primaria por momento. */
-let filmCta: HTMLElement | null = null;
-let ctaOn = false;
-/* Salto "Ver servicios y precios": visible desde que el hero termina hasta el final del film */
-let filmSkip: HTMLElement | null = null;
-let skipOn = false;
-const clamp01 = (n: number) => (n < 0 ? 0 : n > 1 ? 1 : n);
-const easeInOutCubic = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
-
 function revealAll() {
   document.querySelectorAll(".reveal, .reveal-stagger").forEach((el) => {
     el.setAttribute("data-revealed", "in");
@@ -132,34 +97,6 @@ function frame() {
 
   if (bar) bar.style.transform = `scaleX(${(max > 0 ? Math.min(y / max, 1) : 0).toFixed(4)})`;
 
-  // Film: lecturas primero (todas), escrituras al final del frame
-  const filmWrites: { l: Layer; p: number; o: number; active: boolean; late: boolean; done: boolean }[] = [];
-  let overFilm = false;
-  let showCta = false;
-  let showSkip = false;
-  if (filmEl) {
-    const r = filmEl.getBoundingClientRect();
-    // El stage sticky cubre el viewport mientras el wrapper cruza la franja del header
-    if (r.top <= HEADER_PROBE && r.bottom > HEADER_PROBE) overFilm = true;
-    const span = r.height - vh;
-    const P = span > 0 ? clamp01(-r.top / span) : 0;
-    if (layers.length > 2 && r.top <= 0 && r.bottom > vh * 0.5) {
-      const afterHero = P >= layers[0].to - 0.01;
-      showSkip = afterHero;
-      showCta = afterHero && P < layers[layers.length - 1].from - 0.005;
-    }
-    for (const l of layers) {
-      const p = clamp01((P - l.from) / (l.to - l.from));
-      const o = l.first ? 1 : clamp01((P - l.from) / FADE);
-      const active = P >= l.from - PAD && P <= l.to + FADE + PAD;
-      const done = P > l.to;
-      const late = p >= 0.5;
-      if (Math.abs(p - l.p) > 0.0004 || Math.abs(o - l.o) > 0.004 || active !== l.active || late !== l.late || done !== l.done) {
-        filmWrites.push({ l, p, o, active, late, done });
-      }
-    }
-  }
-
   if (hero) {
     const hr = hero.getBoundingClientRect();
     const hp = Math.max(0, Math.min(1, -hr.top / (hr.height * 0.85)));
@@ -173,40 +110,6 @@ function frame() {
     el.style.setProperty("--p", `${((r.top + r.height / 2 - vh / 2) * -speed).toFixed(1)}px`);
   }
 
-  if (overFilm !== headerOver) {
-    headerOver = overFilm;
-    header?.classList.toggle("is-over-film", overFilm);
-  }
-
-  if (showCta !== ctaOn && filmCta) {
-    ctaOn = showCta;
-    filmCta.classList.toggle("is-on", showCta);
-    filmCta.tabIndex = showCta ? 0 : -1;
-    filmCta.setAttribute("aria-hidden", showCta ? "false" : "true");
-  }
-
-  if (showSkip !== skipOn && filmSkip) {
-    skipOn = showSkip;
-    filmSkip.classList.toggle("is-on", showSkip);
-  }
-
-  for (const w of filmWrites) {
-    const { l } = w;
-    if (w.p !== l.p) {
-      l.el.style.setProperty("--p", w.p.toFixed(4));
-      l.el.style.setProperty("--e", easeInOutCubic(w.p).toFixed(4));
-    }
-    if (w.o !== l.o) l.el.style.setProperty("--o", w.o.toFixed(3));
-    if (w.active !== l.active) l.el.classList.toggle("is-active", w.active);
-    if (w.late !== l.late) l.el.classList.toggle("is-late", w.late);
-    if (w.done !== l.done) l.el.classList.toggle("is-done", w.done);
-    l.p = w.p;
-    l.o = w.o;
-    l.active = w.active;
-    l.late = w.late;
-    l.done = w.done;
-  }
-
   if (pointerDirty && glow) {
     glow.style.transform = `translate3d(${mx}px,${my}px,0)`;
     pointerDirty = false;
@@ -216,39 +119,12 @@ function frame() {
 function setup() {
   // Titulares de sección entran solos, sin tocar cada componente
   document.querySelectorAll("main h2").forEach((h) => {
-    if (!h.closest(".reveal, .reveal-stagger, [data-scene], [data-film]")) h.classList.add("reveal");
+    if (!h.closest(".reveal, .reveal-stagger, [data-scene]")) h.classList.add("reveal");
   });
-
-  header = document.querySelector<HTMLElement>("[data-site-header]");
-  headerOver = false;
-  headerIo?.disconnect();
-  headerIo = null;
 
   if (reduce) {
     revealAll();
-    // Sin pin: las anclas (posicionadas por offset) no sirven; el capítulo pasa a cada capa estática
-    document.querySelectorAll<HTMLElement>("[data-film-anchor]").forEach((a) => {
-      const layer = document.querySelector<HTMLElement>(`[data-film-scene="${a.dataset.filmAnchor}"]`);
-      if (layer) {
-        layer.id = a.id;
-        layer.dataset.chapter = a.dataset.chapter ?? "";
-      }
-      a.remove();
-    });
     buildRail();
-    // Film estático (sin pin): un IO sobre la franja superior del viewport alcanza
-    const scenes = document.querySelectorAll<HTMLElement>("[data-film]");
-    if (header && scenes.length) {
-      const hit = new Set<Element>();
-      headerIo = new IntersectionObserver(
-        (entries) => {
-          for (const e of entries) (e.isIntersecting ? hit.add(e.target) : hit.delete(e.target));
-          header!.classList.toggle("is-over-film", hit.size > 0);
-        },
-        { rootMargin: `0px 0px -${Math.max(0, window.innerHeight - HEADER_PROBE - 1)}px 0px` }
-      );
-      scenes.forEach((s) => headerIo!.observe(s));
-    }
     return;
   }
 
@@ -269,22 +145,6 @@ function setup() {
 
   parallax = Array.from(document.querySelectorAll<HTMLElement>("[data-parallax]"));
   hero = document.querySelector<HTMLElement>("[data-scene]");
-  filmEl = document.querySelector<HTMLElement>("[data-film]");
-  layers = Array.from(document.querySelectorAll<HTMLElement>("[data-film-scene]")).map((el, i) => ({
-    el,
-    from: parseFloat(el.dataset.from ?? "0"),
-    to: parseFloat(el.dataset.to ?? "1"),
-    first: i === 0,
-    p: -1,
-    o: -1,
-    active: el.classList.contains("is-active"),
-    late: false,
-    done: false,
-  }));
-  filmCta = document.querySelector<HTMLElement>("[data-film-cta]");
-  ctaOn = false;
-  filmSkip = document.querySelector<HTMLElement>("[data-film-skip]");
-  skipOn = false;
   bar = document.querySelector<HTMLElement>(".page-progress");
   glow = document.querySelector<HTMLElement>(".spotlight");
   document.querySelectorAll<HTMLElement>(".btn-sunset, .btn-ghost").forEach(bindMagnet);

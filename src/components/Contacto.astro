@@ -1,15 +1,17 @@
 ---
 import site from "../data/site.json";
 import servicios from "../data/servicios.json";
+import Robot from "./Robot.astro";
 
 const GENERIC_OPTION = "Quiero hablar de mi proyecto";
 const rawParam = Astro.url.searchParams.get("servicio");
-const isAudit = rawParam === "Auditoría gratis";
-// Cualquier valor que no sea un servicio conocido (p. ej. la auditoría gratis) cae en la opción genérica.
+// "Auditoría gratis" se mantiene para links viejos.
+const isAudit = rawParam === "Diagnóstico gratis" || rawParam === "Auditoría gratis";
+// Cualquier valor que no sea un servicio conocido (p. ej. el diagnóstico gratis) cae en la opción genérica.
 const servicioParam =
   rawParam && servicios.some((s) => s.titulo === rawParam) ? rawParam : rawParam ? GENERIC_OPTION : null;
 const initialSubject = isAudit
-  ? "Quiero la auditoría gratis de 15 min"
+  ? "Quiero el diagnóstico gratis de 30 min"
   : servicioParam
     ? `Consulta sobre ${servicioParam}`
     : "Consulta desde marcialfantini.site";
@@ -31,9 +33,12 @@ const { compact = false } = Astro.props;
     <div class="lg:sticky lg:top-28 lg:self-start space-y-8">
       {!compact && (
       <div>
-        <p class="eyebrow mb-4">Contacto</p>
+        <span class="ct-bots mb-4" style="--bot-line:#F6F1E4" aria-hidden="true">
+          <Robot pose="wave" size={92} />
+          <span class="ct-bots__friend"><Robot pose="carry" cargo="mail" tone="gold" size={72} /></span>
+        </span>
         <h2 class="display-lg">
-          Contanos qué querés <span class="display-accent">vender online.</span>
+          Contanos qué problema <span class="display-accent">querés resolver.</span>
         </h2>
       </div>
       )}
@@ -70,7 +75,7 @@ const { compact = false } = Astro.props;
 
       <div class="sd-reveal">
         <p class="text-base md:text-lg text-[var(--color-ink)] leading-snug font-medium">
-          Auditoría gratis de 15 minutos. Te respondemos en 24 h hábiles.
+          Diagnóstico gratis de 30 minutos. Te respondemos en 24 h hábiles.
         </p>
         <p class="mt-3 text-sm text-[var(--color-ink-soft)] leading-relaxed">
           {site.location}. Usamos tus datos solo para responderte. Más en nuestra{" "}
@@ -208,7 +213,7 @@ const { compact = false } = Astro.props;
 >
   (function () {
     // El sitio es estático: ?servicio= solo se lee en el cliente. Valores desconocidos
-    // (p. ej. "Auditoría gratis") caen en la opción genérica.
+    // (p. ej. "Diagnóstico gratis") caen en la opción genérica.
     const select = document.getElementById('servicio');
     const param = new URLSearchParams(window.location.search).get('servicio');
     if (select instanceof HTMLSelectElement && param) {
@@ -321,3 +326,16 @@ const { compact = false } = Astro.props;
     }
   })();
 </script>
+
+<style>
+  /* Dupla de mascotas: el navy saluda y el dorado (que trae un sobre) le responde con un salto */
+  .ct-bots { display: flex; align-items: flex-end; gap: 0.25rem; }
+  .ct-bots__friend { display: block; animation: ct-reply 2.4s ease-in-out infinite; }
+  @keyframes ct-reply {
+    0%, 70%, 100% { transform: none; }
+    78% { transform: translateY(-9px) rotate(-5deg); }
+    86% { transform: none; }
+    91% { transform: translateY(-3px); }
+  }
+  @media (prefers-reduced-motion: reduce) { .ct-bots__friend { animation: none; } }
+</style>
