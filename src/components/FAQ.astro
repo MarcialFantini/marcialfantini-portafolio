@@ -1,106 +1,289 @@
 ---
 import site from "../data/site.json";
+import Robot from "./Robot.astro";
 
-interface FAQItem {
-  pregunta: string;
-  respuesta: string;
-}
-
-const faqs: FAQItem[] = [
+const faqs = [
   {
-    pregunta: "¿Por qué no usar Shopify, Wix o WordPress directamente?",
-    respuesta:
-      "Podés, y si tu negocio es estándar, probablemente alcance. Lo que hacemos nosotros suma cuando querés un diseño a tu marca sin restricciones de plantilla, una página rápida o algo que esas plataformas no resuelven bien, como un software a medida. Si tu caso es estándar, te lo decimos antes de empezar.",
+    q: "¿Por qué no un sistema enlatado o un ERP?",
+    a: "Si uno estándar resuelve tu problema, te lo decimos y no te vendemos nada. Hacemos a medida cuando tu forma de trabajar no entra en un enlatado o pagás licencias por funciones que no usás.",
   },
   {
-    pregunta: "¿Cuánto tarda un proyecto tipo?",
-    respuesta:
-      "Depende del alcance. Como referencia orientativa: una página web de productos o servicios, de 1 a 3 semanas; una página empresarial, de 2 a 4; un ecommerce, de 4 a 8. El software a medida se define después de conversar. Te confirmamos fechas en la propuesta.",
+    q: "¿Se integra con lo que ya usamos?",
+    a: "Casi siempre: Excel, Google Sheets, ERPs, tiendas online y facturación. En el diagnóstico vemos cómo conectarlo.",
   },
   {
-    pregunta: "¿Qué pasa si no me gusta el resultado?",
-    respuesta:
-      "Lo ajustamos. Cada proyecto incluye 2 rondas de revisión. Si después de eso querés más cambios, lo charlamos y te pasamos el costo por escrito antes de hacerlos.",
+    q: "¿Cuánto cuesta?",
+    a: "Depende del problema. Después del diagnóstico te pasamos una propuesta cerrada con precio por escrito. Si algo cambia, se cotiza antes de hacerlo.",
   },
   {
-    pregunta: "¿Cuánto cuesta mantenerlo después?",
-    respuesta:
-      "El hosting y el dominio son aparte y no están incluidos en los precios orientativos: los cotizamos en la propuesta, junto con cualquier cambio o soporte que necesites después de publicar. Te lo aclaramos por escrito, sin sorpresas.",
+    q: "¿Cuánto tarda?",
+    a: "La primera etapa entra en uso en semanas, no en meses. El resto avanza por etapas, con fechas en la propuesta.",
   },
   {
-    pregunta: "¿Cobran por hora o por proyecto?",
-    respuesta:
-      "Por proyecto, con un presupuesto claro por escrito antes de empezar: página web desde USD 300, página empresarial desde USD 400 y ecommerce desde USD 800 (precios orientativos en USD, sin hosting ni dominio, que se cotizan aparte en la propuesta). El software a medida se cotiza según tu proyecto. Si algo se sale del alcance, lo charlamos antes de hacerlo.",
+    q: "¿Mi equipo va a saber usarlo?",
+    a: "Lo diseñamos sobre cómo ya trabajan. Incluye capacitación y acompañamiento en el arranque.",
   },
   {
-    pregunta: "¿Puedo ver ejemplos antes de contratarlos?",
-    respuesta:
-      "Sí. En la primera charla te mostramos proyectos de complejidad parecida a lo que necesitás, sin compromiso, para que veas qué tipo de trabajo hacemos.",
+    q: "¿De quién es el código y los datos?",
+    a: "Tuyos. Código, datos y accesos quedan a nombre de tu empresa: no dependés de nosotros para seguir operando.",
   },
   {
-    pregunta: "¿Qué necesito para empezar?",
-    respuesta:
-      "Tu logo si lo tenés, textos o ideas de lo que querés contar y fotos de tus productos. Si no tenés algo de eso, no pasa nada: charlamos 15 minutos, te hacemos unas preguntas y armamos el brief entre todos. La auditoría gratis de 15 minutos existe justamente para esto, y te respondemos en menos de 24 h hábiles.",
+    q: "¿Y si la empresa crece o el proceso cambia?",
+    a: "Se suman módulos, usuarios o integraciones cuando hagan falta, cada cambio con presupuesto por escrito.",
   },
   {
-    pregunta: "¿De quién es el código y el sitio?",
-    respuesta:
-      "Al terminar y pagar el proyecto, el sitio es tuyo. Si querés aclarar algún detalle de la entrega, lo charlamos antes de empezar.",
+    q: "¿Qué necesitamos para empezar?",
+    a: "Solo contarnos el problema. El diagnóstico es gratis, dura 30 minutos y respondemos en menos de 24 h hábiles.",
   },
 ];
 
+const half = Math.ceil(faqs.length / 2);
+const cols = [faqs.slice(0, half), faqs.slice(half)];
+
 const whatsappUrl = site.whatsapp
   ? `https://wa.me/${site.whatsapp}?text=${encodeURIComponent(site.whatsappMessage || "")}`
-  : "";
+  : "/contacto";
+
+const schema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqs.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })),
+};
 ---
 
-<section id="faq" class="relative py-20 md:py-28" aria-label="Preguntas frecuentes">
-  <div class="container-page faq-split grid grid-cols-1 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] gap-10 lg:gap-20">
-    <div class="lg:sticky lg:top-28 lg:self-start">
-      <p class="eyebrow mb-4">Preguntas frecuentes</p>
-      <h2 class="display-lg">
-        Lo que suelen preguntarnos <span class="display-accent">antes de arrancar.</span>
+<section id="faq" class="relative py-20 md:py-28" aria-labelledby="faq-title" data-faq>
+  <div class="container-page">
+    <div class="faq-head">
+      <h2 id="faq-title" class="faq-h display-md max-w-[16ch]">
+        Lo que nos preguntan <span class="display-accent">antes de arrancar.</span>
+        <svg class="faq-spark faq-spark--a" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0 14 10 24 12 14 14 12 24 10 14 0 12 10 10Z" /></svg>
+        <svg class="faq-spark faq-spark--b" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0 14 10 24 12 14 14 12 24 10 14 0 12 10 10Z" /></svg>
       </h2>
-      <p class="mt-6 max-w-md text-base md:text-lg text-[var(--color-ink-soft)] leading-relaxed">
-        Si tu duda no está acá, escribinos. Te respondemos en 24 h hábiles.
-      </p>
-      <div class="mt-8 flex flex-col sm:flex-row lg:flex-col xl:flex-row gap-3">
-        {whatsappUrl && (
-          <a
-            href={whatsappUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            class="tactile inline-flex min-h-12 items-center justify-center gap-2 px-6 py-3 rounded-control bg-[var(--color-action)] text-white font-mono text-[12px] uppercase tracking-[0.18em] font-semibold hover:bg-[var(--color-action-hover)]"
-          >
-            Escribinos por WhatsApp <span aria-hidden="true">↗</span>
-          </a>
-        )}
-        <a
-          href="/contacto"
-          class={`tactile inline-flex min-h-12 items-center justify-center gap-2 px-6 py-3 rounded-control font-mono text-[12px] uppercase tracking-[0.18em] font-semibold ${
-            whatsappUrl
-              ? "border border-[var(--color-hair-strong)] text-[var(--color-ink)] hover:border-[var(--color-ink)]"
-              : "bg-[var(--color-action)] text-white hover:bg-[var(--color-action-hover)]"
-          }`}
-        >
-          Ir al formulario <span aria-hidden="true">→</span>
+      <div class="faq-help">
+        <span class="faq-bot"><Robot pose="think" size={76} /></span>
+        <a href={whatsappUrl} class="faq-ask" target={site.whatsapp ? "_blank" : undefined} rel={site.whatsapp ? "noopener noreferrer" : undefined}>
+        ¿Otra duda? Escribinos por WhatsApp <span aria-hidden="true">→</span>
         </a>
       </div>
     </div>
 
-    <div>
+    <div class="faq-grid">
+      <div class="faq-rail" aria-hidden="true"><span class="faq-rail__pkt"></span><span class="faq-rail__pkt faq-rail__pkt--late"></span></div>
       {
-        faqs.map((faq) => (
-          <details class="qa sd-reveal">
-            <summary>
-              <h3>{faq.pregunta}</h3>
-            </summary>
-            <div class="qa__body">
-              <p class="text-base text-[var(--color-ink-soft)] leading-relaxed">{faq.respuesta}</p>
-            </div>
-          </details>
+        cols.map((col, c) => (
+          <div class="faq-col">
+            {col.map((f, i) => (
+              <details class="fq" open={c === 0 && i === 0}>
+                <summary>
+                  <h3>{f.q}</h3>
+                  <span class="fq__icon" aria-hidden="true" />
+                </summary>
+                <p class="fq__a">{f.a}</p>
+              </details>
+            ))}
+          </div>
         ))
       }
     </div>
   </div>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(schema)} />
 </section>
+
+<script>
+  // Las animaciones decorativas solo corren con la sección en pantalla
+  document.addEventListener("astro:page-load", () => {
+    document.querySelectorAll<HTMLElement>("[data-faq]").forEach((sec) => {
+      if (sec.dataset.ready) return;
+      sec.dataset.ready = "1";
+      new IntersectionObserver(([e]) => sec.classList.toggle("is-live", e.isIntersecting), { threshold: 0.1 }).observe(sec);
+    });
+  });
+</script>
+
+<style>
+  .faq-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1.25rem 2rem;
+  }
+  .faq-help { display: flex; align-items: flex-end; gap: 0.6rem; }
+  .faq-bot { flex: none; margin-bottom: -2px; }
+  .faq-ask {
+    font-weight: 600;
+    color: var(--color-ink);
+    text-decoration: underline;
+    text-decoration-color: var(--color-dorado);
+    text-decoration-thickness: 2px;
+    text-underline-offset: 5px;
+    transition: color 200ms;
+  }
+  .faq-ask:hover { color: var(--color-azul); }
+
+  /* ---------- Animaciones secundarias (sutiles) ---------- */
+  .faq-h { position: relative; }
+  .faq-spark {
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    fill: var(--color-dorado);
+    opacity: 0;
+    transform: scale(0.3);
+    pointer-events: none;
+    animation: faq-twinkle 6s var(--ease-out-expo) infinite;
+  }
+  .faq-spark--a { right: -1.25rem; top: 0.1em; animation-delay: 1.2s; }
+  .faq-spark--b { right: 0.6rem; bottom: -0.65rem; width: 9px; height: 9px; animation-delay: 3.6s; }
+  @keyframes faq-twinkle {
+    0%, 72%, 100% { opacity: 0; transform: scale(0.3) rotate(0deg); }
+    80% { opacity: 0.85; transform: scale(1) rotate(45deg); }
+    92% { opacity: 0; transform: scale(0.5) rotate(90deg); }
+  }
+
+  /* Riel entre columnas: línea punteada y un paquete que baja despacio */
+  .faq-rail { display: none; }
+  @media (min-width: 900px) {
+    .faq-rail {
+      display: block;
+      position: absolute;
+      top: 0.5rem;
+      bottom: 0.5rem;
+      left: 50%;
+      width: 0;
+      border-left: 1px dashed var(--color-hair-strong);
+      opacity: 0.6;
+      container-type: size;
+      height: calc(100% - 1rem);
+      pointer-events: none;
+    }
+  }
+  .faq-rail__pkt {
+    position: absolute;
+    left: -4.5px;
+    top: 0;
+    width: 8px;
+    height: 8px;
+    background: var(--color-neon);
+    border: 1px solid var(--color-dorado);
+    rotate: 45deg;
+    opacity: 0;
+    animation: faq-rail 9s ease-in-out infinite;
+  }
+  .faq-rail__pkt--late { animation-delay: -4.5s; }
+  @keyframes faq-rail {
+    0% { transform: translateY(0); opacity: 0; }
+    12%, 88% { opacity: 1; }
+    100% { transform: translateY(100cqh); opacity: 0; }
+  }
+
+  /* Al abrir: una banda de luz cruza la tarjeta una sola vez */
+  .fq { position: relative; overflow: hidden; }
+  .fq::after {
+    content: "";
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 45%;
+    pointer-events: none;
+    background: linear-gradient(100deg, transparent, rgba(255, 210, 74, 0.16) 45%, rgba(255, 255, 255, 0.35) 52%, transparent);
+    transform: translateX(-120%) skewX(-12deg);
+  }
+  .fq[open]::after { animation: faq-sheen 1s var(--ease-out-expo) 120ms; }
+  @keyframes faq-sheen { to { transform: translateX(320%) skewX(-12deg); } }
+
+  /* Flecha del link: empuje suave al pasar */
+  .faq-ask span { display: inline-block; transition: transform 250ms var(--ease-out-expo); }
+  .faq-ask:hover span { transform: translateX(4px); }
+
+  [data-faq]:not(.is-live) :is(.faq-spark, .faq-rail__pkt) { animation-play-state: paused; }
+
+  .faq-grid {
+    position: relative;
+    margin-top: clamp(2rem, 4vw, 3rem);
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.75rem;
+  }
+  @media (min-width: 900px) { .faq-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.75rem 1rem; align-items: start; } }
+  .faq-col { display: grid; gap: 0.75rem; }
+
+  .fq {
+    border-radius: 14px;
+    border: 1px solid var(--color-hair);
+    background: var(--color-page);
+    transition: border-color 250ms var(--ease-out-quart), background-color 250ms var(--ease-out-quart);
+  }
+  .fq:hover { border-color: var(--color-hair-strong); }
+  .fq[open] { background: var(--color-blanco); border-color: var(--color-hair-strong); box-shadow: 0 14px 30px -24px rgba(15, 26, 58, 0.45); }
+
+  .fq > summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    min-height: 3.5rem;
+    padding: 1rem 1.25rem;
+    cursor: pointer;
+    list-style: none;
+  }
+  .fq > summary::-webkit-details-marker { display: none; }
+  .fq > summary:focus-visible { outline: 2px solid var(--color-azul); outline-offset: 2px; border-radius: 14px; }
+  .fq h3 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(1.02rem, 0.95rem + 0.3vw, 1.15rem);
+    letter-spacing: -0.015em;
+    line-height: 1.3;
+    color: var(--color-ink);
+  }
+
+  /* Ícono +/− dibujado con dos barras: la vertical se pliega al abrir */
+  .fq__icon {
+    position: relative;
+    flex: none;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: color-mix(in srgb, var(--color-ink) 7%, transparent);
+    transition: background-color 250ms;
+  }
+  .fq__icon::before,
+  .fq__icon::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 11px;
+    height: 1.75px;
+    margin: -0.875px 0 0 -5.5px;
+    border-radius: 1px;
+    background: var(--color-ink);
+    transition: transform 300ms var(--ease-out-expo);
+  }
+  .fq__icon::after { transform: rotate(90deg); }
+  .fq[open] .fq__icon { background: var(--color-neon); }
+  .fq[open] .fq__icon::before,
+  .fq[open] .fq__icon::after { background: #0f1a3a; }
+  .fq[open] .fq__icon::after { transform: rotate(0deg); }
+
+  .fq__a {
+    padding: 0 1.25rem 1.2rem;
+    max-width: 60ch;
+    color: var(--color-ink-soft);
+    line-height: 1.6;
+  }
+
+  /* Apertura suave donde hay soporte (::details-content + interpolate-size); si no, abre al instante */
+  .fq::details-content {
+    block-size: 0;
+    overflow: hidden;
+    transition: block-size 350ms var(--ease-out-expo), content-visibility 350ms allow-discrete;
+  }
+  .fq[open]::details-content { block-size: auto; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .fq::details-content, .fq__icon::before, .fq__icon::after { transition: none; }
+    .faq-spark, .faq-rail__pkt, .fq[open]::after { animation: none; }
+    .faq-spark, .faq-rail__pkt { display: none; }
+  }
+</style>
