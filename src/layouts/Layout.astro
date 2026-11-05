@@ -29,7 +29,7 @@ const canonicalURL = new URL(Astro.url.pathname, siteURL);
 const isHome = Astro.url.pathname === "/";
 
 // Home: titulo fijo. Resto: "<Pagina> | Marcial Fantini" (normaliza el sufijo " — Marcial Fantini").
-const HOME_TITLE = `${site.name} | Páginas web, ecommerce y software a medida en Córdoba`;
+const HOME_TITLE = `${site.name} | Software a medida para PyMEs`;
 const suffix = ` | ${site.name}`;
 const title = isHome
   ? HOME_TITLE
@@ -42,7 +42,7 @@ const title = isHome
         : titleProp + suffix;
 
 const ogImageURL = new URL(ogImage, siteURL).toString();
-const ogAlt = `${site.name}: ${site.tagline}. Páginas web, ecommerce y software a medida.`;
+const ogAlt = `${site.name}: ${site.tagline}. Software a medida para PyMEs.`;
 const logoURL = new URL("/icon-512.png", siteURL).toString();
 
 import servicios from "../data/servicios.json";
@@ -57,7 +57,6 @@ const professionalService = {
   "description": site.description,
   "slogan": site.tagline,
   "email": site.email,
-  "priceRange": "USD 300+",
   "availableLanguage": "es-AR",
   "areaServed": [
     { "@type": "City", "name": "Córdoba" },
@@ -124,23 +123,6 @@ const professionalService = {
     <link rel="manifest" href="/site.webmanifest" />
 
     <ClientRouter />
-
-    <!-- Sin JS: el film cae al mismo layout estático que prefers-reduced-motion
-         (alto auto, stage sin sticky, capas visibles y opacas, estado final de cada escena) -->
-    <noscript>
-      <style>
-        .film { height: auto !important; }
-        .film-stage { position: relative !important; height: auto !important; overflow: visible !important; }
-        .film-anchor, .film-cta, .peso__chips, .giro__shards, .giro__flash, .giro__sweep { display: none !important; }
-        .film-layer { position: relative !important; inset: auto !important; opacity: 1 !important; visibility: visible !important; --p: 1; --e: 1; }
-        .film-layer.peso { --p: 0; --e: 0; }
-        .film-layer a { pointer-events: auto !important; }
-        .film-body { position: relative !important; inset: auto !important; min-height: 100svh; overflow: clip; }
-        .film-body > div:not([aria-hidden="true"]) { position: relative !important; inset: auto !important; }
-        .peso__stage { display: flex; flex-direction: column; justify-content: center; }
-        .film-skip { position: absolute !important; top: calc(var(--header-h) + 0.5rem); left: 1rem; bottom: auto !important; opacity: 1 !important; visibility: visible !important; }
-      </style>
-    </noscript>
 
     <!-- Tema: prefers-color-scheme es la única fuente de verdad. Se aplica antes del
          primer paint (script bloqueante en <head>) para evitar el flash; sin toggle manual. -->

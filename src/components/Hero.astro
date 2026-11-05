@@ -1,0 +1,1033 @@
+---
+import site from "../data/site.json";
+import Robot from "./Robot.astro";
+
+const areas = ["Inventario", "Procesos", "Automatizaciones", "Monitoreo", "KPIs", "Informes"];
+
+// Tablero ilustrativo: muestra el tipo de herramienta que construimos. No son datos de un cliente.
+interface Num {
+  to: number;
+  j?: number; // variación en vivo alrededor de `to` (0 o ausente: fijo)
+  max?: number;
+  dec?: number;
+  pre?: string;
+  suf?: string;
+}
+interface Vista {
+  id: string;
+  tab: string;
+  main: Num & { label: string };
+  side: (Num & { label: string })[];
+  bars: { label: string; antes: Num; ahora: Num };
+  alerts: string[];
+}
+
+const vistas: Vista[] = [
+  {
+    id: "ahorro",
+    tab: "Ahorro",
+    main: { to: 2340, j: 40, pre: "USD ", label: "ahorro estimado por mes" },
+    side: [
+      { to: 118, j: 3, suf: " h", label: "de carga manual eliminadas" },
+      { to: 64, j: 1, pre: "−", suf: "%", label: "errores de stock" },
+    ],
+    bars: { label: "Horas de tarea manual por semana", antes: { to: 32, suf: " h" }, ahora: { to: 4, suf: " h" } },
+    alerts: [
+      "Informe de ahorro enviado a gerencia",
+      "Orden de compra generada automáticamente",
+      "Conciliación bancaria cerrada sin diferencias",
+      "Proveedor con precio fuera de rango detectado",
+      "Horas extra del mes: −22% vs. el anterior",
+    ],
+  },
+  {
+    id: "stock",
+    tab: "Stock",
+    main: { to: 97.4, j: 0.3, max: 99.9, dec: 1, suf: "%", label: "precisión de inventario" },
+    side: [
+      { to: 7, j: 1, label: "productos bajo mínimo" },
+      { to: 3, label: "depósitos sincronizados" },
+    ],
+    bars: { label: "Quiebres de stock por mes", antes: { to: 19 }, ahora: { to: 3 } },
+    alerts: [
+      "Reponer: tornillo 6 mm, depósito norte",
+      "Transferencia entre depósitos registrada",
+      "Stock sincronizado con la tienda online",
+      "Lote L-2291 vence en 15 días",
+      "Conteo del pasillo B sin diferencias",
+    ],
+  },
+  {
+    id: "ventas",
+    tab: "Ventas",
+    main: { to: 68, j: 1, suf: "%", label: "del objetivo mensual" },
+    side: [
+      { to: 23, j: 2, label: "pedidos en curso" },
+      { to: 1.8, j: 0.1, dec: 1, suf: " días", label: "de entrega promedio" },
+    ],
+    bars: { label: "Días de entrega", antes: { to: 4.6, dec: 1 }, ahora: { to: 1.8, dec: 1 } },
+    alerts: [
+      "Pedido #1184 sin despachar hace 48 h",
+      "Nuevo pedido mayorista: USD 1.920",
+      "Factura emitida y enviada al cliente",
+      "Cobranza registrada: factura A-0042",
+      "Cliente reactivado después de 90 días",
+    ],
+  },
+  {
+    id: "procesos",
+    tab: "Procesos",
+    main: { to: 41, j: 1, label: "tareas automatizadas" },
+    side: [
+      { to: 0, label: "planillas duplicadas" },
+      { to: 12, j: 1, suf: " min", label: "para cerrar el informe" },
+    ],
+    bars: { label: "Horas para cerrar el informe mensual", antes: { to: 16, suf: " h" }, ahora: { to: 0.2, dec: 1, suf: " h" } },
+    alerts: [
+      "Cierre mensual generado automáticamente",
+      "12 remitos cargados sin intervención manual",
+      "Tarea vencida reasignada a Compras",
+      "Aprobación de compra resuelta en 4 min",
+      "Respaldo diario completado",
+    ],
+  },
+];
+
+const fmt = (n: Num) =>
+  `${n.pre ?? ""}${n.to.toLocaleString("es-AR", { minimumFractionDigits: n.dec ?? 0, maximumFractionDigits: n.dec ?? 0 })}${n.suf ?? ""}`;
+const attrs = (n: Num) => ({ "data-to": n.to, "data-j": n.j ?? 0, "data-max": n.max ?? "", "data-dec": n.dec ?? 0, "data-pre": n.pre ?? "", "data-suf": n.suf ?? "" });
+---
+
+<section class="hero surface-night relative overflow-hidden" aria-labelledby="hero-title">
+  <div class="container-page hero__grid">
+    <div class="hero__copy">
+      <h1 id="hero-title" class="hero__h1">
+        Resolvemos con software los problemas operativos de <span class="display-accent">tu empresa.</span>
+      </h1>
+      <p class="hero__lead">
+        Inventario, procesos, automatizaciones, monitoreo, KPIs e informes. Lo construimos a la medida del problema
+        puntual de tu PyME: ni más ni menos.
+      </p>
+      <div class="hero__actions">
+        <a href="/contacto?servicio=Diagn%C3%B3stico%20gratis" class="btn-sunset">
+          Contanos el problema <span aria-hidden="true">→</span>
+        </a>
+        <a href="#problemas" class="hero__link">Qué resolvemos <span aria-hidden="true">↓</span></a>
+      </div>
+      <p class="hero__by">
+        Diagnóstico gratis de 30 minutos con {site.name} y equipo · {site.location}
+      </p>
+    </div>
+
+    <figure class="board" data-board aria-label="Ejemplo ilustrativo de un tablero de gestión con KPIs a elección">
+      <svg class="board__spark board__spark--a" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0 14 10 24 12 14 14 12 24 10 14 0 12 10 10Z" /></svg>
+      <svg class="board__spark board__spark--b" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0 14 10 24 12 14 14 12 24 10 14 0 12 10 10Z" /></svg>
+      <svg class="board__spark board__spark--c" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0 14 10 24 12 14 14 12 24 10 14 0 12 10 10Z" /></svg>
+
+      <span class="board__bot"><Robot pose="carry" spin="entrance" drop size={84} /></span>
+
+      <div class="board__inner">
+        <span class="board__sheen" aria-hidden="true"></span>
+
+        <figcaption class="board__cap">
+          <span class="board__brand">
+            <svg viewBox="0 0 24 24" aria-hidden="true" class="board__gem">
+              <path d="M6 3h12l4 6-10 12L2 9z" />
+              <path d="M2 9h20M9 3 7.5 9 12 21l4.5-12L15 3" />
+            </svg>
+            Tablero de operación
+          </span>
+          <span class="board__live"><i aria-hidden="true"></i>Ejemplo ilustrativo</span>
+        </figcaption>
+
+        <p class="board__pick" id="board-pick">KPIs a la carta: elegí qué medir</p>
+        <div class="board__tabs" role="tablist" aria-labelledby="board-pick">
+          {
+            vistas.map((v, i) => (
+              <button
+                type="button"
+                role="tab"
+                id={`tab-${v.id}`}
+                class="board__tab"
+                aria-selected={i === 0 ? "true" : "false"}
+                aria-controls={`panel-${v.id}`}
+                tabindex={i === 0 ? 0 : -1}
+              >
+                {v.tab}
+                <span class="board__tab-bar" aria-hidden="true"></span>
+              </button>
+            ))
+          }
+        </div>
+
+        <div class="board__panels">
+          {
+            vistas.map((v, i) => {
+              const max = Math.max(v.bars.antes.to, v.bars.ahora.to);
+              return (
+                <div
+                  class="board__panel"
+                  role="tabpanel"
+                  id={`panel-${v.id}`}
+                  aria-labelledby={`tab-${v.id}`}
+                  hidden={i !== 0}
+                >
+                  <p class="board__main">
+                    <strong><span data-count {...attrs(v.main)}>{fmt(v.main)}</span>{v.main.j ? <span class="board__delta" aria-hidden="true"><svg viewBox="0 0 10 10"><path d="M5 1 9.5 9h-9z" /></svg><span class="board__delta-v" /></span> : null}</strong>
+                    <span>{v.main.label}</span>
+                  </p>
+
+                  <div class="board__chart" data-chart aria-hidden="true">
+                    <svg viewBox="0 0 300 64" preserveAspectRatio="none">
+                      <defs>
+                        <linearGradient id={`fill-${v.id}`} x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="0" stop-color="#FFD24A" stop-opacity="0.32" />
+                          <stop offset="1" stop-color="#FFD24A" stop-opacity="0" />
+                        </linearGradient>
+                      </defs>
+                      <line class="board__chart-base" x1="0" x2="300" y1="32" y2="32" />
+                      <g class="board__chart-g">
+                        <path class="board__chart-area" fill={`url(#fill-${v.id})`} />
+                        <path class="board__chart-line" />
+                      </g>
+                    </svg>
+                    <span class="board__chart-dot"></span>
+                  </div>
+
+                  <dl class="board__side">
+                    {v.side.map((s) => (
+                      <div>
+                        <dt>{s.label}</dt>
+                        <dd><span data-count {...attrs(s)}>{fmt(s)}</span>{s.j ? <span class="board__delta" aria-hidden="true"><svg viewBox="0 0 10 10"><path d="M5 1 9.5 9h-9z" /></svg><span class="board__delta-v" /></span> : null}</dd>
+                      </div>
+                    ))}
+                  </dl>
+
+                  <div class="board__bars">
+                    <p class="board__bars-t">{v.bars.label}</p>
+                    <div class="board__bar board__bar--antes">
+                      <span class="board__bar-k">Antes</span>
+                      <span class="board__bar-track">
+                        <span class="board__bar-fill" style={`--v:${(v.bars.antes.to / max).toFixed(3)}`} />
+                      </span>
+                      <span class="board__bar-v">{fmt(v.bars.antes)}</span>
+                    </div>
+                    <div class="board__bar board__bar--ahora">
+                      <span class="board__bar-k">Con el sistema</span>
+                      <span class="board__bar-track">
+                        <span class="board__bar-fill" style={`--v:${Math.max(v.bars.ahora.to / max, 0.02).toFixed(3)}`} />
+                      </span>
+                      <span class="board__bar-v">{fmt(v.bars.ahora)}</span>
+                    </div>
+                  </div>
+
+                  <ul class="board__feed" data-alerts={JSON.stringify(v.alerts)}>
+                    {[0, 1, 2].map((k) => (
+                      <li class="board__feed-row">
+                        <span class="board__feed-t">{v.alerts[k]}</span>
+                        <span class="board__feed-ago">{k === 0 ? "ahora" : `hace ${k * 5} s`}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              );
+            })
+          }
+        </div>
+      </div>
+    </figure>
+  </div>
+
+  <div class="container-page">
+    <ul class="hero__areas" aria-label="Áreas que resolvemos">
+      {areas.map((a) => <li>{a}</li>)}
+    </ul>
+  </div>
+</section>
+
+<script>
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const easeOut = (t: number) => 1 - Math.pow(2, -10 * t);
+  const TICK_MS = 2400;
+  const ALERT_EVERY = 2; // el feed avanza cada 2 ticks
+
+  const render = (el: HTMLElement, v: number) => {
+    const dec = Number(el.dataset.dec);
+    el.textContent = `${el.dataset.pre}${v.toLocaleString("es-AR", { minimumFractionDigits: dec, maximumFractionDigits: dec })}${el.dataset.suf}`;
+  };
+
+  // Anima una cifra de su valor actual a `to`
+  function tween(el: HTMLElement, from: number, to: number, dur: number) {
+    el.dataset.cur = String(to);
+    if (reduce) return render(el, to);
+    const t0 = performance.now();
+    const step = (now: number) => {
+      // El timestamp de rAF puede ser anterior a t0: sin el piso en 0, easeOut(p<0) se dispara.
+      const p = Math.max(0, Math.min(1, (now - t0) / dur));
+      render(el, from + (to - from) * easeOut(p));
+      if (p < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  }
+
+  function countUp(panel: HTMLElement) {
+    panel.querySelectorAll<HTMLElement>("[data-count]").forEach((el) => {
+      const base = Number(el.dataset.to);
+      tween(el, 0, el.dataset.cur ? Number(el.dataset.cur) : base, 900);
+    });
+  }
+
+  // Variación en vivo alrededor del valor base. Devuelve el valor actual.
+  function moveValue(el: HTMLElement) {
+    const base = Number(el.dataset.to);
+    const j = Number(el.dataset.j);
+    const dec = Number(el.dataset.dec);
+    const max = el.dataset.max ? Number(el.dataset.max) : Infinity;
+    const cur = el.dataset.cur ? Number(el.dataset.cur) : base;
+    // Paseo aleatorio con tirón hacia la base: se lee como tendencia, no como ruido
+    let next = cur + (Math.random() * 2 - 1) * j * 1.4 + (base - cur) * 0.25;
+    next = Math.min(max, base + 2 * j, Math.max(0, base - 2 * j, Number(next.toFixed(dec))));
+    next = Number(next.toFixed(dec));
+    if (next === cur) next = Number((cur + (cur <= base ? j : -j) * 0.5).toFixed(dec)) || cur;
+    if (next === cur) return cur;
+    tween(el, cur, next, 650);
+    showDelta(el, next - cur);
+    el.classList.remove("is-tick");
+    void el.offsetWidth;
+    el.classList.add("is-tick");
+    return next;
+  }
+
+  // Cada tick: la cifra principal siempre se mueve (y alimenta el gráfico); a veces, también una secundaria
+  function liveTick(panel: HTMLElement) {
+    const main = panel.querySelector<HTMLElement>(".board__main [data-count]");
+    if (main && Number(main.dataset.j) > 0) pushChart(panel, moveValue(main));
+    const side = Array.from(panel.querySelectorAll<HTMLElement>(".board__side [data-count]")).filter((el) => Number(el.dataset.j) > 0);
+    if (side.length && Math.random() < 0.6) moveValue(side[Math.floor(Math.random() * side.length)]);
+  }
+
+  /* ---------- Gráfico de tendencia en vivo ----------
+     N+1 puntos: el último entra desde la derecha. Tras cada deslizamiento se redibuja
+     con el primer punto descartado y el grupo vuelve a 0 sin transición: el corte no se ve. */
+  const N = 24;
+  const W = 300;
+  const H = 64;
+  const STEP = W / (N - 1);
+  interface Chart { data: number[]; lo: number; hi: number; g: SVGGElement; line: SVGPathElement; area: SVGPathElement; dot: HTMLElement; box: HTMLElement }
+  const charts = new WeakMap<HTMLElement, Chart>();
+
+  const yOf = (c: Chart, v: number) => 6 + (1 - (v - c.lo) / (c.hi - c.lo)) * (H - 12);
+
+  function drawChart(c: Chart) {
+    const pts = c.data.map((v, i) => [i * STEP, yOf(c, v)]);
+    let d = `M${pts[0][0]},${pts[0][1].toFixed(2)}`;
+    for (let i = 0; i < pts.length - 1; i++) {
+      const p0 = pts[i - 1] ?? pts[i], p1 = pts[i], p2 = pts[i + 1], p3 = pts[i + 2] ?? p2;
+      const c1x = p1[0] + (p2[0] - p0[0]) / 6, c1y = p1[1] + (p2[1] - p0[1]) / 6;
+      const c2x = p2[0] - (p3[0] - p1[0]) / 6, c2y = p2[1] - (p3[1] - p1[1]) / 6;
+      d += ` C${c1x.toFixed(2)},${c1y.toFixed(2)} ${c2x.toFixed(2)},${c2y.toFixed(2)} ${p2[0].toFixed(2)},${p2[1].toFixed(2)}`;
+    }
+    c.line.setAttribute("d", d);
+    c.area.setAttribute("d", `${d} L${pts[pts.length - 1][0].toFixed(2)},${H} L0,${H} Z`);
+  }
+
+  function placeDot(c: Chart, animate: boolean) {
+    const y = (yOf(c, c.data[c.data.length - 1]) / H) * c.box.clientHeight;
+    c.dot.style.transition = animate ? "" : "none";
+    c.dot.style.transform = `translate3d(0, ${y.toFixed(1)}px, 0)`;
+  }
+
+  function slide(c: Chart, animate: boolean) {
+    c.g.style.transition = "none";
+    c.g.style.transform = animate ? "translateX(0px)" : `translateX(${-STEP}px)`;
+    if (!animate) return;
+    c.g.getBoundingClientRect();
+    c.g.style.transition = "";
+    c.g.style.transform = `translateX(${-STEP}px)`;
+  }
+
+  function initChart(panel: HTMLElement) {
+    const box = panel.querySelector<HTMLElement>("[data-chart]");
+    const main = panel.querySelector<HTMLElement>(".board__main [data-count]");
+    if (!box || !main) return;
+    const base = Number(main.dataset.to);
+    const j = Number(main.dataset.j) || Math.max(1, base * 0.02);
+    const c: Chart = {
+      data: [],
+      lo: base - 2.4 * j,
+      hi: base + 2.4 * j,
+      g: box.querySelector("g")!,
+      line: box.querySelector(".board__chart-line")!,
+      area: box.querySelector(".board__chart-area")!,
+      dot: box.querySelector(".board__chart-dot")!,
+      box,
+    };
+    let v = base;
+    for (let i = 0; i <= N; i++) {
+      v = Math.min(base + 2 * j, Math.max(base - 2 * j, v + (Math.random() * 2 - 1) * j * 1.2 + (base - v) * 0.2));
+      c.data.push(v);
+    }
+    c.data[N] = base;
+    box.querySelector(".board__chart-base")!.setAttribute("y1", yOf(c, base).toFixed(2));
+    box.querySelector(".board__chart-base")!.setAttribute("y2", yOf(c, base).toFixed(2));
+    charts.set(panel, c);
+    drawChart(c);
+    slide(c, false);
+    box.classList.add("is-ready");
+  }
+
+  function pushChart(panel: HTMLElement, v: number) {
+    const c = charts.get(panel);
+    if (!c) return;
+    c.data.shift();
+    c.data.push(v);
+    drawChart(c);
+    slide(c, !reduce);
+    placeDot(c, !reduce);
+  }
+
+  /* ---------- Feed de eventos ---------- */
+  interface Feed { list: string[]; idx: number; times: number[]; ul: HTMLElement; rows: HTMLElement[] }
+  const feeds = new WeakMap<HTMLElement, Feed>();
+
+  const ago = (ms: number) => {
+    const s = Math.round(ms / 1000);
+    return s < 3 ? "ahora" : s < 60 ? `hace ${s} s` : `hace ${Math.round(s / 60)} min`;
+  };
+
+  function initFeed(panel: HTMLElement) {
+    const ul = panel.querySelector<HTMLElement>("[data-alerts]");
+    if (!ul) return;
+    const now = Date.now();
+    feeds.set(panel, {
+      list: JSON.parse(ul.dataset.alerts || "[]"),
+      idx: 2,
+      times: [now, now - 5000, now - 10000],
+      ul,
+      rows: Array.from(ul.querySelectorAll<HTMLElement>(".board__feed-row")),
+    });
+  }
+
+  function refreshAgo(panel: HTMLElement) {
+    const f = feeds.get(panel);
+    if (!f) return;
+    const now = Date.now();
+    f.rows.forEach((r, i) => (r.querySelector(".board__feed-ago")!.textContent = ago(now - f.times[i])));
+  }
+
+  function nextAlert(panel: HTMLElement) {
+    const f = feeds.get(panel);
+    if (!f || f.list.length < 2) return;
+    f.idx = (f.idx + 1) % f.list.length;
+    f.times.unshift(Date.now());
+    f.times.length = f.rows.length;
+    for (let i = f.rows.length - 1; i > 0; i--) {
+      f.rows[i].querySelector(".board__feed-t")!.textContent = f.rows[i - 1].querySelector(".board__feed-t")!.textContent;
+    }
+    f.rows[0].querySelector(".board__feed-t")!.textContent = f.list[f.idx];
+    refreshAgo(panel);
+    f.ul.classList.remove("is-push");
+    void f.ul.offsetWidth;
+    f.ul.classList.add("is-push");
+  }
+
+  // Muestra ▲/▼ con la diferencia junto a la cifra
+  function showDelta(el: HTMLElement, diff: number) {
+    const d = el.nextElementSibling as HTMLElement | null;
+    const v = d?.querySelector<HTMLElement>(".board__delta-v");
+    if (!d || !v) return;
+    const dec = Number(el.dataset.dec);
+    v.textContent = (diff > 0 ? "+" : "−") + Math.abs(diff).toLocaleString("es-AR", { minimumFractionDigits: dec, maximumFractionDigits: dec });
+    d.classList.toggle("is-up", diff > 0);
+    d.classList.toggle("is-down", diff < 0);
+    d.classList.remove("is-on");
+    void d.offsetWidth;
+    d.classList.add("is-on");
+  }
+
+  function initBoard(board: HTMLElement) {
+    if (board.dataset.ready) return;
+    board.dataset.ready = "1";
+    const tabs = Array.from(board.querySelectorAll<HTMLButtonElement>('[role="tab"]'));
+    const panels = tabs.map((t) => board.querySelector<HTMLElement>(`#${t.getAttribute("aria-controls")}`)!);
+    let current = 0;
+
+    const select = (i: number, focus = false) => {
+      tabs.forEach((t, j) => {
+        const on = j === i;
+        t.setAttribute("aria-selected", on ? "true" : "false");
+        t.tabIndex = on ? 0 : -1;
+        panels[j].hidden = !on;
+      });
+      current = i;
+      if (focus) tabs[i].focus();
+      countUp(panels[i]);
+      const c = charts.get(panels[i]);
+      if (c) placeDot(c, false);
+      refreshAgo(panels[i]);
+    };
+
+    panels.forEach((p) => {
+      initChart(p);
+      initFeed(p);
+    });
+    const c0 = charts.get(panels[0]);
+    if (c0) placeDot(c0, false);
+
+    // Rotación automática: la barra de la pestaña activa marca el tiempo; al terminar, pasa a la siguiente.
+    // Se detiene para siempre cuando el visitante elige una vista.
+    const stopAuto = () => board.classList.add("is-manual");
+    tabs.forEach((t, i) => {
+      t.addEventListener("click", () => {
+        stopAuto();
+        if (i !== current) select(i);
+      });
+      t.addEventListener("keydown", (e) => {
+        const k = e.key;
+        let n = -1;
+        if (k === "ArrowRight") n = (current + 1) % tabs.length;
+        else if (k === "ArrowLeft") n = (current - 1 + tabs.length) % tabs.length;
+        else if (k === "Home") n = 0;
+        else if (k === "End") n = tabs.length - 1;
+        if (n < 0) return;
+        e.preventDefault();
+        stopAuto();
+        select(n, true);
+      });
+      t.querySelector(".board__tab-bar")!.addEventListener("animationend", () => {
+        if (!board.classList.contains("is-manual") && i === current) select((current + 1) % tabs.length);
+      });
+    });
+
+    if (reduce) stopAuto();
+
+    // Fuera de pantalla o con la pestaña oculta: todo en pausa (animaciones CSS y ticks en vivo).
+    let visible = false;
+    const paused = () => !visible || document.hidden;
+    const sync = () => board.classList.toggle("is-paused", paused());
+    new IntersectionObserver(([e]) => {
+      const first = !visible && e.isIntersecting && !board.dataset.counted;
+      visible = e.isIntersecting;
+      sync();
+      if (first) {
+        board.dataset.counted = "1";
+        countUp(panels[current]);
+      }
+    }, { threshold: 0.25 }).observe(board);
+    document.addEventListener("visibilitychange", sync);
+    sync();
+
+    if (!reduce) {
+      let n = 0;
+      const id = window.setInterval(() => {
+        if (!board.isConnected) return window.clearInterval(id);
+        if (paused()) return;
+        n++;
+        liveTick(panels[current]);
+        if (n % ALERT_EVERY === 0) nextAlert(panels[current]);
+        else refreshAgo(panels[current]);
+      }, TICK_MS);
+    }
+  }
+
+  document.addEventListener("astro:page-load", () => {
+    document.querySelectorAll<HTMLElement>("[data-board]").forEach(initBoard);
+  });
+</script>
+
+<style>
+  .hero {
+    --gold: var(--color-neon);
+    --gold-deep: #c8a24e;
+    --ice: #e8f1ff;
+    --ice-dim: #b9c8e2;
+    padding-block: clamp(3.5rem, 8vw, 6.5rem) clamp(2.5rem, 5vw, 4rem);
+    background:
+      radial-gradient(900px 480px at 85% 0%, rgba(27, 43, 92, 0.85), transparent 70%),
+      linear-gradient(180deg, var(--color-navy-900) 0%, var(--color-navy-950) 100%);
+  }
+  .hero__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 3rem;
+    align-items: center;
+  }
+  @media (min-width: 1024px) {
+    .hero__grid { grid-template-columns: minmax(0, 6fr) minmax(0, 5fr); gap: 4rem; }
+  }
+  .hero__h1 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(2.25rem, 1.3rem + 4.2vw, 4.5rem);
+    line-height: 1;
+    letter-spacing: -0.04em;
+    color: var(--color-ivory);
+    text-wrap: balance;
+    max-width: 18ch;
+  }
+  .hero__lead {
+    margin-top: 1.5rem;
+    max-width: 52ch;
+    font-size: clamp(1.0625rem, 1rem + 0.4vw, 1.25rem);
+    line-height: 1.55;
+    color: var(--color-ivory-dim);
+    text-wrap: pretty;
+  }
+  .hero__actions {
+    margin-top: 2.25rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem 1.75rem;
+  }
+  .hero__actions .btn-sunset { background: var(--gold); box-shadow: none; }
+  .hero__link {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--color-ivory);
+    border-bottom: 1px solid rgba(246, 241, 228, 0.38);
+    padding-bottom: 0.25rem;
+    transition: color 200ms, border-color 200ms;
+  }
+  .hero__link:hover { color: var(--gold); border-color: var(--gold); }
+  .hero__by { margin-top: 1.5rem; font-size: 0.875rem; color: #a9aec4; }
+
+  /* ---------- Tablero: oro + diamante ---------- */
+  .board {
+    position: relative;
+    margin: 0;
+    padding: 1px;
+    border-radius: 20px;
+    /* Filo facetado: oro -> hielo -> oro, estático */
+    background: linear-gradient(
+      135deg,
+      rgba(255, 210, 74, 0.85) 0%,
+      rgba(232, 241, 255, 0.55) 22%,
+      rgba(200, 162, 78, 0.25) 45%,
+      rgba(232, 241, 255, 0.7) 68%,
+      rgba(255, 210, 74, 0.6) 100%
+    );
+    box-shadow:
+      0 40px 80px -40px rgba(3, 7, 20, 0.95),
+      0 18px 40px -24px rgba(200, 162, 78, 0.35);
+  }
+  /* Mascota: entra rodando por el borde superior del tablero y deja el paquete adentro */
+  .board__bot {
+    position: absolute;
+    right: 32px;
+    bottom: calc(100% - 10px);
+    z-index: 4;
+    --bot-line: #f6f1e4;
+    animation: bot-arrive 2.7s var(--ease-out-quart) 0.6s both;
+  }
+  @keyframes bot-arrive {
+    from { transform: translateX(-240px); opacity: 0; }
+    15% { opacity: 1; }
+    to { transform: none; opacity: 1; }
+  }
+  @media (max-width: 1023px) { .board { margin-top: 1.75rem; } }
+  @media (prefers-reduced-motion: reduce) { .board__bot { animation: none; } }
+
+  .board__inner {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    border-radius: 19px;
+    padding: clamp(1.1rem, 0.8rem + 1vw, 1.5rem);
+    background:
+      radial-gradient(420px 220px at 100% 0%, rgba(232, 241, 255, 0.08), transparent 70%),
+      radial-gradient(380px 260px at 0% 100%, rgba(255, 210, 74, 0.07), transparent 70%),
+      linear-gradient(180deg, #0d1736 0%, #08102a 100%);
+  }
+  /* Facetas: patrón de triángulos casi invisible, estático */
+  .board__inner::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    opacity: 0.5;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='72' height='72' viewBox='0 0 72 72'%3E%3Cpath d='M0 0L36 36L72 0M0 72L36 36L72 72M36 0V72M0 36H72' fill='none' stroke='%23E8F1FF' stroke-opacity='0.045'/%3E%3C/svg%3E");
+    -webkit-mask-image: linear-gradient(160deg, #000 0%, transparent 75%);
+    mask-image: linear-gradient(160deg, #000 0%, transparent 75%);
+  }
+  /* Brillo de diamante: una banda que cruza el tablero (solo transform) */
+  .board__sheen {
+    position: absolute;
+    inset: -20% auto -20% 0;
+    width: 55%;
+    z-index: 2;
+    pointer-events: none;
+    background: linear-gradient(
+      100deg,
+      transparent 0%,
+      rgba(232, 241, 255, 0.07) 38%,
+      rgba(255, 255, 255, 0.16) 48%,
+      rgba(255, 222, 130, 0.12) 54%,
+      transparent 70%
+    );
+    transform: translate3d(-120%, 0, 0) skewX(-12deg);
+    animation: sheen 7s cubic-bezier(0.45, 0, 0.2, 1) 1.2s infinite;
+  }
+  @keyframes sheen {
+    0% { transform: translate3d(-120%, 0, 0) skewX(-12deg); }
+    28%, 100% { transform: translate3d(260%, 0, 0) skewX(-12deg); }
+  }
+
+  /* Destellos de 4 puntas sobre el filo */
+  .board__spark {
+    position: absolute;
+    z-index: 3;
+    width: 14px;
+    height: 14px;
+    fill: var(--ice);
+    filter: drop-shadow(0 0 6px rgba(232, 241, 255, 0.8));
+    opacity: 0;
+    transform: scale(0.3) rotate(0deg);
+    animation: twinkle 5.5s var(--ease-out-expo) infinite;
+    pointer-events: none;
+  }
+  .board__spark--a { top: -6px; left: 18%; animation-delay: 1.6s; }
+  .board__spark--b { top: 34%; right: -7px; width: 10px; height: 10px; fill: var(--gold); animation-delay: 3.4s; }
+  .board__spark--c { bottom: -5px; left: 62%; width: 11px; height: 11px; animation-delay: 4.6s; }
+  @keyframes twinkle {
+    0%, 70%, 100% { opacity: 0; transform: scale(0.3) rotate(0deg); }
+    78% { opacity: 1; transform: scale(1) rotate(45deg); }
+    90% { opacity: 0; transform: scale(0.5) rotate(90deg); }
+  }
+
+  .board__cap {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--ice-dim);
+    padding-bottom: 0.9rem;
+    border-bottom: 1px solid rgba(232, 241, 255, 0.1);
+  }
+  .board__brand, .board__live { white-space: nowrap; }
+  .board__brand { display: inline-flex; align-items: center; gap: 0.55rem; color: var(--color-ivory); }
+  .board__gem { width: 16px; height: 16px; fill: none; stroke: var(--gold); stroke-width: 1.4; stroke-linejoin: round; }
+  .board__live { display: inline-flex; align-items: center; gap: 0.45rem; }
+  .board__live i {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--gold);
+    animation: live 2.4s ease-in-out infinite;
+  }
+  @keyframes live { 50% { opacity: 0.25; } }
+
+  .board__pick {
+    margin: 1.1rem 0 0.6rem;
+    font-size: 0.8rem;
+    color: var(--ice-dim);
+  }
+  .board__tabs {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0.35rem;
+    padding: 0.3rem;
+    border-radius: 12px;
+    background: rgba(232, 241, 255, 0.04);
+    border: 1px solid rgba(232, 241, 255, 0.08);
+  }
+  .board__tab {
+    position: relative;
+    overflow: hidden;
+    min-height: 2.5rem;
+    padding: 0.5rem 0.25rem;
+    border-radius: 9px;
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--ice-dim);
+    cursor: pointer;
+    transition: color 200ms, background-color 250ms var(--ease-out-quart);
+  }
+  .board__tab:hover { color: var(--color-ivory); background-color: rgba(232, 241, 255, 0.07); }
+  .board__tab[aria-selected="true"] {
+    color: var(--color-navy-950);
+    background: linear-gradient(180deg, #ffe08a 0%, var(--gold) 55%, #e2b53c 100%);
+    font-weight: 700;
+  }
+  .board__tab:focus-visible { outline: 2px solid var(--ice); outline-offset: 2px; }
+  .board__tab:active { transform: translateY(1px); }
+  /* Barra de tiempo de la rotación: solo transform */
+  .board__tab-bar {
+    position: absolute;
+    left: 10%;
+    right: 10%;
+    bottom: 4px;
+    height: 2px;
+    border-radius: 2px;
+    background: rgba(8, 16, 42, 0.55);
+    transform: scaleX(0);
+    transform-origin: left;
+  }
+  .board__tab[aria-selected="true"] .board__tab-bar { animation: tab-timer 5s linear forwards; }
+  .board.is-manual .board__tab-bar { animation: none !important; transform: scaleX(0); }
+  @keyframes tab-timer { to { transform: scaleX(1); } }
+
+  .board__panels { margin-top: 1.25rem; }
+  .board__panel { animation: panel-in 520ms var(--ease-out-expo) both; }
+  @keyframes panel-in {
+    from { opacity: 0; transform: translate3d(0, 8px, 0); }
+  }
+
+  .board__main { display: flex; flex-direction: column; gap: 0.35rem; }
+  .board__main strong {
+    font-family: var(--font-mono);
+    font-size: clamp(2.4rem, 1.6rem + 2.6vw, 3.4rem);
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+    color: var(--gold);
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.12);
+  }
+  .board__main > span { font-size: 0.9rem; color: var(--color-ivory-dim); }
+
+  .board__side {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.6rem;
+    margin: 1.1rem 0 0;
+  }
+  .board__side > div {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 0.25rem;
+    padding: 0.7rem 0.8rem;
+    border-radius: 10px;
+    background: rgba(232, 241, 255, 0.045);
+    border: 1px solid rgba(232, 241, 255, 0.07);
+  }
+  .board__side dt { font-size: 0.75rem; line-height: 1.3; color: var(--ice-dim); }
+  .board__side dd {
+    order: -1;
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: 1.35rem;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    font-variant-numeric: tabular-nums;
+    color: var(--ice);
+  }
+
+  .board__bars { margin-top: 1.1rem; display: grid; gap: 0.5rem; }
+  .board__bars-t { font-size: 0.75rem; color: var(--ice-dim); margin-bottom: 0.15rem; }
+  .board__bar {
+    display: grid;
+    grid-template-columns: 6.5rem minmax(0, 1fr) 3.6rem;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.75rem;
+  }
+  .board__bar-k { color: var(--color-ivory-dim); }
+  .board__bar-track {
+    height: 8px;
+    border-radius: 4px;
+    background: rgba(232, 241, 255, 0.06);
+    overflow: hidden;
+  }
+  .board__bar-fill {
+    display: block;
+    height: 100%;
+    border-radius: 4px;
+    transform-origin: left;
+    transform: scaleX(var(--v));
+    animation: bar-grow 1100ms var(--ease-out-expo) 120ms both;
+  }
+  @keyframes bar-grow { from { transform: scaleX(0); } }
+  /* Cifra que cambia en vivo: sube un poco y destella (transform/opacity + color) */
+  [data-count] { display: inline-block; }
+  .is-tick { animation: tick 650ms var(--ease-out-expo); }
+  @keyframes tick {
+    0% { transform: translate3d(0, 5px, 0); opacity: 0.55; color: #fff1c2; }
+    100% { transform: none; opacity: 1; }
+  }
+  /* Variación del último tick: aparece junto a la cifra y se desvanece */
+  .board__delta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    margin-left: 0.55rem;
+    vertical-align: middle;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0;
+    line-height: 1;
+    padding: 0.25rem 0.4rem;
+    border-radius: 6px;
+    opacity: 0;
+    pointer-events: none;
+  }
+  .board__delta svg { width: 8px; height: 8px; fill: currentColor; }
+  .board__delta.is-up { color: var(--gold); background: rgba(255, 210, 74, 0.12); }
+  .board__delta.is-down { color: var(--ice); background: rgba(232, 241, 255, 0.1); }
+  .board__delta.is-down svg { transform: rotate(180deg); }
+  .board__delta.is-on { animation: delta 2.2s var(--ease-out-expo) both; }
+  @keyframes delta {
+    0% { opacity: 0; transform: translate3d(0, 4px, 0); }
+    14%, 72% { opacity: 1; transform: none; }
+    100% { opacity: 0; transform: none; }
+  }
+  .board__side dd .board__delta { font-size: 0.7rem; margin-left: 0.4rem; }
+
+  /* Gráfico de tendencia: el grupo se desliza (transform), el punto sigue al último valor */
+  .board__chart {
+    position: relative;
+    height: 64px;
+    margin-top: 1rem;
+    visibility: hidden;
+  }
+  .board__chart.is-ready { visibility: visible; }
+  .board__chart svg { display: block; width: 100%; height: 100%; overflow: hidden; }
+  .board__chart-g { transition: transform 700ms var(--ease-out-expo); }
+  .board__chart-line {
+    fill: none;
+    stroke: var(--gold);
+    stroke-width: 2;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+    vector-effect: non-scaling-stroke;
+  }
+  .board__chart-base {
+    stroke: rgba(232, 241, 255, 0.22);
+    stroke-width: 1;
+    stroke-dasharray: 3 4;
+    vector-effect: non-scaling-stroke;
+  }
+  .board__chart-dot {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #fff6d6;
+    box-shadow: 0 0 0 3px rgba(255, 210, 74, 0.35), 0 2px 10px rgba(255, 210, 74, 0.55);
+    transition: transform 700ms var(--ease-out-expo);
+  }
+  .board__chart-dot::after {
+    content: "";
+    position: absolute;
+    inset: -6px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 210, 74, 0.7);
+    animation: ping 2.4s var(--ease-out-expo) infinite;
+  }
+  @keyframes ping {
+    0% { transform: scale(0.4); opacity: 1; }
+    100% { transform: scale(1.6); opacity: 0; }
+  }
+
+  /* Feed: el evento nuevo entra arriba y empuja al resto */
+  .board__feed {
+    --row: 2.25rem;
+    list-style: none;
+    margin: 1.1rem 0 0;
+    padding: 0;
+    height: calc(var(--row) * 3);
+    overflow: hidden;
+    border-top: 1px solid rgba(232, 241, 255, 0.1);
+    -webkit-mask-image: linear-gradient(180deg, #000 60%, transparent 100%);
+    mask-image: linear-gradient(180deg, #000 60%, transparent 100%);
+  }
+  .board__feed.is-push { animation: feed-push 600ms var(--ease-out-expo); }
+  @keyframes feed-push { from { transform: translate3d(0, calc(var(--row) * -1), 0); } }
+  .board__feed-row {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    height: var(--row);
+    padding-left: 1.1rem;
+    font-size: 0.85rem;
+    color: var(--color-ivory-dim);
+  }
+  .board__feed-row::before {
+    content: "";
+    position: absolute;
+    left: 1px;
+    top: 50%;
+    width: 6px;
+    height: 6px;
+    margin-top: -3px;
+    background: rgba(232, 241, 255, 0.35);
+    transform: rotate(45deg);
+  }
+  .board__feed-row:first-child { color: var(--color-ivory); }
+  .board__feed-row:first-child::before { background: var(--gold); }
+  .board__feed.is-push .board__feed-row:first-child { animation: feed-new 900ms var(--ease-out-expo); }
+  @keyframes feed-new {
+    0% { opacity: 0; color: #fff1c2; }
+    100% { opacity: 1; }
+  }
+  .board__feed-t { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .board__feed-ago {
+    flex: none;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-variant-numeric: tabular-nums;
+    color: var(--ice-dim);
+  }
+  .board__bar--antes .board__bar-fill { background: rgba(185, 200, 226, 0.4); }
+  .board__bar--ahora .board__bar-fill { background: linear-gradient(90deg, var(--gold-deep), var(--gold) 70%, #fff1c2); }
+  .board__bar-v {
+    text-align: right;
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    color: var(--color-ivory);
+  }
+  .board__bar--ahora .board__bar-v { color: var(--gold); font-weight: 700; }
+
+  /* Pausa: fuera de pantalla o pestaña oculta */
+  .board.is-paused .board__chart-dot::after,
+  .board.is-paused .board__sheen,
+  .board.is-paused .board__spark,
+  .board.is-paused .board__live i,
+  .board.is-paused .board__tab-bar { animation-play-state: paused; }
+
+  @media (max-width: 420px) {
+    .board__bar { grid-template-columns: 5.6rem minmax(0, 1fr) 3.2rem; }
+    .board__tab { font-size: 9.5px; letter-spacing: 0.08em; }
+    .board__cap { letter-spacing: 0.12em; font-size: 9.5px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .board__sheen,
+    .board__spark { display: none; }
+    .board__live i { animation: none; }
+    .board__panel { animation: panel-fade 200ms ease-out both; }
+    .board__bar-fill { animation: none; }
+    .is-tick, .board__delta.is-on, .board__feed.is-push, .board__feed-row { animation: none !important; }
+    .board__chart-dot::after { animation: none; display: none; }
+  }
+  @keyframes panel-fade { from { opacity: 0; } }
+
+  .hero__areas {
+    list-style: none;
+    margin: clamp(3rem, 6vw, 5rem) 0 0;
+    padding: 1.25rem 0 0;
+    border-top: 1px solid rgba(246, 241, 228, 0.14);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 2rem;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--color-ivory-dim);
+  }
+</style>

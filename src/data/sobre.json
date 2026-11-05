@@ -1,0 +1,17 @@
+{
+  "foto": "",
+  "rol": "Fundador · Arquitectura y desarrollo",
+  "frase": "Cada sistema que entregamos tiene un responsable con nombre y apellido: yo. Diseño la solución, la construyo con el equipo y respondo por ella después de la puesta en marcha.",
+  "datos": [
+    { "valor": "", "etiqueta": "años construyendo software" },
+    { "valor": "", "etiqueta": "sistemas en producción" },
+    { "valor": "", "etiqueta": "rubros atendidos" }
+  ],
+  "rubros": [],
+  "stack": [
+    { "area": "Sistemas web a medida", "para": "Paneles y apps internas que tu equipo usa desde la compu o el celular.", "tec": ["TypeScript", "Node.js", "Astro"] },
+    { "area": "Datos", "para": "Toda la información en un solo lugar, con historial y respaldos.", "tec": ["Bases de datos SQL", "Respaldos automáticos"] },
+    { "area": "Integraciones", "para": "Conectar lo que ya usás para cargar cada dato una sola vez.", "tec": ["APIs", "Webhooks", "Planillas"] },
+    { "area": "Automatización", "para": "Tareas que se ejecutan solas a la hora que corresponde.", "tec": ["Procesos programados", "Alertas por email y WhatsApp"] }
+  ]
+}

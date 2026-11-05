@@ -1,0 +1,192 @@
+---
+/* Cadena de trabajo de las mascotas: Planillas -> Sistema -> Tablero.
+   El robot navy junta datos de las planillas y los deposita en el sistema; el amigo dorado
+   los levanta y los acomoda en el tablero. Al cruzarse en el sistema se saludan.
+   Un solo ciclo de 9s para todo: las posiciones usan unidades del contenedor (cqw). */
+import Robot from "./Robot.astro";
+---
+
+<div class="relay" aria-hidden="true" data-track>
+  <svg class="relay__intake" viewBox="0 0 40 34">
+    <rect x="3" y="10" width="26" height="22" rx="2" transform="rotate(-8 16 21)" class="r-paper" />
+    <rect x="8" y="8" width="26" height="22" rx="2" transform="rotate(5 21 19)" class="r-paper" />
+    <path d="M13 15h14M13 20h14M13 25h9" class="r-line" transform="rotate(5 21 19)" />
+  </svg>
+
+  <svg class="relay__depot" viewBox="0 0 44 30">
+    <rect x="1" y="1" width="42" height="28" rx="5" class="r-box" />
+    <path d="M16 9h12l3 4.5-9 10-9-10z M13 13.5h18" class="r-gem" />
+  </svg>
+  <span class="relay__depot-flash"></span>
+
+  <svg class="relay__shelf" viewBox="0 0 56 46">
+    <rect x="1" y="1" width="54" height="44" rx="4" class="r-rack" />
+    <path d="M1 23h54" class="r-line" />
+    <rect x="6" y="28" width="14" height="12" rx="1.5" class="r-gold" />
+    <rect x="22" y="28" width="14" height="12" rx="1.5" class="r-gold" />
+    <rect x="6" y="6" width="14" height="12" rx="1.5" class="r-gold" />
+  </svg>
+  <span class="relay__shelf-flash"></span>
+
+  <span class="relay__b relay__b--1"><span class="relay__hop relay__hop--1"><Robot tone="navy" spin="loop" size={72} /></span></span>
+  <span class="relay__b relay__b--2"><span class="relay__hop relay__hop--2"><Robot tone="gold" spin="loop" size={72} /></span></span>
+
+  <span class="relay__pkt"></span>
+
+  <svg class="relay__hi" viewBox="0 0 24 24"><path d="M12 0 14 10 24 12 14 14 12 24 10 14 0 12 10 10Z" /></svg>
+
+  <span class="relay__lbl relay__lbl--a">Planillas</span>
+  <span class="relay__lbl relay__lbl--b">Sistema</span>
+  <span class="relay__lbl relay__lbl--c">Tablero</span>
+</div>
+
+<style>
+  .relay {
+    --T: 9s;
+    position: relative;
+    height: 110px;
+    margin-bottom: 1.75rem;
+    border-bottom: 1.5px dashed var(--color-hair-strong);
+    container-type: inline-size;
+  }
+
+  /* Escenografía */
+  .relay__intake { position: absolute; left: 0; bottom: 0; width: 40px; height: 34px; }
+  .relay__depot { position: absolute; left: calc(50% - 22px); bottom: 0; width: 44px; height: 30px; }
+  .relay__shelf { position: absolute; right: 0; bottom: 0; width: 56px; height: 46px; }
+  .r-paper { fill: var(--color-blanco); stroke: var(--color-ink); stroke-width: 1.4; }
+  .r-line { fill: none; stroke: var(--color-ink); stroke-width: 1.2; opacity: 0.55; }
+  .r-box { fill: #0f1a3a; stroke: var(--color-ink); stroke-width: 1.4; }
+  .r-gem { fill: none; stroke: #ffd24a; stroke-width: 1.4; stroke-linejoin: round; }
+  .r-rack { fill: var(--color-blanco); stroke: var(--color-ink); stroke-width: 1.4; }
+  .r-gold { fill: #f5c542; stroke: #0f1a3a; stroke-width: 1.2; }
+
+  .relay__depot-flash,
+  .relay__shelf-flash {
+    position: absolute;
+    bottom: 0;
+    border-radius: 6px;
+    box-shadow: 0 0 0 0 rgba(245, 197, 66, 0.7);
+    opacity: 0;
+    pointer-events: none;
+  }
+  .relay__depot-flash { left: calc(50% - 22px); width: 44px; height: 30px; animation: depot-flash var(--T) infinite; }
+  .relay__shelf-flash { right: 0; width: 56px; height: 46px; animation: shelf-flash var(--T) infinite; }
+  @keyframes depot-flash {
+    0%, 45% { opacity: 0; box-shadow: 0 0 0 0 rgba(245, 197, 66, 0.7); }
+    47% { opacity: 1; }
+    56%, 100% { opacity: 0; box-shadow: 0 0 0 10px rgba(245, 197, 66, 0); }
+  }
+  @keyframes shelf-flash {
+    0%, 91% { opacity: 0; box-shadow: 0 0 0 0 rgba(245, 197, 66, 0.7); }
+    93% { opacity: 1; }
+    100% { opacity: 0; box-shadow: 0 0 0 12px rgba(245, 197, 66, 0); }
+  }
+
+  .relay__lbl {
+    position: absolute;
+    bottom: -1.6rem;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-ink-soft);
+    white-space: nowrap;
+  }
+  .relay__lbl--a { left: 0; }
+  .relay__lbl--b { left: 50%; translate: -50% 0; }
+  .relay__lbl--c { right: 0; }
+
+  /* Robots: la capa externa se traslada, la interna salta (dos transform independientes) */
+  .relay__b { position: absolute; left: 0; bottom: -7px; }
+  .relay__hop { display: block; }
+
+  /* Navy: planillas -> sistema, deposita, vuelve vacío */
+  .relay__b--1 { animation: b1 var(--T) ease-in-out infinite; }
+  @keyframes b1 {
+    0%, 10% { transform: translateX(44px) scaleX(1); }
+    40%, 50% { transform: translateX(calc(50cqw - 88px)) scaleX(1); }
+    51% { transform: translateX(calc(50cqw - 88px)) scaleX(-1); }
+    80% { transform: translateX(44px) scaleX(-1); }
+    81%, 100% { transform: translateX(44px) scaleX(1); }
+  }
+  /* Dorado: vuelve vacío desde el tablero, espera, recibe, lleva y acomoda */
+  .relay__b--2 { animation: b2 var(--T) ease-in-out infinite; }
+  @keyframes b2 {
+    0% { transform: translateX(calc(100cqw - 122px)) scaleX(-1); }
+    30%, 55% { transform: translateX(calc(50cqw + 16px)) scaleX(-1); }
+    56% { transform: translateX(calc(50cqw + 16px)) scaleX(1); }
+    86%, 99% { transform: translateX(calc(100cqw - 122px)) scaleX(1); }
+    100% { transform: translateX(calc(100cqw - 122px)) scaleX(-1); }
+  }
+
+  /* Interacción en el sistema: el navy asiente al depositar, el dorado salta al recibir */
+  .relay__hop--1 { animation: nod var(--T) infinite; }
+  @keyframes nod {
+    0%, 41%, 49%, 100% { transform: none; }
+    44% { transform: translateY(-5px) rotate(-4deg); }
+    46% { transform: none; }
+  }
+  .relay__hop--2 { animation: hop var(--T) infinite; }
+  @keyframes hop {
+    0%, 50%, 60%, 100% { transform: none; }
+    53% { transform: translateY(-10px); }
+    56% { transform: none; }
+    58% { transform: translateY(-4px); }
+  }
+
+  /* Destello entre los dos al cruzarse */
+  .relay__hi {
+    position: absolute;
+    left: calc(50% - 8px);
+    top: 4px;
+    width: 16px;
+    height: 16px;
+    fill: #f5c542;
+    stroke: #0f1a3a;
+    stroke-width: 1;
+    opacity: 0;
+    animation: hi var(--T) var(--ease-out-expo) infinite;
+  }
+  @keyframes hi {
+    0%, 41% { opacity: 0; transform: scale(0.3) rotate(0deg); }
+    45% { opacity: 1; transform: scale(1.15) rotate(45deg); }
+    52% { opacity: 1; transform: scale(1) rotate(90deg) translateY(-3px); }
+    58%, 100% { opacity: 0; transform: scale(0.4) rotate(135deg) translateY(-8px); }
+  }
+
+  /* El paquete: viaja con el navy, queda en el sistema, viaja con el dorado y se acomoda en el tablero */
+  .relay__pkt {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 22px;
+    height: 17px;
+    border-radius: 3px;
+    background: #f5c542;
+    border: 1.6px solid #0f1a3a;
+    animation: pkt var(--T) ease-in-out infinite;
+  }
+  @keyframes pkt {
+    0% { transform: translate(69px, 76px); opacity: 0; }
+    8%, 10% { transform: translate(69px, 76px); opacity: 1; }
+    40% { transform: translate(calc(50cqw - 63px), 76px); opacity: 1; }
+    46%, 52% { transform: translate(calc(50cqw - 11px), 63px); opacity: 1; }
+    /* Mismos tramos que el robot dorado (56% -> 86%) para que viaje pegado a él */
+    55%, 56% { transform: translate(calc(50cqw + 41px), 76px); opacity: 1; }
+    86% { transform: translate(calc(100cqw - 97px), 76px); opacity: 1; }
+    92% { transform: translate(calc(100cqw - 39px), 47px); opacity: 1; }
+    97%, 100% { transform: translate(calc(100cqw - 39px), 47px); opacity: 0; }
+  }
+
+  .relay:not(.is-live) :is(.relay__b, .relay__hop, .relay__pkt, .relay__hi, .relay__depot-flash, .relay__shelf-flash) {
+    animation-play-state: paused;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .relay * { animation: none !important; }
+    .relay__b--1 { transform: translateX(calc(50cqw - 88px)); }
+    .relay__b--2 { transform: translateX(calc(50cqw + 16px)) scaleX(-1); }
+    .relay__pkt { transform: translate(calc(50cqw - 11px), 63px); }
+  }
+</style>
