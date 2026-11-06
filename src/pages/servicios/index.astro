@@ -1,193 +1,203 @@
 ---
 import Layout from "../../layouts/Layout.astro";
+import MapaOperacion from "../../components/MapaOperacion.astro";
+import AntesAhora from "../../components/AntesAhora.astro";
+import Metodo from "../../components/Metodo.astro";
 import servicios from "../../data/servicios.json";
 import site from "../../data/site.json";
 
+const sistema = servicios.find((s) => s.grupo === "sistema")!;
+const canales = servicios.filter((s) => s.grupo === "canal");
+
+const areas = ["Inventario", "Procesos", "Automatizaciones", "Monitoreo", "KPIs", "Informes", "Integraciones"];
+
 const faqsGenerales = [
   {
-    pregunta: "¿Cuánto cuesta una página web o una tienda online?",
+    pregunta: "¿Cuánto cuesta?",
     respuesta:
-      "Los precios de cada servicio son orientativos y marcan desde dónde arrancamos: página web de productos o servicios desde USD 300, página empresarial desde USD 400 y ecommerce desde USD 800. Son valores en USD y no incluyen hosting ni dominio. El valor final depende de lo que necesites y te lo pasamos por escrito antes de empezar.",
+      "Cada proyecto se cotiza aparte, porque depende del problema y del alcance. Después del diagnóstico gratis de 30 minutos te pasamos una propuesta cerrada por escrito: alcance, etapas, plazos y precio. Si algo cambia en el camino, se cotiza antes de hacerlo.",
   },
   {
-    pregunta: "¿Cuánto cuesta el software a medida?",
+    pregunta: "¿Puedo empezar por la web y sumar el sistema después?",
     respuesta:
-      "Depende de cada proyecto, por eso no tiene un precio fijo. Empezamos con una conversación para entender qué necesitás y después te pasamos una propuesta con alcance, etapas y presupuesto.",
+      "Sí. La página o la tienda se construyen pensando en conectarse después con pedidos, stock o facturación, así no hay que rehacer nada cuando des el siguiente paso.",
   },
   {
     pregunta: "¿Cuánto tarda?",
     respuesta:
-      "Cada servicio muestra un plazo orientativo. El tiempo real depende del alcance y de qué tan rápido nos pases textos, fotos y definiciones. Te confirmamos fechas en la propuesta.",
+      "Las webs tienen un plazo orientativo en cada servicio. El software a medida se entrega por etapas: cada parte entra en uso antes de empezar la siguiente. Te confirmamos fechas en la propuesta.",
   },
   {
     pregunta: "¿Y si no estoy seguro de qué necesito?",
     respuesta:
-      "Escribinos igual. Con una charla corta te orientamos hacia la opción que mejor te sirve, aunque no sea la más cara. Podés empezar por el diagnóstico gratis de 30 minutos.",
+      "Escribinos igual. En el diagnóstico gratis de 30 minutos vemos dónde se traba tu operación y te orientamos hacia la opción que mejor te sirve, aunque sea la más chica.",
   },
 ];
 
 const incluyeTodos = [
-  "Un presupuesto claro, por escrito, antes de arrancar.",
+  "Diagnóstico gratis de 30 minutos.",
+  "Propuesta cerrada por escrito antes de arrancar.",
   "Una persona real del equipo que te responde en 24 horas hábiles.",
-  "2 rondas de revisión incluidas.",
-  "Un diagnóstico de 30 minutos, sin costo.",
+  "Entregas que podés ver y probar mientras se arma.",
 ];
 
 const noIncluye = [
-  "Hosting ni dominio: los precios orientativos no los incluyen.",
+  "Hosting ni dominio: se contratan aparte y te ayudamos a elegirlos.",
   "Promesas de resultados que dependen de cosas que no controlamos.",
-  "Empezar sin propuesta: no arrancamos sin que sepas qué hacemos y cuánto cuesta.",
+  "Empezar sin propuesta escrita.",
 ];
 
-const steps = [
-  { t: "Hablamos 15 minutos", d: "Nos contás qué vendés y qué necesitás. Sin costo y sin compromiso." },
-  { t: "Propuesta con precio claro", d: "Alcance y presupuesto por escrito antes de empezar." },
-  { t: "Armamos y te mostramos avances", d: "Vas viendo cómo queda mientras se arma, no solo al final." },
-  { t: "Entrega con 2 rondas de revisión", d: "Ajustamos lo que haga falta. Cada servicio muestra su duración orientativa." },
-];
+const contactoHref = (titulo: string) => `/contacto?servicio=${encodeURIComponent(titulo)}`;
 ---
 
 <Layout
   title={`Servicios — ${site.name}`}
-  description="Página web de productos o servicios desde USD 300, página empresarial desde USD 400, ecommerce desde USD 800 y software a medida. Contanos qué necesitás."
+  description="Software a medida para PyMEs (inventario, procesos, automatizaciones, KPIs e informes) y canales digitales conectados: página web, sitio institucional y tienda online. Propuesta cerrada después de un diagnóstico gratis."
 >
-  <div class="panel--oro">
-    <section class="pt-16 md:pt-24 pb-14 md:pb-20 border-b border-[var(--color-border)]">
+  <div class="panel panel--night" data-chapter="Servicios">
+    <section class="py-12 md:py-16" aria-labelledby="svc-title">
       <div class="container-page">
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-end">
-          <div class="lg:col-span-9 reveal">
-            <p class="eyebrow mb-5">Servicios y precios</p>
-            <h1 class="display-xl">
-              Página web, ecommerce <span class="display-accent">y software a medida.</span>
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-end">
+          <div class="lg:col-span-8 reveal">
+            <p class="eyebrow mb-4">Servicios</p>
+            <h1 id="svc-title" class="display-lg max-w-[18ch]">
+              Un sistema para cada parte de <span class="display-accent">tu operación.</span>
             </h1>
           </div>
-          <div class="lg:col-span-3 reveal">
+          <div class="lg:col-span-4 reveal">
             <p class="text-base md:text-lg text-[var(--color-ink-soft)] leading-relaxed">
-              Te ayudamos a tener tu página web, tu tienda online o el software que tu negocio
-              necesita. Precios orientativos y claros desde el principio; para software a medida,
-              empezamos con una conversación.
+              Software a medida para ordenar la operación de tu PyME, y los canales digitales que la alimentan: página,
+              sitio institucional o tienda online.
             </p>
-            <p class="mt-4 text-sm text-[var(--color-mute)]">
-              Precios orientativos en USD. No incluyen hosting ni dominio. El valor en pesos se confirma en la propuesta.
-            </p>
+            <a href={contactoHref("Diagnóstico gratis")} class="btn-sunset mt-6">
+              Contanos el problema <span aria-hidden="true">→</span>
+            </a>
           </div>
         </div>
-      </div>
-    </section>
-
-    <section class="py-12 md:py-20">
-      <div class="container-page">
-        <ol class="ptab reveal-stagger">
-          {
-            servicios.map((s, i) => {
-              const isQuote = s.precioDesdeUsd == null;
-              const isLead = s.id === "ecommerce";
-              return (
-                <li
-                  id={s.id}
-                  class:list={["ptab__row", isLead && "ptab__row--lead", isQuote && "ptab__row--quote surface-night"]}
-                >
-                  <span class="font-mono text-xs tracking-[0.18em] text-[var(--color-mute)] tabular-nums pt-2">
-                    {String(i + 1).padStart(2, "0")}
-                  </span>
-
-                  <div>
-                    {s.badge && (
-                      <p class="font-mono text-[10px] uppercase tracking-[0.22em] text-[var(--color-mute)] mb-3">
-                        {s.badge}
-                      </p>
-                    )}
-                    <h2 class="m-0">
-                      <a href={`/servicios/${s.id}`} class="ptab__name">{s.titulo}</a>
-                    </h2>
-                    <p class="mt-4 text-[var(--color-ink)] font-medium leading-snug">{s.subtitulo}</p>
-                    <p class="mt-3 text-[var(--color-ink-soft)] leading-relaxed max-w-[54ch]">{s.descripcion}</p>
-                  </div>
-
-                  <div class="flex flex-col gap-5">
-                    <div>
-                      <p class="svc__label">Para quién</p>
-                      <p class="svc__text text-sm">{s.idealPara}</p>
-                    </div>
-                    <div>
-                      <p class="svc__label">Duración orientativa</p>
-                      <p class="svc__dur font-mono">{s.duracion}</p>
-                    </div>
-                    <div class="flex flex-wrap items-center gap-x-6 gap-y-3">
-                      <a href={`/contacto?servicio=${encodeURIComponent(s.titulo)}`} class="btn-sunset">
-                        {isQuote ? s.cta : "Quiero este servicio"} <span aria-hidden="true">→</span>
-                      </a>
-                      <a href={`/servicios/${s.id}`} class="svc__more">
-                        Ver el detalle <span aria-hidden="true">→</span>
-                      </a>
-                    </div>
-                  </div>
-
-                  <p class="price price--end">
-                    <span class="sr-only">{s.precioOrientativo}</span>
-                    <span class="price__from" aria-hidden="true">{isQuote ? "según tu proyecto" : "desde"}</span>
-                    <strong class="price__amount" aria-hidden="true">
-                      {isQuote ? "A cotizar" : <><span class="price__cur">USD</span>{s.precioDesdeUsd}</>}
-                    </strong>
-                  </p>
-                </li>
-              );
-            })
-          }
-        </ol>
       </div>
     </section>
   </div>
 
-  <section class="py-16 md:py-28 border-b border-[var(--color-border)]">
-    <div class="container-page">
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-x-10">
-        <div class="lg:col-span-5">
-          <p class="eyebrow mb-5">Para quién</p>
-          <h2 class="display-md">
-            Para PyMEs, comercios y profesionales que quieren <span class="display-accent">verse bien y vender online.</span>
+  <div class="panel panel--night" data-chapter="Tu operación">
+    <section class="py-12 md:py-16" aria-labelledby="mapa-title">
+      <div class="container-page">
+        <h2 id="mapa-title" class="display-md max-w-[24ch] mb-8 md:mb-10">
+          Qué parte de tu operación <span class="display-accent">resuelve cada servicio.</span>
+        </h2>
+        <MapaOperacion />
+      </div>
+    </section>
+  </div>
+
+  <div class="panel" data-chapter="Software a medida">
+    <section id={sistema.id} class="py-16 md:py-24" aria-labelledby="sistema-title">
+      <div class="container-page grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-x-12">
+        <div class="lg:col-span-7">
+          {sistema.badge && <p class="eyebrow mb-5">{sistema.badge}</p>}
+          <h2 id="sistema-title" class="display-lg max-w-[18ch]">
+            {sistema.titulo}. <span class="display-accent">El centro de tu operación.</span>
           </h2>
+          <p class="mt-6 text-lg text-[var(--color-ink-soft)] leading-relaxed max-w-[58ch]">{sistema.descripcion}</p>
+
+          <ul class="sys__areas" aria-label="Áreas que resolvemos">
+            {areas.map((a) => <li><a href="/#problemas">{a}</a></li>)}
+          </ul>
+
+          <div class="mt-8">
+            <p class="svc__label">Para quién</p>
+            <p class="svc__text max-w-[58ch]">{sistema.idealPara}</p>
+          </div>
         </div>
-        <div class="lg:col-span-3 lg:col-start-7">
-          <p class="svc__label">Qué incluye, siempre</p>
+
+        <div class="lg:col-span-5 flex flex-col gap-6">
+          <AntesAhora {...sistema.grafico} />
+          <div>
+            <p class="svc__label">Qué incluye</p>
+            <ul class="hair-list">
+              {sistema.queIncluye.map((t) => <li>{t}</li>)}
+            </ul>
+          </div>
+          <div class="flex flex-wrap items-center gap-x-6 gap-y-3">
+            <a href={contactoHref(sistema.titulo)} class="btn-sunset">
+              {sistema.cta} <span aria-hidden="true">→</span>
+            </a>
+            <a href={`/servicios/${sistema.id}`} class="svc__more">Ver el detalle <span aria-hidden="true">→</span></a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div class="panel" data-chapter="Canales digitales">
+    <section class="py-16 md:py-24" aria-labelledby="canales-title">
+      <div class="container-page">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-10 items-end">
+          <div class="lg:col-span-8">
+            <p class="eyebrow mb-4">Canales digitales</p>
+            <h2 id="canales-title" class="display-lg max-w-[20ch]">
+              La puerta de entrada. <span class="display-accent">Conectada al sistema.</span>
+            </h2>
+          </div>
+          <p class="lg:col-span-4 text-[var(--color-ink-soft)] text-base md:text-lg leading-relaxed">
+            Por acá te encuentran, te consultan y te compran. Lo que entra queda ordenado y listo para pasar al sistema
+            cuando lo sumes.
+          </p>
+        </div>
+
+        <ul class="ch-grid reveal-stagger">
+          {
+            canales.map((s) => (
+              <li id={s.id} class="ch">
+                {s.badge && <p class="ch__badge">{s.badge}</p>}
+                <h3 class="ch__t">
+                  <a href={`/servicios/${s.id}`}>{s.titulo}</a>
+                </h3>
+                <p class="ch__sub">{s.subtitulo}</p>
+
+                <p class="ch__link">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h12l4 6-10 12L2 9z" /></svg>
+                  <span>{s.conecta}</span>
+                </p>
+
+                <AntesAhora {...s.grafico} class="mt-5" />
+
+                <div class="ch__foot">
+                  <div>
+                    <p class="svc__label">Duración</p>
+                    <p class="svc__dur font-mono">{s.duracion}</p>
+                  </div>
+                  <div class="flex flex-wrap items-center gap-x-5 gap-y-3">
+                    <a href={contactoHref(s.titulo)} class="ch__cta">
+                      {s.cta} <span aria-hidden="true">→</span>
+                    </a>
+                    <a href={`/servicios/${s.id}`} class="svc__more">Detalle <span aria-hidden="true">→</span></a>
+                  </div>
+                </div>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </section>
+  </div>
+
+  <div class="panel" data-chapter="Cómo trabajamos"><Metodo /></div>
+
+  <div class="panel" data-chapter="Dudas">
+    <section class="py-16 md:py-24" aria-labelledby="dudas-title">
+      <div class="container-page grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-x-10">
+        <div class="lg:col-span-4">
+          <p class="eyebrow mb-4">Antes de empezar</p>
+          <h2 id="dudas-title" class="display-md">Lo que nos preguntan <span class="display-accent">antes de firmar.</span></h2>
+
+          <p class="svc__label mt-10">Siempre incluye</p>
           <ul class="hair-list">
             {incluyeTodos.map((t) => <li>{t}</li>)}
           </ul>
-        </div>
-        <div class="lg:col-span-3">
-          <p class="svc__label">Qué no incluye</p>
+          <p class="svc__label mt-8">No incluye</p>
           <ul class="hair-list">
             {noIncluye.map((t) => <li>{t}</li>)}
           </ul>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="py-16 md:py-28 border-b border-[var(--color-border)]">
-    <div class="container-page">
-      <p class="eyebrow mb-4">Cómo trabajamos</p>
-      <h2 class="display-lg max-w-[18ch] mb-10 md:mb-14">Cuatro pasos, de la primera charla a la entrega.</h2>
-      <ol class="process">
-        {
-          steps.map((st, i) => (
-            <li class="process__step">
-              <span class="process__num">{String(i + 1).padStart(2, "0")}</span>
-              <h3 class="process__t">{st.t}</h3>
-              <p class="process__d">{st.d}</p>
-            </li>
-          ))
-        }
-      </ol>
-    </div>
-  </section>
-
-  <section class="py-16 md:py-24 border-b border-[var(--color-border)]">
-    <div class="container-page">
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
-        <div class="lg:col-span-4">
-          <p class="eyebrow mb-4">FAQ</p>
-          <h2 class="display-md">Lo que nos preguntan <span class="display-accent">antes de firmar.</span></h2>
         </div>
         <div class="lg:col-span-7 lg:col-start-6">
           {
@@ -206,23 +216,128 @@ const steps = [
           }
         </div>
       </div>
-    </div>
-  </section>
+    </section>
+  </div>
 
-  <section class="surface-night py-16 md:py-24">
-    <div class="container-page grid grid-cols-1 lg:grid-cols-12 gap-10 items-end">
-      <div class="lg:col-span-8 reveal">
-        <p class="eyebrow mb-4">Próximo paso</p>
-        <h2 class="display-lg">¿Te encaja alguno? <span class="display-accent">Hablemos.</span></h2>
-        <p class="mt-6 text-lg text-[var(--color-ink-soft)] leading-relaxed max-w-[56ch]">
-          Contanos qué necesitás y te orientamos. Podés empezar por un diagnóstico gratis de 30 minutos o escribirnos directamente: si tu caso no entra en estos servicios, te lo decimos y te orientamos hacia otra opción.
-        </p>
+  <div class="panel panel--night" data-chapter="Contacto">
+    <section class="py-16 md:py-24">
+      <div class="container-page grid grid-cols-1 lg:grid-cols-12 gap-10 items-end">
+        <div class="lg:col-span-8 reveal">
+          <p class="eyebrow mb-4">Próximo paso</p>
+          <h2 class="display-lg">¿Dónde se traba tu operación? <span class="display-accent">Hablemos.</span></h2>
+          <p class="mt-6 text-lg text-[var(--color-ink-soft)] leading-relaxed max-w-[56ch]">
+            Empezá por el diagnóstico gratis de 30 minutos. Si tu caso no se resuelve con nada de esto, te lo decimos y
+            te orientamos hacia otra opción.
+          </p>
+        </div>
+        <div class="lg:col-span-4 lg:justify-self-end">
+          <a href={contactoHref("Quiero hablar de mi proyecto")} class="btn-sunset">
+            Contanos qué necesitás <span aria-hidden="true">→</span>
+          </a>
+        </div>
       </div>
-      <div class="lg:col-span-4 lg:justify-self-end">
-        <a href="/contacto?servicio=Quiero%20hablar%20de%20mi%20proyecto" class="btn-sunset">
-          Contanos qué necesitás <span aria-hidden="true">→</span>
-        </a>
-      </div>
-    </div>
-  </section>
+    </section>
+  </div>
 </Layout>
+
+<style>
+  /* CTA sobre panel claro: navy con texto dorado, igual que en "Qué resolvemos" del home */
+  #software-a-medida :global(.btn-sunset) { background: var(--color-action); color: var(--color-neon); box-shadow: 0 8px 24px -12px rgba(15, 26, 58, 0.6); }
+  #software-a-medida :global(.btn-sunset:hover) { color: var(--color-on-gold); }
+  :global(.dark) #software-a-medida :global(.btn-sunset) { background: var(--color-neon); color: var(--color-on-gold); }
+
+  .sys__areas {
+    list-style: none;
+    margin: 2rem 0 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .sys__areas a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.25rem;
+    padding: 0.4rem 0.85rem;
+    border-radius: 999px;
+    border: 1px solid var(--color-hair-strong);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-ink);
+    transition: background-color 200ms, border-color 200ms;
+  }
+  .sys__areas a:hover { background: #f5c542; border-color: #f5c542; color: var(--color-on-gold); }
+
+  .ch-grid {
+    list-style: none;
+    margin: clamp(2.5rem, 5vw, 3.5rem) 0 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1rem;
+  }
+  @media (min-width: 1024px) { .ch-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+  .ch {
+    display: flex;
+    flex-direction: column;
+    padding: 1.5rem;
+    border-radius: var(--radius-card);
+    border: 1px solid var(--color-hair);
+    background: var(--color-page);
+    transition: border-color 250ms var(--ease-out-quart);
+  }
+  .ch:hover { border-color: var(--color-hair-strong); }
+  .ch__badge {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--color-mute);
+    margin-bottom: 0.75rem;
+  }
+  .ch__t {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(1.35rem, 1.1rem + 0.6vw, 1.65rem);
+    letter-spacing: -0.025em;
+    line-height: 1.1;
+    color: var(--color-ink);
+  }
+  .ch__t a:hover { color: var(--color-azul); }
+  .ch__sub { margin-top: 0.5rem; font-weight: 500; color: var(--color-ink-soft); }
+  .ch__link {
+    display: flex;
+    gap: 0.6rem;
+    margin-top: 1.25rem;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    color: var(--color-ink);
+    text-wrap: pretty;
+  }
+  .ch__link svg {
+    flex: none;
+    width: 14px;
+    height: 14px;
+    margin-top: 0.3rem;
+    fill: #f5c542;
+    stroke: var(--color-ink);
+    stroke-width: 1.5;
+    stroke-linejoin: round;
+  }
+  .ch__foot {
+    margin-top: auto;
+    padding-top: 1.5rem;
+    display: grid;
+    gap: 1.25rem;
+  }
+  .ch__cta {
+    font-weight: 600;
+    color: var(--color-ink);
+    border-bottom: 2px solid #f5c542;
+    padding-bottom: 0.15rem;
+    transition: color 200ms;
+  }
+  .ch__cta:hover { color: var(--color-azul); }
+</style>

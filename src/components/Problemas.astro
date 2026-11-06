@@ -273,7 +273,7 @@ const estaciones = [
 <script>
   // Las ilustraciones solo se animan mientras la grilla está en pantalla
   document.addEventListener("astro:page-load", () => {
-    document.querySelectorAll<HTMLElement>("[data-stations], [data-track]").forEach((grid) => {
+    document.querySelectorAll<HTMLElement>("[data-stations]").forEach((grid) => {
       if (grid.dataset.ready) return;
       grid.dataset.ready = "1";
       new IntersectionObserver(([e]) => grid.classList.toggle("is-live", e.isIntersecting), { threshold: 0.05 }).observe(grid);

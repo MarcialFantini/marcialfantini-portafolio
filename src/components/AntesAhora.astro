@@ -1,0 +1,120 @@
+---
+/* Comparación ilustrativa "Antes / Con el sistema" (mismo lenguaje que las barras del tablero del hero).
+   Hereda los tokens de la superficie donde se usa (claro, oro o navy). */
+interface Num {
+  v: number;
+  suf?: string;
+  dec?: number;
+}
+interface Props {
+  label: string;
+  antes: Num;
+  ahora: Num;
+  class?: string;
+}
+const { label, antes, ahora, class: cls } = Astro.props;
+const max = Math.max(antes.v, ahora.v) || 1;
+const fmt = (n: Num) =>
+  `${n.v.toLocaleString("es-AR", { minimumFractionDigits: n.dec ?? 0, maximumFractionDigits: n.dec ?? 0 })}${n.suf ?? ""}`;
+---
+
+<figure class:list={["aa", cls]} data-aa>
+  <figcaption class="aa__cap">
+    <span class="aa__t">{label}</span>
+    <span class="aa__tag">Ejemplo ilustrativo</span>
+  </figcaption>
+  <div class="aa__row">
+    <span class="aa__k">Antes</span>
+    <span class="aa__track"><span class="aa__fill aa__fill--antes" style={`--v:${(antes.v / max).toFixed(3)}`}></span></span>
+    <span class="aa__v">{fmt(antes)}</span>
+  </div>
+  <div class="aa__row aa__row--ahora">
+    <span class="aa__k">Con el sistema</span>
+    <span class="aa__track"><span class="aa__fill aa__fill--ahora" style={`--v:${Math.max(ahora.v / max, 0.03).toFixed(3)}`}></span></span>
+    <span class="aa__v">{fmt(ahora)}</span>
+  </div>
+</figure>
+
+<script>
+  // Las barras crecen la primera vez que entran en pantalla
+  document.addEventListener("astro:page-load", () => {
+    const io = new IntersectionObserver(
+      (entries) =>
+        entries.forEach((e) => {
+          if (!e.isIntersecting) return;
+          e.target.classList.add("is-in");
+          io.unobserve(e.target);
+        }),
+      { threshold: 0.4 },
+    );
+    document.querySelectorAll<HTMLElement>("[data-aa]:not(.is-in)").forEach((el) => io.observe(el));
+  });
+</script>
+
+<style>
+  .aa {
+    margin: 0;
+    display: grid;
+    gap: 0.6rem;
+    padding: 1rem 1.1rem 1.1rem;
+    border-radius: 14px;
+    border: 1px solid var(--color-hair);
+    background: color-mix(in srgb, var(--color-ink) 3%, transparent);
+  }
+  .aa__cap {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 0.25rem 1rem;
+    margin-bottom: 0.15rem;
+  }
+  .aa__t { font-size: 0.85rem; line-height: 1.35; color: var(--color-ink); font-weight: 600; }
+  .aa__tag {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--color-mute);
+    white-space: nowrap;
+  }
+  .aa__row {
+    display: grid;
+    grid-template-columns: 7rem minmax(0, 1fr) 3.4rem;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.8rem;
+  }
+  .aa__k { color: var(--color-ink-soft); }
+  .aa__track {
+    height: 10px;
+    border-radius: 5px;
+    background: color-mix(in srgb, var(--color-ink) 8%, transparent);
+    overflow: hidden;
+  }
+  .aa__fill {
+    display: block;
+    height: 100%;
+    border-radius: 5px;
+    transform-origin: left;
+    transform: scaleX(0);
+    transition: transform 1100ms var(--ease-out-expo);
+  }
+  .aa.is-in .aa__fill { transform: scaleX(var(--v)); }
+  .aa.is-in .aa__fill--ahora { transition-delay: 180ms; }
+  .aa__fill--antes { background: color-mix(in srgb, var(--color-ink) 28%, transparent); }
+  .aa__fill--ahora { background: linear-gradient(90deg, #c8a24e, #ffd24a 70%, #fff1c2); box-shadow: inset 0 0 0 1px rgba(15, 26, 58, 0.18); }
+  .aa__v {
+    text-align: right;
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    color: var(--color-ink);
+  }
+  .aa__row--ahora .aa__v { font-weight: 700; color: var(--color-dorado-deep); }
+  @media (max-width: 420px) {
+    .aa__row { grid-template-columns: 5.8rem minmax(0, 1fr) 3rem; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .aa__fill { transition: none; transform: scaleX(var(--v)); }
+  }
+</style>
