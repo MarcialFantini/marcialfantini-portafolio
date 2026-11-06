@@ -1,10 +1,18 @@
 [
   {
     "id": "software-a-medida",
+    "grupo": "sistema",
     "titulo": "Software a medida",
     "subtitulo": "Inventario, procesos, automatizaciones, KPIs e informes",
     "descripcion": "Sistemas hechos a la medida del problema puntual de tu PyME: control de stock, flujos de trabajo, automatización de tareas, monitoreo con alertas, tableros de indicadores e informes automáticos. Partimos de un diagnóstico y construimos lo justo para resolverlo, ni más ni menos.",
     "resultadoCuantificado": "Una operación ordenada y medible: menos tareas manuales, menos errores y los números de tu empresa a la vista.",
+    "conecta": "Es el centro: ordena pedidos, stock, procesos y facturación, y te devuelve tableros, informes y alertas.",
+    "nodos": ["pedidos", "stock", "procesos", "facturacion", "kpis", "informes", "alertas"],
+    "grafico": {
+      "label": "Horas de carga manual por semana",
+      "antes": { "v": 32, "suf": " h" },
+      "ahora": { "v": 4, "suf": " h" }
+    },
     "queIncluye": [
       "Diagnóstico gratis de 30 minutos",
       "Propuesta cerrada con alcance, etapas, plazos y precio",
@@ -14,18 +22,24 @@
       "Código y datos a nombre de tu empresa"
     ],
     "idealPara": "PyMEs que operan con planillas, tareas manuales o sistemas que no se comunican, y necesitan una herramienta que se adapte a su forma de trabajar.",
-    "duracion": "A definir según el alcance",
-    "precioOrientativo": "A cotizar según tu proyecto",
-    "precioDesdeUsd": null,
+    "duracion": "Por etapas, según el alcance",
     "cta": "Contanos el problema",
     "badge": "FOCO PRINCIPAL"
   },
   {
     "id": "web-productos-servicios",
+    "grupo": "canal",
     "titulo": "Página web de productos o servicios",
     "subtitulo": "Mostrá lo que vendés y que te escriban",
-    "descripcion": "Una página web clara donde tus clientes ven qué ofrecés, cuánto vale y cómo contactarte. Pensada para que se vea bien en el celular y para que te encuentren en Google. Te ayudamos con la estructura y los textos para que no tengas que ocuparte de nada técnico.",
+    "descripcion": "Una página web clara donde tus clientes ven qué ofrecés y cómo contactarte. Pensada para que se vea bien en el celular y para que te encuentren en Google. Te ayudamos con la estructura y los textos para que no tengas que ocuparte de nada técnico.",
     "resultadoCuantificado": "Tu negocio con presencia propia en internet: tus productos o servicios a la vista y un camino directo para que te consulten por WhatsApp o formulario.",
+    "conecta": "Las consultas llegan ordenadas, con los datos completos, y pueden entrar directo al sistema cuando lo sumes.",
+    "nodos": ["web", "pedidos"],
+    "grafico": {
+      "label": "Mensajes para explicar qué vendés, por consulta",
+      "antes": { "v": 6 },
+      "ahora": { "v": 1 }
+    },
     "queIncluye": [
       "Diseño a tu marca, adaptado a celular, tablet y computadora",
       "Secciones para presentar tus productos o servicios",
@@ -36,17 +50,23 @@
     ],
     "idealPara": "Negocios, profesionales y emprendedores que ofrecen productos o servicios y todavía no tienen una página propia (o la que tienen no los representa).",
     "duracion": "1 a 3 semanas (orientativo)",
-    "precioOrientativo": "Desde USD 300",
-    "precioDesdeUsd": 300,
     "cta": "Quiero mi página web",
     "badge": "PARA ARRANCAR"
   },
   {
     "id": "web-empresarial",
+    "grupo": "canal",
     "titulo": "Página empresarial o institucional",
     "subtitulo": "La cara profesional de tu empresa",
     "descripcion": "Un sitio institucional para que tu empresa se vea seria, ordenada y confiable. Presentamos quiénes son, qué hacen, sus servicios y cómo contactarlos, con más secciones y más cuidado que una página simple.",
     "resultadoCuantificado": "Una empresa que genera confianza desde el primer vistazo: clientes, proveedores y candidatos entienden rápido quiénes son y cómo trabajar con ustedes.",
+    "conecta": "Clientes, proveedores y candidatos llegan con la información básica resuelta, y sus contactos quedan registrados.",
+    "nodos": ["empresa", "pedidos"],
+    "grafico": {
+      "label": "Preguntas básicas que responde tu equipo por día",
+      "antes": { "v": 15 },
+      "ahora": { "v": 3 }
+    },
     "queIncluye": [
       "Sitio de varias secciones: inicio, nosotros, servicios y contacto",
       "Diseño profesional alineado a la identidad de tu empresa",
@@ -57,17 +77,23 @@
     ],
     "idealPara": "Empresas, estudios, consultoras e instituciones que necesitan un sitio profesional para presentarse y generar confianza.",
     "duracion": "2 a 4 semanas (orientativo)",
-    "precioOrientativo": "Desde USD 400",
-    "precioDesdeUsd": 400,
     "cta": "Quiero la web de mi empresa",
     "badge": null
   },
   {
     "id": "ecommerce",
+    "grupo": "canal",
     "titulo": "Ecommerce (tienda online)",
     "subtitulo": "Vendé online, todos los días",
     "descripcion": "Una tienda online con catálogo, carrito y medios de pago para que tus clientes compren cuando quieran. Te la dejamos lista para que cargues y administres tus productos sin depender de nadie.",
     "resultadoCuantificado": "Una tienda propia donde los pedidos y los pagos entran de forma ordenada, en lugar de coordinar cada venta a mano por mensajes.",
+    "conecta": "Cada venta entra como pedido, descuenta stock y queda lista para facturar, sin pasarla a mano.",
+    "nodos": ["tienda", "pedidos", "stock", "facturacion"],
+    "grafico": {
+      "label": "Pedidos coordinados a mano por WhatsApp, por día",
+      "antes": { "v": 25 },
+      "ahora": { "v": 2 }
+    },
     "queIncluye": [
       "Catálogo de productos con fotos, precios y categorías",
       "Carrito y proceso de compra simple",
@@ -78,8 +104,6 @@
     ],
     "idealPara": "Marcas y comercios que quieren vender online o dejar de gestionar cada pedido a mano por WhatsApp o redes.",
     "duracion": "4 a 8 semanas (orientativo)",
-    "precioOrientativo": "Desde USD 800",
-    "precioDesdeUsd": 800,
     "cta": "Quiero mi tienda online",
     "badge": "VENDÉ ONLINE"
   }

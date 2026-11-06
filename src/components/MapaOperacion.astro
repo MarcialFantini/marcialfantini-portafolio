@@ -1,0 +1,360 @@
+---
+/* "Mapa de tu operación": Canales -> Sistema -> Control.
+   Cada servicio enciende su parte del mapa; los paquetes dorados viajan solo entre columnas encendidas.
+   Pensado para superficie navy (panel--night); usa tokens, así que también funciona en claro. */
+import servicios from "../data/servicios.json";
+import Robot from "./Robot.astro";
+
+interface Props {
+  inicial?: string;
+}
+const { inicial = servicios[0].id } = Astro.props;
+
+const columnas = [
+  {
+    id: "canales",
+    t: "Canales",
+    d: "Por donde te encuentran y te compran",
+    nodos: [
+      { id: "web", t: "Página de productos" },
+      { id: "empresa", t: "Sitio institucional" },
+      { id: "tienda", t: "Tienda online" },
+    ],
+  },
+  {
+    id: "sistema",
+    t: "Sistema",
+    d: "Donde se ordena la operación",
+    nodos: [
+      { id: "pedidos", t: "Pedidos y consultas" },
+      { id: "stock", t: "Stock" },
+      { id: "procesos", t: "Procesos" },
+      { id: "facturacion", t: "Facturación" },
+    ],
+  },
+  {
+    id: "control",
+    t: "Control",
+    d: "Lo que mirás para decidir",
+    nodos: [
+      { id: "kpis", t: "KPIs y tableros" },
+      { id: "informes", t: "Informes" },
+      { id: "alertas", t: "Alertas" },
+    ],
+  },
+];
+
+const todos = columnas.flatMap((c) => c.nodos.map((n) => n.id));
+const opciones = [
+  ...servicios.map((s) => ({ id: s.id, tab: s.titulo.replace(/\s*\(.*\)$/, ""), nodos: s.nodos, conecta: s.conecta, href: `/servicios/${s.id}` })),
+  {
+    id: "todo",
+    tab: "Todo conectado",
+    nodos: todos,
+    conecta: "Los canales alimentan el sistema y el sistema te devuelve los números. Podés arrancar por cualquier parte y sumar el resto después, sin rehacer nada.",
+    href: "/contacto?servicio=Quiero%20hablar%20de%20mi%20proyecto",
+  },
+];
+const sel = opciones.find((o) => o.id === inicial) ?? opciones[0];
+const isOn = (id: string) => sel.nodos.includes(id);
+const colOn = (i: number) => columnas[i].nodos.some((n) => isOn(n.id));
+---
+
+<div class="om" data-om>
+  <p class="om__pick" id="om-pick">Elegí un servicio y mirá qué parte de tu operación resuelve</p>
+  <div class="om__tabs" role="tablist" aria-labelledby="om-pick">
+    {
+      opciones.map((o) => (
+        <button
+          type="button"
+          role="tab"
+          id={`om-tab-${o.id}`}
+          class="om__tab"
+          aria-selected={o.id === sel.id ? "true" : "false"}
+          aria-controls="om-panel"
+          tabindex={o.id === sel.id ? 0 : -1}
+          data-nodos={JSON.stringify(o.nodos)}
+          data-conecta={o.conecta}
+          data-href={o.href}
+        >
+          {o.tab}
+        </button>
+      ))
+    }
+  </div>
+
+  <figure class="om__map" id="om-panel" role="tabpanel" aria-labelledby={`om-tab-${sel.id}`}>
+    <span class="om__bot" aria-hidden="true"><Robot pose="carry" size={60} /></span>
+    <div class="om__grid">
+      {
+        columnas.map((c, i) => (
+          <>
+            <div class:list={["om__col", colOn(i) && "is-on"]} data-col={i}>
+              <p class="om__col-t">
+                <span class="om__col-n">{String(i + 1).padStart(2, "0")}</span>
+                {c.t}
+              </p>
+              <p class="om__col-d">{c.d}</p>
+              <ul class="om__nodes">
+                {c.nodos.map((n) => (
+                  <li class:list={["om__node", isOn(n.id) && "is-on"]} data-node={n.id}>
+                    <svg viewBox="0 0 24 24" aria-hidden="true" class="om__gem">
+                      <path d="M6 3h12l4 6-10 12L2 9z" />
+                    </svg>
+                    <span>{n.t}</span>
+                    <span class="sr-only">{isOn(n.id) ? "(incluido)" : ""}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            {i < columnas.length - 1 && (
+              <div class:list={["om__link", colOn(i) && colOn(i + 1) && "is-on"]} data-link={i} aria-hidden="true">
+                <span class="om__line"></span>
+                <span class="om__pkt"></span>
+                <span class="om__pkt om__pkt--2"></span>
+              </div>
+            )}
+          </>
+        ))
+      }
+    </div>
+    <figcaption class="om__cap">
+      <p class="om__conecta" data-om-conecta aria-live="polite">{sel.conecta}</p>
+      <a href={sel.href} class="om__more" data-om-href>
+        Ver el servicio <span aria-hidden="true">→</span>
+      </a>
+    </figcaption>
+  </figure>
+</div>
+
+<script>
+  function initMap(root: HTMLElement) {
+    if (root.dataset.ready) return;
+    root.dataset.ready = "1";
+    const tabs = Array.from(root.querySelectorAll<HTMLButtonElement>('[role="tab"]'));
+    const panel = root.querySelector<HTMLElement>('[role="tabpanel"]')!;
+    const cols = Array.from(root.querySelectorAll<HTMLElement>("[data-col]"));
+    const links = Array.from(root.querySelectorAll<HTMLElement>("[data-link]"));
+    const conecta = root.querySelector<HTMLElement>("[data-om-conecta]")!;
+    const more = root.querySelector<HTMLAnchorElement>("[data-om-href]")!;
+    let current = Math.max(0, tabs.findIndex((t) => t.getAttribute("aria-selected") === "true"));
+
+    const select = (i: number, focus = false) => {
+      current = i;
+      const on = new Set<string>(JSON.parse(tabs[i].dataset.nodos || "[]"));
+      tabs.forEach((t, j) => {
+        t.setAttribute("aria-selected", j === i ? "true" : "false");
+        t.tabIndex = j === i ? 0 : -1;
+      });
+      panel.setAttribute("aria-labelledby", tabs[i].id);
+      const colOn = cols.map((c) => {
+        let any = false;
+        c.querySelectorAll<HTMLElement>("[data-node]").forEach((n, k) => {
+          const lit = on.has(n.dataset.node!);
+          n.style.setProperty("--d", `${k * 70}ms`);
+          n.classList.toggle("is-on", lit);
+          n.querySelector(".sr-only")!.textContent = lit ? "(incluido)" : "";
+          any ||= lit;
+        });
+        c.classList.toggle("is-on", any);
+        return any;
+      });
+      links.forEach((l, k) => l.classList.toggle("is-on", colOn[k] && colOn[k + 1]));
+      conecta.textContent = tabs[i].dataset.conecta ?? "";
+      more.href = tabs[i].dataset.href ?? "#";
+      if (focus) tabs[i].focus();
+    };
+
+    tabs.forEach((t, i) => {
+      t.addEventListener("click", () => select(i));
+      t.addEventListener("keydown", (e) => {
+        const n =
+          e.key === "ArrowRight" ? (current + 1) % tabs.length :
+          e.key === "ArrowLeft" ? (current - 1 + tabs.length) % tabs.length :
+          e.key === "Home" ? 0 :
+          e.key === "End" ? tabs.length - 1 : -1;
+        if (n < 0) return;
+        e.preventDefault();
+        select(n, true);
+      });
+    });
+
+    new IntersectionObserver(([e]) => root.classList.toggle("is-paused", !e.isIntersecting), { threshold: 0.1 }).observe(root);
+  }
+
+  document.addEventListener("astro:page-load", () => {
+    document.querySelectorAll<HTMLElement>("[data-om]").forEach(initMap);
+  });
+</script>
+
+<style>
+  .om { --gold: #ffd24a; }
+  .om__pick { font-size: 0.9rem; color: var(--color-ink-soft); margin-bottom: 0.75rem; }
+  .om__tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    padding: 0.35rem;
+    border-radius: 14px;
+    border: 1px solid var(--color-hair);
+    background: color-mix(in srgb, var(--color-ink) 4%, transparent);
+  }
+  .om__tab {
+    flex: 1 1 auto;
+    min-height: 2.75rem;
+    padding: 0.55rem 0.9rem;
+    border-radius: 10px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-ink-soft);
+    cursor: pointer;
+    transition: color 200ms, background-color 250ms var(--ease-out-quart);
+  }
+  .om__tab:hover { color: var(--color-ink); background: color-mix(in srgb, var(--color-ink) 7%, transparent); }
+  .om__tab[aria-selected="true"] { background: var(--gold); color: var(--color-on-gold); font-weight: 700; }
+  .om__tab:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+  .om__tab:active { transform: translateY(1px); }
+
+  .om__map {
+    position: relative;
+    margin: 1.75rem 0 0;
+    padding: clamp(1.1rem, 2vw, 1.75rem);
+    border-radius: var(--radius-card);
+    border: 1px solid var(--color-hair);
+    background:
+      linear-gradient(color-mix(in srgb, var(--color-ink) 4%, transparent) 1px, transparent 1px) 0 0 / 24px 24px,
+      linear-gradient(90deg, color-mix(in srgb, var(--color-ink) 4%, transparent) 1px, transparent 1px) 0 0 / 24px 24px;
+  }
+  .om__bot { position: absolute; right: 1.5rem; bottom: calc(100% - 12px); --bot-line: #f6f1e4; }
+
+  .om__grid { display: grid; grid-template-columns: minmax(0, 1fr); }
+  @media (min-width: 900px) {
+    .om__grid { grid-template-columns: minmax(0, 1fr) 3.5rem minmax(0, 1fr) 3.5rem minmax(0, 1fr); align-items: stretch; }
+  }
+
+  .om__col {
+    padding: 1rem;
+    border-radius: 14px;
+    border: 1.5px dashed var(--color-hair-strong);
+    transition: border-color 400ms var(--ease-out-expo), background-color 400ms var(--ease-out-expo);
+  }
+  .om__col.is-on { border-style: solid; border-color: color-mix(in srgb, var(--gold) 55%, transparent); background: color-mix(in srgb, var(--gold) 5%, transparent); }
+  .om__col-t {
+    display: flex;
+    align-items: baseline;
+    gap: 0.6rem;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.25rem;
+    letter-spacing: -0.02em;
+    color: var(--color-ink);
+  }
+  .om__col-n { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.16em; color: var(--color-mute); }
+  .om__col-d { margin-top: 0.25rem; font-size: 0.85rem; color: var(--color-ink-soft); }
+  .om__nodes { list-style: none; margin: 1rem 0 0; padding: 0; display: grid; gap: 0.5rem; }
+  .om__node {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.65rem 0.8rem;
+    border-radius: 10px;
+    border: 1px solid var(--color-hair);
+    font-size: 0.9rem;
+    color: var(--color-ink-soft);
+    transition:
+      background-color 450ms var(--ease-out-expo) var(--d, 0ms),
+      color 450ms var(--ease-out-expo) var(--d, 0ms),
+      border-color 450ms var(--ease-out-expo) var(--d, 0ms),
+      transform 450ms var(--ease-out-expo) var(--d, 0ms);
+  }
+  .om__gem {
+    flex: none;
+    width: 14px;
+    height: 14px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linejoin: round;
+    opacity: 0.6;
+  }
+  .om__node.is-on {
+    background: var(--gold);
+    border-color: var(--gold);
+    color: var(--color-on-gold);
+    font-weight: 600;
+    transform: translateX(3px);
+  }
+  .om__node.is-on .om__gem { fill: var(--color-on-gold); stroke: var(--color-on-gold); opacity: 1; }
+
+  /* Conector entre columnas: punteado apagado; sólido con paquetes cuando ambas columnas están encendidas */
+  .om__link { position: relative; height: 2.5rem; container-type: size; }
+  .om__line {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    bottom: 0;
+    border-left: 1.5px dashed var(--color-hair-strong);
+    transition: border-color 400ms ease;
+  }
+  @media (min-width: 900px) {
+    .om__link { height: auto; }
+    .om__line { left: 0; right: 0; top: 50%; bottom: auto; border-left: 0; border-top: 1.5px dashed var(--color-hair-strong); }
+  }
+  .om__link.is-on .om__line { border-style: solid; border-color: var(--gold); }
+  .om__pkt {
+    position: absolute;
+    left: calc(50% - 5px);
+    top: 0;
+    width: 10px;
+    height: 10px;
+    background: var(--gold);
+    rotate: 45deg;
+    opacity: 0;
+  }
+  @media (min-width: 900px) { .om__pkt { left: 0; top: calc(50% - 5px); } }
+  .om__link.is-on .om__pkt { animation: om-y 1.6s ease-in-out infinite; }
+  .om__link.is-on .om__pkt--2 { animation-delay: 0.8s; }
+  @media (min-width: 900px) { .om__link.is-on .om__pkt { animation-name: om-x; } }
+  @keyframes om-y {
+    0% { transform: translateY(0); opacity: 0; }
+    20%, 80% { opacity: 1; }
+    100% { transform: translateY(calc(100cqh - 10px)); opacity: 0; }
+  }
+  @keyframes om-x {
+    0% { transform: translateX(0); opacity: 0; }
+    20%, 80% { opacity: 1; }
+    100% { transform: translateX(calc(100cqw - 10px)); opacity: 0; }
+  }
+
+  .om__cap {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem 2rem;
+    margin-top: 1.5rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--color-hair);
+  }
+  .om__conecta { max-width: 60ch; font-size: 1.05rem; line-height: 1.5; color: var(--color-ink); text-wrap: pretty; }
+  .om__more {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--color-ink);
+    border-bottom: 1px solid var(--color-hair-strong);
+    padding-bottom: 0.25rem;
+    white-space: nowrap;
+    transition: color 200ms, border-color 200ms;
+  }
+  .om__more:hover { color: var(--gold); border-color: var(--gold); }
+
+  .om.is-paused .om__pkt { animation-play-state: paused !important; }
+  @media (prefers-reduced-motion: reduce) {
+    .om * { transition: none !important; animation: none !important; }
+    .om__link.is-on .om__pkt:not(.om__pkt--2) { opacity: 1; }
+  }
+</style>

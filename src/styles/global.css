@@ -953,26 +953,6 @@
   .numlist--plain .numlist__t { font-weight: 500; font-size: clamp(1.0625rem, 0.95rem + 0.5vw, 1.3rem); letter-spacing: -0.01em; line-height: 1.35; }
   .numlist__d { grid-column: 2; color: var(--color-ink-soft); line-height: 1.55; max-width: 52ch; }
 
-  /* Precio tipográfico */
-  .price { display: flex; flex-direction: column; align-items: flex-start; gap: 0.35rem; font-family: var(--font-mono); }
-  .price__from {
-    font-size: 10px;
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.22em;
-    color: var(--color-mute);
-  }
-  .price__amount {
-    font-size: clamp(1.75rem, 1.1rem + 2.4vw, 3rem);
-    font-weight: 700;
-    letter-spacing: -0.045em;
-    line-height: 1;
-    font-variant-numeric: tabular-nums;
-    color: var(--color-ink);
-  }
-  .price__cur { font-size: 0.42em; letter-spacing: 0.12em; font-weight: 500; margin-right: 0.25em; color: var(--color-mute); }
-  @media (min-width: 768px) { .price--end { align-items: flex-end; text-align: right; } }
-
   /* Preguntas frecuentes en filetes (sin círculo con ícono) */
   .qa { border-top: 1px solid var(--color-hair); }
   .qa:last-child { border-bottom: 1px solid var(--color-hair); }
@@ -1231,43 +1211,6 @@
     }
     .svc-row:has(> .svc:not([open])):hover .svc__media:has(img) { opacity: 1; transform: translate3d(0, -50%, 0) scale(1); }
   }
-
-  /* Tabla tipográfica de /servicios */
-  .ptab { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--color-hair-strong); }
-  .ptab__row {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 1.25rem;
-    padding: 2rem 0;
-    border-bottom: 1px solid var(--color-hair);
-  }
-  @media (min-width: 768px) {
-    .ptab__row {
-      grid-template-columns: 4rem minmax(0, 1.5fr) minmax(0, 1fr) 13rem;
-      gap: 2rem;
-      padding: 3rem 0;
-    }
-    .ptab__row--lead { padding: 4.5rem 0; }
-  }
-  .ptab__row--quote {
-    margin-top: 2rem;
-    padding-inline: 1.25rem;
-    border-bottom: 0;
-    border-radius: var(--radius-card);
-  }
-  @media (min-width: 768px) { .ptab__row--quote { padding-inline: 2rem; margin-top: 2.5rem; } }
-  .ptab__name {
-    display: block;
-    font-family: var(--font-display);
-    font-weight: 800;
-    font-size: clamp(1.75rem, 1rem + 2.8vw, 3.25rem);
-    line-height: 0.96;
-    letter-spacing: -0.045em;
-    color: var(--color-ink);
-    text-wrap: balance;
-  }
-  .ptab__row--lead .ptab__name { font-size: clamp(2.1rem, 1rem + 4.4vw, 5rem); }
-  a.ptab__name:hover { color: var(--color-azul); }
 
   /* Proceso: línea de tiempo vertical en móvil, horizontal en desktop */
   .process { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr; }
