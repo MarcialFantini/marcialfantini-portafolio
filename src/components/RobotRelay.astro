@@ -40,6 +40,17 @@ import Robot from "./Robot.astro";
   <span class="relay__lbl relay__lbl--c">Tablero</span>
 </div>
 
+<script>
+  // Autónomo: se anima solo mientras está en pantalla, en cualquier página que lo use
+  document.addEventListener("astro:page-load", () => {
+    document.querySelectorAll<HTMLElement>("[data-track]").forEach((el) => {
+      if (el.dataset.ready) return;
+      el.dataset.ready = "1";
+      new IntersectionObserver(([e]) => el.classList.toggle("is-live", e.isIntersecting), { threshold: 0.05 }).observe(el);
+    });
+  });
+</script>
+
 <style>
   .relay {
     --T: 9s;

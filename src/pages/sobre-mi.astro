@@ -1,174 +1,155 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import SobreMi from "../components/SobreMi.astro";
+import MapaOperacion from "../components/MapaOperacion.astro";
+import FiltroAlcance from "../components/FiltroAlcance.astro";
+import Metodo from "../components/Metodo.astro";
 import site from "../data/site.json";
 
-const aboutPhoto = (site as { aboutPhoto?: string }).aboutPhoto ?? "";
-
-const build = [
-  {
-    title: "Páginas web",
-    text: "Para mostrar lo que ofrecés y que te escriban. Desde una página simple hasta un sitio institucional de varias secciones.",
-  },
-  {
-    title: "Ecommerce",
-    text: "Tiendas online con catálogo, carrito y medios de pago, con un panel para que administres tus productos.",
-  },
-  {
-    title: "Software a medida",
-    text: "Herramientas pensadas para tu forma de trabajar: paneles, reservas, gestión interna o automatización de tareas.",
-  },
+const principios = [
+  { t: "Primero el problema", d: "Antes de hablar de tecnología, entendemos dónde se traba tu operación y cuánto te cuesta." },
+  { t: "Lo justo, ni más ni menos", d: "Construimos lo que se va a usar todos los días. Lo demás espera o no se hace." },
+  { t: "Por etapas, sin frenar", d: "Cada parte entra en uso antes de empezar la siguiente. Tu equipo sigue trabajando." },
 ];
 
-const steps = [
-  {
-    title: "Hablamos 15 minutos",
-    text: "Te escuchamos y hacemos un diagnóstico gratuito del problema. Sin compromiso.",
-  },
-  {
-    title: "Te pasamos una propuesta",
-    text: "Alcance, plazos y presupuesto por escrito antes de empezar. Sabés qué recibís y cuánto cuesta.",
-  },
-  {
-    title: "Construimos y entregamos",
-    text: "Vas viendo avances reales. Entregamos con 2 rondas de revisión para ajustar lo que haga falta.",
-  },
-];
-
-const get = [
-  "Un presupuesto claro, por escrito, antes de arrancar.",
-  "Un sitio que se ve bien en el celular, la tablet y la computadora.",
-  "Una base de posicionamiento en Google para que te encuentren.",
-  "Una persona real del equipo que te responde en 24 horas hábiles.",
-  "2 rondas de revisión incluidas.",
-];
-
-const dont = [
+const noHacemos = [
   "No te pedimos que entiendas de tecnología: nos ocupamos de lo técnico.",
-  "No te cobramos nada por el diagnóstico de 30 minutos.",
-  "No empezamos sin que sepas qué vamos a hacer y cuánto cuesta.",
-  "No te prometemos resultados que dependen de cosas que no controlamos.",
+  "No cobramos el diagnóstico de 30 minutos.",
+  "No empezamos sin una propuesta escrita con alcance, plazos y precio.",
+  "No construimos de más: si algo no resuelve tu problema, te lo decimos.",
+  "No te dejamos atado: código, datos y accesos quedan a nombre de tu empresa.",
 ];
 ---
 
 <Layout
-  title="Nosotros — Marcial Fantini"
-  description="Somos Marcial Fantini, un equipo que desarrolla software a medida para PyMEs: inventario, procesos, automatizaciones, KPIs e informes. Conocé cómo trabajamos y pedí tu diagnóstico gratuito."
+  title={`Nosotros — ${site.name}`}
+  description={`Somos ${site.name}, un equipo que desarrolla software a medida para PyMEs: inventario, procesos, automatizaciones, KPIs e informes. Conocé cómo pensamos y pedí tu diagnóstico gratuito.`}
 >
-  <section class="surface-night relative pt-20 md:pt-28 pb-16 md:pb-28 overflow-hidden">
-    <div class="container-page">
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-x-10 items-start">
-        <!--
-          SLOT: foto o video del equipo.
-          Para activarlo, completá `aboutPhoto` en src/data/site.json con la ruta de la imagen
-          (por ejemplo "/equipo.jpg", guardada en /public). Si queda vacío, se muestra el monograma.
-        -->
-        <div class="lg:col-span-5 lg:order-1 order-2">
-          {
-            aboutPhoto ? (
-              <figure class="about-media">
-                <img src={aboutPhoto} alt={`El equipo de ${site.name}`} loading="lazy" decoding="async" />
-                <span class="about-media__frame" aria-hidden="true"></span>
-              </figure>
-            ) : (
-              <div class="about-media" role="img" aria-label="Iniciales MF">
-                <span class="about-media__frame" aria-hidden="true"></span>
-                <span class="about-media__mono" aria-hidden="true">M<i>F</i></span>
-                <span class="about-media__cap" aria-hidden="true">
-                  <span>{site.name}</span>
-                  <span>Córdoba AR</span>
-                </span>
-              </div>
-            )
-          }
-        </div>
-
-        <div class="lg:col-span-6 lg:col-start-7 lg:order-2 order-1 reveal">
-          <p class="eyebrow mb-5">Sobre nosotros</p>
-          <h1 class="display-lg">
-            Somos {site.name}. Hacemos que tu negocio
-            <span class="display-accent">se vea y venda online.</span>
-          </h1>
-          <p class="mt-8 max-w-[62ch] text-lg text-[var(--color-ink-soft)] leading-relaxed">
-            Somos una agencia de desarrollo que construye páginas web, tiendas online y software a medida
-            para PyMEs, comercios y profesionales. Trabajamos con un lenguaje simple y con las reglas
-            claras desde el primer día.
+  <div class="panel panel--night" data-chapter="Nosotros">
+    <section class="py-12 md:py-16" aria-labelledby="nos-title">
+      <div class="container-page">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-end">
+          <div class="lg:col-span-8 reveal">
+            <p class="eyebrow mb-4">Nosotros</p>
+            <h1 id="nos-title" class="display-lg max-w-[20ch]">
+              Somos {site.name}. Ordenamos con software <span class="display-accent">la operación de tu PyME.</span>
+            </h1>
+          </div>
+          <p class="lg:col-span-4 reveal text-base md:text-lg text-[var(--color-ink-soft)] leading-relaxed">
+            Un equipo chico de desarrollo con base en {site.location}. Convertimos planillas, mensajes y tareas
+            repetidas en sistemas que tu equipo usa todos los días.
           </p>
         </div>
-      </div>
-    </div>
-  </section>
 
-  <section class="py-16 md:py-28 border-b border-[var(--color-border)]">
-    <div class="container-page grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-x-10">
-      <div class="lg:col-span-4">
-        <p class="eyebrow mb-5">Qué hacemos</p>
-        <h2 class="display-md">Tres cosas, <span class="display-accent">bien hechas.</span></h2>
-      </div>
-      <ol class="numlist lg:col-span-7 lg:col-start-6">
-        {
-          build.map((b, i) => (
-            <li>
-              <span class="numlist__n">{String(i + 1).padStart(2, "0")}</span>
-              <h3 class="numlist__t">{b.title}</h3>
-              <p class="numlist__d">{b.text}</p>
-            </li>
-          ))
-        }
-      </ol>
-    </div>
-  </section>
-
-  <section class="py-16 md:py-28 border-b border-[var(--color-border)]">
-    <div class="container-page">
-      <p class="eyebrow mb-4">Cómo trabajamos</p>
-      <h2 class="display-lg max-w-[14ch] mb-10 md:mb-14">Simple, en tres pasos.</h2>
-      <ol class="process" style="--steps: 3">
-        {
-          steps.map((s, i) => (
-            <li class="process__step">
-              <span class="process__num">{String(i + 1).padStart(2, "0")}</span>
-              <h3 class="process__t">{s.title}</h3>
-              <p class="process__d">{s.text}</p>
-            </li>
-          ))
-        }
-      </ol>
-    </div>
-  </section>
-
-  <section class="py-16 md:py-28 border-b border-[var(--color-border)]">
-    <div class="container-page grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-x-20">
-      <div>
-        <p class="svc__label">Qué recibís</p>
-        <ul class="hair-list text-lg">
-          {get.map((g) => <li>{g}</li>)}
+        <ul class="pr">
+          {
+            principios.map((p, i) => (
+              <li>
+                <span class="pr__n">{String(i + 1).padStart(2, "0")}</span>
+                <h2 class="pr__t">{p.t}</h2>
+                <p class="pr__d">{p.d}</p>
+              </li>
+            ))
+          }
         </ul>
       </div>
-      <div>
-        <p class="svc__label">Qué no hacemos</p>
-        <ul class="hair-list text-lg">
-          {dont.map((d) => <li>{d}</li>)}
+    </section>
+  </div>
+
+  <div class="panel panel--night" data-chapter="Quién responde"><SobreMi /></div>
+
+  <div class="panel" data-chapter="Cómo decidimos">
+    <section class="py-16 md:py-24" aria-labelledby="decide-title">
+      <div class="container-page">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-10 items-end">
+          <h2 id="decide-title" class="display-lg lg:col-span-8 max-w-[20ch]">
+            No construimos todo lo que se pide. <span class="display-accent">Construimos lo que resuelve.</span>
+          </h2>
+          <p class="lg:col-span-4 text-[var(--color-ink-soft)] text-base md:text-lg leading-relaxed">
+            En el diagnóstico pasamos cada pedido por dos preguntas. Lo que no las supera no entra en la propuesta, y te
+            explicamos por qué.
+          </p>
+        </div>
+        <div class="mt-10 md:mt-14"><FiltroAlcance /></div>
+      </div>
+    </section>
+  </div>
+
+  <div class="panel panel--night" data-chapter="Qué hacemos">
+    <section class="py-16 md:py-24" aria-labelledby="hacemos-title">
+      <div class="container-page">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-10 items-end mb-12 md:mb-16">
+          <h2 id="hacemos-title" class="display-lg lg:col-span-8 max-w-[20ch]">
+            Del canal donde te compran <span class="display-accent">al número que mirás para decidir.</span>
+          </h2>
+          <a href="/servicios" class="svc__more lg:col-span-4 lg:justify-self-end self-end">
+            Ver todos los servicios <span aria-hidden="true">→</span>
+          </a>
+        </div>
+        <MapaOperacion inicial="todo" />
+      </div>
+    </section>
+  </div>
+
+  <div class="panel" data-chapter="Cómo trabajamos"><Metodo /></div>
+
+  <div class="panel" data-chapter="Qué no hacemos">
+    <section class="py-16 md:py-24" aria-labelledby="no-title">
+      <div class="container-page grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-x-10">
+        <div class="lg:col-span-4">
+          <p class="eyebrow mb-4">Reglas claras</p>
+          <h2 id="no-title" class="display-md">Lo que <span class="display-accent">no vas a ver</span> con nosotros.</h2>
+        </div>
+        <ul class="hair-list text-lg lg:col-span-7 lg:col-start-6">
+          {noHacemos.map((d) => <li>{d}</li>)}
         </ul>
       </div>
-    </div>
-  </section>
+    </section>
+  </div>
 
-  <section class="surface-night py-16 md:py-28">
-    <div class="container-page grid grid-cols-1 lg:grid-cols-12 gap-10 items-end">
-      <div class="lg:col-span-8">
-        <h2 class="display-lg">
-          Empecemos por una <span class="display-accent">diagnóstico gratis</span> de 30 minutos.
-        </h2>
-        <p class="mt-6 max-w-[56ch] text-lg text-[var(--color-ink-soft)] leading-relaxed">
-          Contanos qué necesitás y te respondemos en 24 horas hábiles.
-        </p>
+  <div class="panel panel--night" data-chapter="Contacto">
+    <section class="py-16 md:py-24">
+      <div class="container-page grid grid-cols-1 lg:grid-cols-12 gap-10 items-end">
+        <div class="lg:col-span-8 reveal">
+          <p class="eyebrow mb-4">Próximo paso</p>
+          <h2 class="display-lg">
+            Empecemos por un <span class="display-accent">diagnóstico gratis</span> de 30 minutos.
+          </h2>
+          <p class="mt-6 max-w-[56ch] text-lg text-[var(--color-ink-soft)] leading-relaxed">
+            Contanos dónde se traba tu operación y te respondemos en 24 horas hábiles.
+          </p>
+        </div>
+        <div class="lg:col-span-4 lg:justify-self-end flex flex-col sm:flex-row lg:flex-col gap-4 items-start">
+          <a href="/contacto?servicio=Diagn%C3%B3stico%20gratis" class="btn-sunset">
+            Pedir diagnóstico gratis <span aria-hidden="true">→</span>
+          </a>
+          <a href="/servicios" class="svc__more">Ver servicios <span aria-hidden="true">→</span></a>
+        </div>
       </div>
-      <div class="lg:col-span-4 lg:justify-self-end flex flex-col sm:flex-row lg:flex-col gap-4 items-start">
-        <a href="/contacto?servicio=Diagn%C3%B3stico%20gratis" class="btn-sunset">
-          Pedir diagnóstico gratis <span aria-hidden="true">→</span>
-        </a>
-        <a href="/servicios" class="svc__more">Ver servicios <span aria-hidden="true">→</span></a>
-      </div>
-    </div>
-  </section>
+    </section>
+  </div>
 </Layout>
+
+<style>
+  .pr {
+    list-style: none;
+    margin: clamp(2rem, 4vw, 2.75rem) 0 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.25rem;
+  }
+  @media (min-width: 768px) { .pr { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 2rem; } }
+  .pr li { padding-top: 0.9rem; border-top: 1px solid rgba(255, 210, 74, 0.45); }
+  .pr__n { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.16em; color: var(--color-neon); }
+  .pr__t {
+    margin-top: 0.5rem;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(1.1rem, 1rem + 0.4vw, 1.25rem);
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+    color: var(--color-ivory);
+  }
+  .pr__d { margin-top: 0.5rem; line-height: 1.55; color: var(--color-ivory-dim); max-width: 40ch; text-wrap: pretty; }
+</style>

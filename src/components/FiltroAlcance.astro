@@ -1,0 +1,187 @@
+---
+/* "Ni más ni menos": lo que se pide pasa por el diagnóstico y sale ordenado en
+   primero / después / no. Ejemplo ilustrativo; se anima la primera vez que entra en pantalla. */
+import Robot from "./Robot.astro";
+
+type Estado = "ya" | "luego" | "no";
+const pedidos: { t: string; e: Estado; por: string }[] = [
+  { t: "Control de stock", e: "ya", por: "Se usa todos los días" },
+  { t: "Alertas de reposición", e: "ya", por: "Evita quiebres de stock" },
+  { t: "App móvil propia", e: "no", por: "Una web en el celular alcanza" },
+  { t: "Integrar facturación", e: "ya", por: "Elimina la doble carga" },
+  { t: "Tablero de ventas", e: "luego", por: "Suma cuando haya datos" },
+  { t: "Chat interno", e: "no", por: "Ya usan WhatsApp" },
+  { t: "Informe mensual automático", e: "luego", por: "Etapa 2" },
+  { t: "20 formatos de reporte", e: "no", por: "Con 2 cubren todo" },
+];
+const etiqueta: Record<Estado, string> = { ya: "Primera etapa", luego: "Más adelante", no: "No hace falta" };
+const cuenta = (e: Estado) => pedidos.filter((p) => p.e === e).length;
+---
+
+<figure class="fa" data-fa aria-label="Ejemplo: cómo filtramos lo que se pide para construir solo lo que resuelve el problema">
+  <figcaption class="fa__cap">
+    <span>Lo que se pide · ejemplo de una distribuidora</span>
+    <span class="fa__legend" aria-hidden="true">
+      <span><i class="fa__dot fa__dot--ya"></i>{etiqueta.ya} ({cuenta("ya")})</span>
+      <span><i class="fa__dot fa__dot--luego"></i>{etiqueta.luego} ({cuenta("luego")})</span>
+      <span><i class="fa__dot fa__dot--no"></i>{etiqueta.no} ({cuenta("no")})</span>
+    </span>
+  </figcaption>
+
+  <div class="fa__gate" aria-hidden="true">
+    <span class="fa__bot"><Robot pose="think" size={56} /></span>
+    <span class="fa__gate-t">Diagnóstico: ¿resuelve el problema? ¿se va a usar todos los días?</span>
+    <span class="fa__scan"></span>
+  </div>
+
+  <ul class="fa__list">
+    {
+      pedidos.map((p, i) => (
+        <li class={`fa__item fa__item--${p.e}`} style={`--i:${i}`}>
+          <span class="fa__t">{p.t}</span>
+          <span class="fa__why">
+            <strong>{etiqueta[p.e]}</strong>
+            <span>{p.por}</span>
+          </span>
+        </li>
+      ))
+    }
+  </ul>
+</figure>
+
+<script>
+  document.addEventListener("astro:page-load", () => {
+    document.querySelectorAll<HTMLElement>("[data-fa]:not([data-ready])").forEach((el) => {
+      el.dataset.ready = "1";
+      const io = new IntersectionObserver(
+        ([e]) => {
+          if (!e.isIntersecting) return;
+          el.classList.add("is-in");
+          io.disconnect();
+        },
+        { threshold: 0.35 },
+      );
+      io.observe(el);
+    });
+  });
+</script>
+
+<style>
+  .fa {
+    --gold: #f5c542;
+    margin: 0;
+    padding: clamp(1.1rem, 2vw, 1.75rem);
+    border-radius: var(--radius-card);
+    border: 1px solid var(--color-hair);
+    background:
+      linear-gradient(color-mix(in srgb, var(--color-ink) 4%, transparent) 1px, transparent 1px) 0 0 / 24px 24px,
+      linear-gradient(90deg, color-mix(in srgb, var(--color-ink) 4%, transparent) 1px, transparent 1px) 0 0 / 24px 24px,
+      var(--color-page);
+  }
+  .fa__cap {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.75rem 1.5rem;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--color-ink-soft);
+  }
+  .fa__legend { display: inline-flex; flex-wrap: wrap; gap: 0.5rem 1rem; }
+  .fa__legend > span { display: inline-flex; align-items: center; gap: 0.45rem; white-space: nowrap; }
+  .fa__dot { display: inline-block; width: 12px; height: 12px; border-radius: 3px; border: 1.5px solid var(--color-ink); }
+  .fa__dot--ya { background: var(--gold); }
+  .fa__dot--luego { background: var(--color-blanco); }
+  .fa__dot--no { border-style: dashed; border-color: var(--color-hair-strong); }
+
+  /* Compuerta del diagnóstico: una línea que barre la lista */
+  .fa__gate {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    margin-top: 1.5rem;
+    padding: 0.75rem 1rem;
+    border-radius: 12px;
+    background: var(--color-action);
+    color: #f6f1e4;
+    overflow: hidden;
+  }
+  .fa__bot { flex: none; --bot-line: #f6f1e4; margin-block: -0.5rem -0.75rem; }
+  .fa__gate-t { font-size: 0.95rem; line-height: 1.35; font-weight: 600; text-wrap: pretty; }
+  .fa__scan {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 2px;
+    width: 100%;
+    background: #ffd24a;
+    transform: scaleX(0);
+    transform-origin: left;
+  }
+  .fa.is-in .fa__scan { animation: fa-scan 1.6s var(--ease-out-expo) forwards; }
+  @keyframes fa-scan { to { transform: scaleX(1); } }
+
+  .fa__list {
+    list-style: none;
+    margin: 1rem 0 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.5rem;
+  }
+  @media (min-width: 640px) { .fa__list { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+  /* Antes de filtrar: todos iguales y neutros. Después: cada uno toma su estado, escalonado. */
+  .fa__item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    padding: 0.8rem 1rem;
+    border-radius: 12px;
+    border: 1.5px solid var(--color-hair-strong);
+    background: var(--color-blanco);
+    color: var(--color-ink);
+    transition:
+      background-color 500ms var(--ease-out-expo),
+      border-color 500ms var(--ease-out-expo),
+      color 500ms var(--ease-out-expo),
+      opacity 500ms var(--ease-out-expo),
+      transform 500ms var(--ease-out-expo);
+    transition-delay: calc(700ms + var(--i) * 140ms);
+  }
+  .fa__t { font-family: var(--font-display); font-weight: 700; font-size: 1.05rem; letter-spacing: -0.015em; line-height: 1.2; }
+  .fa__why {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.2rem 0.6rem;
+    font-size: 0.8rem;
+    color: var(--color-ink-soft);
+    opacity: 0;
+    transform: translateY(4px);
+    transition: opacity 400ms ease, transform 450ms var(--ease-out-expo);
+    transition-delay: calc(850ms + var(--i) * 140ms);
+  }
+  .fa__why strong { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-ink); }
+
+  .fa.is-in .fa__why { opacity: 1; transform: none; }
+  .fa.is-in .fa__item--ya {
+    background: var(--gold);
+    border-color: var(--color-ink);
+    color: #0f1a3a;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 24px -14px rgba(15, 26, 58, 0.6);
+  }
+  .fa.is-in .fa__item--ya .fa__why,
+  .fa.is-in .fa__item--ya .fa__why strong { color: #0f1a3a; }
+  .fa.is-in .fa__item--luego { border-color: var(--color-ink); }
+  .fa.is-in .fa__item--no { border-style: dashed; background: transparent; opacity: 0.6; }
+  .fa.is-in .fa__item--no .fa__t { text-decoration: line-through; text-decoration-thickness: 1.5px; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .fa *, .fa__item { transition: none !important; animation: none !important; }
+    .fa__scan { transform: scaleX(1); }
+  }
+</style>
