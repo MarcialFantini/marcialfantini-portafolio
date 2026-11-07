@@ -26,7 +26,7 @@ const whatsappUrl = site.whatsapp
   <div class="ct__side" data-rise>
     {whatsappUrl && (
       <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" class="btn ct__wa">
-        Escribinos por WhatsApp <span aria-hidden="true">↗</span>
+        Escribinos por WhatsApp
       </a>
     )}
 
@@ -90,7 +90,7 @@ const whatsappUrl = site.whatsapp
 
     <button type="submit" id="contact-submit" class="btn ct__submit" data-rise>
       <span id="contact-submit-label">{endpoint ? "Enviar mensaje" : "Abrir mi app de email"}</span>
-      <span aria-hidden="true">→</span>
+     
     </button>
 
     <p id="contact-status" class="hidden" role="status" aria-live="polite"></p>
@@ -278,8 +278,8 @@ const whatsappUrl = site.whatsapp
   .ct__field option { background: var(--color-surface); color: var(--color-fg); }
   .ct__field input:hover, .ct__field select:hover, .ct__field textarea:hover { background: var(--color-surface-2); }
   .ct__field input:focus-visible, .ct__field select:focus-visible, .ct__field textarea:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 0; }
-  .ct__field [aria-invalid="true"] { outline: 2px solid #fca5a5; outline-offset: 0; }
-  .ct__err { margin-top: 0.4rem; font-size: var(--step-small); color: #fecaca; }
+  .ct__field [aria-invalid="true"] { outline: 2px solid var(--color-err-line); outline-offset: 0; }
+  .ct__err { margin-top: 0.4rem; font-size: var(--step-small); color: var(--color-err-ink); }
   .ct__submit { justify-self: start; }
   #contact-status { padding: 0.75rem 1rem; }
 

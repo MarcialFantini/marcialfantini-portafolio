@@ -8,100 +8,62 @@ const whatsappUrl = site.whatsapp
   ? `https://wa.me/${site.whatsapp}?text=${encodeURIComponent(site.whatsappMessage || "")}`
   : "";
 
+const foto = sobre.foto || site.aboutPhoto || "";
+
 const compromisos = [
-  { t: "Un responsable", d: "No un call center" },
-  { t: "Propuesta escrita", d: "Antes de cada cambio" },
-  { t: "Código y datos", d: "A nombre de tu empresa" },
+  { t: "Un solo responsable", d: "No un call center" },
+  { t: "Precio por escrito", d: "Antes de cada cambio" },
+  { t: "Todo a tu nombre", d: "El sistema y tus datos" },
 ];
 ---
 
 <section id="sobre-mi" class="sobre wrap" aria-labelledby="sobre-title">
-  <h2 id="sobre-title" class="sr-only">Sobre mí</h2>
-
-  <div class="sobre__row">
-    <div class="sobre__side">
-      <MediaSlot
-        kind="foto"
-        src={sobre.foto || site.aboutPhoto || undefined}
-        alt={`Retrato de ${site.name}`}
-        label="Foto: retrato de Marcial (pendiente)"
-        ratio="4 / 5"
-      />
-      <dl class="facts" data-rise>
-        <div><dt>Responsable</dt><dd>{site.name}</dd></div>
-        <div><dt>Base</dt><dd>{site.location}</dd></div>
-        <div>
-          <dt>Contacto</dt>
-          <dd>
-            {whatsappUrl && <a href={whatsappUrl} target="_blank" rel="noopener noreferrer">WhatsApp</a>}
-            {whatsappUrl && " · "}<a href={`mailto:${site.email}`}>Email</a> ·{" "}
-            <a href={site.social.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a> ·{" "}
-            <a href={site.social.github} target="_blank" rel="noopener noreferrer">GitHub</a>
-          </dd>
-        </div>
-      </dl>
-    </div>
-
-    <p class="sobre__p" data-rise style="--i:1">
-      {sobre.frase} Hablás con quien hace el trabajo, no con un call center.
-    </p>
+  <div class="sobre__media">
+    {
+      foto ? (
+        <MediaSlot kind="foto" src={foto} alt={`Retrato de ${site.name}`} label="" ratio="4 / 5" />
+      ) : (
+        <SceneTorre class="sobre__tower" />
+      )
+    }
   </div>
 
-  <div class="sobre__row sobre__row--record">
-    <div class="sobre__build">
-      <p class="sobre__word">Con qué</p>
-      <SceneTorre class="sobre__tower" />
-    </div>
-    <div class="sobre__lists">
-      <ul class="rec" data-rise>
-        {sobre.stack.map((s) => <li><span>{s.area}</span><span class="soft">{s.tec.join(", ")}</span></li>)}
-      </ul>
-      <ul class="rec" data-rise style="--i:1">
-        {compromisos.map((c) => <li><span>{c.t}</span><span class="soft">{c.d}</span></li>)}
-      </ul>
-    </div>
+  <div class="sobre__body">
+    <h2 id="sobre-title" data-split>Quién lo hace</h2>
+    <p class="sobre__p" data-rise>
+      Soy {site.name.split(" ")[0]}. Armo cada sistema y respondo por él después. Hablás con quien hace el trabajo.
+    </p>
+    <ul class="rec" data-rise style="--i:1">
+      {compromisos.map((c) => <li><span>{c.t}</span><span class="soft">{c.d}</span></li>)}
+    </ul>
+    <p class="sobre__links soft" data-rise style="--i:2">
+      {site.location}. Escribime por{" "}
+      {whatsappUrl && <><a href={whatsappUrl} target="_blank" rel="noopener noreferrer">WhatsApp</a>, </>}
+      <a href={`mailto:${site.email}`}>email</a> o{" "}
+      <a href={site.social.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a>.
+    </p>
   </div>
 </section>
 
 <style>
-  .sobre { margin-top: var(--section-gap); }
-  .sobre__row { display: grid; gap: 2.5rem; }
-  .sobre__row--record { margin-top: 5rem; }
-  .sobre__side :global(.slot) { overflow: hidden; }
-  @supports (animation-timeline: view()) {
-    @media (prefers-reduced-motion: no-preference) {
-      /* Slow drift on the portrait */
-      .sobre__side :global(.slot) { animation: portrait linear both; animation-timeline: view(); animation-range: cover 0% cover 100%; }
-      @keyframes portrait { from { transform: scale(1.06) translateY(2%); } to { transform: scale(1) translateY(-2%); } }
-    }
+  .sobre {
+    margin-top: var(--section-gap);
+    display: grid;
+    gap: 2.5rem;
+    align-items: center;
   }
-
-
-  .facts { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin-top: 1.5rem; font-size: var(--step-small); }
-  .facts > div:last-child { grid-column: 1 / -1; }
-  .facts dt { color: var(--color-soft); }
-  .facts dd { margin: 0.15rem 0 0; }
-  .facts a { display: inline-block; padding-block: 0.35rem; }
-
-  .sobre__p {
-    font-size: var(--step-lead);
-    line-height: 1.35;
-    max-width: 52ch;
-  }
-
-  .sobre__word { font-size: var(--step-small); font-weight: 500; }
-  :global(.sobre__tower) { width: min(100%, 18rem); margin-top: 1.5rem; }
-  .sobre__lists { display: grid; gap: 2.5rem; }
-  .rec { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.65rem; font-size: var(--step-small); }
-  .rec li { display: flex; justify-content: space-between; gap: 1.5rem; }
-  .rec li span:last-child { text-align: right; }
-
   @media (min-width: 900px) {
-    .sobre__row { grid-template-columns: 34% 1fr; column-gap: 0; gap: 0; }
-    .sobre__side { padding-right: 4rem; max-width: 26rem; }
-    .sobre__p { align-self: start; max-width: none; padding-right: 10%; }
-    .sobre__lists { grid-template-columns: repeat(2, minmax(0, 21rem)); column-gap: 4rem; }
-    .facts { grid-template-columns: 1fr; }
-    .facts > div:last-child { grid-column: auto; }
+    .sobre { grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); column-gap: clamp(2rem, 5vw, 5rem); }
   }
+  .sobre__media :global(.slot) { overflow: hidden; }
+  :global(.sobre__tower) { width: 100%; max-width: 30rem; margin-inline: auto; }
+  .sobre__body { display: grid; gap: 1.75rem; }
+  .sobre__body h2 { min-width: 0; overflow-wrap: break-word; }
+  .sobre__p { font-size: var(--step-lead); line-height: 1.35; max-width: 34ch; }
+  .rec { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; max-width: 30rem; }
+  .rec li { display: flex; justify-content: space-between; gap: 1.5rem; padding: 0.85rem 1rem; background: var(--color-surface); font-size: var(--step-small); }
+  .rec li span:first-child { font-weight: 500; }
+  .rec li span:last-child { text-align: right; }
+  .sobre__links { font-size: var(--step-small); }
+  .sobre__links a { display: inline-block; padding-block: 0.25rem; }
 </style>

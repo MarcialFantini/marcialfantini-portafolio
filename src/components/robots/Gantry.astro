@@ -5,7 +5,7 @@ interface Props { x?: number; y?: number; w?: number; h?: number; class?: string
 const { x = 0, y = 0, w = 220, h = 150, class: cls } = Astro.props;
 ---
 
-<svg class:list={["rb rb-gantry", cls]} x={x} y={y} width={w} height={h} viewBox={`0 0 ${w} ${h}`} overflow="visible">
+<svg aria-hidden="true" class:list={["rb rb-gantry", cls]} x={x} y={y} width={w} height={h} viewBox={`0 0 ${w} ${h}`} overflow="visible">
   <rect x="4" y="16" width="8" height={h - 16} class="r-soft" />
   <rect x={w - 12} y="16" width="8" height={h - 16} class="r-soft" />
   <rect x="0" y={h - 6} width="16" height="6" rx="2" class="r-soft" />

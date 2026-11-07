@@ -6,7 +6,7 @@ interface Props { x?: number; y?: number; s?: number; class?: string }
 const { x = 0, y = 0, s = 1, class: cls } = Astro.props;
 ---
 
-<svg class:list={["rb rb-scara", cls]} x={x} y={y} width={150 * s} height={140 * s} viewBox="0 0 150 140" overflow="visible">
+<svg aria-hidden="true" class:list={["rb rb-scara", cls]} x={x} y={y} width={150 * s} height={140 * s} viewBox="0 0 150 140" overflow="visible">
   <rect x="4" y="128" width="42" height="12" rx="3" class="r-soft" />
   <rect x="12" y="44" width="26" height="86" rx="4" class="r-ink" />
   <rect x="15" y="60" width="20" height="10" rx="3" class="r-dark" />

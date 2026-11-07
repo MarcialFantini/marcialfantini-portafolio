@@ -56,7 +56,7 @@ const contactoHref = (titulo: string) => `/contacto?servicio=${encodeURIComponen
       <p class="sv-hero__lead" data-rise style="--i:1">
         Software a medida para ordenar tu PyME, y los canales digitales que lo alimentan: página, sitio institucional o tienda online.
       </p>
-      <a href={contactoHref("Diagnóstico gratis")} class="btn" data-rise style="--i:2">Contanos el problema <span aria-hidden="true">→</span></a>
+      <a href={contactoHref("Diagnóstico gratis")} class="btn" data-rise style="--i:2">Contanos el problema</a>
     </div>
   </section>
 
@@ -72,7 +72,7 @@ const contactoHref = (titulo: string) => `/contacto?servicio=${encodeURIComponen
           <ul>{sistema.queIncluye.map((t) => <li>{t}</li>)}</ul>
         </div>
         <div class="sv-core__actions" data-rise style="--i:3">
-          <a href={contactoHref(sistema.titulo)} class="btn sv-core__btn">{sistema.cta} <span aria-hidden="true">→</span></a>
+          <a href={contactoHref(sistema.titulo)} class="btn sv-core__btn">{sistema.cta}</a>
           <a href={`/servicios/${sistema.id}`}>Ver el detalle</a>
         </div>
       </div>
@@ -122,7 +122,7 @@ const contactoHref = (titulo: string) => `/contacto?servicio=${encodeURIComponen
     <p class="sv-end__p" data-rise style="--i:1">
       Empezá por el diagnóstico gratis de 30 minutos. Si tu caso no se resuelve con nada de esto, te lo decimos y te orientamos hacia otra opción.
     </p>
-    <a href={contactoHref("Quiero hablar de mi proyecto")} class="btn" data-rise style="--i:2">Contanos qué necesitás <span aria-hidden="true">→</span></a>
+    <a href={contactoHref("Quiero hablar de mi proyecto")} class="btn" data-rise style="--i:2">Contanos qué necesitás</a>
   </section>
 </Layout>
 

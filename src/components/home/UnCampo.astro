@@ -27,7 +27,7 @@ const waUrl = site.whatsapp
         autocomplete="off"
         placeholder="Ej.: perdemos pedidos entre WhatsApp y Excel"
       />
-      <button type="submit" aria-label="Enviar por WhatsApp"><span aria-hidden="true">→</span></button>
+      <button type="submit" >Enviar</button>
     </form>
     <p class="uc__next soft" data-rise style="--i:2">
       Se abre WhatsApp con tu mensaje. Te respondemos en 24 h hábiles y el diagnóstico de 30 minutos es gratis.
@@ -59,16 +59,21 @@ const waUrl = site.whatsapp
 </script>
 
 <style>
-  .uc { padding-top: clamp(5rem, 12vw, 12.5rem); }
-  .uc__col { max-width: 32.5rem; margin-inline: auto; }
+  .uc { padding-block: var(--section-gap) 2rem; }
+  .uc__col { display: grid; grid-template-columns: minmax(0, 1fr); }
   :global(.uc__crew) { width: min(100%, 20rem); margin: 0 0 1.5rem; }
+  @media (min-width: 900px) {
+    .uc__col { grid-template-columns: minmax(0, 6fr) minmax(0, 5fr); column-gap: clamp(2rem, 5vw, 5rem); align-items: start; }
+    .uc__col > :not(.uc__crew) { grid-column: 1; }
+    :global(.uc__crew) { grid-column: 2; grid-row: 1 / span 6; align-self: center; width: 100%; max-width: 28rem; margin: 0; }
+  }
   .uc__prompt {
     display: flex;
     flex-direction: column;
     font-family: var(--font-sans);
-    font-size: var(--step-lead);
+    font-size: clamp(1.75rem, 1.2rem + 1.8vw, 2.75rem);
     font-weight: 500;
-    line-height: 1.25;
+    line-height: 1.1;
     letter-spacing: -0.01em;
   }
   .uc__form {
@@ -91,25 +96,26 @@ const waUrl = site.whatsapp
     color: var(--color-accent-ink);
     font: inherit;
   }
-  .uc__form input::placeholder { color: #4d5566; }
+  .uc__form input::placeholder { color: var(--color-placeholder); }
   .uc__form input:focus-visible { outline: none; }
   .uc__form button {
     flex: none;
-    width: 2.75rem;
     height: 2.75rem;
+    padding-inline: 1.25rem;
     margin-right: 0.5rem;
+    font-weight: 500;
     background: var(--color-accent);
     color: var(--color-accent-ink);
     border: 0;
-    font-size: 1.25rem;
+    font-size: var(--step-body);
     cursor: pointer;
     transition: transform 160ms var(--ease-out-quart), background-color 160ms var(--ease-out-quart);
   }
-  .uc__form button:hover { background: #2f7cf0; color: #fff; }
+  .uc__form button:hover { background: var(--color-accent-hi); color: var(--color-accent-ink); }
   .uc__form button:active { transform: scale(0.94); }
   .uc__next { margin-top: 1rem; font-size: var(--step-small); }
 
-  .uc__facts { display: grid; gap: 1.25rem; margin-top: 4.5rem; font-size: var(--step-small); }
+  .uc__facts { display: grid; gap: 1rem; margin-top: 2.5rem; font-size: var(--step-small); }
   .uc__facts dd { margin: 0.15rem 0 0; }
   .uc__facts a { display: inline-block; padding-block: 0.35rem; }
   @media (min-width: 640px) {

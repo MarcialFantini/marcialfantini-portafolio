@@ -1,0 +1,110 @@
+---
+/* Four demo projects told as before / after, in the visitor's words.
+   They are demos built to show what is possible: never presented as clients, never with figures. */
+import { getPublishedProjects } from "../../lib/content";
+import SceneConvoy from "../robots/scenes/SceneConvoy.astro";
+
+const casos = [
+  {
+    id: "inventario-distribuidora",
+    rubro: "Distribuidora",
+    antes: "El stock estaba en cuatro Excel. Vendían cosas que ya no tenían.",
+    ahora: "Un solo stock para todos los depósitos, con aviso antes de que algo falte.",
+  },
+  {
+    id: "tracker-pedidos",
+    rubro: "Logística",
+    antes: "Los clientes llamaban todo el día para preguntar dónde estaba su pedido.",
+    ahora: "Cada cliente ve su pedido en el celular y recibe un aviso cuando avanza.",
+  },
+  {
+    id: "dashboard-cobranzas",
+    rubro: "Cobranzas",
+    antes: "Las deudas se revisaban una vez por semana, a mano.",
+    ahora: "Ven todos los días quién debe y quién ya pagó.",
+  },
+  {
+    id: "automatizacion-crm-whatsapp",
+    rubro: "Clínica",
+    antes: "Una persona mandaba los recordatorios de turno uno por uno.",
+    ahora: "Los recordatorios salen solos y el paciente confirma con un toque.",
+  },
+];
+
+const published = new Set((await getPublishedProjects()).map((p) => p.id));
+---
+
+<section id="proyectos-demo" class="casos wrap" aria-labelledby="casos-title">
+  <div class="casos__head">
+    <h2 id="casos-title" data-split>Así se ve resuelto</h2>
+    <p class="casos__note soft" data-rise>Son proyectos de demostración, hechos para mostrar cómo funciona. No son clientes.</p>
+  </div>
+
+  <ul class="casos__grid">
+    {
+      casos.map((c, i) => (
+        <li class="caso" data-rise style={`--i:${i % 2}`}>
+          <h3 class="caso__rubro">{c.rubro}</h3>
+          <dl class="caso__dl">
+            <div>
+              <dt class="soft">Antes</dt>
+              <dd>{c.antes}</dd>
+            </div>
+            <div>
+              <dt class="caso__ahora">Ahora</dt>
+              <dd>{c.ahora}</dd>
+            </div>
+          </dl>
+          {published.has(c.id) && (
+            <a class="caso__link" href={`/proyectos/${c.id}`}>Ver cómo funciona</a>
+          )}
+        </li>
+      ))
+    }
+  </ul>
+
+  <p class="casos__more"><a href="/proyectos">Ver todos los proyectos demo</a></p>
+  <SceneConvoy class="casos__convoy" />
+</section>
+
+<style>
+  .casos { margin-top: var(--section-gap); }
+  .casos__head { display: grid; gap: 1.25rem; }
+  .casos__head h2 { min-width: 0; overflow-wrap: break-word; }
+  .casos__note { font-size: var(--step-small); max-width: 44ch; }
+
+  .casos__grid {
+    list-style: none;
+    margin: 3rem 0 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 4px;
+  }
+  @media (min-width: 768px) {
+    .casos__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+
+  .caso {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    padding: clamp(1.25rem, 2.5vw, 2rem);
+    background: var(--color-surface);
+  }
+  .caso__rubro { font-size: var(--step-lead); }
+  .caso__dl { display: grid; gap: 1.25rem; margin: 0; }
+  .caso__dl dt { font-size: var(--step-small); margin-bottom: 0.25rem; }
+  .caso__dl dd { margin: 0; font-size: var(--step-body); line-height: 1.45; }
+  .caso__ahora { color: var(--color-accent); }
+  .caso__link {
+    margin-top: auto;
+    align-self: flex-start;
+    display: inline-block;
+    padding-block: 0.5rem;
+    font-size: var(--step-small);
+  }
+  .casos__more { margin-top: 2rem; }
+  .casos__more a { display: inline-block; padding-block: 0.5rem; }
+  :global(.casos__convoy) { margin-top: 3rem; overflow: hidden; }
+</style>

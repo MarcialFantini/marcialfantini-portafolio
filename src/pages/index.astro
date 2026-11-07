@@ -1,64 +1,77 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import HeroWord from "../components/home/HeroWord.astro";
-import Campos from "../components/home/Campos.astro";
+import Hero from "../components/home/Hero.astro";
+import Capitulos from "../components/home/Capitulos.astro";
 import MediaSlot from "../components/home/MediaSlot.astro";
 import Proceso from "../components/home/Proceso.astro";
-import Demos from "../components/home/Demos.astro";
+import Casos from "../components/home/Casos.astro";
 import Sobre from "../components/home/Sobre.astro";
 import Dudas from "../components/home/Dudas.astro";
 import UnCampo from "../components/home/UnCampo.astro";
-import PostList from "../components/PostList.astro";
 import site from "../data/site.json";
-import { getPublishedPosts } from "../lib/content";
+import fotos from "../data/fotos.json";
 
-const latest = (await getPublishedPosts()).slice(0, 3);
-
-// Video band: drop the files in /public/media and fill these two paths.
+// Video band: drop the files in /public/media and fill these two paths. Until then the band shows a photograph.
 const video = { src: "", poster: "" };
+const banda = fotos.turnoNoche;
 ---
 
 <Layout title={`${site.name} · Software a medida para PyMEs`} description={site.description}>
-  <HeroWord />
-  <Campos />
+  <!-- 1. The promise, with the product over the robot floor -->
+  <Hero />
+  <!-- 2. Four chapters on one rail: order, connect, automate, numbers -->
+  <Capitulos />
 
-  <section class="band" aria-label="Un sistema en uso">
-    <MediaSlot
-      kind="video"
-      src={video.src || undefined}
-      poster={video.poster || undefined}
-      alt="Un sistema de pedidos en uso"
-      label="Video: grabación de pantalla de un sistema en uso (pendiente)"
-      ratio="21 / 9"
-    />
+  <section class="band" aria-labelledby="band-title">
+    <div class="band__media">
+      {
+        video.src ? (
+          <MediaSlot kind="video" src={video.src} poster={video.poster || undefined} alt="Un sistema de pedidos en uso" label="" ratio="21 / 9" />
+        ) : (
+          <img class="band__img" src={banda.src} alt={banda.alt} width={banda.width} height={banda.height} loading="lazy" decoding="async" />
+        )
+      }
+    </div>
+    <h2 id="band-title" class="band__h wrap" data-split>Tu negocio sigue andando mientras lo armamos.</h2>
   </section>
 
+  <!-- 3. How, in three steps -->
   <Proceso />
-  <Demos />
+  <!-- 4. Examples, before and after -->
+  <Casos />
+  <!-- 5. Who, questions, contact -->
   <Sobre />
-  {
-    latest.length > 0 && (
-      <section class="escritos wrap" aria-labelledby="escritos-title">
-        <h2 id="escritos-title" data-split>Escritos</h2>
-        <PostList posts={latest} />
-        <p><a href="/blog">Ver todos los escritos</a></p>
-      </section>
-    )
-  }
   <Dudas />
   <UnCampo />
 </Layout>
 
 <style>
-  .band { overflow: hidden; }
-  .band :global(.slot) { min-height: 50svh; }
-  @supports (animation-timeline: view()) {
-    @media (prefers-reduced-motion: no-preference) {
-      /* Slow push-in on the footage band */
-      .band :global(.slot) { animation: band-zoom linear both; animation-timeline: view(); animation-range: cover 0% cover 100%; }
-      @keyframes band-zoom { from { transform: scale(1.14); } to { transform: scale(1); } }
+  .band { position: relative; margin-top: var(--section-gap); }
+  .band__media { overflow: hidden; }
+  .band__img, .band__media :global(.slot) {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 21 / 9;
+    min-height: 50svh;
+    object-fit: cover;
+    object-position: 50% 45%;
+  }
+  /* The line sits on a plate of the page ground, cut into the photo's lower edge */
+  .band__h {
+    max-width: 18ch;
+    min-width: 0;
+    overflow-wrap: break-word;
+    padding-top: 1.5rem;
+  }
+  @media (min-width: 768px) {
+    .band__h {
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      max-width: min(40rem, 60%);
+      padding: 2rem var(--gutter) 0;
+      background: var(--color-bg);
     }
   }
-
-  .escritos { margin-top: var(--section-gap); display: grid; gap: 3rem; }
 </style>

@@ -104,7 +104,7 @@ const otros = servicios.filter((s) => s.id !== servicio.id);
       <dl class="sd-hero__facts" data-rise style="--i:2">
         <div><dt class="soft">Duración</dt><dd>{servicio.duracion}</dd></div>
         <div><dt class="soft">Cómo se cotiza</dt><dd>Propuesta cerrada por escrito, después del diagnóstico gratis de 30 minutos.</dd></div>
-        <div><a href={contactoHref} class="btn">{servicio.cta} <span aria-hidden="true">→</span></a></div>
+        <div><a href={contactoHref} class="btn">{servicio.cta}</a></div>
       </dl>
     </div>
   </section>
@@ -150,7 +150,7 @@ const otros = servicios.filter((s) => s.id !== servicio.id);
     <p class="sd-end__p" data-rise style="--i:1">
       Empezá por el diagnóstico gratis de 30 minutos. Si no es lo que te conviene, te lo decimos y te orientamos.
     </p>
-    <a href={contactoHref} class="btn" data-rise style="--i:2">{servicio.cta} <span aria-hidden="true">→</span></a>
+    <a href={contactoHref} class="btn" data-rise style="--i:2">{servicio.cta}</a>
     <p class="sd-end__more" data-rise style="--i:3">
       Otros servicios:{" "}
       {otros.map((o, i) => (

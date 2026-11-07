@@ -45,7 +45,7 @@ function setup() {
     { rootMargin: "0px 0px -8% 0px", threshold: 0.05 }
   );
 
-  document.documentElement.classList.add("rise-ready");
+  document.documentElement.classList.add("js");
   items.forEach((el) => io!.observe(el));
 }
 

@@ -1,8 +1,11 @@
 ---
 import site from "../data/site.json";
+import fotos from "../data/fotos.json";
 import { hasPublishedPosts, hasPublishedProjects } from "../lib/content";
 
 const year = new Date().getFullYear();
+const isHome = Astro.url.pathname === "/";
+const creditos = Object.values(fotos);
 
 const socials = [
   { href: site.social.linkedin, label: "LinkedIn" },
@@ -43,7 +46,7 @@ const links = [
         <div class="ft__field">
           <label class="sr-only" for="newsletter-email">Tu email</label>
           <input type="email" id="newsletter-email" name="email" required autocomplete="email" placeholder="tu@email.com" />
-          <button type="submit" aria-label="Suscribirme al newsletter"><span aria-hidden="true">→</span></button>
+          <button type="submit" >Suscribirme</button>
         </div>
         <p id="newsletter-msg" class="ft__msg" role="status" aria-live="polite" hidden></p>
       </form>
@@ -56,7 +59,17 @@ const links = [
   </div>
 
   <p class="ft__name" aria-hidden="true" data-footer-name>Fantini</p>
-  <p class="ft__legal wrap soft">© {year} {site.name} · {site.location}</p>
+  <p class="ft__legal wrap soft">© {year} {site.name}, {site.location}</p>
+  {isHome && (
+    <p class="ft__credits wrap soft">
+      {creditos.length > 1 ? "Fotografías:" : "Fotografía:"}{" "}
+      {creditos.map((f, i) => (
+        <>
+          <a href={f.url} target="_blank" rel="noopener noreferrer">{f.autor}</a> ({f.licencia}, Wikimedia Commons){i < creditos.length - 1 ? ", " : "."}
+        </>
+      ))}
+    </p>
+  )}
 </footer>
 
 <script>
@@ -146,15 +159,16 @@ const links = [
   }
   .ft__field input:focus-visible { outline: none; box-shadow: inset 0 0 0 2px var(--color-accent); } /* taste-skill-ignore: focus ring */
   .ft__field button {
-    width: 3.25rem;
+    padding-inline: 1.25rem;
+    font-weight: 500;
     background: var(--color-accent);
     color: var(--color-accent-ink);
     border: 0;
-    font-size: 1.25rem;
+    font-size: var(--step-small);
     cursor: pointer;
     transition: background-color 160ms var(--ease-out-quart);
   }
-  .ft__field button:hover { background: #8fbaff; }
+  .ft__field button:hover { background: var(--color-accent-hi); }
   .ft__msg { margin-top: 0.75rem; font-size: var(--step-small); }
 
   .ft__links { display: flex; flex-wrap: wrap; gap: 0.5rem 1.75rem; }
@@ -171,6 +185,7 @@ const links = [
     transform-origin: 0 100%;
   }
   .ft__legal { font-size: var(--step-small); padding-block: 1.5rem 2rem; }
+  .ft__credits { font-size: var(--step-small); padding-bottom: 2rem; margin-top: -1rem; }
   @supports (animation-timeline: view()) {
     @media (prefers-reduced-motion: no-preference) {
       /* The name settles as the page ends */

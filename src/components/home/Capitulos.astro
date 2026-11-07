@@ -1,0 +1,402 @@
+---
+/* Four chapters on one vertical rail, each on its own tint:
+   a plain promise, one sentence, a large panel of the product with its robot crew, three short benefits.
+   Every panel is an illustrative example and says so. */
+import SceneStock from "../robots/scenes/SceneStock.astro";
+import SceneRepetitivo from "../robots/scenes/SceneRepetitivo.astro";
+import SceneNumeros from "../robots/scenes/SceneNumeros.astro";
+import Agv from "../robots/Agv.astro";
+import Tablero from "./Tablero.astro";
+
+const caps = [
+  {
+    id: "ordenar",
+    h: "Tus pedidos y tu stock, en un solo lugar.",
+    p: "Dejás de buscar en WhatsApp, en el Excel y en la cabeza de alguien.",
+    beneficios: [
+      { t: "Stock real", d: "Por depósito y siempre al día." },
+      { t: "Cada pedido con su estado", d: "Sabés en qué paso va." },
+      { t: "Desde el celular", d: "Lo ves donde estés." },
+    ],
+  },
+  {
+    id: "conectar",
+    h: "Lo que ya usás, conectado.",
+    p: "WhatsApp, el Excel, tu tienda y tu facturación cargan cada dato una sola vez.",
+    beneficios: [
+      { t: "Sin copiar y pegar", d: "Cada dato se carga una vez." },
+      { t: "Sin cambiar todo", d: "Lo que ya funciona, se queda." },
+      { t: "Sin errores de tipeo", d: "Nadie pasa datos a mano." },
+    ],
+  },
+  {
+    id: "automatizar",
+    h: "Lo repetitivo se hace solo.",
+    p: "Facturas, recordatorios y avisos salen a tiempo, sin que nadie los mande.",
+    beneficios: [
+      { t: "Facturas automáticas", d: "Salen cuando se cierra la venta." },
+      { t: "Avisos por WhatsApp o mail", d: "A vos, a tu equipo o al cliente." },
+      { t: "Horas libres", d: "Para atender, vender o descansar." },
+    ],
+  },
+  {
+    id: "numeros",
+    h: "Sabés cómo va el mes, todos los días.",
+    p: "Ventas, cobros y stock en una pantalla, con un aviso cuando algo se desvía.",
+    beneficios: [
+      { t: "Todo en una pantalla", d: "Sin armar informes a mano." },
+      { t: "Avisos a tiempo", d: "Antes de que lo note el cliente." },
+      { t: "Decisiones con datos", d: "No a ojo ni a fin de mes." },
+    ],
+  },
+];
+
+const stock = [
+  { p: "Cajas 30 x 40", a: "120", b: "45", alerta: false, repone: "" },
+  { p: "Cinta de embalar", a: "18", b: "0", alerta: true, repone: "40" },
+  { p: "Etiquetas", a: "900", b: "300", alerta: false, repone: "" },
+  { p: "Film stretch", a: "6", b: "2", alerta: true, repone: "24" },
+];
+
+/* One sale closes, everything after it happens on its own: cause, then the chain of effects. */
+const cadena = [
+  { t: "+1 s", d: "Se emite la factura" },
+  { t: "+2 s", d: "Le llega por WhatsApp al cliente" },
+  { t: "+3 s", d: "Se descuenta del stock" },
+  { t: "+4 s", d: "Aviso a compras: queda poco" },
+];
+
+const entradas = [
+  { y: 60, t: "WhatsApp" },
+  { y: 150, t: "Tienda online" },
+  { y: 240, t: "Excel" },
+];
+const salidas = [
+  { y: 60, t: "Stock" },
+  { y: 150, t: "Facturas" },
+  { y: 240, t: "Tablero" },
+];
+---
+
+<div class="caps">
+  <div class="rail" aria-hidden="true"><span class="rail__fill"></span></div>
+
+  {
+    caps.map((c, i) => (
+      <section id={c.id} class:list={["cap", `cap--${i + 1}`]} aria-labelledby={`${c.id}-title`}>
+        <span class="cap__mark" aria-hidden="true">{i + 1}</span>
+
+        <div class="cap__head">
+          <h2 id={`${c.id}-title`} data-split>{c.h}</h2>
+          <p class="cap__p" data-rise>{c.p}</p>
+        </div>
+
+        <figure class="cap__panel" data-rise style="--i:1">
+          <figcaption class="cap__cap soft">Ejemplo</figcaption>
+
+          {c.id === "ordenar" && (
+            <div class="cap__split" data-stock>
+              <table class="cap__table">
+                <caption class="sr-only">Stock por depósito, ejemplo</caption>
+                <thead>
+                  <tr><th scope="col">Producto</th><th scope="col">Depósito norte</th><th scope="col">Depósito sur</th></tr>
+                </thead>
+                <tbody>
+                  {stock.map((s) => (
+                    <tr>
+                      <th scope="row">{s.p}</th>
+                      <td>{s.a}</td>
+                      <td class:list={[s.alerta && "is-low"]}>
+                        <span data-qty>{s.b}</span>
+                        {s.alerta && (
+                          <button type="button" class="cap__restock" data-restock={s.repone}>Reponer</button>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              <SceneStock class="cap__crew" />
+            </div>
+          )}
+
+          {c.id === "conectar" && (
+            <div class="rbs cap__graph" data-rb>
+              <svg viewBox="0 0 680 380" role="img" aria-label="WhatsApp, la tienda online y el Excel cargan en tu sistema, que actualiza el stock, las facturas y el tablero" focusable="false">
+                <defs>
+                  <pattern id="cap-dots" width="20" height="20" patternUnits="userSpaceOnUse">
+                    <rect x="9" y="9" width="2" height="2" class="g-dot" />
+                  </pattern>
+                </defs>
+                <rect width="680" height="380" fill="url(#cap-dots)" />
+                {entradas.map((n, k) => (
+                  <g>
+                    <rect x="170" y={n.y - 1} width="85" height="2" class="g-wire" />
+                    <rect x="170" y={n.y - 5} width="10" height="10" class="r-acc g-pk" style={`--d:${k * -0.8}s`} />
+                    <rect x="20" y={n.y - 24} width="150" height="48" class="g-node" />
+                    <text x="36" y={n.y + 6} class="g-t">{n.t}</text>
+                  </g>
+                ))}
+                {salidas.map((n, k) => (
+                  <g>
+                    <rect x="425" y={n.y - 1} width="85" height="2" class="g-wire" />
+                    <rect x="425" y={n.y - 5} width="10" height="10" class="r-acc g-pk" style={`--d:${k * -0.8 - 1.2}s`} />
+                    <rect x="510" y={n.y - 24} width="150" height="48" class="g-node" />
+                    <text x="526" y={n.y + 6} class="g-t">{n.t}</text>
+                  </g>
+                ))}
+                <rect x="255" y="30" width="170" height="240" class="g-core" />
+                <text x="340" y="146" text-anchor="middle" class="g-core-t">Tu sistema</text>
+                <text x="340" y="170" text-anchor="middle" class="g-d">cada dato, una vez</text>
+                <rect x="0" y="364" width="680" height="8" class="r-floor" />
+                <g class="g-agv">
+                  <Agv x={0} y={306}><rect x="48" y="-8" width="24" height="24" class="r-acc" /></Agv>
+                </g>
+              </svg>
+            </div>
+          )}
+
+          {c.id === "automatizar" && (
+            <div class="cap__split cap__split--auto" data-auto>
+              <div class="auto">
+                <div class="auto__trigger">
+                  <p>
+                    <strong>Venta <span data-auto-n>2087</span></strong>
+                    <span class="soft"> cerrada por tu vendedor</span>
+                  </p>
+                  <button type="button" class="cap__restock" data-auto-run>Cerrar otra venta</button>
+                </div>
+                <ol class="auto__chain">
+                  {cadena.map((s) => (
+                    <li data-step>
+                      <span class="auto__t">{s.t}</span>
+                      <span>{s.d}</span>
+                      <span class="auto__ok" data-state>Listo</span>
+                    </li>
+                  ))}
+                </ol>
+                <p class="auto__foot soft">Nadie tocó nada.</p>
+              </div>
+              <SceneRepetitivo class="cap__crew cap__crew--auto" />
+            </div>
+          )}
+
+          {c.id === "numeros" && (
+            <div class="cap__board">
+              <SceneNumeros class="cap__crew cap__crew--top" />
+              <Tablero />
+            </div>
+          )}
+        </figure>
+
+        <ul class="cap__ben">
+          {c.beneficios.map((b, k) => (
+            <li data-rise style={`--i:${k}`}>
+              <strong>{b.t}</strong>
+              <span class="soft">{b.d}</span>
+            </li>
+          ))}
+        </ul>
+      </section>
+    ))
+  }
+</div>
+
+<style>
+  .caps {
+    position: relative;
+    --rail-x: calc(var(--gutter) + 1rem);
+    --content-x: calc(var(--gutter) + 3.25rem);
+  }
+  @media (min-width: 900px) {
+    .caps { --rail-x: calc(var(--gutter) + 2rem); --content-x: calc(var(--gutter) + 6rem); }
+  }
+
+  /* The rail runs through every chapter; its fill follows the reader down. */
+  .rail {
+    position: absolute;
+    z-index: 2;
+    top: 0;
+    bottom: 0;
+    left: var(--rail-x);
+    width: 2px;
+    background: var(--color-surface-2);
+    pointer-events: none;
+  }
+  .rail__fill { position: absolute; inset: 0; background: var(--color-accent); transform-origin: top; transform: scaleY(0); }
+  @supports not (animation-timeline: view()) {
+    .rail__fill { transform: scaleY(1); }
+  }
+  @supports (animation-timeline: view()) {
+    .rail__fill { animation: rail-fill linear both; animation-timeline: view(); animation-range: cover 15% cover 85%; }
+    @media (prefers-reduced-motion: reduce) {
+      .rail__fill { animation: none; transform: scaleY(1); }
+    }
+  }
+  @keyframes rail-fill { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+
+  .cap {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: "head" "panel" "ben";
+    padding: clamp(3.5rem, 7vw, 6rem) var(--gutter) clamp(3.5rem, 7vw, 6rem) var(--content-x);
+  }
+  @media (min-width: 1100px) {
+    /* Text and benefits on the left, the product on the right: one screen per chapter */
+    .cap {
+      grid-template-columns: minmax(0, 4fr) minmax(0, 7fr);
+      grid-template-areas: "head panel" "ben panel";
+      grid-template-rows: auto 1fr;
+      column-gap: clamp(2rem, 4vw, 4rem);
+      align-items: start;
+    }
+  }
+  .cap__head { grid-area: head; }
+  .cap__panel { grid-area: panel; }
+  .cap__ben { grid-area: ben; }
+  .cap--1 { background: var(--color-tint-1); }
+  .cap--2 { background: var(--color-tint-2); }
+  .cap--3 { background: var(--color-tint-3); }
+  .cap--4 { background: var(--color-tint-4); }
+
+  .cap__mark {
+    position: absolute;
+    z-index: 3;
+    left: calc(var(--rail-x) - 1rem + 1px);
+    top: clamp(3.5rem, 7vw, 6rem);
+    display: grid;
+    place-items: center;
+    width: 2rem;
+    height: 2rem;
+    background: var(--color-accent);
+    color: var(--color-accent-ink);
+    font-size: var(--step-small);
+    font-weight: 500;
+  }
+
+  .cap__head { display: grid; gap: 1.25rem; max-width: 40rem; }
+  .cap__head h2 { font-size: clamp(2rem, 1.3rem + 2.2vw, 3.25rem); line-height: 1; min-width: 0; overflow-wrap: break-word; }
+  .cap__p { font-size: var(--step-lead); line-height: 1.3; color: var(--color-soft); max-width: 34ch; }
+
+  .cap__panel {
+    position: relative;
+    overflow: hidden;
+    margin: 2rem 0 0;
+    background: var(--color-bg);
+    padding: clamp(1rem, 2.5vw, 2rem);
+  }
+  .cap__cap { font-size: var(--step-small); margin-bottom: 1rem; }
+
+  .cap__split { display: grid; gap: 2rem; align-items: end; }
+  @media (min-width: 900px) {
+    .cap__split { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); }
+  }
+  :global(.cap__crew) { width: 100%; max-width: 24rem; justify-self: end; }
+  :global(.cap__crew--top) { max-width: 18rem; margin: 0 0 1.5rem auto; }
+
+  .cap__table { width: 100%; border-collapse: collapse; font-size: var(--step-small); }
+  .cap__table th, .cap__table td { text-align: left; padding: 0.75rem 0.75rem 0.75rem 0; }
+  .cap__table thead th { color: var(--color-soft); font-weight: 400; }
+  .cap__table tbody tr { border-top: 1px solid var(--color-surface-2); }
+  .cap__table tbody th { font-weight: 500; }
+  .cap__table td { font-variant-numeric: tabular-nums; }
+  .cap__table td.is-low { color: var(--color-accent); }
+  .cap__table tr { transition: background-color 500ms var(--ease-out-quart); }
+  .cap__table tr.is-fresh { background: var(--color-accent-deep); }
+  .cap__restock {
+    margin-left: 0.5rem;
+    min-height: 2rem;
+    padding: 0 0.75rem;
+    background: var(--color-accent);
+    color: var(--color-accent-ink);
+    border: 0;
+    font: inherit;
+    font-weight: 500;
+    cursor: pointer;
+    transition: transform 160ms var(--ease-out-quart), background-color 160ms var(--ease-out-quart);
+  }
+  .cap__restock:hover { background: var(--color-accent-hi); }
+  .cap__restock:active { transform: scale(0.95); }
+  .cap__restock:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+  /* Automation: the cause on top, the chain of effects below, the crew doing it beside */
+  .cap__split--auto { align-items: center; }
+  @media (min-width: 900px) {
+    .cap__split--auto { grid-template-columns: minmax(0, 6fr) minmax(0, 5fr); }
+  }
+  :global(.cap__crew--auto) { max-width: none; }
+  .auto { display: grid; gap: 4px; }
+  .auto__trigger {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem 1rem;
+    padding: 1rem;
+    background: var(--color-surface-2);
+    font-size: var(--step-small);
+  }
+  .auto__trigger strong { font-weight: 500; }
+  .auto__trigger .cap__restock { margin-left: 0; min-height: 2.5rem; padding-inline: 1rem; }
+  .auto__chain { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
+  .auto__chain li {
+    display: grid;
+    grid-template-columns: 3rem minmax(0, 1fr) auto;
+    gap: 0.75rem;
+    align-items: center;
+    padding: 0.85rem 1rem 0.85rem 1.5rem;
+    background: var(--color-surface);
+    font-size: var(--step-small);
+    transition: opacity 300ms var(--ease-out-quart), background-color 400ms var(--ease-out-quart);
+  }
+  .auto__t { color: var(--color-soft); font-variant-numeric: tabular-nums; }
+  .auto__ok { color: var(--color-ok); white-space: nowrap; }
+  .auto__chain li.is-pending { opacity: 0.45; }
+  .auto__chain li.is-pending .auto__ok { color: var(--color-soft); }
+  .auto__chain li.is-fresh { background: var(--color-accent-deep); }
+  .auto__foot { margin-top: 0.75rem; font-size: var(--step-small); }
+
+  .cap__graph :global(svg) { display: block; width: 100%; height: auto; }
+  .g-dot { fill: var(--color-grid); }
+  .g-wire { fill: var(--color-rb-floor); }
+  .g-node { fill: var(--color-surface-2); }
+  .g-core { fill: var(--color-accent); }
+  .g-t { fill: var(--color-fg); font-family: var(--font-sans); font-size: 17px; font-weight: 500; }
+  .g-core-t { fill: var(--color-accent-ink); font-family: var(--font-serif); font-size: 26px; }
+  .g-d { fill: var(--color-accent-ink); font-family: var(--font-sans); font-size: 14px; }
+  .g-pk, .g-agv { transform-box: fill-box; }
+  @media (prefers-reduced-motion: no-preference) {
+    .g-pk { animation: g-flow 2.4s linear infinite; animation-delay: var(--d, 0s); }
+    .g-agv { animation: g-patrol 12s ease-in-out infinite; }
+    .cap__graph :global(.a-wheel) { animation: g-wheel 12s ease-in-out infinite; }
+  }
+  @keyframes g-flow {
+    0% { transform: translateX(0); opacity: 0; }
+    10%, 85% { opacity: 1; }
+    100% { transform: translateX(75px); opacity: 0; }
+  }
+  @keyframes g-patrol {
+    0%, 6% { transform: translateX(0); }
+    46%, 54% { transform: translateX(560px); }
+    94%, 100% { transform: translateX(0); }
+  }
+  @keyframes g-wheel { 0%, 6% { transform: rotate(0); } 46%, 54% { transform: rotate(1440deg); } 94%, 100% { transform: rotate(0); } }
+
+  .cap__ben {
+    list-style: none;
+    margin: 2rem 0 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.25rem var(--gutter);
+  }
+  @media (min-width: 768px) and (max-width: 1099px) {
+    .cap__ben { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  }
+  @media (min-width: 1100px) {
+    .cap__panel { margin-top: 0; }
+  }
+  .cap__ben li { display: grid; gap: 0.35rem; font-size: var(--step-small); }
+  .cap__ben strong { font-weight: 500; font-size: var(--step-body); }
+</style>
