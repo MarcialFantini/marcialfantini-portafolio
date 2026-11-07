@@ -4,166 +4,119 @@ import { hasPublishedPosts, hasPublishedProjects } from "../lib/content";
 
 const navItems = [
   { href: "/servicios", label: "Servicios" },
-  { href: "/sobre-mi", label: "Nosotros" },
   ...((await hasPublishedProjects()) ? [{ href: "/proyectos", label: "Proyectos" }] : []),
   ...((await hasPublishedPosts()) ? [{ href: "/blog", label: "Blog" }] : []),
+  { href: "/sobre-mi", label: "Sobre mí" },
   { href: "/contacto", label: "Contacto" },
 ];
 
 const pathname = Astro.url.pathname;
+const isActive = (href: string) => pathname === href || pathname.startsWith(href + "/");
 ---
 
-<header
-  data-site-header
-  class="site-header fixed inset-x-0 top-0 z-[var(--z-header)] backdrop-blur-md bg-[var(--color-blanco-humo)]/85 border-b border-[var(--color-border)]"
->
-  <div class="container-page flex items-center justify-between h-16 md:h-[72px] gap-6">
-    <a
-      href="/"
-      class="flex items-center gap-2 group shrink-0"
-      aria-label={`${site.name} — ir al inicio`}
-    >
-      <span class="sh-brand font-impact text-[20px] md:text-[24px] leading-none text-[var(--color-azul)] tracking-[-0.04em]">
-        MF
-      </span>
-      <span class="sh-mute font-mono text-[10px] md:text-[11px] uppercase tracking-[0.22em] text-[var(--color-mute)] hidden sm:inline">
-        {site.shortName}
-      </span>
-    </a>
+<header class="sh wrap" data-site-header>
+  <a href="/" class="sh__name plain" aria-label={`${site.name}, ir al inicio`}>{site.name}</a>
 
-    <nav aria-label="Principal" class="sh-nav hidden md:flex items-center gap-1 rounded-control border border-[var(--color-border)] bg-[var(--color-blanco)] p-1">
-      {
-        navItems.map((item) => {
-          const active =
-            item.href === "/"
-              ? pathname === "/"
-              : pathname.startsWith(item.href.split("#")[0]) && item.href !== "/";
-          return (
-            <a
-              href={item.href}
-              class:list={[
-                "sh-link tactile font-mono text-[11px] uppercase tracking-[0.18em] px-3.5 py-2 rounded-control",
-                active
-                  ? "text-[var(--color-ink)] bg-[var(--color-azul-soft)]"
-                  : "text-[var(--color-ink-soft)] hover:text-[var(--color-ink)] hover:bg-[var(--color-azul-soft)]/50",
-              ]}
-              aria-current={active ? "page" : undefined}
-            >
-              {item.label}
-            </a>
-          );
-        })
-      }
-    </nav>
+  <nav class="sh__nav" aria-label="Principal">
+    {
+      navItems.map((item) => (
+        <a href={item.href} aria-current={isActive(item.href) ? "page" : undefined}>
+          {item.label}
+        </a>
+      ))
+    }
+  </nav>
 
-    <a
-      href="/contacto"
-      class="tactile hidden md:inline-flex items-center gap-2 px-5 py-2.5 rounded-control bg-[var(--color-dorado)] text-[var(--color-on-gold)] text-[11px] font-mono uppercase tracking-[0.18em] font-semibold hover:bg-[var(--color-deep)] hover:text-white"
-    >
-      Hablemos
-      <span aria-hidden="true">→</span>
-    </a>
+  <button type="button" class="sh__menu" aria-expanded="false" aria-controls="sh-sheet" data-menu>
+    Menú
+  </button>
 
-    <a
-      href="/contacto?servicio=Diagn%C3%B3stico%20gratis"
-      class="sh-cta-m tactile ml-auto md:hidden inline-flex items-center min-h-[40px] px-3 rounded-control bg-[var(--color-dorado)] text-[var(--color-on-gold)] text-[11px] font-mono uppercase tracking-[0.12em] font-semibold whitespace-nowrap"
-    >
-      Diagnóstico gratis
-    </a>
-
-    <button
-      type="button"
-      id="mobile-menu-trigger"
-      class="sh-burger tactile md:hidden flex items-center justify-center w-11 h-11 -mr-2 -ml-3 text-[var(--color-ink)] rounded-control"
-      aria-label="Abrir menú"
-      aria-controls="mobile-menu"
-      aria-expanded="false"
-    >
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
-        <line x1="3" y1="7" x2="21" y2="7" />
-        <line x1="3" y1="12" x2="21" y2="12" />
-        <line x1="3" y1="17" x2="21" y2="17" />
-      </svg>
-    </button>
-  </div>
-
-  <div
-    id="mobile-menu"
-    class="sh-menu hidden md:hidden border-t border-[var(--color-border)] bg-[var(--color-blanco-humo)] mobile-menu-slide"
-    hidden
-  >
-    <nav aria-label="Móvil" class="container-page flex flex-col py-2">
-      {
-        navItems.map((item) => (
-          <a
-            href={item.href}
-            class="tactile mobile-menu-link flex items-center justify-between min-h-[48px] py-3 font-mono text-[12px] uppercase tracking-[0.18em] text-[var(--color-ink-soft)] hover:text-[var(--color-azul)] border-b border-[var(--color-border)] last:border-b-0"
-          >
-            {item.label}
-            <span aria-hidden="true" class="text-[var(--color-mute)]">→</span>
-          </a>
-        ))
-      }
-      <a
-        href="/contacto"
-        class="tactile mt-4 mb-2 inline-flex items-center justify-center gap-2 min-h-[48px] px-5 py-3 rounded-control bg-[var(--color-action)] text-white font-mono text-[11px] uppercase tracking-[0.18em] font-semibold hover:bg-[var(--color-action-hover)]"
-      >
-        Hablemos
-        <span aria-hidden="true">→</span>
-      </a>
+  <div class="sh__sheet" id="sh-sheet" hidden>
+    <nav aria-label="Móvil">
+      {navItems.map((item) => <a href={item.href}>{item.label}</a>)}
     </nav>
   </div>
 </header>
 
 <script>
-  (function () {
-    const trigger = document.getElementById('mobile-menu-trigger');
-    const menu = document.getElementById('mobile-menu');
-    if (!trigger || !menu) return;
-
-    const openMenu = () => {
-      menu.classList.remove('hidden');
-      menu.removeAttribute('hidden');
-      void menu.offsetWidth;
-      menu.classList.add('mobile-menu--open');
-      trigger.setAttribute('aria-expanded', 'true');
-      trigger.setAttribute('aria-label', 'Cerrar menú');
-      document.body.style.overflow = 'hidden';
+  function bindMenu() {
+    const btn = document.querySelector<HTMLButtonElement>("[data-menu]");
+    const sheet = document.getElementById("sh-sheet");
+    if (!btn || !sheet || btn.dataset.bound) return;
+    btn.dataset.bound = "1";
+    const set = (open: boolean) => {
+      btn.setAttribute("aria-expanded", String(open));
+      btn.textContent = open ? "Cerrar" : "Menú";
+      sheet.hidden = !open;
     };
-
-    const closeMenu = () => {
-      menu.classList.remove('mobile-menu--open');
-      trigger.setAttribute('aria-expanded', 'false');
-      trigger.setAttribute('aria-label', 'Abrir menú');
-      document.body.style.overflow = '';
-      setTimeout(() => {
-        if (trigger.getAttribute('aria-expanded') === 'false') {
-          menu.classList.add('hidden');
-          menu.setAttribute('hidden', '');
-        }
-      }, 280);
-    };
-
-    trigger.addEventListener('click', () => {
-      const isOpen = trigger.getAttribute('aria-expanded') === 'true';
-      if (isOpen) closeMenu();
-      else openMenu();
-    });
-
-    menu.querySelectorAll('a').forEach((link) => {
-      link.addEventListener('click', closeMenu);
-    });
-
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && trigger.getAttribute('aria-expanded') === 'true') {
-        closeMenu();
-        trigger.focus();
+    btn.addEventListener("click", () => set(btn.getAttribute("aria-expanded") !== "true"));
+    sheet.querySelectorAll("a").forEach((a) => a.addEventListener("click", () => set(false)));
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && btn.getAttribute("aria-expanded") === "true") {
+        set(false);
+        btn.focus();
       }
     });
-
-    const mq = window.matchMedia('(min-width: 768px)');
-    mq.addEventListener('change', (e) => {
-      if (e.matches) closeMenu();
-    });
-  })();
+  }
+  document.addEventListener("astro:page-load", bindMenu);
 </script>
+
+<style>
+  .sh {
+    position: relative;
+    z-index: var(--z-header);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    min-height: 4.5rem;
+    font-size: var(--step-small);
+  }
+  .sh__name {
+    font-size: var(--step-body);
+    font-weight: 500;
+    color: var(--color-fg);
+  }
+  .sh__nav { display: none; gap: 1.75rem; }
+  .sh__nav a {
+    color: var(--color-fg);
+    font-size: var(--step-body);
+    transition: color 160ms var(--ease-out-quart);
+  }
+  .sh__nav a:hover,
+  .sh__nav a[aria-current="page"] { color: var(--color-accent); }
+
+  .sh__menu {
+    min-height: 2.75rem;
+    padding: 0 0.25rem;
+    background: none;
+    border: 0;
+    color: var(--color-fg);
+    font: inherit;
+    font-size: var(--step-body);
+    font-weight: 500;
+    cursor: pointer;
+  }
+  .sh__sheet {
+    position: absolute;
+    inset: 100% 0 auto 0;
+    background: var(--color-surface);
+    padding: 1rem var(--gutter) 2rem;
+  }
+  .sh__sheet nav { display: flex; flex-direction: column; }
+  .sh__sheet a {
+    display: flex;
+    align-items: center;
+    min-height: 3.5rem;
+    font-family: var(--font-serif);
+    font-size: 2.25rem;
+    letter-spacing: -0.02em;
+    color: var(--color-fg);
+    text-decoration: none;
+  }
+
+  @media (min-width: 768px) {
+    .sh__nav { display: flex; }
+    .sh__menu, .sh__sheet { display: none; }
+  }
+</style>
