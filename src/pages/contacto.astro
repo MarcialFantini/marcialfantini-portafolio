@@ -6,20 +6,21 @@ import site from "../data/site.json";
 
 <Layout
   title={`Contacto — ${site.name}`}
-  description={`Contanos qué necesitás: página web, ecommerce o software a medida. Escribinos a ${site.email} o usá el formulario y te respondemos en 24 h hábiles.`}
+  description={`Contanos qué problema querés resolver: software a medida, página web o tienda online. Escribinos a ${site.email} o usá el formulario y te respondemos en 24 h hábiles.`}
 >
-  <section class="pt-16 md:pt-24 pb-14 md:pb-16">
-    <div class="container-page max-w-4xl reveal">
-      <p class="eyebrow mb-4">Contacto</p>
-      <h1 class="display-lg mb-6">
-        Contanos qué querés <span class="display-accent">vender online.</span>
-      </h1>
-      <p class="text-xl text-[var(--color-ink-soft)] leading-relaxed max-w-3xl">
-        Contanos tres cosas: qué negocio tenés, qué te duele hoy y por qué ahora. Te respondemos en
-        24 h hábiles, y si querés arrancamos con un diagnóstico gratis de 30 minutos.
-      </p>
-    </div>
+  <section class="cp wrap" aria-labelledby="cp-title">
+    <h1 id="cp-title" class="cp__h1" data-split>Contanos el problema.</h1>
+    <p class="cp__lead" data-rise style="--i:1">
+      Tres cosas alcanzan: qué negocio tenés, qué te duele hoy y por qué ahora. Te respondemos en 24 h hábiles, y si querés
+      arrancamos con un diagnóstico gratis de 30 minutos.
+    </p>
   </section>
 
-  <Contacto compact />
+  <Contacto />
 </Layout>
+
+<style>
+  .cp { padding-top: clamp(3rem, 8vw, 6rem); }
+  .cp__h1 { font-size: clamp(3rem, 9vw, 9.375rem); line-height: 0.9; letter-spacing: -0.03em; max-width: 11ch; }
+  .cp__lead { margin-top: 2rem; font-size: var(--step-lead); line-height: 1.3; max-width: 42ch; }
+</style>

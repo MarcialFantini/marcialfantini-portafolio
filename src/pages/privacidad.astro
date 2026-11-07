@@ -9,48 +9,43 @@ const updated = "octubre de 2026";
   title={`Privacidad — ${site.name}`}
   description="Qué datos recolectamos cuando nos escribís o te suscribís al newsletter, para qué los usamos y cómo pedir que los borremos. Este sitio no usa cookies."
 >
-  <section class="pt-16 md:pt-24 pb-20 md:pb-28">
-    <div class="container-page max-w-3xl">
-      <p class="font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--color-azul)] mb-3">
-        Privacidad
-      </p>
-      <h1 class="font-impact text-[clamp(2.25rem,5.5vw,4.25rem)] uppercase leading-[0.95] text-[var(--color-ink)] tracking-tight mb-6">
-        Qué hacemos con <span class="text-[var(--color-azul)]">tus datos.</span>
-      </h1>
-      <p class="text-xl text-[var(--color-ink-soft)] leading-relaxed mb-10">
+  <section class="pv wrap">
+    <div class="pv__in">
+      <h1 class="pv__h1" data-split>Qué hacemos con tus datos.</h1>
+      <p class="pv__lead" data-rise style="--i:1">
         Pedimos pocos datos y los usamos para lo que viniste a hacer: hablar con nosotros. Acá te
         contamos cuáles son, para qué los usamos y cómo pedir que los borremos.
       </p>
 
-      <div class="space-y-10 text-[var(--color-ink-soft)] leading-relaxed">
-        <section>
-          <h2 class="font-display text-2xl font-semibold text-[var(--color-ink)] mb-3">Qué datos recolectamos</h2>
+      <div class="pv__body">
+        <section data-rise>
+          <h2 class="pv__h2">Qué datos recolectamos</h2>
           <ul class="list-disc pl-6 space-y-2">
             <li>
-              <strong class="text-[var(--color-ink)]">Formulario de contacto:</strong> tu nombre, tu email, el servicio que
+              <strong>Formulario de contacto:</strong> tu nombre, tu email, el servicio que
               te interesa (si lo elegís) y el mensaje que escribas.
             </li>
             <li>
-              <strong class="text-[var(--color-ink)]">Newsletter:</strong> tu email y la página desde la que te
+              <strong>Newsletter:</strong> tu email y la página desde la que te
               suscribiste.
             </li>
             <li>
-              <strong class="text-[var(--color-ink)]">Si nos escribís por email o WhatsApp:</strong> lo que nos
+              <strong>Si nos escribís por email o WhatsApp:</strong> lo que nos
               mandes y tu dirección de email o número.
             </li>
           </ul>
         </section>
 
-        <section>
-          <h2 class="font-display text-2xl font-semibold text-[var(--color-ink)] mb-3">Para qué los usamos</h2>
+        <section data-rise>
+          <h2 class="pv__h2">Para qué los usamos</h2>
           <p>
             Para responderte, armar una propuesta si corresponde y, si te suscribiste, mandarte el
             newsletter. No los vendemos ni los cedemos a terceros para publicidad.
           </p>
         </section>
 
-        <section>
-          <h2 class="font-display text-2xl font-semibold text-[var(--color-ink)] mb-3">Cookies y analítica</h2>
+        <section data-rise>
+          <h2 class="pv__h2">Cookies y analítica</h2>
           <p>
             Este sitio no instala cookies ni usa herramientas de analítica, por eso no ves un cartel
             de cookies. Tu navegador puede guardar en tu dispositivo una marca para recordar que ya
@@ -58,8 +53,8 @@ const updated = "octubre de 2026";
           </p>
         </section>
 
-        <section>
-          <h2 class="font-display text-2xl font-semibold text-[var(--color-ink)] mb-3">Quién procesa los datos</h2>
+        <section data-rise>
+          <h2 class="pv__h2">Quién procesa los datos</h2>
           <p class="mb-3">
             Para funcionar usamos servicios de terceros que reciben los datos que vos enviás:
           </p>
@@ -74,19 +69,19 @@ const updated = "octubre de 2026";
           </p>
         </section>
 
-        <section>
-          <h2 class="font-display text-2xl font-semibold text-[var(--color-ink)] mb-3">Cuánto tiempo los guardamos</h2>
+        <section data-rise>
+          <h2 class="pv__h2">Cuánto tiempo los guardamos</h2>
           <p>
             Guardamos tus mensajes mientras dure la conversación o la relación de trabajo, y tu
             email del newsletter hasta que te des de baja.
           </p>
         </section>
 
-        <section>
-          <h2 class="font-display text-2xl font-semibold text-[var(--color-ink)] mb-3">Tus derechos</h2>
+        <section data-rise>
+          <h2 class="pv__h2">Tus derechos</h2>
           <p class="mb-3">
             Podés pedirnos acceder a tus datos, corregirlos o que los borremos. Escribinos a
-            <a href={`mailto:${site.email}`} class="text-[var(--color-azul)] underline hover:text-[var(--color-dorado)]">{site.email}</a>
+            <a href={`mailto:${site.email}`}>{site.email}</a>
             y lo hacemos sin costo.
           </p>
           <p>
@@ -96,8 +91,21 @@ const updated = "octubre de 2026";
           </p>
         </section>
 
-        <p class="text-sm text-[var(--color-mute)]">Última actualización: {updated}.</p>
+        <p class="pv__date soft">Última actualización: {updated}.</p>
       </div>
     </div>
   </section>
 </Layout>
+
+<style>
+  .pv { padding-top: clamp(3rem, 8vw, 6rem); }
+  .pv__in { max-width: 46rem; }
+  .pv__h1 { font-size: clamp(2.5rem, 6vw, 6rem); line-height: 0.92; letter-spacing: -0.03em; max-width: 14ch; }
+  .pv__lead { margin-top: 2rem; font-size: var(--step-lead); line-height: 1.3; }
+  .pv__body { margin-top: 4rem; display: grid; gap: 3rem; }
+  .pv__h2 { font-family: var(--font-sans); font-size: var(--step-lead); font-weight: 500; letter-spacing: 0; line-height: 1.2; margin-bottom: 0.75rem; }
+  .pv__body ul { list-style: disc; padding-left: 1.25rem; display: grid; gap: 0.5rem; }
+  .pv__body strong { font-weight: 500; }
+  .pv__body p + p, .pv__body p + ul, .pv__body ul + p { margin-top: 0.75rem; }
+  .pv__date { font-size: var(--step-small); }
+</style>
