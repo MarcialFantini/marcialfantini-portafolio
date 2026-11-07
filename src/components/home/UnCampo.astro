@@ -1,0 +1,121 @@
+---
+import site from "../../data/site.json";
+import SceneEnvio from "../robots/scenes/SceneEnvio.astro";
+
+// Un solo campo: el texto viaja a WhatsApp como ?text= (funciona sin JavaScript).
+const waAction = site.whatsapp ? `https://wa.me/${site.whatsapp}` : "/contacto";
+const waUrl = site.whatsapp
+  ? `https://wa.me/${site.whatsapp}?text=${encodeURIComponent(site.whatsappMessage || "")}`
+  : "";
+---
+
+<section id="contacto" class="uc wrap" aria-labelledby="uc-title">
+  <div class="uc__col">
+    <SceneEnvio class="uc__crew" />
+    <h2 id="uc-title" class="uc__prompt" data-rise>
+      <span class="soft">¿Qué problema querés resolver?</span>
+      <span>Contanoslo en una línea.</span>
+    </h2>
+
+    <form class="uc__form" action={waAction} method="get" target="_blank" data-rise style="--i:1">
+      <label for="uc-text" class="sr-only">Tu problema, en una línea</label>
+      <input
+        id="uc-text"
+        name="text"
+        type="text"
+        required
+        autocomplete="off"
+        placeholder="Ej.: perdemos pedidos entre WhatsApp y Excel"
+      />
+      <button type="submit" aria-label="Enviar por WhatsApp"><span aria-hidden="true">→</span></button>
+    </form>
+    <p class="uc__next soft" data-rise style="--i:2">
+      Se abre WhatsApp con tu mensaje. Te respondemos en 24 h hábiles y el diagnóstico de 30 minutos es gratis.
+    </p>
+
+    <dl class="uc__facts" data-rise style="--i:3">
+      <div><dt class="soft">Email</dt><dd><a href={`mailto:${site.email}`}>{site.email}</a></dd></div>
+      {waUrl && <div><dt class="soft">WhatsApp</dt><dd><a href={waUrl} target="_blank" rel="noopener noreferrer">Escribinos directo</a></dd></div>}
+      <div><dt class="soft">Base</dt><dd>{site.location}</dd></div>
+    </dl>
+    <p class="uc__alt"><a href="/contacto">¿Preferís un formulario completo?</a></p>
+  </div>
+</section>
+
+<script>
+  // Con JavaScript, el mensaje sale con un saludo delante.
+  document.addEventListener("astro:page-load", () => {
+    const form = document.querySelector<HTMLFormElement>(".uc__form");
+    if (!form || form.dataset.bound || !form.action.includes("wa.me")) return;
+    form.dataset.bound = "1";
+    form.addEventListener("submit", (e) => {
+      const input = form.querySelector<HTMLInputElement>("input[name=text]");
+      if (!input || !input.value.trim()) return;
+      e.preventDefault();
+      const text = `Hola, quiero resolver esto: ${input.value.trim()}`;
+      window.open(`${form.action}?text=${encodeURIComponent(text)}`, "_blank", "noopener");
+    });
+  });
+</script>
+
+<style>
+  .uc { padding-top: clamp(5rem, 12vw, 12.5rem); }
+  .uc__col { max-width: 32.5rem; margin-inline: auto; }
+  :global(.uc__crew) { width: min(100%, 20rem); margin: 0 0 1.5rem; }
+  .uc__prompt {
+    display: flex;
+    flex-direction: column;
+    font-family: var(--font-sans);
+    font-size: var(--step-lead);
+    font-weight: 500;
+    line-height: 1.25;
+    letter-spacing: -0.01em;
+  }
+  .uc__form {
+    display: flex;
+    align-items: center;
+    margin-top: 1.75rem;
+    min-height: 4rem;
+    background: var(--color-surface-3);
+    color: var(--color-accent-ink);
+    transition: box-shadow 160ms var(--ease-out-quart);
+  }
+  .uc__form:focus-within { box-shadow: inset 0 0 0 2px var(--color-accent); } /* taste-skill-ignore: focus ring */
+  .uc__form input {
+    flex: 1;
+    min-width: 0;
+    height: 4rem;
+    padding: 0 1.25rem;
+    background: transparent;
+    border: 0;
+    color: var(--color-accent-ink);
+    font: inherit;
+  }
+  .uc__form input::placeholder { color: #4d5566; }
+  .uc__form input:focus-visible { outline: none; }
+  .uc__form button {
+    flex: none;
+    width: 2.75rem;
+    height: 2.75rem;
+    margin-right: 0.5rem;
+    background: var(--color-accent);
+    color: var(--color-accent-ink);
+    border: 0;
+    font-size: 1.25rem;
+    cursor: pointer;
+    transition: transform 160ms var(--ease-out-quart), background-color 160ms var(--ease-out-quart);
+  }
+  .uc__form button:hover { background: #2f7cf0; color: #fff; }
+  .uc__form button:active { transform: scale(0.94); }
+  .uc__next { margin-top: 1rem; font-size: var(--step-small); }
+
+  .uc__facts { display: grid; gap: 1.25rem; margin-top: 4.5rem; font-size: var(--step-small); }
+  .uc__facts dd { margin: 0.15rem 0 0; }
+  .uc__facts a { display: inline-block; padding-block: 0.35rem; }
+  @media (min-width: 640px) {
+    .uc__facts > div { display: grid; grid-template-columns: 7rem 1fr; }
+    .uc__facts dd { margin: 0; }
+  }
+  .uc__alt { margin-top: 2rem; font-size: var(--step-small); }
+  .uc__alt a { display: inline-block; padding-block: 0.5rem; }
+</style>

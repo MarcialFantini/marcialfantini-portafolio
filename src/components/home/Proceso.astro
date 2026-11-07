@@ -1,0 +1,151 @@
+---
+import Tablero from "./Tablero.astro";
+import SceneDiagnostico from "../robots/scenes/SceneDiagnostico.astro";
+import ScenePropuesta from "../robots/scenes/ScenePropuesta.astro";
+import SceneTablero from "../robots/scenes/SceneTablero.astro";
+
+/* Mapa del proceso de una distribuidora de ejemplo: cómo trabajan hoy y dónde se traba. */
+const mapa = [
+  { area: "Pedidos", hoy: "WhatsApp", traba: "Se pierden entre chats" },
+  { area: "Stock", hoy: "Excel", traba: "Desactualizado cada semana" },
+  { area: "Armado", hoy: "Papel", traba: "" },
+  { area: "Facturación", hoy: "Sistema contable", traba: "Se carga dos veces" },
+  { area: "Informes", hoy: "Excel", traba: "Dos días por mes" },
+];
+
+const etapas = [
+  { t: "Etapa 1", d: "Stock por depósito y pedidos en un solo lugar" },
+  { t: "Etapa 2", d: "Facturación conectada, sin doble carga" },
+  { t: "Etapa 3", d: "Tablero e informes automáticos" },
+];
+---
+
+<section id="como-trabajamos" class="proceso wrap" aria-labelledby="proceso-title">
+  <h2 id="proceso-title" class="proceso__h" data-split>Cómo trabajamos</h2>
+
+  <ol class="proceso__list">
+    <li class="ex">
+      <p class="ex__say" data-rise>Primero, nos contás el problema.</p>
+      <p class="ex__call" data-rise style="--i:1">
+        Los pedidos entran por WhatsApp, los pasamos a un Excel a mano y siempre se pierde alguno.
+      </p>
+      <div class="ex__resp" data-rise style="--i:2">
+        <div class="frag" data-ui role="group" aria-label="Ejemplo: mapa del proceso actual de una distribuidora">
+          <p class="frag__cap"><span>Mapa del proceso actual</span><span class="soft">Diagnóstico · 30 min, gratis</span></p>
+          <table class="frag__table">
+            <thead>
+              <tr><th scope="col">Área</th><th scope="col">Hoy</th><th scope="col">Dónde se traba</th></tr>
+            </thead>
+            <tbody>
+              {
+                mapa.map((m) => (
+                  <tr>
+                    <th scope="row">{m.area}</th>
+                    <td>{m.hoy}</td>
+                    <td class:list={[m.traba && "is-pain"]}>{m.traba || "Funciona"}</td>
+                  </tr>
+                ))
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <SceneDiagnostico class="ex__scene" />
+    </li>
+
+    <li class="ex">
+      <p class="ex__say" data-rise>Después, una propuesta cerrada.</p>
+      <p class="ex__call" data-rise style="--i:1">¿Cuánto sale y cuándo está?</p>
+      <div class="ex__resp" data-rise style="--i:2">
+        <div class="frag" data-ui role="group" aria-label="Ejemplo: propuesta por etapas">
+          <p class="frag__cap"><span>Propuesta</span><span class="soft">Por escrito, antes de empezar</span></p>
+          <ul class="frag__steps">
+            {etapas.map((e) => <li><strong>{e.t}</strong><span>{e.d}</span></li>)}
+          </ul>
+          <p class="frag__foot">Alcance, plazos y precio de cada etapa. Si algo cambia, se cotiza antes de hacerlo.</p>
+        </div>
+      </div>
+      <ScenePropuesta class="ex__scene" />
+    </li>
+
+    <li class="ex ex--final">
+      <p class="ex__say" data-rise>Al final, el sistema en uso.</p>
+      <div class="ex__row">
+        <p class="ex__call" data-rise style="--i:1">Quiero ver cuánto ahorramos.</p>
+        <SceneTablero class="ex__crew" />
+      </div>
+      <div class="ex__resp" data-rise style="--i:2">
+        <Tablero />
+        <p class="ex__after">
+          Cada etapa entra en uso antes de empezar la siguiente. Capacitamos al equipo, y el código y los datos quedan a tu nombre.
+        </p>
+      </div>
+    </li>
+  </ol>
+</section>
+
+<style>
+  .proceso {
+    margin-top: var(--section-gap);
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: var(--gutter);
+  }
+  .proceso__h { grid-column: 1 / -1; }
+  .proceso__list {
+    grid-column: 1 / -1;
+    list-style: none;
+    margin: 3.5rem 0 0;
+    padding: 0;
+    display: grid;
+    gap: 5.5rem;
+  }
+  @media (min-width: 1024px) {
+    .proceso__h { grid-column: 4 / span 6; }
+    .proceso__list { grid-column: 4 / span 5; }
+    /* The finished result breaks out of the 5-column reading column to column 12. */
+    .ex--final .ex__resp { width: calc((100% - 4 * var(--gutter)) / 5 * 9 + 8 * var(--gutter)); }
+  }
+
+  .ex__say { font-size: var(--step-lead); font-weight: 500; }
+  .ex__call {
+    margin-top: 1rem;
+    background: var(--color-surface);
+    padding: 1.25rem;
+    font-size: var(--step-body);
+  }
+  .ex__resp { margin-top: 1.5rem; }
+  @media (min-width: 768px) {
+    .ex:not(.ex--final) .ex__resp { margin-left: 3.5rem; }
+  }
+  .ex__after { margin-top: 1.5rem; max-width: 60ch; }
+  .ex__row { display: flex; align-items: flex-end; justify-content: space-between; gap: 1.5rem; }
+  .ex__row .ex__call { flex: 1; }
+  :global(.ex__crew) { flex: none; width: clamp(9rem, 22vw, 15rem); }
+  .ex { position: relative; }
+  :global(.ex__scene) { width: min(100%, 22rem); margin-top: 1.5rem; }
+  @media (min-width: 1024px) {
+    /* The crew works in the empty columns to the right of the reading column */
+    :global(.ex__scene) {
+      position: absolute;
+      top: 0;
+      left: calc(100% + 2 * var(--gutter));
+      width: calc((100% - 4 * var(--gutter)) / 5 * 3.6);
+      margin-top: 0;
+    }
+  }
+
+  /* Interface fragments (data-ui) */
+  .frag { background: var(--color-surface-2); padding: 1.25rem; font-size: var(--step-small); }
+  .frag__cap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.25rem 1rem; font-weight: 500; margin-bottom: 1rem; }
+  .frag__table { width: 100%; border-collapse: collapse; }
+  .frag__table th, .frag__table td { text-align: left; padding: 0.6rem 0.5rem 0.6rem 0; vertical-align: top; }
+  .frag__table thead th { color: var(--color-soft); font-weight: 400; }
+  .frag__table tbody tr { border-top: 1px solid var(--color-surface); }
+  .frag__table tbody th { font-weight: 500; }
+  .frag__table td.is-pain { color: var(--color-accent); }
+  .frag__steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
+  .frag__steps li { display: grid; grid-template-columns: 5rem 1fr; gap: 1rem; background: var(--color-surface); padding: 0.85rem 1rem; }
+  .frag__steps strong { font-weight: 500; }
+  .frag__foot { margin-top: 1rem; color: var(--color-soft); }
+</style>

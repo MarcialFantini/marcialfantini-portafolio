@@ -1,27 +1,64 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import Hero from "../components/Hero.astro";
-import Problemas from "../components/Problemas.astro";
-import Metodo from "../components/Metodo.astro";
-import SobreMi from "../components/SobreMi.astro";
-import Proyectos from "../components/Proyectos.astro";
-import BlogPreview from "../components/BlogPreview.astro";
-import FAQ from "../components/FAQ.astro";
-import Contacto from "../components/Contacto.astro";
+import HeroWord from "../components/home/HeroWord.astro";
+import Campos from "../components/home/Campos.astro";
+import MediaSlot from "../components/home/MediaSlot.astro";
+import Proceso from "../components/home/Proceso.astro";
+import Demos from "../components/home/Demos.astro";
+import Sobre from "../components/home/Sobre.astro";
+import Dudas from "../components/home/Dudas.astro";
+import UnCampo from "../components/home/UnCampo.astro";
+import PostList from "../components/PostList.astro";
 import site from "../data/site.json";
-import { hasPublishedPosts, hasPublishedProjects } from "../lib/content";
+import { getPublishedPosts } from "../lib/content";
 
-const showProyectos = await hasPublishedProjects();
-const showBlog = await hasPublishedPosts();
+const latest = (await getPublishedPosts()).slice(0, 3);
+
+// Video band: drop the files in /public/media and fill these two paths.
+const video = { src: "", poster: "" };
 ---
 
 <Layout title={`${site.name} · Software a medida para PyMEs`} description={site.description}>
-  <Hero />
-  <div class="panel" data-chapter="Qué resolvemos"><Problemas /></div>
-  <div class="panel" data-chapter="Cómo trabajamos"><Metodo /></div>
-  <div class="panel panel--night" data-chapter="Nosotros"><SobreMi /></div>
-  {showProyectos && <div class="panel" data-chapter="Proyectos"><Proyectos /></div>}
-  {showBlog && <div class="panel" data-chapter="Escritos"><BlogPreview /></div>}
-  <div class="panel" data-chapter="Dudas"><FAQ /></div>
-  <div class="panel panel--night" data-chapter="Contacto"><Contacto /></div>
+  <HeroWord />
+  <Campos />
+
+  <section class="band" aria-label="Un sistema en uso">
+    <MediaSlot
+      kind="video"
+      src={video.src || undefined}
+      poster={video.poster || undefined}
+      alt="Un sistema de pedidos en uso"
+      label="Video: grabación de pantalla de un sistema en uso (pendiente)"
+      ratio="21 / 9"
+    />
+  </section>
+
+  <Proceso />
+  <Demos />
+  <Sobre />
+  {
+    latest.length > 0 && (
+      <section class="escritos wrap" aria-labelledby="escritos-title">
+        <h2 id="escritos-title" data-split>Escritos</h2>
+        <PostList posts={latest} />
+        <p><a href="/blog">Ver todos los escritos</a></p>
+      </section>
+    )
+  }
+  <Dudas />
+  <UnCampo />
 </Layout>
+
+<style>
+  .band { overflow: hidden; }
+  .band :global(.slot) { min-height: 50svh; }
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      /* Slow push-in on the footage band */
+      .band :global(.slot) { animation: band-zoom linear both; animation-timeline: view(); animation-range: cover 0% cover 100%; }
+      @keyframes band-zoom { from { transform: scale(1.14); } to { transform: scale(1); } }
+    }
+  }
+
+  .escritos { margin-top: var(--section-gap); display: grid; gap: 3rem; }
+</style>

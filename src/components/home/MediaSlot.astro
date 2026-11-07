@@ -1,0 +1,72 @@
+---
+/**
+ * Picture slot. With `src` it renders the real media (image or muted loop video).
+ * Without it, a flat placeholder at the final size that says what goes there,
+ * so the owner can drop the file in later without touching the layout.
+ */
+interface Props {
+  kind: "foto" | "captura" | "video";
+  src?: string;
+  poster?: string;
+  alt: string;
+  /** What should go in this slot, shown while it is empty. */
+  label: string;
+  ratio?: string;
+  class?: string;
+  eager?: boolean;
+}
+
+const { kind, src, poster, alt, label, ratio = "16 / 10", class: cls, eager = false } = Astro.props;
+---
+
+{
+  src && kind === "video" ? (
+    <video
+      class:list={["slot", cls]}
+      style={`aspect-ratio:${ratio}`}
+      src={src}
+      poster={poster}
+      autoplay
+      muted
+      loop
+      playsinline
+      preload="metadata"
+      aria-label={alt}
+      data-slot={kind}
+    />
+  ) : src ? (
+    <img
+      class:list={["slot", cls]}
+      style={`aspect-ratio:${ratio}`}
+      src={src}
+      alt={alt}
+      loading={eager ? "eager" : "lazy"}
+      decoding="async"
+      data-slot={kind}
+    />
+  ) : (
+    <div class:list={["slot slot--empty", cls]} style={`aspect-ratio:${ratio}`} role="img" aria-label={alt} data-slot={kind} data-slot-empty>
+      <span class="slot__label">{label}</span>
+    </div>
+  )
+}
+
+<style>
+  .slot {
+    display: block;
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    background: var(--color-surface-2);
+  }
+  .slot--empty {
+    display: flex;
+    align-items: flex-end;
+    padding: 1rem;
+  }
+  .slot__label {
+    font-size: var(--step-small);
+    color: var(--color-soft);
+    max-width: 32ch;
+  }
+</style>
