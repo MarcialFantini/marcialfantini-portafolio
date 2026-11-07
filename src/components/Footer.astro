@@ -1,4 +1,7 @@
 ---
+/* Footer: quiet chrome on one surface step.
+   Who and how to reach me on the left, the site and the elsewhere links in two short columns,
+   the newsletter on its own band, and a single legal line. Same column width as .wrap. */
 import site from "../data/site.json";
 import fotos from "../data/fotos.json";
 import { hasPublishedPosts, hasPublishedProjects } from "../lib/content";
@@ -7,69 +10,91 @@ const year = new Date().getFullYear();
 const isHome = Astro.url.pathname === "/";
 const creditos = Object.values(fotos);
 
-const socials = [
-  { href: site.social.linkedin, label: "LinkedIn" },
-  { href: site.social.github, label: "GitHub" },
-  { href: site.social.twitter, label: "X" },
-].filter((s) => s.href);
-
 const whatsappUrl = site.whatsapp
   ? `https://wa.me/${site.whatsapp}?text=${encodeURIComponent(site.whatsappMessage || "")}`
   : "";
 
-const showRss = await hasPublishedPosts();
-const links = [
+const showPosts = await hasPublishedPosts();
+const sitio = [
   { href: "/servicios", label: "Servicios" },
-  ...((await hasPublishedProjects()) ? [{ href: "/proyectos", label: "Proyectos" }] : []),
-  ...(showRss ? [{ href: "/blog", label: "Blog" }] : []),
+  ...((await hasPublishedProjects()) ? [{ href: "/proyectos", label: "Proyectos demo" }] : []),
+  ...(showPosts ? [{ href: "/blog", label: "Blog" }] : []),
   { href: "/sobre-mi", label: "Sobre mí" },
   { href: "/contacto", label: "Contacto" },
-  { href: "/privacidad", label: "Privacidad" },
-  ...(showRss ? [{ href: "/rss.xml", label: "RSS" }] : []),
 ];
+
+const afuera = [
+  { href: site.social.linkedin, label: "LinkedIn", ext: true },
+  { href: site.social.github, label: "GitHub", ext: true },
+  { href: site.social.twitter, label: "X", ext: true },
+  ...(showPosts ? [{ href: "/rss.xml", label: "RSS", ext: false }] : []),
+].filter((s) => s.href);
 ---
 
 <footer class="ft">
-  <div class="ft__top wrap">
-    <div class="ft__contact">
-      <p class="soft">Escribime</p>
+  <div class="ft__main wrap">
+    <div class="ft__who">
+      <p class="ft__name">{site.name}</p>
+      <p class="ft__tag soft">{site.tagline}</p>
       <a href={`mailto:${site.email}`} class="ft__mail">{site.email}</a>
       {whatsappUrl && (
-        <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" class="ft__wa">WhatsApp</a>
+        <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" class="ft__wa">Escribime por WhatsApp</a>
       )}
     </div>
 
-    {site.newsletterEndpoint && (
-      <form id="newsletter-form" class="ft__news" data-endpoint={site.newsletterEndpoint} aria-label="Newsletter mensual">
-        <p class="soft">Un email por mes con lo que aprendí. Te das de baja cuando quieras.</p>
-        <input type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" hidden />
-        <div class="ft__field">
-          <label class="sr-only" for="newsletter-email">Tu email</label>
-          <input type="email" id="newsletter-email" name="email" required autocomplete="email" placeholder="tu@email.com" />
-          <button type="submit" >Suscribirme</button>
-        </div>
-        <p id="newsletter-msg" class="ft__msg" role="status" aria-live="polite" hidden></p>
-      </form>
-    )}
+    <nav class="ft__col" aria-labelledby="ft-sitio">
+      <p id="ft-sitio" class="ft__label soft">Sitio</p>
+      <ul>
+        {sitio.map((l) => <li><a href={l.href}>{l.label}</a></li>)}
+      </ul>
+    </nav>
 
-    <nav class="ft__links" aria-label="Pie de página">
-      {links.map((l) => <a href={l.href}>{l.label}</a>)}
-      {socials.map((s) => <a href={s.href} target="_blank" rel="noopener noreferrer">{s.label}</a>)}
+    <nav class="ft__col" aria-labelledby="ft-afuera">
+      <p id="ft-afuera" class="ft__label soft">En otros lados</p>
+      <ul>
+        {afuera.map((s) => (
+          <li>
+            <a href={s.href} target={s.ext ? "_blank" : undefined} rel={s.ext ? "noopener noreferrer" : undefined}>{s.label}</a>
+          </li>
+        ))}
+      </ul>
     </nav>
   </div>
 
-  <p class="ft__name" aria-hidden="true" data-footer-name>Fantini</p>
-  <p class="ft__legal wrap soft">© {year} {site.name}, {site.location}</p>
-  {isHome && (
-    <p class="ft__credits wrap soft">
-      {creditos.length > 1 ? "Fotografías:" : "Fotografía:"}{" "}
-      {creditos.map((f, i) => (
-        <>
-          <a href={f.url} target="_blank" rel="noopener noreferrer">{f.autor}</a> ({f.licencia}, Wikimedia Commons){i < creditos.length - 1 ? ", " : "."}
-        </>
-      ))}
-    </p>
+  {site.newsletterEndpoint && (
+    <div class="ft__band">
+      <form id="newsletter-form" class="ft__news wrap" data-endpoint={site.newsletterEndpoint} aria-label="Newsletter mensual">
+        <div class="ft__news-text">
+          <p class="ft__news-h">Un email por mes</p>
+          <p class="soft">Lo que aprendí armando sistemas. Te das de baja cuando quieras.</p>
+        </div>
+        <input type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" hidden />
+        <div class="ft__news-side">
+          <div class="ft__field">
+            <label class="sr-only" for="newsletter-email">Tu email</label>
+            <input type="email" id="newsletter-email" name="email" required autocomplete="email" placeholder="tu@email.com" />
+            <button type="submit">Suscribirme</button>
+          </div>
+          <p id="newsletter-msg" class="ft__msg" role="status" aria-live="polite" hidden></p>
+        </div>
+      </form>
+    </div>
   )}
+
+  <div class="ft__legal wrap soft">
+    <p>© {year} {site.name} · {site.location}</p>
+    <p><a href="/privacidad">Privacidad</a></p>
+    {isHome && (
+      <p class="ft__credits">
+        {creditos.length > 1 ? "Fotografías:" : "Fotografía:"}{" "}
+        {creditos.map((f, i) => (
+          <>
+            <a href={f.url} target="_blank" rel="noopener noreferrer">{f.autor}</a> ({f.licencia}, Wikimedia Commons){i < creditos.length - 1 ? ", " : ""}
+          </>
+        ))}
+      </p>
+    )}
+  </div>
 </footer>
 
 <script>
@@ -123,75 +148,106 @@ const links = [
   .ft {
     margin-top: var(--section-gap);
     background: var(--color-surface);
-    overflow: hidden;
+    font-size: var(--step-small);
   }
-  .ft__top {
+
+  /* Who, then two short link columns */
+  .ft__main {
     display: grid;
-    gap: 3rem;
-    padding-block: 5rem 3rem;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 2.5rem 1.5rem;
+    padding-block: 4rem 3rem;
+  }
+  .ft__who { grid-column: 1 / -1; display: grid; justify-items: start; gap: 0.5rem; }
+  @media (min-width: 900px) {
+    .ft__main { grid-template-columns: minmax(0, 6fr) minmax(0, 3fr) minmax(0, 3fr); column-gap: 3rem; }
+    .ft__who { grid-column: auto; }
+  }
+
+  .ft__name {
+    font-family: var(--font-display);
+    font-size: var(--step-statement);
+    font-weight: 500;
+    line-height: 1;
+    color: var(--color-fg);
+  }
+  .ft__tag { max-width: 36ch; font-size: var(--step-body); margin-bottom: 1rem; }
+  .ft__mail {
+    font-size: var(--step-lead);
+    font-weight: 500;
+    line-height: 1.2;
+    text-decoration: none;
+    overflow-wrap: anywhere;
+    transition: color 160ms var(--ease-out-quart);
+  }
+  .ft__mail:hover { color: var(--color-accent-hi); }
+  .ft__wa { display: inline-flex; align-items: center; min-height: 2.75rem; }
+
+  .ft__label { margin-bottom: 0.75rem; }
+  .ft__col ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.25rem; }
+  .ft__col a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.25rem;
+    font-size: var(--step-body);
+    text-decoration: none;
+    transition: color 160ms var(--ease-out-quart);
+  }
+  .ft__col a:hover { color: var(--color-accent-hi); }
+
+  /* Newsletter on its own band, one surface step up */
+  .ft__band { background: var(--color-surface-2); }
+  .ft__news {
+    display: grid;
+    gap: 1.25rem;
+    padding-block: 2rem;
+    align-items: center;
   }
   @media (min-width: 900px) {
-    .ft__top { grid-template-columns: 1fr 1fr; column-gap: 4rem; }
-    .ft__links { grid-column: 1 / -1; }
+    .ft__news { grid-template-columns: minmax(0, 6fr) minmax(0, 6fr); column-gap: 3rem; }
   }
-  .ft__contact p, .ft__news > p { font-size: var(--step-small); margin-bottom: 0.75rem; }
-  .ft__mail {
-    display: block;
-    font-family: var(--font-serif);
-    font-size: var(--step-statement);
-    letter-spacing: -0.02em;
-    line-height: 1.05;
-    text-decoration: none;
-    word-break: break-all;
-  }
-  .ft__wa { display: inline-flex; align-items: center; min-height: 2.75rem; margin-top: 0.5rem; }
-
-  .ft__field { display: flex; max-width: 28rem; background: var(--color-surface-2); }
+  .ft__news-h { font-family: var(--font-display); font-size: var(--step-lead); font-weight: 500; line-height: 1.1; color: var(--color-fg); margin-bottom: 0.25rem; }
+  .ft__news-side { min-width: 0; }
+  .ft__field { display: flex; max-width: 32rem; background: var(--color-bg); }
   .ft__field input {
     flex: 1;
     min-width: 0;
-    min-height: 3.25rem;
+    min-height: 3rem;
     padding: 0 1rem;
     background: transparent;
     border: 0;
     color: var(--color-fg);
     font: inherit;
+    font-size: var(--step-body);
   }
+  .ft__field input::placeholder { color: var(--color-placeholder); }
   .ft__field input:focus-visible { outline: none; box-shadow: inset 0 0 0 2px var(--color-accent); } /* taste-skill-ignore: focus ring */
   .ft__field button {
+    flex: none;
     padding-inline: 1.25rem;
+    font: inherit;
     font-weight: 500;
     background: var(--color-accent);
     color: var(--color-accent-ink);
     border: 0;
-    font-size: var(--step-small);
     cursor: pointer;
-    transition: background-color 160ms var(--ease-out-quart);
+    transition: background-color 160ms var(--ease-out-quart), transform 160ms var(--ease-out-quart);
   }
   .ft__field button:hover { background: var(--color-accent-hi); }
-  .ft__msg { margin-top: 0.75rem; font-size: var(--step-small); }
+  .ft__field button:active { transform: scale(0.97); }
+  .ft__field button:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+  .ft__msg { margin-top: 0.75rem; }
 
-  .ft__links { display: flex; flex-wrap: wrap; gap: 0.5rem 1.75rem; }
-  .ft__links a { display: inline-flex; align-items: center; min-height: 2.75rem; text-decoration: none; }
-
-  .ft__name {
-    font-family: var(--font-serif);
-    font-size: clamp(6rem, 29vw, 30rem);
-    line-height: 0.78;
-    letter-spacing: -0.04em;
-    white-space: nowrap;
-    color: var(--color-fg);
-    margin: 0 0 0 -0.04em;
-    transform-origin: 0 100%;
+  /* One quiet legal line */
+  .ft__legal {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.5rem;
+    padding-block: 1.5rem 2rem;
   }
-  .ft__legal { font-size: var(--step-small); padding-block: 1.5rem 2rem; }
-  .ft__credits { font-size: var(--step-small); padding-bottom: 2rem; margin-top: -1rem; }
-  @supports (animation-timeline: view()) {
-    @media (prefers-reduced-motion: no-preference) {
-      /* The name settles as the page ends */
-      .ft__name { animation: name-settle linear both; animation-timeline: view(); animation-range: entry 0% entry 100%; }
-      @keyframes name-settle { from { transform: translateY(18%) scale(0.94); opacity: 0.4; } to { transform: none; opacity: 1; } }
-    }
+  .ft__legal a { display: inline-block; padding-block: 0.25rem; }
+  .ft__credits { flex-basis: 100%; }
+  @media (min-width: 900px) {
+    .ft__credits { flex-basis: auto; margin-left: auto; }
   }
-
 </style>

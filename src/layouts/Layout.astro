@@ -29,7 +29,7 @@ const canonicalURL = new URL(Astro.url.pathname, siteURL);
 const isHome = Astro.url.pathname === "/";
 
 // Home: titulo fijo. Resto: "<Pagina> | Marcial Fantini" (normaliza el sufijo " — Marcial Fantini").
-const HOME_TITLE = `${site.name} | Software a medida para PyMEs`;
+const HOME_TITLE = `${site.name} | Mejoro cómo opera tu PyME`;
 const suffix = ` | ${site.name}`;
 const title = isHome
   ? HOME_TITLE
@@ -88,8 +88,8 @@ const professionalService = {
     <meta name="generator" content={Astro.generator} />
     <meta name="color-scheme" content="dark" />
     <meta name="theme-color" content="#0a0d14" />
-    <link rel="preload" href="/fonts/gambarino-400.woff2" as="font" type="font/woff2" crossorigin />
-    <link rel="preload" href="/fonts/general-sans-400.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/barlow-condensed-500.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/barlow-400.woff2" as="font" type="font/woff2" crossorigin />
 
     <title>{title}</title>
     <meta name="description" content={description} />
@@ -139,7 +139,7 @@ const professionalService = {
   <body class="min-h-[100dvh] flex flex-col antialiased">
     <a href="#main-content" class="skip-link">Saltar al contenido principal</a>
     <Header />
-    <main id="main-content" class="flex-1">
+    <main id="main-content" class="flex-1 page">
       <slot />
     </main>
     <Footer />
