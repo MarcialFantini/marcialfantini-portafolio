@@ -14,7 +14,7 @@ const waUrl = site.whatsapp
     <SceneEnvio class="uc__crew" />
     <h2 id="uc-title" class="uc__prompt" data-rise>
       <span class="soft">¿Qué problema querés resolver?</span>
-      <span>Contanoslo en una línea.</span>
+      <span>Contámelo en una línea.</span>
     </h2>
 
     <form class="uc__form" action={waAction} method="get" target="_blank" data-rise style="--i:1">
@@ -30,12 +30,12 @@ const waUrl = site.whatsapp
       <button type="submit" >Enviar</button>
     </form>
     <p class="uc__next soft" data-rise style="--i:2">
-      Se abre WhatsApp con tu mensaje. Te respondemos en 24 h hábiles y el diagnóstico de 30 minutos es gratis.
+      Se abre WhatsApp con tu mensaje. Te respondo en 24 h hábiles y el diagnóstico de 30 minutos es gratis.
     </p>
 
     <dl class="uc__facts" data-rise style="--i:3">
       <div><dt class="soft">Email</dt><dd><a href={`mailto:${site.email}`}>{site.email}</a></dd></div>
-      {waUrl && <div><dt class="soft">WhatsApp</dt><dd><a href={waUrl} target="_blank" rel="noopener noreferrer">Escribinos directo</a></dd></div>}
+      {waUrl && <div><dt class="soft">WhatsApp</dt><dd><a href={waUrl} target="_blank" rel="noopener noreferrer">Escribime directo</a></dd></div>}
       <div><dt class="soft">Base</dt><dd>{site.location}</dd></div>
     </dl>
     <p class="uc__alt"><a href="/contacto">¿Preferís un formulario completo?</a></p>
@@ -116,8 +116,8 @@ const waUrl = site.whatsapp
   .uc__next { margin-top: 1rem; font-size: var(--step-small); }
 
   .uc__facts { display: grid; gap: 1rem; margin-top: 2.5rem; font-size: var(--step-small); }
-  .uc__facts dd { margin: 0.15rem 0 0; }
-  .uc__facts a { display: inline-block; padding-block: 0.35rem; }
+  .uc__facts dd { margin: 0.25rem 0 0; }
+  .uc__facts a { display: inline-block; padding-block: 0.25rem; }
   @media (min-width: 640px) {
     .uc__facts > div { display: grid; grid-template-columns: 7rem 1fr; }
     .uc__facts dd { margin: 0; }

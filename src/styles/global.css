@@ -58,8 +58,8 @@
   /* Chapter grounds: one tint per chapter, all inside the night palette */
   --color-tint-1: #0f1628;
   --color-tint-2: #11161e;
-  --color-tint-3: #19150f;
-  --color-tint-4: #0e1916;
+  --color-tint-3: #0d1322;
+  --color-tint-4: #12171f;
   --color-ok: #7fd6a4;
 
   /* Robots: joints and floor tuned for 3:1 against every ground they stand on */

@@ -32,7 +32,7 @@ const links = [
 <footer class="ft">
   <div class="ft__top wrap">
     <div class="ft__contact">
-      <p class="soft">Escribinos</p>
+      <p class="soft">Escribime</p>
       <a href={`mailto:${site.email}`} class="ft__mail">{site.email}</a>
       {whatsappUrl && (
         <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" class="ft__wa">WhatsApp</a>
@@ -41,7 +41,7 @@ const links = [
 
     {site.newsletterEndpoint && (
       <form id="newsletter-form" class="ft__news" data-endpoint={site.newsletterEndpoint} aria-label="Newsletter mensual">
-        <p class="soft">Un email por mes con lo que aprendimos. Te das de baja cuando quieras.</p>
+        <p class="soft">Un email por mes con lo que aprendí. Te das de baja cuando quieras.</p>
         <input type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" hidden />
         <div class="ft__field">
           <label class="sr-only" for="newsletter-email">Tu email</label>
@@ -107,10 +107,10 @@ const links = [
         try {
           localStorage.setItem("mf-newsletter-subscribed", "1");
         } catch {}
-        show("Listo, te anotamos.");
+        show("Listo, te anoté.");
         input.value = "";
       } catch {
-        show("No pudimos anotarte. Probá de nuevo en un rato.");
+        show("No pude anotarte. Probá de nuevo en un rato.");
       } finally {
         if (button) button.disabled = false;
       }

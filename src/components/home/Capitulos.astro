@@ -223,7 +223,7 @@ const salidas = [
     background: var(--color-surface-2);
     pointer-events: none;
   }
-  .rail__fill { position: absolute; inset: 0; background: var(--color-accent); transform-origin: top; transform: scaleY(0); }
+  .rail__fill { position: absolute; inset: 0; background: var(--color-soft); transform-origin: top; transform: scaleY(0); }
   @supports not (animation-timeline: view()) {
     .rail__fill { transform: scaleY(1); }
   }
@@ -301,7 +301,7 @@ const salidas = [
   .cap__table tbody tr { border-top: 1px solid var(--color-surface-2); }
   .cap__table tbody th { font-weight: 500; }
   .cap__table td { font-variant-numeric: tabular-nums; }
-  .cap__table td.is-low { color: var(--color-accent); }
+  .cap__table td.is-low { color: var(--color-fg); font-weight: 500; }
   .cap__table tr { transition: background-color 500ms var(--ease-out-quart); }
   .cap__table tr.is-fresh { background: var(--color-accent-deep); }
   .cap__restock {
@@ -345,7 +345,7 @@ const salidas = [
     grid-template-columns: 3rem minmax(0, 1fr) auto;
     gap: 0.75rem;
     align-items: center;
-    padding: 0.85rem 1rem 0.85rem 1.5rem;
+    padding: 0.75rem 1rem 0.75rem 1.5rem;
     background: var(--color-surface);
     font-size: var(--step-small);
     transition: opacity 300ms var(--ease-out-quart), background-color 400ms var(--ease-out-quart);
@@ -361,7 +361,7 @@ const salidas = [
   .g-dot { fill: var(--color-grid); }
   .g-wire { fill: var(--color-rb-floor); }
   .g-node { fill: var(--color-surface-2); }
-  .g-core { fill: var(--color-accent); }
+  .g-core { fill: var(--color-surface-3); }
   .g-t { fill: var(--color-fg); font-family: var(--font-sans); font-size: 17px; font-weight: 500; }
   .g-core-t { fill: var(--color-accent-ink); font-family: var(--font-serif); font-size: 26px; }
   .g-d { fill: var(--color-accent-ink); font-family: var(--font-sans); font-size: 14px; }
@@ -397,6 +397,6 @@ const salidas = [
   @media (min-width: 1100px) {
     .cap__panel { margin-top: 0; }
   }
-  .cap__ben li { display: grid; gap: 0.35rem; font-size: var(--step-small); }
+  .cap__ben li { display: grid; gap: 0.25rem; font-size: var(--step-small); }
   .cap__ben strong { font-weight: 500; font-size: var(--step-body); }
 </style>

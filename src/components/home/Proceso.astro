@@ -6,17 +6,17 @@ import Agv from "../robots/Agv.astro";
 import Cobot from "../robots/Cobot.astro";
 
 const pasos = [
-  { t: "Nos contás el problema.", d: "Una charla de 30 minutos, gratis." },
-  { t: "Te pasamos un precio cerrado.", d: "Por escrito y por etapas. Sin sorpresas." },
-  { t: "Lo usás desde la primera etapa.", d: "Te enseñamos a usarlo y queda a tu nombre." },
+  { t: "Me contás el problema.", d: "Una charla de 30 minutos, gratis." },
+  { t: "Te paso un precio cerrado.", d: "Por escrito y por etapas. Sin sorpresas." },
+  { t: "Lo usás desde la primera etapa.", d: "Te enseño a usarlo y queda a tu nombre." },
 ];
 const estaciones = [200, 600, 1000];
 ---
 
 <section id="como-trabajamos" class="proceso wrap" aria-labelledby="proceso-title">
   <div class="proceso__head">
-    <h2 id="proceso-title" data-split>Cómo trabajamos</h2>
-    <p class="proceso__lead soft" data-rise>Tres pasos. Tu negocio sigue andando mientras tanto.</p>
+    <h2 id="proceso-title" data-split>Cómo trabajo</h2>
+    <p class="proceso__lead soft" data-rise>De la primera charla al sistema en uso, en tres pasos.</p>
   </div>
 
   <div class="rbs linea" data-rb aria-hidden="true">
@@ -137,10 +137,10 @@ const estaciones = [200, 600, 1000];
     .proceso__list { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--gutter); text-align: center; }
     .paso__n { display: none; }
   }
-  .paso { display: grid; gap: 0.4rem; justify-items: inherit; }
+  .paso { display: grid; gap: 0.5rem; justify-items: inherit; }
   @media (max-width: 767px) {
     .paso { grid-template-columns: 2.5rem minmax(0, 1fr); column-gap: 0.75rem; }
-    .paso__n { grid-row: 1 / span 2; display: grid; place-items: center; width: 2.5rem; height: 2.5rem; background: var(--color-accent); color: var(--color-accent-ink); font-weight: 500; }
+    .paso__n { grid-row: 1 / span 2; display: grid; place-items: center; width: 2.5rem; height: 2.5rem; background: var(--color-surface-2); color: var(--color-fg); font-weight: 500; }
   }
   .paso__t { font-family: var(--font-sans); font-size: var(--step-lead); font-weight: 500; line-height: 1.2; letter-spacing: -0.01em; }
   .paso__d { font-size: var(--step-body); }

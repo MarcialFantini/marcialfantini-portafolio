@@ -1,0 +1,127 @@
+---
+import site from "../../data/site.json";
+import SceneEnvio from "../robots/scenes/SceneEnvio.astro";
+
+// Un solo campo: el texto viaja a WhatsApp como ?text= (funciona sin JavaScript).
+const waAction = site.whatsapp ? `https://wa.me/${site.whatsapp}` : "/contacto";
+const waUrl = site.whatsapp
+  ? `https://wa.me/${site.whatsapp}?text=${encodeURIComponent(site.whatsappMessage || "")}`
+  : "";
+---
+
+<section id="contacto" class="uc wrap" aria-labelledby="uc-title">
+  <div class="uc__col">
+    <SceneEnvio class="uc__crew" />
+    <h2 id="uc-title" class="uc__prompt" data-rise>
+      <span class="soft">¿Qué problema querés resolver?</span>
+      <span>Contámelo en una línea.</span>
+    </h2>
+
+    <form class="uc__form" action={waAction} method="get" target="_blank" data-rise style="--i:1">
+      <label for="uc-text" class="sr-only">Tu problema, en una línea</label>
+      <input
+        id="uc-text"
+        name="text"
+        type="text"
+        required
+        autocomplete="off"
+        placeholder="Ej.: perdemos pedidos entre WhatsApp y Excel"
+      />
+      <button type="submit" >Enviar</button>
+    </form>
+    <p class="uc__next soft" data-rise style="--i:2">
+      Se abre WhatsApp con tu mensaje. Te respondo en 24 h hábiles y el diagnóstico de 30 minutos es gratis.
+    </p>
+
+    <dl class="uc__facts" data-rise style="--i:3">
+      <div><dt class="soft">Email</dt><dd><a href={`mailto:${site.email}`}>{site.email}</a></dd></div>
+      {waUrl && <div><dt class="soft">WhatsApp</dt><dd><a href={waUrl} target="_blank" rel="noopener noreferrer">Escribinos directo</a></dd></div>}
+      <div><dt class="soft">Base</dt><dd>{site.location}</dd></div>
+    </dl>
+    <p class="uc__alt"><a href="/contacto">¿Preferís un formulario completo?</a></p>
+  </div>
+</section>
+
+<script>
+  // Con JavaScript, el mensaje sale con un saludo delante.
+  document.addEventListener("astro:page-load", () => {
+    const form = document.querySelector<HTMLFormElement>(".uc__form");
+    if (!form || form.dataset.bound || !form.action.includes("wa.me")) return;
+    form.dataset.bound = "1";
+    form.addEventListener("submit", (e) => {
+      const input = form.querySelector<HTMLInputElement>("input[name=text]");
+      if (!input || !input.value.trim()) return;
+      e.preventDefault();
+      const text = `Hola, quiero resolver esto: ${input.value.trim()}`;
+      window.open(`${form.action}?text=${encodeURIComponent(text)}`, "_blank", "noopener");
+    });
+  });
+</script>
+
+<style>
+  .uc { padding-block: var(--section-gap) 2rem; }
+  .uc__col { display: grid; grid-template-columns: minmax(0, 1fr); }
+  :global(.uc__crew) { width: min(100%, 20rem); margin: 0 0 1.5rem; }
+  @media (min-width: 900px) {
+    .uc__col { grid-template-columns: minmax(0, 6fr) minmax(0, 5fr); column-gap: clamp(2rem, 5vw, 5rem); align-items: start; }
+    .uc__col > :not(.uc__crew) { grid-column: 1; }
+    :global(.uc__crew) { grid-column: 2; grid-row: 1 / span 6; align-self: center; width: 100%; max-width: 28rem; margin: 0; }
+  }
+  .uc__prompt {
+    display: flex;
+    flex-direction: column;
+    font-family: var(--font-sans);
+    font-size: clamp(1.75rem, 1.2rem + 1.8vw, 2.75rem);
+    font-weight: 500;
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+  }
+  .uc__form {
+    display: flex;
+    align-items: center;
+    margin-top: 1.75rem;
+    min-height: 4rem;
+    background: var(--color-surface-3);
+    color: var(--color-accent-ink);
+    transition: box-shadow 160ms var(--ease-out-quart);
+  }
+  .uc__form:focus-within { box-shadow: inset 0 0 0 2px var(--color-accent); } /* taste-skill-ignore: focus ring */
+  .uc__form input {
+    flex: 1;
+    min-width: 0;
+    height: 4rem;
+    padding: 0 1.25rem;
+    background: transparent;
+    border: 0;
+    color: var(--color-accent-ink);
+    font: inherit;
+  }
+  .uc__form input::placeholder { color: var(--color-placeholder); }
+  .uc__form input:focus-visible { outline: none; }
+  .uc__form button {
+    flex: none;
+    height: 2.75rem;
+    padding-inline: 1.25rem;
+    margin-right: 0.5rem;
+    font-weight: 500;
+    background: var(--color-accent);
+    color: var(--color-accent-ink);
+    border: 0;
+    font-size: var(--step-body);
+    cursor: pointer;
+    transition: transform 160ms var(--ease-out-quart), background-color 160ms var(--ease-out-quart);
+  }
+  .uc__form button:hover { background: var(--color-accent-hi); color: var(--color-accent-ink); }
+  .uc__form button:active { transform: scale(0.94); }
+  .uc__next { margin-top: 1rem; font-size: var(--step-small); }
+
+  .uc__facts { display: grid; gap: 1rem; margin-top: 2.5rem; font-size: var(--step-small); }
+  .uc__facts dd { margin: 0.25rem 0 0; }
+  .uc__facts a { display: inline-block; padding-block: 0.25rem; }
+  @media (min-width: 640px) {
+    .uc__facts > div { display: grid; grid-template-columns: 7rem 1fr; }
+    .uc__facts dd { margin: 0; }
+  }
+  .uc__alt { margin-top: 2rem; font-size: var(--step-small); }
+  .uc__alt a { display: inline-block; padding-block: 0.5rem; }
+</style>
