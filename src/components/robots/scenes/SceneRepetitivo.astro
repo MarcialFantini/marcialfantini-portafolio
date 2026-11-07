@@ -1,0 +1,65 @@
+---
+/* Repetitive work: the cobot feeds invoices onto the belt every 2 s, the industrial arm
+   stamps each one as it passes. Cards run 6 s (3 cards, offset 2 s), the stamp and the cobot run 2 s.
+   A card's centre reaches the stamp (x 230) at 58.2 % of its run -> 1.49 s into the 2 s stamp cycle. */
+import Cobot from "../Cobot.astro";
+import Industrial from "../Industrial.astro";
+interface Props { class?: string }
+const { class: cls } = Astro.props;
+---
+
+<div class:list={["rbs sc-rep rb-on-accent", cls]} data-rb aria-hidden="true">
+  <svg viewBox="0 0 380 210" focusable="false">
+    <rect x="0" y="200" width="380" height="8" class="r-floor" />
+    <!-- pile of blank invoices -->
+    <rect x="2" y="190" width="30" height="10" class="r-ink" />
+    <rect x="2" y="180" width="30" height="9" class="r-ink" />
+    <!-- belt -->
+    <rect x="60" y="180" width="6" height="20" class="r-soft" />
+    <rect x="344" y="180" width="6" height="20" class="r-soft" />
+    <rect x="40" y="172" width="330" height="8" rx="4" class="r-soft" />
+
+    <Industrial x={102} y={50} />
+
+    {[0, 1, 2].map((k) => (
+      <g class="rp-card" style={`animation-delay:${-2 * k}s`}>
+        <rect x="40" y="162" width="26" height="10" class="r-ink" />
+        <rect x="48" y="165" width="10" height="4" class="r-dark rp-mark" style={`animation-delay:${-2 * k}s`} />
+      </g>
+    ))}
+
+    <Cobot x={-30} y={88} s={0.8}><rect x="88" y="80" width="32" height="12" class="r-ink rp-hold" /></Cobot>
+  </svg>
+</div>
+
+<style>
+  .rp-mark { opacity: 0; }
+  .rp-card { opacity: 0; }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .rp-card { animation: rp-card 6s linear infinite; }
+    .rp-mark { animation: rp-mark 6s step-end infinite; }
+    .sc-rep :global(.i-ram) { animation: rp-ram 2s ease-in-out infinite; }
+    .sc-rep :global(.i-a2) { animation: rp-a2 2s ease-in-out infinite; }
+    .sc-rep :global(.c-up) { animation: rp-up 2s ease-in-out infinite; }
+    .sc-rep :global(.c-fore) { animation: rp-fore 2s ease-in-out infinite; }
+    .sc-rep :global(.c-wrist) { animation: rp-wrist 2s ease-in-out infinite; }
+    .rp-hold { animation: rp-hold 2s step-end infinite; }
+  }
+  @media (prefers-reduced-motion: reduce) { .rp-card { opacity: 1; } }
+
+  @keyframes rp-card {
+    0% { transform: none; opacity: 0; }
+    4% { opacity: 1; }
+    94% { opacity: 1; }
+    100% { transform: translateX(304px); opacity: 0; }
+  }
+  @keyframes rp-mark { 0% { opacity: 0; } 58.5%, 100% { opacity: 1; } }
+  @keyframes rp-ram { 0%, 64% { transform: none; } 74.6% { transform: translateY(29px); } 84%, 100% { transform: none; } }
+  @keyframes rp-a2 { 0%, 60% { transform: rotate(0); } 72% { transform: rotate(3deg); } 86%, 100% { transform: rotate(0); } }
+  /* Cobot: release on the belt at 0, reach the pile, take the next invoice, come back */
+  @keyframes rp-up { 0%, 6% { transform: rotate(0); } 38%, 50% { transform: rotate(-30deg); } 92%, 100% { transform: rotate(0); } }
+  @keyframes rp-fore { 0%, 6% { transform: rotate(0); } 38%, 50% { transform: rotate(-60deg); } 92%, 100% { transform: rotate(0); } }
+  @keyframes rp-wrist { 0%, 6% { transform: rotate(0); } 38%, 50% { transform: rotate(90deg); } 92%, 100% { transform: rotate(0); } }
+  @keyframes rp-hold { 0% { opacity: 0; } 44%, 100% { opacity: 1; } }
+</style>

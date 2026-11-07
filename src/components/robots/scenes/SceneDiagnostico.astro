@@ -1,0 +1,65 @@
+---
+/* Diagnosis: an AGV brings the current process sheet, the cobot reads it line by line with its
+   wrist camera, a check appears, the AGV takes it away. 9 s loop. */
+import Agv from "../Agv.astro";
+import Cobot from "../Cobot.astro";
+interface Props { class?: string }
+const { class: cls } = Astro.props;
+---
+
+<div class:list={["rbs sc-dx", cls]} data-rb aria-hidden="true">
+  <svg viewBox="0 0 300 190" focusable="false">
+    <rect x="0" y="180" width="300" height="8" class="r-floor" />
+    <g class="dx-agv">
+      <Agv x={150} y={132} s={0.8}>
+        <rect x="42" y="-34" width="36" height="52" rx="2" class="r-ink" />
+        <rect x="48" y="-26" width="24" height="4" class="r-dark" />
+        <rect x="48" y="-17" width="20" height="4" class="r-dark" />
+        <rect x="48" y="-8" width="24" height="4" class="r-dark" />
+        <rect x="48" y="1" width="16" height="4" class="r-dark" />
+        <rect x="64" y="-2" width="10" height="10" rx="2" class="r-acc dx-ok" />
+      </Agv>
+    </g>
+    <Cobot x={30} y={40} />
+  </svg>
+</div>
+
+<style>
+  .dx-ok { opacity: 0; }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .sc-dx :global(*) { animation-duration: 9s; animation-iteration-count: infinite; animation-timing-function: ease-in-out; }
+    .dx-agv { animation-name: dx-agv; }
+    .sc-dx :global(.a-wheel) { animation-name: dx-wheel; }
+    .dx-ok { animation-name: dx-ok; animation-timing-function: step-end; }
+    .sc-dx :global(.c-up) { animation-name: dx-up; }
+    .sc-dx :global(.c-fore) { animation-name: dx-fore; }
+    .sc-dx :global(.c-wrist) { animation-name: dx-wrist; }
+  }
+
+  @keyframes dx-agv {
+    0% { transform: translateX(170px); opacity: 0; }
+    6% { opacity: 1; }
+    18%, 76% { transform: none; opacity: 1; }
+    88% { opacity: 0; }
+    92%, 100% { transform: translateX(170px); opacity: 0; }
+  }
+  @keyframes dx-wheel { 0% { transform: rotate(0); } 18%, 76% { transform: rotate(-540deg); } 92%, 100% { transform: rotate(0); } }
+  @keyframes dx-ok { 0% { opacity: 0; } 66%, 92% { opacity: 1; } 93%, 100% { opacity: 0; } }
+  /* lean in, scan top to bottom twice, sit back */
+  @keyframes dx-up { 0%, 18% { transform: rotate(0); } 26%, 66% { transform: rotate(28deg); } 76%, 100% { transform: rotate(0); } }
+  @keyframes dx-fore {
+    0%, 18% { transform: rotate(0); }
+    26% { transform: rotate(-52deg); } 36% { transform: rotate(-24deg); }
+    46% { transform: rotate(-52deg); } 56% { transform: rotate(-24deg); }
+    66% { transform: rotate(-40deg); }
+    76%, 100% { transform: rotate(0); }
+  }
+  @keyframes dx-wrist {
+    0%, 18% { transform: rotate(0); }
+    26% { transform: rotate(24deg); } 36% { transform: rotate(-4deg); }
+    46% { transform: rotate(24deg); } 56% { transform: rotate(-4deg); }
+    66% { transform: rotate(12deg); }
+    76%, 100% { transform: rotate(0); }
+  }
+</style>

@@ -1,0 +1,68 @@
+---
+/* Contact crew: the cobot holds an empty envelope next to a waiting AGV.
+   think (visitor typing): the cobot reads along, camera scanning.
+   send (message sent): the cobot drops the envelope on the AGV, which drives it off and comes back. */
+import Agv from "../Agv.astro";
+import Cobot from "../Cobot.astro";
+interface Props { class?: string }
+const { class: cls } = Astro.props;
+---
+
+<div class:list={["rbs sc-ev", cls]} data-rb data-listen="uc" data-mood="idle" aria-hidden="true">
+  <svg viewBox="0 0 300 160" focusable="false">
+    <rect x="0" y="150" width="300" height="8" class="r-floor" />
+    <g class="ev-agv">
+      <Agv x={118} y={102} s={0.8}>
+        <g class="ev-onagv">
+          <rect x="44" y="2" width="32" height="16" rx="2" class="r-acc" />
+          <path d="M44 3 L60 12 L76 3" class="ev-flap" />
+        </g>
+      </Agv>
+    </g>
+    <Cobot x={10} y={10}>
+      <g class="ev-held">
+        <rect x="92" y="84" width="24" height="12" rx="2" class="r-acc" />
+        <path d="M92 85 L104 91 L116 85" class="ev-flap" />
+      </g>
+    </Cobot>
+  </svg>
+</div>
+
+<style>
+  .ev-flap { fill: none; stroke: var(--color-bg); stroke-width: 1.6; }
+  .ev-onagv { opacity: 0; }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .sc-ev :global(.c-up) { animation: ev-idle-up 6s ease-in-out infinite; }
+    .sc-ev :global(.c-fore) { animation: ev-idle-fore 6s ease-in-out infinite; }
+
+    .sc-ev[data-mood="think"] :global(.c-wrist) { animation: ev-scan 1.6s ease-in-out infinite; }
+    .sc-ev[data-mood="think"] :global(.rb-cobot .r-eye) { animation: ev-look 1.6s ease-in-out infinite; }
+
+    .sc-ev[data-mood="send"] :global(.c-up) { animation: ev-send-up 2.6s ease-in-out 1 both; }
+    .sc-ev[data-mood="send"] :global(.c-fore) { animation: ev-send-fore 2.6s ease-in-out 1 both; }
+    .sc-ev[data-mood="send"] :global(.c-wrist) { animation: ev-send-wrist 2.6s ease-in-out 1 both; }
+    .sc-ev[data-mood="send"] .ev-held { animation: ev-held 2.6s step-end 1 both; }
+    .sc-ev[data-mood="send"] .ev-onagv { animation: ev-onagv 2.6s step-end 1 both; }
+    .sc-ev[data-mood="send"] .ev-agv { animation: ev-drive 2.6s ease-in-out 1 both; }
+    .sc-ev[data-mood="send"] :global(.a-wheel) { animation: ev-wheel 2.6s ease-in-out 1 both; }
+  }
+
+  @keyframes ev-idle-up { 0%, 100% { transform: rotate(0); } 50% { transform: rotate(4deg); } }
+  @keyframes ev-idle-fore { 0%, 100% { transform: rotate(0); } 50% { transform: rotate(-6deg); } }
+  @keyframes ev-scan { 0%, 100% { transform: rotate(-6deg); } 50% { transform: rotate(8deg); } }
+  @keyframes ev-look { 0%, 100% { transform: translateX(-1px); } 50% { transform: translateX(1.5px); } }
+  /* reach over to the AGV, let go, come back while the AGV leaves and returns */
+  @keyframes ev-send-up { 0% { transform: rotate(0); } 25%, 35% { transform: rotate(48deg); } 60%, 100% { transform: rotate(0); } }
+  @keyframes ev-send-fore { 0% { transform: rotate(0); } 25%, 35% { transform: rotate(-20deg); } 60%, 100% { transform: rotate(0); } }
+  @keyframes ev-send-wrist { 0% { transform: rotate(0); } 25%, 35% { transform: rotate(-28deg); } 60%, 100% { transform: rotate(0); } }
+  @keyframes ev-held { 0% { opacity: 1; } 32% { opacity: 0; } 96%, 100% { opacity: 1; } }
+  @keyframes ev-onagv { 0% { opacity: 0; } 32% { opacity: 1; } 70%, 100% { opacity: 0; } }
+  @keyframes ev-drive {
+    0%, 38% { transform: none; opacity: 1; }
+    62% { transform: translateX(150px); opacity: 0; }
+    74% { transform: translateX(-60px); opacity: 0; }
+    100% { transform: none; opacity: 1; }
+  }
+  @keyframes ev-wheel { 0%, 38% { transform: rotate(0); } 62% { transform: rotate(600deg); } 74% { transform: rotate(600deg); } 100% { transform: rotate(900deg); } }
+</style>

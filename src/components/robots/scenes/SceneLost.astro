@@ -1,0 +1,34 @@
+---
+/* 404: an AGV looking for a page that is not there, driving back and forth with a question. */
+import Agv from "../Agv.astro";
+interface Props { class?: string }
+const { class: cls } = Astro.props;
+---
+
+<div class:list={["rbs sc-lost", cls]} data-rb aria-hidden="true">
+  <svg viewBox="0 0 600 90" focusable="false">
+    <rect x="0" y="80" width="600" height="8" class="r-floor" />
+    <g class="lost-agv">
+      <Agv x={0} y={26}>
+        <rect x="46" y="-10" width="28" height="28" rx="2" class="r-acc" />
+        <text x="60" y="12" text-anchor="middle" font-size="22" class="r-text">?</text>
+      </Agv>
+    </g>
+  </svg>
+</div>
+
+<style>
+  .lost-agv { transform-box: fill-box; transform-origin: center; }
+  @media (prefers-reduced-motion: no-preference) {
+    .lost-agv { animation: lost-roam 9s ease-in-out infinite; }
+    .sc-lost :global(.a-wheel) { animation: lost-wheel 9s ease-in-out infinite; }
+  }
+  @keyframes lost-roam {
+    0% { transform: translateX(0) scaleX(1); }
+    42% { transform: translateX(460px) scaleX(1); }
+    50% { transform: translateX(460px) scaleX(-1); }
+    92% { transform: translateX(0) scaleX(-1); }
+    100% { transform: translateX(0) scaleX(1); }
+  }
+  @keyframes lost-wheel { 0% { transform: rotate(0); } 42%, 50% { transform: rotate(1080deg); } 92%, 100% { transform: rotate(0); } }
+</style>

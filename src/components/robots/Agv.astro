@@ -1,0 +1,27 @@
+---
+/* AGV: autonomous warehouse cart. Local box 120 x 60, deck top at y 18. Payload goes in the slot. */
+interface Props { x?: number; y?: number; s?: number; class?: string }
+const { x = 0, y = 0, s = 1, class: cls } = Astro.props;
+---
+
+<svg class:list={["rb rb-agv", cls]} x={x} y={y} width={120 * s} height={60 * s} viewBox="0 0 120 60" overflow="visible">
+  <g class="a-load"><slot /></g>
+  <rect x="4" y="18" width="112" height="8" rx="3" class="r-soft" />
+  <rect x="8" y="24" width="104" height="22" rx="4" class="r-ink" />
+  <rect x="8" y="38" width="104" height="4" class="r-dark" />
+  <path d="M14 27 l6 5 -6 5 h5 l6 -5 -6 -5z" class="r-acc" />
+  <path d="M24 27 l6 5 -6 5 h5 l6 -5 -6 -5z" class="r-acc" />
+  <rect x="84" y="27" width="22" height="10" rx="3" class="r-dark" />
+  <rect x="88" y="29" width="4" height="6" rx="1" class="r-acc r-eye" />
+  <rect x="97" y="29" width="4" height="6" rx="1" class="r-acc r-eye" />
+  <g class="a-wheel a-w1">
+    <circle cx="28" cy="50" r="8" class="r-soft" />
+    <rect x="27" y="43" width="2" height="14" class="r-ink" />
+    <rect x="21" y="49" width="14" height="2" class="r-ink" />
+  </g>
+  <g class="a-wheel a-w2">
+    <circle cx="92" cy="50" r="8" class="r-soft" />
+    <rect x="91" y="43" width="2" height="14" class="r-ink" />
+    <rect x="85" y="49" width="14" height="2" class="r-ink" />
+  </g>
+</svg>

@@ -1,0 +1,46 @@
+---
+/* Proposal: an AGV carries the proposal under the industrial arm, the arm stamps it,
+   the AGV drives it out. 8 s loop. Stamp centre x 200; AGV deck centre 200; sheet top 144.6. */
+import Agv from "../Agv.astro";
+import Industrial from "../Industrial.astro";
+interface Props { class?: string }
+const { class: cls } = Astro.props;
+---
+
+<div class:list={["rbs sc-pp", cls]} data-rb aria-hidden="true">
+  <svg viewBox="0 0 300 190" focusable="false">
+    <rect x="0" y="183" width="300" height="8" class="r-floor" />
+    <Industrial x={72} y={30} />
+    <g class="pp-agv">
+      <Agv x={152} y={135} s={0.8}>
+        <rect x="36" y="12" width="48" height="6" class="r-ink" />
+        <rect x="52" y="12" width="16" height="3" class="r-acc pp-mark" />
+      </Agv>
+    </g>
+  </svg>
+</div>
+
+<style>
+  .pp-mark { opacity: 0; }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .sc-pp :global(*) { animation-duration: 8s; animation-iteration-count: infinite; animation-timing-function: ease-in-out; }
+    .pp-agv { animation-name: pp-agv; }
+    .sc-pp :global(.a-wheel) { animation-name: pp-wheel; }
+    .pp-mark { animation-name: pp-mark; animation-timing-function: step-end; }
+    .sc-pp :global(.i-ram) { animation-name: pp-ram; }
+    .sc-pp :global(.i-a1) { animation-name: pp-a1; }
+  }
+
+  @keyframes pp-agv {
+    0% { transform: translateX(-170px); opacity: 0; }
+    8% { opacity: 1; }
+    25%, 60% { transform: none; opacity: 1; }
+    74% { opacity: 0; }
+    80%, 100% { transform: translateX(170px); opacity: 0; }
+  }
+  @keyframes pp-wheel { 0% { transform: rotate(0); } 25%, 60% { transform: rotate(540deg); } 80%, 100% { transform: rotate(1080deg); } }
+  @keyframes pp-mark { 0% { opacity: 0; } 42%, 99% { opacity: 1; } 100% { opacity: 0; } }
+  @keyframes pp-ram { 0%, 32% { transform: none; } 40%, 44% { transform: translateY(31.6px); } 52%, 100% { transform: none; } }
+  @keyframes pp-a1 { 0%, 26% { transform: rotate(0); } 34%, 50% { transform: rotate(-2deg); } 58%, 100% { transform: rotate(0); } }
+</style>

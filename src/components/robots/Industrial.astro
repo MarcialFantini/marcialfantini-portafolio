@@ -1,0 +1,30 @@
+---
+/* Industrial (anthropomorphic) arm with a stamping ram.
+   Local box 150 x 150. Shoulder (70,120), elbow (70,58), wrist (128,58). Ram slides down (translateY). */
+interface Props { x?: number; y?: number; s?: number; class?: string }
+const { x = 0, y = 0, s = 1, class: cls } = Astro.props;
+---
+
+<svg class:list={["rb rb-ind", cls]} x={x} y={y} width={150 * s} height={150 * s} viewBox="0 0 150 150" overflow="visible">
+  <rect x="40" y="134" width="60" height="16" rx="3" class="r-soft" />
+  <rect x="52" y="118" width="36" height="18" rx="4" class="r-ink" />
+  <g class="i-a1">
+    <rect x="60" y="52" width="20" height="72" rx="10" class="r-ink" />
+    <circle cx="70" cy="120" r="12" class="r-soft" />
+    <g class="i-a2">
+      <g class="i-w">
+        <g class="i-ram">
+          <rect x="124" y="30" width="8" height="48" rx="2" class="r-soft" />
+          <rect x="116" y="76" width="24" height="7" rx="2" class="r-acc" />
+          <g class="i-load"><slot /></g>
+        </g>
+        <circle cx="128" cy="58" r="8" class="r-soft" />
+      </g>
+      <rect x="64" y="49" width="70" height="18" rx="9" class="r-ink" />
+      <circle cx="70" cy="58" r="10" class="r-soft" />
+      <rect x="90" y="52" width="22" height="11" rx="3" class="r-dark" />
+      <rect x="94" y="54" width="4" height="7" rx="1" class="r-acc r-eye" />
+      <rect x="103" y="54" width="4" height="7" rx="1" class="r-acc r-eye" />
+    </g>
+  </g>
+</svg>

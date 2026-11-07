@@ -1,0 +1,29 @@
+---
+/* Cartesian (gantry) robot: two legs, a beam, an X carriage and a Z axis with a gripper.
+   Local box w x h. Tool centre x 28 (+ X travel); load top at y 74 (+ Z travel). */
+interface Props { x?: number; y?: number; w?: number; h?: number; class?: string }
+const { x = 0, y = 0, w = 220, h = 150, class: cls } = Astro.props;
+---
+
+<svg class:list={["rb rb-gantry", cls]} x={x} y={y} width={w} height={h} viewBox={`0 0 ${w} ${h}`} overflow="visible">
+  <rect x="4" y="16" width="8" height={h - 16} class="r-soft" />
+  <rect x={w - 12} y="16" width="8" height={h - 16} class="r-soft" />
+  <rect x="0" y={h - 6} width="16" height="6" rx="2" class="r-soft" />
+  <rect x={w - 16} y={h - 6} width="16" height="6" rx="2" class="r-soft" />
+  <g class="g-x">
+    <g class="g-z">
+      <rect x="25" y="-26" width="6" height="96" rx="2" class="r-soft" />
+      <rect x="20" y="68" width="16" height="5" rx="2" class="r-soft" />
+      <g class="g-load"><slot /></g>
+      <rect x="20" y="72" width="4" height="10" rx="1.5" class="r-soft g-fl" />
+      <rect x="32" y="72" width="4" height="10" rx="1.5" class="r-soft g-fr" />
+    </g>
+  </g>
+  <rect x="0" y="10" width={w} height="10" rx="3" class="r-ink" />
+  <g class="g-x">
+    <rect x="14" y="4" width="28" height="20" rx="3" class="r-soft" />
+    <rect x="17" y="8" width="22" height="10" rx="3" class="r-dark" />
+    <rect x="20" y="10" width="4" height="6" rx="1" class="r-acc r-eye" />
+    <rect x="31" y="10" width="4" height="6" rx="1" class="r-acc r-eye" />
+  </g>
+</svg>

@@ -1,0 +1,28 @@
+---
+/* SCARA: column with a horizontal two-link arm and a vertical quill.
+   Local box 150 x 140. Seen from the side, swinging the arm round the column reads as scaleX(1 -> -1)
+   around the column axis (25,45). Tool centre x 130; load top at y 92 (+ quill travel). */
+interface Props { x?: number; y?: number; s?: number; class?: string }
+const { x = 0, y = 0, s = 1, class: cls } = Astro.props;
+---
+
+<svg class:list={["rb rb-scara", cls]} x={x} y={y} width={150 * s} height={140 * s} viewBox="0 0 150 140" overflow="visible">
+  <rect x="4" y="128" width="42" height="12" rx="3" class="r-soft" />
+  <rect x="12" y="44" width="26" height="86" rx="4" class="r-ink" />
+  <rect x="15" y="60" width="20" height="10" rx="3" class="r-dark" />
+  <rect x="18" y="62" width="4" height="6" rx="1" class="r-acc r-eye" />
+  <rect x="27" y="62" width="4" height="6" rx="1" class="r-acc r-eye" />
+  <g class="s-arms">
+    <rect x="12" y="36" width="80" height="18" rx="9" class="r-ink" />
+    <circle cx="25" cy="45" r="8" class="r-soft" />
+    <g class="s-z">
+      <rect x="127" y="22" width="6" height="66" rx="2" class="r-soft" />
+      <rect x="121" y="86" width="18" height="5" rx="2" class="r-soft" />
+      <g class="s-load"><slot /></g>
+      <rect x="121" y="90" width="4" height="10" rx="1.5" class="r-soft s-fl" />
+      <rect x="135" y="90" width="4" height="10" rx="1.5" class="r-soft s-fr" />
+    </g>
+    <rect x="78" y="38" width="62" height="14" rx="7" class="r-ink" />
+    <circle cx="84" cy="45" r="7" class="r-soft" />
+  </g>
+</svg>
