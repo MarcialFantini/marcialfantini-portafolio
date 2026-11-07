@@ -1,7 +1,7 @@
 /* =========================================================
    Marcial Fantini — Design system
    Direction: "Type and nothing else" (tasteskill seed 442660410)
-   Type: Gambarino (display) + General Sans (text), self-hosted.
+   Type: Barlow Condensed (display) + Barlow (text), self-hosted (OFL).
    Colour: Night and cornflower — one ground, one ink, one accent.
    House rules: no gradients, no shadows at rest, no hairlines,
    no monospace outside code, no tracked uppercase labels.
@@ -10,22 +10,29 @@
 @import "tailwindcss";
 
 @font-face {
-  font-family: "Gambarino";
-  src: url("/fonts/gambarino-400.woff2") format("woff2");
+  font-family: "Barlow Condensed";
+  src: url("/fonts/barlow-condensed-500.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Barlow Condensed";
+  src: url("/fonts/barlow-condensed-600.woff2") format("woff2");
+  font-weight: 600 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Barlow";
+  src: url("/fonts/barlow-400.woff2") format("woff2");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
-  font-family: "General Sans";
-  src: url("/fonts/general-sans-400.woff2") format("woff2");
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: "General Sans";
-  src: url("/fonts/general-sans-500.woff2") format("woff2");
+  font-family: "Barlow";
+  src: url("/fonts/barlow-500.woff2") format("woff2");
   font-weight: 500 700;
   font-style: normal;
   font-display: swap;
@@ -35,8 +42,8 @@
    Tokens
    --------------------------------------------------------- */
 @theme {
-  --font-serif: "Gambarino", "Iowan Old Style", Georgia, serif;
-  --font-sans: "General Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-display: "Barlow Condensed", "Arial Narrow", ui-sans-serif, sans-serif;
+  --font-sans: "Barlow", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --font-code: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace; /* taste-skill-ignore: only for real <pre>/<code> */
 
   /* Night and cornflower */
@@ -94,7 +101,8 @@
   --step-statement: clamp(1.5rem, 1.1rem + 1.6vw, 2.25rem);
 
   --gutter: clamp(1.25rem, 2vw, 1.75rem);
-  --section-gap: clamp(4.5rem, 8vw, 8rem);
+  --content-max: 1200px;
+  --section-gap: 40px;
 }
 
 /* ---------------------------------------------------------
@@ -125,10 +133,10 @@
 
   .min-w-0 { min-width: 0; }
 
-  h1, h2, h3, h4, .font-serif {
-    font-family: var(--font-serif);
-    font-weight: 400;
-    letter-spacing: -0.02em;
+  h1, h2, h3, h4, .font-display {
+    font-family: var(--font-display);
+    font-weight: 500;
+    letter-spacing: 0;
     line-height: 0.95;
     color: var(--color-fg);
     text-wrap: balance;
@@ -174,7 +182,9 @@
    Shared components of the new system
    --------------------------------------------------------- */
 @layer components {
-  .wrap { padding-inline: var(--gutter); }
+  .wrap { padding-inline: var(--gutter); max-width: var(--content-max); margin-inline: auto; }
+  /* The whole page, backgrounds included, keeps to one 1200px column */
+  .page { width: 100%; max-width: var(--content-max); margin-inline: auto; }
 
   .btn {
     display: inline-flex;

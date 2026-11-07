@@ -3,7 +3,7 @@
 Landing personal de **Marcial Fantini**, desarrollador freelance full-stack argentino. Mood indie hacker: directo, sin fluff, orientado a resultados.
 
 **Stack**: Astro 7 + TypeScript + Tailwind v4 + Content Collections. Mobile-first. SSG puro.
-**Tipografías**: Gambarino (display) + General Sans (texto), self-hosted en `public/fonts/` (Fontshare, licencia ITF Free Font). Sin CDNs ni Google Fonts. Sin monoespaciadas salvo en `<pre>`/`<code>`.
+**Tipografías**: Barlow Condensed (display) + Barlow (texto), self-hosted en `public/fonts/` (Fontsource, licencia SIL OFL 1.1). Sin CDNs ni Google Fonts. Sin monoespaciadas salvo en `<pre>`/`<code>`.
 **Dirección visual**: tasteskill `type-only-statement` (seed 442660410), paleta Night and cornflower. Ficha en `.taste-skill/direction.json`; reglas en `src/styles/global.css`.
 
 **Comandos**: `pnpm dev`, `pnpm build`, `pnpm preview`, `pnpm check` (alias de `astro check`). Sin variables de entorno. Datos editables en `src/data/*.json`.
