@@ -1,0 +1,21 @@
+[
+  { "id": "inventario-distribuidora", "nombre": "Inventario para distribuidora", "captura": "" },
+  { "id": "dashboard-ventas", "nombre": "Tablero de ventas mayoristas", "captura": "" },
+  { "id": "tracker-pedidos", "nombre": "Seguimiento de pedidos mayoristas", "captura": "" },
+  { "id": "dashboard-cobranzas", "nombre": "Tablero de cobranzas", "captura": "" },
+  { "id": "integracion-mercadolibre-erp", "nombre": "Integración de MercadoLibre con ERP", "captura": "" },
+  { "id": "pos-mobile-pyme", "nombre": "Punto de venta móvil para dietética", "captura": "" },
+  { "id": "automatizacion-crm-whatsapp", "nombre": "Automatización de WhatsApp para clínica", "captura": "" },
+  { "id": "panel-reservas-restaurante", "nombre": "Panel de reservas para restaurante", "captura": "" },
+  { "id": "reservas-peluqueria", "nombre": "Reservas para peluquería", "captura": "" },
+  { "id": "catalogo-ferreteria", "nombre": "Catálogo para ferretería", "captura": "" },
+  { "id": "ecommerce-marca", "nombre": "Tienda online de muebles", "captura": "" },
+  { "id": "checkout-artesanal", "nombre": "Checkout para panadería artesanal", "captura": "" },
+  { "id": "tienda-shopify-headless", "nombre": "Tienda de moda headless", "captura": "" },
+  { "id": "auditoria-performance-ecommerce", "nombre": "Auditoría de velocidad de tienda online", "captura": "" },
+  { "id": "leads-inmobiliaria", "nombre": "Captación de consultas para inmobiliaria", "captura": "" },
+  { "id": "estudio-juridico-morales", "nombre": "Landing para estudio jurídico", "captura": "" },
+  { "id": "landing-lanzamiento-producto", "nombre": "Landing de lanzamiento de producto", "captura": "" },
+  { "id": "blog-consultora", "nombre": "Blog para consultora", "captura": "" },
+  { "id": "migracion-wordpress-editorial", "nombre": "Migración de revista a Astro", "captura": "" }
+]

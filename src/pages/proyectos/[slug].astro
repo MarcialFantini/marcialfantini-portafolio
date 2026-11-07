@@ -1,7 +1,7 @@
 ---
 import Layout from "../../layouts/Layout.astro";
-import FormattedDate from "../../components/FormattedDate.astro";
-import ProyectoCard from "../../components/ProyectoCard.astro";
+import MediaSlot from "../../components/home/MediaSlot.astro";
+import demos from "../../data/demos.json";
 import { render } from "astro:content";
 import { getPublishedProjects } from "../../lib/content";
 import type { GetStaticPaths } from "astro";
@@ -14,311 +14,132 @@ export const getStaticPaths = (async () => {
   }));
 }) satisfies GetStaticPaths;
 
+/* Proyecto demo: construido para mostrar qué se puede hacer. El negocio y las cifras son un escenario de ejemplo. */
 const { proyecto } = Astro.props;
 const { Content } = await render(proyecto);
-const { title, cliente, descripcion, problema, resultado, stack, fecha, duracion, role, repo, url, tags, categoria, metricas } =
-  proyecto.data;
+const { title, cliente, descripcion, problema, resultado, stack, role, url, metricas } = proyecto.data;
 
-const sortedAll = await getPublishedProjects();
-const projectIndex = sortedAll.findIndex((p) => p.id === proyecto.id) + 1;
-const placeholderIndex = String(projectIndex).padStart(2, "0");
-const related = sortedAll
-  .filter((p) => p.id !== proyecto.id && p.data.tags.some((t) => tags.includes(t)))
-  .sort((a, b) => b.data.fecha.getTime() - a.data.fecha.getTime())
-  .slice(0, 3);
+const demo = demos.find((d) => d.id === proyecto.id);
+const nombre = demo?.nombre ?? title;
 
-const categoryLabels: Record<string, string> = {
-  landing: "Landing",
-  ecommerce: "E-commerce",
-  panel: "Panel",
-  blog: "Blog / Editorial",
-  integracion: "Integración",
-  dashboard: "Dashboard",
-  reservas: "Reservas",
-  otro: "Otro",
-};
-
-const canonicalURL = new URL(`/proyectos/${proyecto.id}`, Astro.site ?? "https://www.marcialfantini.site").toString();
-const shareText = `${title} — caso de ${cliente}`;
+const orden = demos.map((d) => d.id);
+const published = await getPublishedProjects();
+const otros = published
+  .filter((p) => p.id !== proyecto.id)
+  .sort((a, b) => orden.indexOf(a.id) - orden.indexOf(b.id))
+  .slice(0, 4)
+  .map((p) => ({ id: p.id, nombre: demos.find((d) => d.id === p.id)?.nombre ?? p.data.title }));
 ---
 
-<Layout
-  title={`${title} — Proyecto de ${cliente}`}
-  description={descripcion}
-  pageType="article"
->
-  <div class="scroll-progress-bar" aria-hidden="true"></div>
-
-  <article>
-    <header class="pt-12 md:pt-20 pb-10 md:pb-14 border-b border-[var(--color-border)]">
-      <div class="container-page max-w-4xl reveal">
-        <nav class="mb-8 font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-mute)]">
-          <ol class="flex flex-wrap items-center gap-2">
-            <li><a href="/" class="hover:text-[var(--color-azul)]">Inicio</a></li>
-            <li aria-hidden="true">/</li>
-            <li><a href="/proyectos" class="hover:text-[var(--color-azul)]">Proyectos</a></li>
-            <li aria-hidden="true">/</li>
-            <li class="text-[var(--color-ink)] truncate max-w-[60vw]">{title}</li>
-          </ol>
-        </nav>
-
-        <div class="placeholder-image placeholder-image--azul h-56 md:h-72 rounded-card mb-8 shadow-md relative overflow-hidden">
-          <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
-            <span class="font-impact text-[clamp(8rem,20vw,16rem)] text-white/15 select-none tabular-nums leading-none">
-              {placeholderIndex}
-            </span>
-          </div>
-        </div>
-
-        <div class="flex items-center flex-wrap gap-3 mb-5 text-xs font-mono text-[var(--color-mute)]">
-          <span class="px-2.5 py-1 rounded-control bg-[var(--color-azul-soft)] text-[var(--color-azul-deep)] font-semibold uppercase tracking-[0.18em]">
-            {categoryLabels[categoria] ?? categoria}
-          </span>
-          <span class="w-1 h-1 rounded-full bg-[var(--color-border)]"></span>
-          <span class="font-semibold text-[var(--color-ink-soft)]">{cliente}</span>
-          <span class="w-1 h-1 rounded-full bg-[var(--color-border)]"></span>
-          <FormattedDate date={fecha} format="long" />
-          <span class="w-1 h-1 rounded-full bg-[var(--color-border)]"></span>
-          <span>{duracion}</span>
-        </div>
-
-        <h1 class="font-impact text-[clamp(2rem,5vw,3.75rem)] uppercase leading-[0.95] text-[var(--color-ink)] tracking-tight mb-6">
-          {title}
-        </h1>
-        <p class="text-xl text-[var(--color-ink-soft)] leading-relaxed max-w-3xl">
-          {descripcion}
-        </p>
-
-        {tags.length > 0 && (
-          <div class="mt-8 flex flex-wrap gap-2">
-            {
-              tags.map((t) => (
-                <a
-                  href={`/proyectos?tag=${t}`}
-                  class="font-mono text-xs px-2.5 py-1 rounded-control border border-[var(--color-border)] text-[var(--color-ink-soft)] hover:border-[var(--color-azul)] hover:text-[var(--color-azul)] tactile"
-                >
-                  #{t}
-                </a>
-              ))
-            }
-          </div>
-        )}
-      </div>
+<Layout title={`${nombre} (proyecto demo)`} description={descripcion} pageType="article">
+  <article class="pd wrap">
+    <header class="pd__head">
+      <h1 class="pd__h1">{nombre}</h1>
+      <p class="pd__lead" data-rise>{descripcion}</p>
+      <p class="pd__demo" data-rise style="--i:1">
+        Proyecto demo, construido para mostrar qué se puede hacer. El negocio ({cliente}) y sus cifras son un escenario de ejemplo, no un cliente.
+      </p>
     </header>
 
-    {metricas.length > 0 && (
-      <section class="py-10 md:py-12 bg-[var(--color-action)] text-white">
-        <div class="container-page reveal">
-          <p class="font-mono text-[11px] uppercase tracking-widest text-[var(--color-dorado)] mb-6">
-            Resultados medibles
-          </p>
-          <dl class="grid grid-cols-2 md:grid-cols-4 gap-6">
-            {metricas.map((m) => (
-              <div class="border-l-2 border-[var(--color-dorado)] pl-4">
-                <dd class="font-impact text-3xl md:text-4xl text-white uppercase tabular-nums tracking-tight leading-none">
-                  {m.value}
-                </dd>
-                <dt class="font-mono text-[10px] uppercase tracking-widest text-white/70 mt-2 leading-tight block">
-                  {m.label}
-                </dt>
-              </div>
-            ))}
-          </dl>
-        </div>
-      </section>
-    )}
+    <MediaSlot
+      kind="captura"
+      src={demo?.captura || undefined}
+      alt={`Captura de ${nombre}`}
+      label={`Captura: ${nombre} (pendiente)`}
+      ratio="16 / 9"
+      class="pd__shot"
+      eager
+    />
 
-    <div class="container-page py-12 md:py-16">
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-12 lg:gap-16">
-        <aside class="lg:col-span-1 space-y-7 text-sm reveal">
-          <div>
-            <p class="font-mono text-[11px] uppercase tracking-widest text-[var(--color-mute)] mb-2">
-              Cliente
-            </p>
-            <p class="text-[var(--color-ink)]">{cliente}</p>
-          </div>
-          <div>
-            <p class="font-mono text-[11px] uppercase tracking-widest text-[var(--color-mute)] mb-2">
-              Rol
-            </p>
-            <p class="text-[var(--color-ink)]">{role}</p>
-          </div>
-          <div>
-            <p class="font-mono text-[11px] uppercase tracking-widest text-[var(--color-mute)] mb-2">
-              Duración
-            </p>
-            <p class="text-[var(--color-ink)]">{duracion}</p>
-          </div>
-          <div>
-            <p class="font-mono text-[11px] uppercase tracking-widest text-[var(--color-mute)] mb-2">
-              Categoría
-            </p>
-            <p class="text-[var(--color-ink)]">{categoryLabels[categoria] ?? categoria}</p>
-          </div>
-          <div>
-            <p class="font-mono text-[11px] uppercase tracking-widest text-[var(--color-mute)] mb-2">
-              Stack
-            </p>
-            <ul class="flex flex-wrap gap-1.5">
-              {stack.map((s) => (
-                <li class="font-mono text-[11px] px-2 py-0.5 rounded bg-[var(--color-azul-soft)] border border-[var(--color-border)] text-[var(--color-ink-soft)]">
-                  {s}
-                </li>
+    <div class="pd__body">
+      <aside class="pd__facts" data-rise>
+        <dl>
+          <div><dt>Rol</dt><dd>{role}</dd></div>
+          <div><dt>Con qué</dt><dd>{stack.join(", ")}</dd></div>
+          {url && <div><dt>En vivo</dt><dd><a href={url} target="_blank" rel="noopener noreferrer">Ver la demo</a></dd></div>}
+        </dl>
+      </aside>
+
+      <div class="pd__main">
+        <section data-rise>
+          <h2 class="pd__h2">El escenario</h2>
+          <p class="pd__statement">{problema}</p>
+        </section>
+
+        <section data-rise>
+          <h2 class="pd__h2">Lo que construí</h2>
+          <div class="prose-mf pd__prose"><Content /></div>
+        </section>
+
+        <section data-rise>
+          <h2 class="pd__h2">Lo que resuelve</h2>
+          <p class="pd__statement">{resultado}</p>
+        </section>
+
+        {metricas.length > 0 && (
+          <section data-rise>
+            <h2 class="pd__h2">Datos del escenario</h2>
+            <dl class="pd__nums">
+              {metricas.map((m) => (
+                <div><dt>{m.label}</dt><dd>{m.value}</dd></div>
               ))}
-            </ul>
-          </div>
-          {(url || repo) && (
-            <div class="pt-2 border-t border-[var(--color-border)]">
-              <p class="font-mono text-[11px] uppercase tracking-widest text-[var(--color-mute)] mb-3">
-                Links
-              </p>
-              <div class="flex flex-col gap-2">
-                {url && (
-                  <a
-                    href={url}
-                    rel="noopener noreferrer"
-                    target="_blank"
-                    class="tactile text-[var(--color-azul)] hover:text-[var(--color-dorado-deep)] inline-flex items-center gap-1 font-semibold"
-                  >
-                    Ver sitio en vivo <span aria-hidden="true">↗</span>
-                  </a>
-                )}
-                {repo && (
-                  <a
-                    href={repo}
-                    rel="noopener noreferrer"
-                    target="_blank"
-                    class="tactile text-[var(--color-azul)] hover:text-[var(--color-dorado-deep)] inline-flex items-center gap-1 font-semibold"
-                  >
-                    Repositorio en GitHub <span aria-hidden="true">↗</span>
-                  </a>
-                )}
-              </div>
-            </div>
-          )}
-        </aside>
-
-        <div class="lg:col-span-2 space-y-12 reveal">
-          <section>
-            <p class="font-mono text-xs uppercase tracking-widest text-[var(--color-azul)] mb-3">
-              01 · El problema
-            </p>
-            <h2 class="font-display font-bold text-2xl md:text-3xl tracking-tight text-[var(--color-ink)] mb-4">
-              {problema}
-            </h2>
+            </dl>
           </section>
+        )}
 
-          <section>
-            <p class="font-mono text-xs uppercase tracking-widest text-[var(--color-azul)] mb-3">
-              02 · Lo que entregué
-            </p>
-            <div class="prose-editorial" data-post-body>
-              <Content />
-            </div>
-          </section>
-
-          <section>
-            <p class="font-mono text-xs uppercase tracking-widest text-[var(--color-azul)] mb-3">
-              03 · El resultado
-            </p>
-            <h2 class="font-display font-bold text-2xl md:text-3xl tracking-tight text-[var(--color-ink)] mb-4">
-              {resultado}
-            </h2>
-          </section>
-
-          <div class="pt-6 border-t border-[var(--color-border)] flex flex-col sm:flex-row items-start sm:items-center gap-4 justify-between">
-            <div class="flex flex-col sm:flex-row gap-2">
-              <button
-                type="button"
-                data-share="copy"
-                data-share-url={canonicalURL}
-                class="tactile inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-control bg-[var(--color-azul-soft)] text-[var(--color-azul-deep)] font-mono text-[10px] uppercase tracking-[0.18em] font-semibold hover:bg-[var(--color-action)] hover:text-white"
-              >
-                <span aria-hidden="true">⎘</span>
-                <span data-share-label>Copiar link</span>
-              </button>
-              <a
-                href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(canonicalURL)}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                class="tactile inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-control border border-[var(--color-border)] text-[var(--color-ink-soft)] font-mono text-[10px] uppercase tracking-[0.18em] font-semibold hover:border-[var(--color-azul)] hover:text-[var(--color-azul)]"
-              >
-                Twitter <span aria-hidden="true">↗</span>
-              </a>
-              <a
-                href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(canonicalURL)}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                class="tactile inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-control border border-[var(--color-border)] text-[var(--color-ink-soft)] font-mono text-[10px] uppercase tracking-[0.18em] font-semibold hover:border-[var(--color-azul)] hover:text-[var(--color-azul)]"
-              >
-                LinkedIn <span aria-hidden="true">↗</span>
-              </a>
-            </div>
-            <a
-              href="/contacto"
-              class="tactile inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-control bg-[var(--color-deep)] text-white font-semibold hover:bg-[var(--color-azul)] border border-[var(--color-deep)]"
-            >
-              Hablemos de uno similar
-              <span aria-hidden="true">→</span>
-            </a>
-          </div>
+        <div class="pd__cta" data-rise>
+          <a href="/contacto" class="btn">Hablemos de uno similar <span aria-hidden="true">→</span></a>
         </div>
       </div>
     </div>
   </article>
 
-  {related.length > 0 && (
-    <section class="py-16 md:py-24 border-t border-[var(--color-border)] bg-[var(--color-blanco)]">
-      <div class="container-page">
-        <h2 class="font-impact text-[clamp(1.75rem,4vw,3rem)] uppercase leading-[0.95] text-[var(--color-ink)] tracking-tight mb-10 reveal">
-          Proyectos similares.
-        </h2>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-5 reveal-stagger">
-          {related.map((p) => <ProyectoCard proyecto={p} />)}
-        </div>
-      </div>
+  {otros.length > 0 && (
+    <section class="pd-more wrap" aria-labelledby="pd-more-title">
+      <h2 id="pd-more-title" class="pd__h2">Otros demos (<a href="/proyectos">ver los {published.length}</a>)</h2>
+      <p class="pd-more__list">
+        {otros.map((o, i) => (
+          <>
+            <a href={`/proyectos/${o.id}`}>{o.nombre}</a>
+            {i < otros.length - 1 ? ", " : "."}
+          </>
+        ))}
+      </p>
     </section>
   )}
 </Layout>
 
-<script>
-  (function () {
-    // Scroll progress bar
-    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const bar = document.querySelector('.scroll-progress-bar') as HTMLElement | null;
-    if (bar && !reduce) {
-      const update = () => {
-        const article = document.querySelector('article') as HTMLElement | null;
-        if (!article) return;
-        const rect = article.getBoundingClientRect();
-        const winH = window.innerHeight;
-        const total = rect.height - winH;
-        const scrolled = -rect.top;
-        const pct = total > 0 ? Math.min(1, Math.max(0, scrolled / total)) : 0;
-        bar.style.setProperty('--scroll-progress', `${Math.round(pct * 100)}%`);
-      };
-      update();
-      window.addEventListener('scroll', update, { passive: true });
-      document.addEventListener('astro:page-load', update);
-    }
+<style>
+  .pd__head { padding-top: clamp(2rem, 5vw, 4rem); }
+  .pd__h1 { font-size: clamp(2.25rem, 7vw, 7.5rem); line-height: 0.9; letter-spacing: -0.03em; }
+  .pd__lead { margin-top: 1.5rem; font-size: var(--step-lead); line-height: 1.3; max-width: 40ch; }
+  .pd__demo { margin-top: 1.5rem; font-size: var(--step-small); color: var(--color-soft); max-width: 60ch; }
 
-    // Share buttons
-    document.querySelectorAll('[data-share]').forEach((btn) => {
-      btn.addEventListener('click', async () => {
-        const action = btn.getAttribute('data-share');
-        const url = btn.getAttribute('data-share-url') ?? window.location.href;
-        if (action === 'copy') {
-          const label = btn.querySelector('[data-share-label]');
-          try {
-            await navigator.clipboard.writeText(url);
-            if (label) label.textContent = '¡Copiado!';
-            setTimeout(() => { if (label) label.textContent = 'Copiar link'; }, 2200);
-          } catch {
-            if (label) label.textContent = 'No se pudo copiar';
-            setTimeout(() => { if (label) label.textContent = 'Copiar link'; }, 2200);
-          }
-        }
-      });
-    });
-  })();
-</script>
+  :global(.pd__shot) { margin-top: clamp(3rem, 6vw, 5rem); }
+
+  .pd__body { display: grid; gap: 3rem; margin-top: clamp(4rem, 8vw, 7rem); }
+  .pd__facts dl { display: grid; gap: 1.25rem; font-size: var(--step-small); }
+  .pd__facts dt { color: var(--color-soft); }
+  .pd__facts dd { margin: 0.15rem 0 0; }
+  .pd__main { display: grid; gap: 4.5rem; }
+  .pd__h2 { font-size: var(--step-lead); font-family: var(--font-sans); font-weight: 500; letter-spacing: 0; line-height: 1.2; margin-bottom: 1rem; }
+  .pd__statement { font-size: var(--step-lead); line-height: 1.35; max-width: 44ch; }
+  .pd__prose { max-width: 65ch; }
+
+  .pd__nums { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2rem var(--gutter); }
+  .pd__nums div { display: flex; flex-direction: column-reverse; gap: 0.5rem; }
+  .pd__nums dd { font-family: var(--font-serif); font-size: var(--step-head); line-height: 0.95; letter-spacing: -0.02em; margin: 0; }
+  .pd__nums dt { font-size: var(--step-small); color: var(--color-soft); }
+
+  .pd-more { margin-top: var(--section-gap); }
+  .pd-more__list { font-size: var(--step-statement); line-height: 1.25; max-width: 40ch; }
+  .pd-more__list a { text-decoration: none; color: var(--color-soft); transition: color 200ms var(--ease-out-quart); }
+  .pd-more__list a:hover { color: var(--color-fg); }
+
+  @media (min-width: 1024px) {
+    .pd__body { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gutter); }
+    .pd__facts { grid-column: 1 / span 3; }
+    .pd__main { grid-column: 5 / span 7; }
+    .pd__nums { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  }
+</style>

@@ -10,7 +10,6 @@ const EXCLUDED = new Set([
   `${SITE}/404`,
   `${SITE}/blog`,
   `${SITE}/blog/tags`,
-  `${SITE}/proyectos`,
 ]);
 
 // https://astro.build/config
