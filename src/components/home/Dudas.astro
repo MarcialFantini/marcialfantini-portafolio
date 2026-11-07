@@ -1,0 +1,96 @@
+---
+import site from "../../data/site.json";
+import SceneDudas from "../robots/scenes/SceneDudas.astro";
+
+const faqs = [
+  {
+    q: "¿Por qué no un sistema enlatado o un ERP?",
+    a: "Si uno estándar resuelve tu problema, te lo decimos y no te vendemos nada. Hacemos a medida cuando tu forma de trabajar no entra en un enlatado o pagás licencias por funciones que no usás.",
+  },
+  {
+    q: "¿Se integra con lo que ya usamos?",
+    a: "Casi siempre: Excel, Google Sheets, ERPs, tiendas online y facturación. En el diagnóstico vemos cómo conectarlo.",
+  },
+  {
+    q: "¿Cuánto cuesta?",
+    a: "Depende del problema. Después del diagnóstico te pasamos una propuesta cerrada con precio por escrito. Si algo cambia, se cotiza antes de hacerlo.",
+  },
+  {
+    q: "¿Cuánto tarda?",
+    a: "La primera etapa entra en uso en semanas, no en meses. El resto avanza por etapas, con fechas en la propuesta.",
+  },
+  {
+    q: "¿Mi equipo va a saber usarlo?",
+    a: "Lo diseñamos sobre cómo ya trabajan. Incluye capacitación y acompañamiento en el arranque.",
+  },
+  {
+    q: "¿De quién son el código y los datos?",
+    a: "Tuyos. Código, datos y accesos quedan a nombre de tu empresa: no dependés de nosotros para seguir operando.",
+  },
+  {
+    q: "¿Y si la empresa crece o el proceso cambia?",
+    a: "Se suman módulos, usuarios o integraciones cuando hagan falta, cada cambio con presupuesto por escrito.",
+  },
+  {
+    q: "¿Qué necesitamos para empezar?",
+    a: "Solo contarnos el problema. El diagnóstico es gratis, dura 30 minutos y respondemos en menos de 24 h hábiles.",
+  },
+];
+
+const whatsappUrl = site.whatsapp
+  ? `https://wa.me/${site.whatsapp}?text=${encodeURIComponent(site.whatsappMessage || "")}`
+  : "/contacto";
+
+const schema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqs.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })),
+};
+---
+
+<section id="dudas" class="dudas wrap" aria-labelledby="dudas-title">
+  <div class="dudas__side">
+    <h2 id="dudas-title" class="dudas__h" data-split>Antes de arrancar</h2>
+    <SceneDudas class="dudas__crew" />
+  </div>
+
+  <div class="dudas__text">
+    {
+      faqs.map((f, i) => (
+        <p data-rise style={`--i:${i % 4}`}>
+          <strong>{f.q}</strong> {f.a}
+        </p>
+      ))
+    }
+    <p class="dudas__more" data-rise>
+      ¿Otra duda?{" "}
+      <a href={whatsappUrl} target={site.whatsapp ? "_blank" : undefined} rel={site.whatsapp ? "noopener noreferrer" : undefined}>
+        Escribinos por WhatsApp
+      </a>.
+    </p>
+  </div>
+
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(schema)} />
+</section>
+
+<style>
+  .dudas {
+    margin-top: var(--section-gap);
+    display: grid;
+    gap: 2.5rem;
+  }
+  :global(.dudas__crew) { width: min(100%, 20rem); margin-top: 2rem; }
+  .dudas__text p {
+    font-size: var(--step-body);
+    line-height: 1.55;
+    break-inside: avoid;
+    margin-bottom: 1.25rem;
+  }
+  .dudas__text strong { font-weight: 500; }
+
+  @media (min-width: 1024px) {
+    .dudas { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gutter); }
+    .dudas__side { grid-column: 1 / span 4; align-self: start; }
+    .dudas__text { grid-column: 5 / -1; columns: 2; column-gap: 3.5rem; }
+  }
+</style>

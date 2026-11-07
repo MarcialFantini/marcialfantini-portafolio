@@ -1,0 +1,46 @@
+---
+/* Demo convoy: three AGVs carry the demo projects across; the gantry scans each box as it
+   passes under (a check appears). AGVs run 9 s, 3 s apart; an AGV is under the gantry at 50.1 %
+   of its run, i.e. 1.51 s into the gantry's 3 s cycle. */
+import Agv from "../Agv.astro";
+import Gantry from "../Gantry.astro";
+interface Props { class?: string }
+const { class: cls } = Astro.props;
+---
+
+<div class:list={["rbs sc-cv", cls]} data-rb aria-hidden="true">
+  <svg viewBox="0 0 1200 150" focusable="false" preserveAspectRatio="xMidYMax meet">
+    <rect x="0" y="140" width="1200" height="8" class="r-floor" />
+    {[0, 1, 2].map((k) => (
+      <g class="cv-agv" style={`animation-delay:${-3 * k}s`}>
+        <Agv x={-150} y={92} s={0.8}>
+          <rect x="44" y="0" width="16" height="18" class="r-acc" />
+          <rect x="62" y="-4" width="16" height="22" class="r-acc" />
+          <rect x="65" y="2" width="10" height="4" class="r-dark cv-ok" style={`animation-delay:${-3 * k}s`} />
+        </Agv>
+      </g>
+    ))}
+    <Gantry x={520} y={10} w={180} h={130} />
+  </svg>
+</div>
+
+<style>
+  .cv-ok { opacity: 0; }
+  .sc-cv :global(.g-x) { transform: translateX(52px); }
+  .sc-cv :global(.g-z) { transform: translateY(-30px); }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .cv-agv { animation: cv-run 9s linear infinite; }
+    .cv-agv :global(.a-wheel) { animation: cv-wheel 0.7s linear infinite; }
+    .cv-ok { animation: cv-ok 9s step-end infinite; }
+    .sc-cv :global(.g-z) { animation: cv-scan 3s ease-in-out infinite; }
+    .sc-cv :global(.rb-gantry .r-eye) { animation: cv-flash 3s steps(2, jump-none) infinite; }
+  }
+  @media (prefers-reduced-motion: reduce) { .cv-agv:not(:first-of-type) { display: none; } .cv-agv { transform: translateX(560px); } }
+
+  @keyframes cv-run { from { transform: none; } to { transform: translateX(1400px); } }
+  @keyframes cv-wheel { to { transform: rotate(360deg); } }
+  @keyframes cv-ok { 0% { opacity: 0; } 51%, 100% { opacity: 1; } }
+  @keyframes cv-scan { 0%, 40% { transform: translateY(-30px); } 50% { transform: translateY(-14px); } 60%, 100% { transform: translateY(-30px); } }
+  @keyframes cv-flash { 0%, 46% { opacity: 1; } 48%, 52% { opacity: 0.2; } 50%, 54%, 100% { opacity: 1; } }
+</style>

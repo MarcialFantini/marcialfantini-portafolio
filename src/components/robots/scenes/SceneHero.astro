@@ -1,0 +1,59 @@
+---
+/* Hero: an AGV delivers a box, the cobot lifts it over the top and stacks it. 8 s loop.
+   Poses solved for the cobot (shoulder at 310,224; links 56 and 44):
+   pick  θ1 -45, θ2 -118.6, wrist 163.6  -> wrist at (228,172), over the AGV box
+   place θ1 55.3, θ2 -58,   wrist 2.7    -> wrist at (400,190), over the stack */
+import Agv from "../Agv.astro";
+import Cobot from "../Cobot.astro";
+interface Props { class?: string }
+const { class: cls } = Astro.props;
+---
+
+<div class:list={["rbs sc-hero", cls]} data-rb aria-hidden="true">
+  <svg viewBox="0 0 520 250" focusable="false">
+    <rect x="0" y="240" width="520" height="8" class="r-floor" />
+    <rect x="394" y="228" width="12" height="12" class="r-acc" />
+    <rect x="394" y="216" width="12" height="12" class="r-acc" />
+    <rect x="394" y="204" width="12" height="12" class="r-acc hero-new" />
+    <g class="hero-agv">
+      <Agv x={168} y={180}><rect x="54" y="6" width="12" height="12" class="r-acc hero-agvbox" /></Agv>
+    </g>
+    <Cobot x={250} y={100}><rect x="98" y="82" width="12" height="12" class="r-acc hero-grip" /></Cobot>
+  </svg>
+</div>
+
+<style>
+  .hero-new, .hero-grip { opacity: 0; }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .sc-hero :global(*) { animation-duration: 8s; animation-iteration-count: infinite; animation-timing-function: ease-in-out; }
+    .hero-agv { animation-name: hero-agv; }
+    .sc-hero :global(.a-wheel) { animation-name: hero-wheel; }
+    .hero-agvbox { animation-name: hero-agvbox; animation-timing-function: step-end; }
+    .sc-hero :global(.c-up) { animation-name: hero-up; }
+    .sc-hero :global(.c-fore) { animation-name: hero-fore; }
+    .sc-hero :global(.c-wrist) { animation-name: hero-wrist; }
+    .sc-hero :global(.c-fl) { animation-name: hero-fl; }
+    .sc-hero :global(.c-fr) { animation-name: hero-fr; }
+    .hero-grip { animation-name: hero-grip; animation-timing-function: step-end; }
+    .hero-new { animation-name: hero-new; }
+    .sc-hero :global(.r-eye) { animation-name: r-blink; animation-duration: 5s; }
+  }
+
+  @keyframes hero-agv {
+    0% { transform: translateX(-160px); opacity: 0; }
+    8% { opacity: 1; }
+    22%, 50% { transform: none; opacity: 1; }
+    62% { opacity: 0; }
+    66%, 100% { transform: translateX(-160px); opacity: 0; }
+  }
+  @keyframes hero-wheel { 0% { transform: rotate(0); } 22%, 50% { transform: rotate(540deg); } 66%, 100% { transform: rotate(0); } }
+  @keyframes hero-agvbox { 0% { opacity: 1; } 40%, 100% { opacity: 0; } }
+  @keyframes hero-up { 0%, 22% { transform: rotate(0); } 32%, 44% { transform: rotate(-45deg); } 64%, 74% { transform: rotate(55.3deg); } 86%, 100% { transform: rotate(0); } }
+  @keyframes hero-fore { 0%, 22% { transform: rotate(0); } 32%, 44% { transform: rotate(-118.6deg); } 64%, 74% { transform: rotate(-58deg); } 86%, 100% { transform: rotate(0); } }
+  @keyframes hero-wrist { 0%, 22% { transform: rotate(0); } 32%, 44% { transform: rotate(163.6deg); } 64%, 74% { transform: rotate(2.7deg); } 86%, 100% { transform: rotate(0); } }
+  @keyframes hero-fl { 0%, 34% { transform: none; } 37%, 70% { transform: translateX(2px); } 73%, 100% { transform: none; } }
+  @keyframes hero-fr { 0%, 34% { transform: none; } 37%, 70% { transform: translateX(-2px); } 73%, 100% { transform: none; } }
+  @keyframes hero-grip { 0% { opacity: 0; } 40% { opacity: 1; } 72%, 100% { opacity: 0; } }
+  @keyframes hero-new { 0%, 71% { opacity: 0; } 72%, 93% { opacity: 1; } 99%, 100% { opacity: 0; } }
+</style>

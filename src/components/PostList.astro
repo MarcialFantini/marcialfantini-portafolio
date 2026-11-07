@@ -1,0 +1,48 @@
+---
+import type { CollectionEntry } from "astro:content";
+import FormattedDate from "./FormattedDate.astro";
+
+interface Props {
+  posts: CollectionEntry<"blog">[];
+}
+
+const { posts } = Astro.props;
+const minutes = (p: CollectionEntry<"blog">) =>
+  p.data.readingTime ?? Math.max(1, Math.round((p.body ?? "").trim().split(/\s+/).length / 220));
+---
+
+<ul class="pl">
+  {
+    posts.map((p, i) => (
+      <li class="pl__item" data-rise style={`--i:${i % 3}`}>
+        <a href={`/blog/${p.id}`} class="pl__title">{p.data.title}</a>
+        <p class="pl__desc">
+          {p.data.description}{" "}
+          <span class="soft"><FormattedDate date={p.data.pubDate} /> · {minutes(p)} min de lectura.</span>
+        </p>
+      </li>
+    ))
+  }
+</ul>
+
+<style>
+  .pl { list-style: none; margin: 0; padding: 0; display: grid; gap: 3.5rem; }
+  .pl__item { display: grid; gap: 0.75rem; }
+  .pl__title {
+    font-family: var(--font-serif);
+    font-size: var(--step-statement);
+    line-height: 1.08;
+    letter-spacing: -0.02em;
+    text-decoration: none;
+    max-width: 28ch;
+    transition: color 200ms var(--ease-out-quart);
+  }
+  .pl__title:hover { color: var(--color-accent); }
+  .pl__desc { max-width: 60ch; }
+
+  @media (min-width: 1024px) {
+    .pl__item { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gutter); align-items: baseline; }
+    .pl__title { grid-column: 1 / span 6; }
+    .pl__desc { grid-column: 7 / span 6; }
+  }
+</style>

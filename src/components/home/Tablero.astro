@@ -1,0 +1,392 @@
+---
+// Tablero ilustrativo: muestra el tipo de herramienta que construimos. Son datos de ejemplo, no de un cliente.
+interface Num {
+  to: number;
+  j?: number; // variación en vivo alrededor de `to` (0 o ausente: fijo)
+  max?: number;
+  dec?: number;
+  pre?: string;
+  suf?: string;
+}
+interface Vista {
+  id: string;
+  tab: string;
+  main: Num & { label: string };
+  side: (Num & { label: string })[];
+  bars: { label: string; antes: Num; ahora: Num };
+  alerts: string[];
+}
+
+const vistas: Vista[] = [
+  {
+    id: "ahorro",
+    tab: "Ahorro",
+    main: { to: 2340, j: 40, pre: "USD ", label: "ahorro estimado por mes" },
+    side: [
+      { to: 118, j: 3, suf: " h", label: "de carga manual eliminadas" },
+      { to: 64, j: 1, pre: "−", suf: "%", label: "errores de stock" },
+    ],
+    bars: { label: "Horas de tarea manual por semana", antes: { to: 32, suf: " h" }, ahora: { to: 4, suf: " h" } },
+    alerts: [
+      "Informe de ahorro enviado a gerencia",
+      "Orden de compra generada automáticamente",
+      "Conciliación bancaria cerrada sin diferencias",
+      "Proveedor con precio fuera de rango detectado",
+      "Horas extra del mes: −22% vs. el anterior",
+    ],
+  },
+  {
+    id: "stock",
+    tab: "Stock",
+    main: { to: 97.4, j: 0.3, max: 99.9, dec: 1, suf: "%", label: "precisión de inventario" },
+    side: [
+      { to: 7, j: 1, label: "productos bajo mínimo" },
+      { to: 3, label: "depósitos sincronizados" },
+    ],
+    bars: { label: "Quiebres de stock por mes", antes: { to: 19 }, ahora: { to: 3 } },
+    alerts: [
+      "Reponer: tornillo 6 mm, depósito norte",
+      "Transferencia entre depósitos registrada",
+      "Stock sincronizado con la tienda online",
+      "Lote L-2291 vence en 15 días",
+      "Conteo del pasillo B sin diferencias",
+    ],
+  },
+  {
+    id: "ventas",
+    tab: "Ventas",
+    main: { to: 68, j: 1, suf: "%", label: "del objetivo mensual" },
+    side: [
+      { to: 23, j: 2, label: "pedidos en curso" },
+      { to: 1.8, j: 0.1, dec: 1, suf: " días", label: "de entrega promedio" },
+    ],
+    bars: { label: "Días de entrega", antes: { to: 4.6, dec: 1 }, ahora: { to: 1.8, dec: 1 } },
+    alerts: [
+      "Pedido #1184 sin despachar hace 48 h",
+      "Nuevo pedido mayorista: USD 1.920",
+      "Factura emitida y enviada al cliente",
+      "Cobranza registrada: factura A-0042",
+      "Cliente reactivado después de 90 días",
+    ],
+  },
+  {
+    id: "procesos",
+    tab: "Procesos",
+    main: { to: 41, j: 1, label: "tareas automatizadas" },
+    side: [
+      { to: 0, label: "planillas duplicadas" },
+      { to: 12, j: 1, suf: " min", label: "para cerrar el informe" },
+    ],
+    bars: { label: "Horas para cerrar el informe mensual", antes: { to: 16, suf: " h" }, ahora: { to: 0.2, dec: 1, suf: " h" } },
+    alerts: [
+      "Cierre mensual generado automáticamente",
+      "12 remitos cargados sin intervención manual",
+      "Tarea vencida reasignada a Compras",
+      "Aprobación de compra resuelta en 4 min",
+      "Respaldo diario completado",
+    ],
+  },
+];
+
+const fmt = (n: Num) =>
+  `${n.pre ?? ""}${n.to.toLocaleString("es-AR", { minimumFractionDigits: n.dec ?? 0, maximumFractionDigits: n.dec ?? 0 })}${n.suf ?? ""}`;
+const attrs = (n: Num) => ({ "data-to": n.to, "data-j": n.j ?? 0, "data-max": n.max ?? "", "data-dec": n.dec ?? 0, "data-pre": n.pre ?? "", "data-suf": n.suf ?? "" });
+---
+
+<figure class="board" data-board data-ui aria-label="Ejemplo ilustrativo de un tablero de gestión con KPIs a elección">
+  <figcaption class="board__cap">
+    <span>Tablero de operación</span>
+    <span class="board__live">Ejemplo ilustrativo</span>
+  </figcaption>
+
+  <p class="board__pick" id="board-pick">Elegí qué medir</p>
+  <div class="board__tabs" role="tablist" aria-labelledby="board-pick">
+    {
+      vistas.map((v, i) => (
+        <button
+          type="button"
+          role="tab"
+          id={`tab-${v.id}`}
+          class="board__tab"
+          aria-selected={i === 0 ? "true" : "false"}
+          aria-controls={`panel-${v.id}`}
+          tabindex={i === 0 ? 0 : -1}
+        >
+          {v.tab}
+          <span class="board__tab-bar" aria-hidden="true"></span>
+        </button>
+      ))
+    }
+  </div>
+
+  <div class="board__panels">
+    {
+      vistas.map((v, i) => {
+        const max = Math.max(v.bars.antes.to, v.bars.ahora.to);
+        return (
+          <div class="board__panel" role="tabpanel" id={`panel-${v.id}`} aria-labelledby={`tab-${v.id}`} hidden={i !== 0}>
+            <div class="board__top">
+              <p class="board__main">
+                <strong>
+                  <span data-count {...attrs(v.main)}>{fmt(v.main)}</span>
+                  {v.main.j ? (
+                    <span class="board__delta" aria-hidden="true">
+                      <svg viewBox="0 0 10 10"><path d="M5 1 9.5 9h-9z" /></svg>
+                      <span class="board__delta-v" />
+                    </span>
+                  ) : null}
+                </strong>
+                <span>{v.main.label}</span>
+              </p>
+
+              <div class="board__chart" data-chart aria-hidden="true">
+                <svg viewBox="0 0 300 64" preserveAspectRatio="none">
+                  <line class="board__chart-base" x1="0" x2="300" y1="32" y2="32" />
+                  <g class="board__chart-g">
+                    <path class="board__chart-area" />
+                    <path class="board__chart-line" />
+                  </g>
+                </svg>
+                <span class="board__chart-dot"></span>
+              </div>
+            </div>
+
+            <div class="board__bottom">
+              <dl class="board__side">
+                {v.side.map((s) => (
+                  <div>
+                    <dt>{s.label}</dt>
+                    <dd>
+                      <span data-count {...attrs(s)}>{fmt(s)}</span>
+                      {s.j ? (
+                        <span class="board__delta" aria-hidden="true">
+                          <svg viewBox="0 0 10 10"><path d="M5 1 9.5 9h-9z" /></svg>
+                          <span class="board__delta-v" />
+                        </span>
+                      ) : null}
+                    </dd>
+                  </div>
+                ))}
+              </dl>
+
+              <div class="board__bars">
+                <p class="board__bars-t">{v.bars.label}</p>
+                <div class="board__bar board__bar--antes">
+                  <span class="board__bar-k">Antes</span>
+                  <span class="board__bar-track"><span class="board__bar-fill" style={`--v:${(v.bars.antes.to / max).toFixed(3)}`} /></span>
+                  <span class="board__bar-v">{fmt(v.bars.antes)}</span>
+                </div>
+                <div class="board__bar board__bar--ahora">
+                  <span class="board__bar-k">Con el sistema</span>
+                  <span class="board__bar-track"><span class="board__bar-fill" style={`--v:${Math.max(v.bars.ahora.to / max, 0.02).toFixed(3)}`} /></span>
+                  <span class="board__bar-v">{fmt(v.bars.ahora)}</span>
+                </div>
+              </div>
+
+              <ul class="board__feed" data-alerts={JSON.stringify(v.alerts)}>
+                {[0, 1, 2].map((k) => (
+                  <li class="board__feed-row">
+                    <span class="board__feed-t">{v.alerts[k]}</span>
+                    <span class="board__feed-ago">{k === 0 ? "ahora" : `hace ${k * 5} s`}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        );
+      })
+    }
+  </div>
+</figure>
+
+<script>
+  import "../../scripts/tablero.ts";
+</script>
+
+<style>
+  /* Interface fragment (data-ui): keeps its own fills and the product's own controls. */
+  .board {
+    --b-bg: var(--color-surface);
+    --b-2: var(--color-surface-2);
+    background: var(--b-bg);
+    padding: clamp(1.25rem, 2.5vw, 2rem);
+    font-variant-numeric: tabular-nums;
+  }
+  .board__cap {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    font-size: var(--step-small);
+    font-weight: 500;
+  }
+  .board__live { color: var(--color-soft); font-weight: 400; }
+
+  .board__pick { margin-top: 1.5rem; font-size: var(--step-small); color: var(--color-soft); }
+  .board__tabs {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 4px;
+    margin-top: 0.5rem;
+    background: var(--b-2);
+    padding: 4px;
+  }
+  .board__tab {
+    position: relative;
+    min-height: 2.75rem;
+    background: transparent;
+    border: 0;
+    color: var(--color-fg);
+    font: inherit;
+    font-size: var(--step-small);
+    font-weight: 500;
+    cursor: pointer;
+    overflow: hidden;
+    transition: background-color 180ms var(--ease-out-quart), color 180ms var(--ease-out-quart), transform 180ms var(--ease-out-quart);
+  }
+  .board__tab:hover { background: var(--b-bg); }
+  .board__tab[aria-selected="true"] { background: var(--color-accent); color: var(--color-accent-ink); }
+  .board__tab:active { transform: scale(0.97); }
+  .board__tab-bar {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 3px;
+    background: var(--color-accent-ink);
+    opacity: 0.35;
+    transform: scaleX(0);
+    transform-origin: 0 50%;
+  }
+  .board__tab[aria-selected="true"] .board__tab-bar { animation: tab-timer 6s linear forwards; }
+  .board.is-manual .board__tab-bar { animation: none !important; transform: scaleX(0); }
+  @keyframes tab-timer { to { transform: scaleX(1); } }
+
+  .board__panel:not([hidden]) { animation: panel-in 500ms var(--ease-out-expo); }
+  @keyframes panel-in { from { opacity: 0; transform: translateY(8px); } }
+
+  .board__top { margin-top: 1.75rem; }
+  .board__main { display: flex; flex-direction: column; gap: 0.25rem; }
+  .board__main strong {
+    display: flex;
+    align-items: baseline;
+    gap: 0.75rem;
+    font-family: var(--font-serif);
+    font-weight: 400;
+    font-size: clamp(3rem, 2rem + 4vw, 5.5rem);
+    line-height: 0.9;
+    letter-spacing: -0.02em;
+    color: var(--color-fg);
+  }
+  .board__main > span { font-size: var(--step-small); color: var(--color-soft); }
+
+  .board__chart { position: relative; height: 72px; margin-top: 1.25rem; visibility: hidden; }
+  .board__chart.is-ready { visibility: visible; }
+  .board__chart svg { display: block; width: 100%; height: 100%; overflow: hidden; }
+  .board__chart-g { transition: transform 700ms var(--ease-out-expo); }
+  .board__chart-line {
+    fill: none;
+    stroke: var(--color-accent);
+    stroke-width: 2;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+    vector-effect: non-scaling-stroke;
+  }
+  .board__chart-area { fill: var(--color-accent); fill-opacity: 0.12; }
+  .board__chart-base { stroke: var(--b-2); stroke-width: 2; vector-effect: non-scaling-stroke; }
+  .board__chart-dot {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--color-fg);
+    transition: transform 700ms var(--ease-out-expo);
+  }
+
+  .board__bottom { display: grid; gap: 1.5rem; margin-top: 1.75rem; }
+  @media (min-width: 900px) {
+    .board__bottom { grid-template-columns: 1fr 1fr; column-gap: 2rem; }
+    .board__feed { grid-column: 1 / -1; }
+  }
+
+  .board__side { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; }
+  .board__side > div { display: flex; flex-direction: column-reverse; gap: 0.25rem; background: var(--b-2); padding: 1rem; }
+  .board__side dt { font-size: var(--step-small); color: var(--color-soft); }
+  .board__side dd { font-size: var(--step-lead); font-weight: 500; color: var(--color-fg); }
+
+  .board__bars-t { font-size: var(--step-small); color: var(--color-soft); margin-bottom: 0.75rem; }
+  .board__bar {
+    display: grid;
+    grid-template-columns: 7.5rem 1fr 3.5rem;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: var(--step-small);
+    min-height: 2rem;
+  }
+  .board__bar-track { height: 10px; background: var(--b-2); overflow: hidden; }
+  .board__bar-fill {
+    display: block;
+    height: 100%;
+    transform: scaleX(var(--v));
+    transform-origin: 0 50%;
+    animation: bar-grow 900ms var(--ease-out-expo);
+  }
+  @keyframes bar-grow { from { transform: scaleX(0); } }
+  .board__bar--antes .board__bar-fill { background: var(--color-soft); }
+  .board__bar--ahora .board__bar-fill { background: var(--color-accent); }
+  .board__bar-v { text-align: right; }
+  .board__bar--ahora .board__bar-v { font-weight: 500; color: var(--color-accent); }
+
+  .is-tick { animation: tick 650ms var(--ease-out-expo); display: inline-block; }
+  @keyframes tick { 30% { transform: translateY(-3px); } }
+
+  .board__delta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-family: var(--font-sans);
+    font-size: var(--step-small);
+    letter-spacing: 0;
+    opacity: 0;
+  }
+  .board__delta svg { width: 8px; height: 8px; fill: currentColor; }
+  .board__delta.is-up { color: var(--color-accent); }
+  .board__delta.is-down { color: var(--color-soft); }
+  .board__delta.is-down svg { transform: rotate(180deg); }
+  .board__delta.is-on { animation: delta 2.2s var(--ease-out-expo) both; }
+  @keyframes delta {
+    0% { opacity: 0; transform: translateY(4px); }
+    15%, 70% { opacity: 1; transform: none; }
+    100% { opacity: 0; }
+  }
+
+  .board__feed {
+    --row: 2.5rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    height: calc(var(--row) * 3);
+    overflow: hidden;
+  }
+  .board__feed.is-push { animation: feed-push 600ms var(--ease-out-expo); }
+  @keyframes feed-push { from { transform: translate3d(0, calc(var(--row) * -1), 0); } }
+  .board__feed-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    height: var(--row);
+    font-size: var(--step-small);
+    color: var(--color-soft);
+  }
+  .board__feed-row:first-child { color: var(--color-fg); }
+  .board__feed-t { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .board__feed-ago { flex: none; color: var(--color-soft); }
+
+  .board.is-paused .board__tab-bar { animation-play-state: paused; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .is-tick, .board__delta.is-on, .board__feed.is-push, .board__panel:not([hidden]), .board__bar-fill { animation: none !important; }
+  }
+</style>

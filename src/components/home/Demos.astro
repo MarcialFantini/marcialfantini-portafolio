@@ -1,0 +1,88 @@
+---
+import demos from "../../data/demos.json";
+import { getPublishedProjects } from "../../lib/content";
+import SceneConvoy from "../robots/scenes/SceneConvoy.astro";
+
+/* Proyectos de demostración: construidos para mostrar qué se puede hacer. Nunca se presentan como clientes. */
+const published = new Set((await getPublishedProjects()).map((p) => p.id));
+---
+
+<section id="proyectos-demo" class="demos wrap" aria-labelledby="demos-title">
+  <p class="demos__p" data-rise>
+    <strong id="demos-title" class="demos__h">Proyectos demo:</strong>{" "}
+    {
+      demos.map((d, i) => {
+        const last = i === demos.length - 1;
+        const frame = (
+          <span class="demos__frame" aria-hidden="true">
+            {d.captura && <img src={d.captura} alt="" loading="lazy" decoding="async" />}
+          </span>
+        );
+        return published.has(d.id) ? (
+          <>
+            <a class="demos__name" href={`/proyectos/${d.id}`}>{d.nombre}</a>
+            {frame}
+            {last ? "." : ", "}
+          </>
+        ) : (
+          <>
+            <span class="demos__name">{d.nombre}</span>
+            {frame}
+            {last ? "." : ", "}
+          </>
+        );
+      })
+    }
+  </p>
+  <p class="demos__note soft" data-rise style="--i:1">
+    {demos.length} proyectos de demostración, construidos para mostrar qué se puede hacer. No son clientes.
+  </p>
+  <SceneConvoy class="demos__convoy" />
+</section>
+
+<style>
+  .demos { margin-top: var(--section-gap); }
+  :global(.demos__convoy) { margin-top: 3rem; overflow: hidden; }
+  .demos__p {
+    font-size: var(--step-statement);
+    line-height: 1.25;
+    letter-spacing: -0.01em;
+    color: var(--color-soft);
+  }
+  .demos__h { color: var(--color-fg); font-weight: 500; }
+  .demos__name {
+    color: inherit;
+    text-decoration: none;
+    transition: color 200ms var(--ease-out-quart);
+  }
+  a.demos__name:hover, a.demos__name:focus-visible { color: var(--color-fg); }
+  .demos__frame {
+    display: inline-block;
+    width: 1.2em;
+    height: 0.8em;
+    margin: 0 0.15em 0 0.3em;
+    vertical-align: baseline;
+    background: var(--color-surface-2);
+    overflow: hidden;
+    transform-origin: 0 100%;
+    transition: transform 260ms var(--ease-out-expo);
+  }
+  .demos__frame img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  a.demos__name:hover + .demos__frame { transform: scale(1.6); }
+  .demos__note { margin-top: 2rem; font-size: var(--step-small); }
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      /* Names light up one by one as the paragraph scrolls past */
+      .demos__p { color: var(--color-fg); }
+      .demos__name { animation: name-on linear both; animation-timeline: view(); animation-range: entry 10% cover 40%; }
+      @keyframes name-on { from { opacity: 0.22; } to { opacity: 1; } }
+      a.demos__name:hover { color: var(--color-accent); }
+    }
+  }
+
+
+  @media (max-width: 767px) {
+    .demos__p { font-size: 1.5rem; color: var(--color-fg); }
+    .demos__name { padding-block: 3px; }
+  }
+</style>

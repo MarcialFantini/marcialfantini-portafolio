@@ -1,8 +1,6 @@
 ---
 import Layout from "../../layouts/Layout.astro";
-import MapaOperacion from "../../components/MapaOperacion.astro";
-import AntesAhora from "../../components/AntesAhora.astro";
-import Metodo from "../../components/Metodo.astro";
+
 import servicios from "../../data/servicios.json";
 import site from "../../data/site.json";
 import type { GetStaticPaths } from "astro";
@@ -82,7 +80,6 @@ const faqsPorServicio: Record<string, { pregunta: string; respuesta: string }[]>
 };
 
 const faqItems = faqsPorServicio[servicio.id] ?? [];
-const index = servicios.findIndex((s) => s.id === servicio.id) + 1;
 const contactoHref = `/contacto?servicio=${encodeURIComponent(servicio.titulo)}`;
 
 const noIncluye = [
@@ -90,148 +87,127 @@ const noIncluye = [
   "Promesas de resultados que dependen de cosas que no controlamos.",
   "Empezar sin propuesta escrita.",
 ];
+
+type Cifra = { v: number; suf?: string };
+const cifra = (c: Cifra) => `${c.v.toLocaleString("es-AR")}${c.suf ?? ""}`;
+const otros = servicios.filter((s) => s.id !== servicio.id);
 ---
 
 <Layout title={`${servicio.titulo} — ${site.name}`} description={servicio.descripcion}>
-  <div class="panel panel--night" data-chapter={servicio.titulo}>
-    <section class="py-12 md:py-16">
-      <div class="container-page">
-        <nav class="mb-8font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-mute)]" aria-label="Migas de pan">
-          <ol class="flex flex-wrap items-center gap-2">
-            <li><a href="/servicios" class="hover:text-[var(--color-azul)]">Servicios</a></li>
-            <li aria-hidden="true">/</li>
-            <li class="text-[var(--color-ink)]">{servicio.titulo}</li>
-          </ol>
-        </nav>
+  <section class="sd-hero wrap" aria-labelledby="sd-title">
+    <h1 id="sd-title" class="sd-hero__h1" data-split>{servicio.titulo}</h1>
+    <div class="sd-hero__grid">
+      <div class="sd-hero__copy">
+        <p class="sd-hero__lead" data-rise style="--i:1">{servicio.subtitulo}.</p>
+        <p data-rise style="--i:2">{servicio.descripcion}</p>
+      </div>
+      <dl class="sd-hero__facts" data-rise style="--i:2">
+        <div><dt class="soft">Duración</dt><dd>{servicio.duracion}</dd></div>
+        <div><dt class="soft">Cómo se cotiza</dt><dd>Propuesta cerrada por escrito, después del diagnóstico gratis de 30 minutos.</dd></div>
+        <div><a href={contactoHref} class="btn">{servicio.cta} <span aria-hidden="true">→</span></a></div>
+      </dl>
+    </div>
+  </section>
 
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-x-10 items-end">
-          <div class="lg:col-span-8 reveal">
-            <p class="font-mono text-xs tracking-[0.18em] text-[var(--color-mute)] tabular-nums mb-5">
-              {String(index).padStart(2, "0")}
-              {servicio.badge && <> · <span class="uppercase tracking-[0.22em] text-[10px]">{servicio.badge}</span></>}
-            </p>
-            <h1 class="display-lg max-w-[22ch]">
-              {servicio.titulo}. <span class="display-accent">{servicio.subtitulo}</span>
-            </h1>
-            <p class="mt-6 text-base md:text-lg text-[var(--color-ink-soft)] leading-relaxed max-w-[60ch]">
-              {servicio.descripcion}
-            </p>
-          </div>
-
-          <div class="lg:col-span-4 reveal border-t border-[var(--color-hair-strong)] pt-6">
-            <p class="svc__label">Duración</p>
-            <p class="svc__dur font-mono">{servicio.duracion}</p>
-            <p class="svc__label mt-6">Cómo se cotiza</p>
-            <p class="svc__text text-sm">Propuesta cerrada por escrito, después del diagnóstico gratis de 30 minutos.</p>
-            <a href={contactoHref} class="btn-sunset mt-6">
-              {servicio.cta} <span aria-hidden="true">→</span>
-            </a>
-          </div>
+  <section class="sd-get" aria-labelledby="sd-get-title">
+    <div class="sd-get__in wrap">
+      <h2 id="sd-get-title" class="sr-only">Lo que conseguís</h2>
+      <p class="sd-get__statement" data-rise>{servicio.resultadoCuantificado}</p>
+      <div class="sd-get__side">
+        <p data-rise style="--i:1"><strong>Para quién es.</strong> {servicio.idealPara}</p>
+        <div class="sd-get__nums" data-rise style="--i:2">
+          <dl>
+            <div><dt class="soft">Antes</dt><dd>{cifra(servicio.grafico.antes)}</dd></div>
+            <div><dt class="soft">Con el sistema</dt><dd class="is-now">{cifra(servicio.grafico.ahora)}</dd></div>
+          </dl>
+          <p class="sd-get__ej soft">Ejemplo ilustrativo · {servicio.grafico.label}</p>
         </div>
       </div>
-    </section>
-  </div>
+    </div>
+  </section>
 
-  <div class="panel panel--night" data-chapter="Dónde encaja">
-    <section class="py-12 md:py-16">
-      <div class="container-page">
-        <p class="eyebrow mb-4">Dónde encaja</p>
-        <MapaOperacion inicial={servicio.id} />
-      </div>
-    </section>
-  </div>
-
-  <div class="panel" data-chapter="Qué conseguís">
-    <section class="py-16 md:py-24">
-      <div class="container-page grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-x-12 items-start">
-        <div class="lg:col-span-7">
-          <p class="eyebrow mb-5">Lo que conseguís</p>
-          <p class="font-impact text-[clamp(1.5rem,1rem+2.2vw,2.75rem)] leading-[1.08] text-[var(--color-ink)] max-w-[30ch]">
-            {servicio.resultadoCuantificado}
-          </p>
-          <p class="svc__label mt-10">Para quién es</p>
-          <p class="svc__text max-w-[56ch]">{servicio.idealPara}</p>
-        </div>
-        <div class="lg:col-span-5">
-          <AntesAhora {...servicio.grafico} />
-        </div>
-      </div>
-    </section>
-  </div>
-
-  <div class="panel" data-chapter="Qué incluye">
-    <section class="py-16 md:py-24">
-      <div class="container-page grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-x-10">
-        <div class="lg:col-span-4">
-          <p class="eyebrow mb-5">Qué incluye</p>
-          <h2 class="display-md">Todo lo que entregamos, <span class="display-accent">por escrito.</span></h2>
-          <p class="svc__label mt-10">No incluye</p>
-          <ul class="hair-list">
-            {noIncluye.map((t) => <li>{t}</li>)}
-          </ul>
-        </div>
-        <ol class="numlist numlist--plain lg:col-span-7 lg:col-start-6">
-          {
-            servicio.queIncluye.map((item, i) => (
-              <li>
-                <span class="numlist__n">{String(i + 1).padStart(2, "0")}</span>
-                <p class="numlist__t">{item}</p>
-              </li>
-            ))
-          }
-        </ol>
-      </div>
-    </section>
-  </div>
-
-  <div class="panel" data-chapter="Cómo trabajamos"><Metodo /></div>
+  <section class="sd-inc wrap" aria-labelledby="sd-inc-title">
+    <h2 id="sd-inc-title" class="sd-inc__h" data-split>Qué incluye</h2>
+    <ul class="sd-inc__list">
+      {servicio.queIncluye.map((item, i) => <li data-rise style={`--i:${i % 4}`}>{item}</li>)}
+    </ul>
+    <p class="sd-inc__no soft" data-rise>No incluye: {noIncluye.map((t) => t.replace(/\.$/, "").toLowerCase()).join("; ")}.</p>
+  </section>
 
   {
     faqItems.length > 0 && (
-      <div class="panel" data-chapter="Dudas">
-        <section class="py-16 md:py-24">
-          <div class="container-page grid grid-cols-1 lg:grid-cols-12 gap-10">
-            <div class="lg:col-span-4">
-              <p class="eyebrow mb-4">FAQ del servicio</p>
-              <h2 class="display-md">Preguntas <span class="display-accent">concretas.</span></h2>
-            </div>
-            <div class="lg:col-span-7 lg:col-start-6">
-              {faqItems.map((faq) => (
-                <details class="qa">
-                  <summary>
-                    <h3 class="font-display font-semibold text-base md:text-xl text-[var(--color-ink)] leading-snug flex-1">
-                      {faq.pregunta}
-                    </h3>
-                  </summary>
-                  <div class="qa__body">
-                    <p class="text-sm md:text-base text-[var(--color-ink-soft)] leading-relaxed">{faq.respuesta}</p>
-                  </div>
-                </details>
-              ))}
-            </div>
-          </div>
-        </section>
-      </div>
+      <section class="sd-faq wrap" aria-labelledby="sd-faq-title">
+        <h2 id="sd-faq-title" class="sd-faq__h" data-split>Preguntas concretas</h2>
+        <div class="sd-faq__text">
+          {faqItems.map((f, i) => <p data-rise style={`--i:${i}`}><strong>{f.pregunta}</strong> {f.respuesta}</p>)}
+        </div>
+      </section>
     )
   }
 
-  <div class="panel panel--night" data-chapter="Contacto">
-    <section class="py-16 md:py-24">
-      <div class="container-page grid grid-cols-1 lg:grid-cols-12 gap-10 items-end">
-        <div class="lg:col-span-8 reveal">
-          <p class="eyebrow mb-4">Próximo paso</p>
-          <h2 class="display-lg">¿Te encaja? <span class="display-accent">Hablemos.</span></h2>
-          <p class="mt-6 text-lg text-[var(--color-ink-soft)] leading-relaxed max-w-[56ch]">
-            Empezá por el diagnóstico gratis de 30 minutos. Si no es lo que te conviene, te lo decimos y te orientamos.
-          </p>
-        </div>
-        <div class="lg:col-span-4 lg:justify-self-end flex flex-col sm:flex-row lg:flex-col gap-4 items-start">
-          <a href={contactoHref} class="btn-sunset">
-            {servicio.cta} <span aria-hidden="true">→</span>
-          </a>
-          <a href="/servicios" class="svc__more">Ver otros servicios <span aria-hidden="true">→</span></a>
-        </div>
-      </div>
-    </section>
-  </div>
+  <section class="sd-end wrap" aria-labelledby="sd-end-title">
+    <h2 id="sd-end-title" data-split>¿Te encaja?</h2>
+    <p class="sd-end__p" data-rise style="--i:1">
+      Empezá por el diagnóstico gratis de 30 minutos. Si no es lo que te conviene, te lo decimos y te orientamos.
+    </p>
+    <a href={contactoHref} class="btn" data-rise style="--i:2">{servicio.cta} <span aria-hidden="true">→</span></a>
+    <p class="sd-end__more" data-rise style="--i:3">
+      Otros servicios:{" "}
+      {otros.map((o, i) => (
+        <>
+          <a href={`/servicios/${o.id}`}>{o.titulo}</a>
+          {i < otros.length - 1 ? ", " : "."}
+        </>
+      ))}
+    </p>
+  </section>
 </Layout>
+
+<style>
+  .sd-hero { padding-top: clamp(3rem, 8vw, 6rem); }
+  .sd-hero__h1 { font-size: clamp(2.5rem, 6.5vw, 7rem); line-height: 0.92; letter-spacing: -0.03em; max-width: 16ch; }
+  .sd-hero__grid { display: grid; gap: 2.5rem; margin-top: 3rem; }
+  .sd-hero__copy { display: grid; gap: 1rem; max-width: 60ch; }
+  .sd-hero__lead { font-size: var(--step-lead); line-height: 1.3; font-weight: 500; }
+  .sd-hero__facts { display: grid; gap: 1.25rem; font-size: var(--step-small); align-content: start; }
+  .sd-hero__facts dd { margin: 0.15rem 0 0; font-size: var(--step-body); }
+
+  .sd-get { margin-top: var(--section-gap); background: var(--color-surface); }
+  .sd-get__in { display: grid; gap: 3rem; padding-block: clamp(4rem, 8vw, 7rem); }
+  .sd-get__statement { font-family: var(--font-serif); font-size: var(--step-statement); line-height: 1.15; letter-spacing: -0.01em; max-width: 38ch; }
+  .sd-get__side { display: grid; gap: 2.5rem; align-content: start; max-width: 52ch; }
+  .sd-get strong { font-weight: 500; }
+  .sd-get__ej { font-size: var(--step-small); margin-top: 1rem; }
+  .sd-get__nums dl { display: grid; grid-template-columns: 1fr 1fr; gap: var(--gutter); }
+  .sd-get__nums dl div { display: flex; flex-direction: column-reverse; gap: 0.25rem; }
+  .sd-get__nums dt { font-size: var(--step-small); }
+  .sd-get__nums dd { margin: 0; font-family: var(--font-serif); font-size: var(--step-head); line-height: 0.95; letter-spacing: -0.02em; }
+  .sd-get__nums dd.is-now { color: var(--color-accent); }
+
+  .sd-inc { margin-top: var(--section-gap); }
+  .sd-inc__list { list-style: none; margin: 2.5rem 0 0; padding: 0; display: grid; gap: 0.75rem; }
+  .sd-inc__list li { font-size: var(--step-statement); line-height: 1.2; letter-spacing: -0.01em; max-width: 32ch; }
+  .sd-inc__no { margin-top: 2.5rem; font-size: var(--step-small); max-width: 70ch; }
+
+  .sd-faq { margin-top: var(--section-gap); display: grid; gap: 2.5rem; }
+  .sd-faq__text p { margin-bottom: 1.25rem; break-inside: avoid; }
+  .sd-faq__text strong { font-weight: 500; }
+
+  .sd-end { margin-top: var(--section-gap); display: grid; gap: 1.5rem; justify-items: start; }
+  .sd-end__p { max-width: 52ch; }
+  .sd-end__more { font-size: var(--step-small); }
+  .sd-end__more a { display: inline-block; padding-block: 0.4rem; }
+
+  @media (min-width: 1024px) {
+    .sd-hero__grid { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gutter); }
+    .sd-hero__copy { grid-column: 1 / span 6; }
+    .sd-hero__facts { grid-column: 9 / span 4; }
+    .sd-get__in { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gutter); }
+    .sd-get__statement { grid-column: 1 / span 7; }
+    .sd-get__side { grid-column: 9 / span 4; }
+    .sd-inc { padding-left: calc((100% - 11 * var(--gutter)) / 12 * 4 + 4 * var(--gutter)); }
+    .sd-faq { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gutter); }
+    .sd-faq__h { grid-column: 1 / span 4; align-self: start; }
+    .sd-faq__text { grid-column: 5 / -1; columns: 2; column-gap: 3.5rem; }
+  }
+</style>

@@ -1,0 +1,50 @@
+---
+/* Board crew: a cobot and an AGV watch the KPI board.
+   Idle: the AGV parks back and forth, the cobot keeps an eye on the numbers.
+   happy (a KPI goes up): both celebrate. wave (a tab is picked): the cobot waves its gripper. */
+import Agv from "../Agv.astro";
+import Cobot from "../Cobot.astro";
+interface Props { class?: string }
+const { class: cls } = Astro.props;
+---
+
+<div class:list={["rbs sc-tb", cls]} data-rb data-listen="board" data-mood="idle" aria-hidden="true">
+  <svg viewBox="0 0 260 150" focusable="false">
+    <rect x="0" y="140" width="260" height="8" class="r-floor" />
+    <g class="tb-agv"><Agv x={20} y={92} s={0.8}><rect x="52.5" y="3" width="15" height="15" class="r-acc" /></Agv></g>
+    <g class="tb-cob"><Cobot x={130} y={0} /></g>
+  </svg>
+</div>
+
+<style>
+  @media (prefers-reduced-motion: no-preference) {
+    .tb-agv { animation: tb-park 7s ease-in-out infinite; }
+    .sc-tb :global(.a-wheel) { animation: tb-wheel 7s ease-in-out infinite; }
+    .sc-tb :global(.c-up) { animation: tb-up 6s ease-in-out infinite; }
+    .sc-tb :global(.c-fore) { animation: tb-fore 6s ease-in-out infinite; }
+    .sc-tb :global(.c-wrist) { animation: tb-wrist 6s ease-in-out infinite; }
+
+    .sc-tb[data-mood="happy"] .tb-agv { animation: tb-hop 0.35s ease-out 4 alternate; }
+    .sc-tb[data-mood="happy"] .tb-cob { animation: tb-hop 0.35s ease-out 4 alternate; animation-delay: 0.1s; }
+    .sc-tb[data-mood="happy"] :global(.c-up) { animation: tb-cheer-up 0.8s ease-in-out 2; }
+    .sc-tb[data-mood="happy"] :global(.c-fore) { animation: tb-cheer-fore 0.8s ease-in-out 2; }
+    .sc-tb[data-mood="happy"] :global(.c-wrist) { animation: tb-cheer-wrist 0.8s ease-in-out 2; }
+
+    .sc-tb[data-mood="wave"] :global(.c-fore) { animation: tb-wave 0.45s ease-in-out 4 alternate; }
+    .sc-tb[data-mood="wave"] :global(.c-fl) { animation: tb-open-l 0.45s ease-in-out 4 alternate; }
+    .sc-tb[data-mood="wave"] :global(.c-fr) { animation: tb-open-r 0.45s ease-in-out 4 alternate; }
+  }
+
+  @keyframes tb-park { 0%, 100% { transform: none; } 40%, 55% { transform: translateX(26px); } }
+  @keyframes tb-wheel { 0%, 100% { transform: rotate(0); } 40%, 55% { transform: rotate(200deg); } }
+  @keyframes tb-up { 0%, 100% { transform: rotate(-8deg); } 50% { transform: rotate(-2deg); } }
+  @keyframes tb-fore { 0%, 100% { transform: rotate(-30deg); } 50% { transform: rotate(-22deg); } }
+  @keyframes tb-wrist { 0%, 100% { transform: rotate(38deg); } 50% { transform: rotate(24deg); } }
+  @keyframes tb-hop { to { transform: translateY(-8px); } }
+  @keyframes tb-cheer-up { 0%, 100% { transform: rotate(-8deg); } 45% { transform: rotate(-20deg); } }
+  @keyframes tb-cheer-fore { 0%, 100% { transform: rotate(-30deg); } 45% { transform: rotate(-80deg); } }
+  @keyframes tb-cheer-wrist { 0%, 100% { transform: rotate(38deg); } 45% { transform: rotate(60deg); } }
+  @keyframes tb-wave { from { transform: rotate(-40deg); } to { transform: rotate(-14deg); } }
+  @keyframes tb-open-l { to { transform: translateX(-3px) rotate(-10deg); } }
+  @keyframes tb-open-r { to { transform: translateX(3px) rotate(10deg); } }
+</style>

@@ -1,0 +1,65 @@
+---
+/* Building together: the industrial arm sets each block, the cobot (facing it) steadies the
+   tower. Four blocks, then the tower clears and starts again. 10 s loop. */
+import Cobot from "../Cobot.astro";
+import Industrial from "../Industrial.astro";
+interface Props { class?: string }
+const { class: cls } = Astro.props;
+const levels = [194, 178, 162, 146];
+---
+
+<div class:list={["rbs sc-tw", cls]} data-rb aria-hidden="true">
+  <svg viewBox="0 0 300 220" focusable="false">
+    <rect x="0" y="210" width="300" height="8" class="r-floor" />
+    {levels.map((y, i) => <rect x="133" y={y} width="34" height="16" class:list={["r-acc tw-b", `tw-b${i}`]} />)}
+    <Industrial x={-6} y={60} />
+    <g transform="translate(300 0) scale(-1 1)"><Cobot x={22} y={70} /></g>
+  </svg>
+</div>
+
+<style>
+  @media (prefers-reduced-motion: no-preference) {
+    .sc-tw :global(*) { animation-duration: 10s; animation-iteration-count: infinite; animation-timing-function: ease-in-out; }
+    .tw-b0 { animation-name: tw-b0; }
+    .tw-b1 { animation-name: tw-b1; }
+    .tw-b2 { animation-name: tw-b2; }
+    .tw-b3 { animation-name: tw-b3; }
+    .sc-tw :global(.i-a1) { animation-name: tw-a1; }
+    .sc-tw :global(.i-ram) { animation-name: tw-ram; }
+    .sc-tw :global(.c-fore) { animation-name: tw-fore; }
+    .sc-tw :global(.c-wrist) { animation-name: tw-wrist; }
+  }
+
+  @keyframes tw-b0 { 0%, 6% { transform: translateY(-40px); opacity: 0; } 12%, 88% { transform: none; opacity: 1; } 96%, 100% { opacity: 0; } }
+  @keyframes tw-b1 { 0%, 26% { transform: translateY(-40px); opacity: 0; } 32%, 88% { transform: none; opacity: 1; } 96%, 100% { opacity: 0; } }
+  @keyframes tw-b2 { 0%, 46% { transform: translateY(-40px); opacity: 0; } 52%, 88% { transform: none; opacity: 1; } 96%, 100% { opacity: 0; } }
+  @keyframes tw-b3 { 0%, 66% { transform: translateY(-40px); opacity: 0; } 72%, 88% { transform: none; opacity: 1; } 96%, 100% { opacity: 0; } }
+  @keyframes tw-a1 {
+    0%, 100% { transform: rotate(0); }
+    8%, 12% { transform: rotate(6deg); } 18% { transform: rotate(0); }
+    28%, 32% { transform: rotate(4deg); } 38% { transform: rotate(0); }
+    48%, 52% { transform: rotate(2deg); } 58% { transform: rotate(0); }
+    68%, 72% { transform: rotate(0deg); } 78% { transform: rotate(0); }
+  }
+  @keyframes tw-ram {
+    0%, 100% { transform: none; }
+    8%, 12% { transform: translateY(18px); } 18% { transform: none; }
+    28%, 32% { transform: translateY(10px); } 38% { transform: none; }
+    48%, 52% { transform: translateY(2px); } 58% { transform: none; }
+    68%, 72% { transform: translateY(-6px); } 78% { transform: none; }
+  }
+  @keyframes tw-fore {
+    0%, 100% { transform: rotate(0); }
+    12%, 16% { transform: rotate(14deg); } 22% { transform: rotate(0); }
+    32%, 36% { transform: rotate(10deg); } 42% { transform: rotate(0); }
+    52%, 56% { transform: rotate(6deg); } 62% { transform: rotate(0); }
+    72%, 76% { transform: rotate(2deg); } 82% { transform: rotate(0); }
+  }
+  @keyframes tw-wrist {
+    0%, 100% { transform: rotate(0); }
+    12%, 16% { transform: rotate(-14deg); } 22% { transform: rotate(0); }
+    32%, 36% { transform: rotate(-10deg); } 42% { transform: rotate(0); }
+    52%, 56% { transform: rotate(-6deg); } 62% { transform: rotate(0); }
+    72%, 76% { transform: rotate(-2deg); } 82% { transform: rotate(0); }
+  }
+</style>

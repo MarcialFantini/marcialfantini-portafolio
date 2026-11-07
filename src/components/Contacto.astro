@@ -1,7 +1,6 @@
 ---
 import site from "../data/site.json";
 import servicios from "../data/servicios.json";
-import Robot from "./Robot.astro";
 
 const GENERIC_OPTION = "Quiero hablar de mi proyecto";
 const rawParam = Astro.url.searchParams.get("servicio");
@@ -21,187 +20,88 @@ const endpoint = site.formEndpoint || "";
 const whatsappUrl = site.whatsapp
   ? `https://wa.me/${site.whatsapp}?text=${encodeURIComponent(site.whatsappMessage || "")}`
   : "";
-const { compact = false } = Astro.props;
 ---
 
-<section
-  id="contacto"
-  class="surface-night relative py-20 md:py-28"
-  aria-label="Contacto"
->
-  <div class="container-page relative z-[1] grid grid-cols-1 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] gap-12 lg:gap-20">
-    <div class="lg:sticky lg:top-28 lg:self-start space-y-8">
-      {!compact && (
-      <div>
-        <span class="ct-bots mb-4" style="--bot-line:#F6F1E4" aria-hidden="true">
-          <Robot pose="wave" size={92} />
-          <span class="ct-bots__friend"><Robot pose="carry" cargo="mail" tone="gold" size={72} /></span>
-        </span>
-        <h2 class="display-lg">
-          Contanos qué problema <span class="display-accent">querés resolver.</span>
-        </h2>
+<section id="contacto" class="ct wrap" aria-label="Contacto">
+  <div class="ct__side" data-rise>
+    {whatsappUrl && (
+      <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" class="btn ct__wa">
+        Escribinos por WhatsApp <span aria-hidden="true">↗</span>
+      </a>
+    )}
+
+    <div>
+      <p>{whatsappUrl ? "O por email:" : "Escribinos por email:"} <a id="email-link" href={`mailto:${email}`} class="ct__mail">{email}</a></p>
+      <button type="button" id="copy-email-btn" class="ct__copy">
+        <span id="copy-email-label">Copiar email</span>
+      </button>
+    </div>
+
+    <div>
+      <p><strong>Diagnóstico gratis de 30 minutos.</strong> Te respondemos en 24 h hábiles.</p>
+      <p class="ct__small">
+        {site.location}. Usamos tus datos solo para responderte. Más en nuestra <a href="/privacidad">política de privacidad</a>.
+      </p>
+    </div>
+  </div>
+
+  <form id="contact-form" novalidate class="ct__form" aria-label="Formulario de contacto">
+    <div class="ct__field" data-rise>
+      <label for="name">Nombre</label>
+      <input type="text" id="name" name="name" required autocomplete="name" aria-describedby="name-error" />
+      <p id="name-error" class="ct__err hidden" role="alert"></p>
+    </div>
+
+    <div class="ct__field" data-rise>
+      <label for="email">Tu email</label>
+      <input type="email" id="email" name="email" required autocomplete="email" aria-describedby="email-error" />
+      <p id="email-error" class="ct__err hidden" role="alert"></p>
+    </div>
+
+    <div class="ct__pair">
+      <div class="ct__field" data-rise>
+        <label for="servicio">Servicio (opcional)</label>
+        <select id="servicio" name="servicio">
+          <option value="">Elegí uno</option>
+          {servicios.map((s) => <option value={s.titulo} selected={servicioParam === s.titulo}>{s.titulo}</option>)}
+          <option value={GENERIC_OPTION} selected={servicioParam === GENERIC_OPTION}>{GENERIC_OPTION}</option>
+          <option value="Otro">Otro</option>
+        </select>
       </div>
-      )}
-
-      {whatsappUrl && (
-        <a
-          href={whatsappUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          class="tactile sd-reveal flex w-full min-h-14 items-center justify-center gap-2 px-6 py-4 rounded-control bg-[var(--color-dorado)] text-[var(--color-on-gold)] font-mono text-[12px] uppercase tracking-[0.18em] font-bold hover:bg-[var(--color-ivory)]"
-        >
-          Escribinos por WhatsApp <span aria-hidden="true">↗</span>
-        </a>
-      )}
-
-      <div class="sd-reveal">
-        <p class="field-label">{whatsappUrl ? "O por email" : "Email directo"}</p>
-        <a
-          id="email-link"
-          href={`mailto:${email}`}
-          class="block font-display text-xl md:text-2xl font-semibold tracking-tight text-[var(--color-ink)] hover:text-[var(--color-dorado)] break-all py-1"
-        >
-          {email}
-        </a>
-        <button
-          type="button"
-          id="copy-email-btn"
-          class="tactile mt-2 inline-flex min-h-11 items-center gap-2 px-4 py-2 rounded-control border border-[var(--color-hair-strong)] text-[var(--color-ink)] font-mono text-[11px] uppercase tracking-[0.18em] font-semibold hover:border-[var(--color-dorado)] hover:text-[var(--color-dorado)] focus-visible:outline-2 focus-visible:outline-offset-2"
-        >
-          <span aria-hidden="true" id="copy-email-icon">⎘</span>
-          <span id="copy-email-label">Copiar email</span>
-        </button>
-      </div>
-
-      <div class="sd-reveal">
-        <p class="text-base md:text-lg text-[var(--color-ink)] leading-snug font-medium">
-          Diagnóstico gratis de 30 minutos. Te respondemos en 24 h hábiles.
-        </p>
-        <p class="mt-3 text-sm text-[var(--color-ink-soft)] leading-relaxed">
-          {site.location}. Usamos tus datos solo para responderte. Más en nuestra{" "}
-          <a href="/privacidad" class="underline underline-offset-2 hover:text-[var(--color-dorado)]">política de privacidad</a>.
-        </p>
+      <div class="ct__field" data-rise>
+        <label for="presupuesto">Presupuesto (opcional)</label>
+        <select id="presupuesto" name="presupuesto">
+          <option value="">Elegí un rango</option>
+          <option value="Hasta USD 500">Hasta USD 500</option>
+          <option value="USD 500 - 1.500">USD 500 - 1.500</option>
+          <option value="Más de USD 1.500">Más de USD 1.500</option>
+          <option value="No lo sé todavía">No lo sé todavía</option>
+        </select>
       </div>
     </div>
 
-    <form
-      id="contact-form"
-      novalidate
-      class="contact-form sd-reveal lg:border-l lg:border-[var(--color-hair)] lg:pl-14"
-      aria-label="Formulario de contacto"
-    >
-      <div class="space-y-7">
-        <div>
-          <label for="name" class="field-label">Nombre</label>
-          <input
-            type="text"
-            id="name"
-            name="name"
-            required
-            autocomplete="name"
-            aria-describedby="name-error"
-            class="field"
-          />
-          <p id="name-error" class="field-error hidden" role="alert"></p>
-        </div>
+    <div class="ct__field" data-rise>
+      <label for="message">Contanos brevemente qué necesitás</label>
+      <textarea id="message" name="message" required rows={5} aria-describedby="message-error"></textarea>
+      <p id="message-error" class="ct__err hidden" role="alert"></p>
+    </div>
 
-        <div>
-          <label for="email" class="field-label">Tu email</label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            required
-            autocomplete="email"
-            aria-describedby="email-error"
-            class="field"
-          />
-          <p id="email-error" class="field-error hidden" role="alert"></p>
-        </div>
+    <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true" class="hidden" />
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-7">
-          <div>
-            <label for="servicio" class="field-label">Servicio (opcional)</label>
-            <select id="servicio" name="servicio" class="field">
-              <option value="">Elegí uno</option>
-              {
-                servicios.map((s) => (
-                  <option value={s.titulo} selected={servicioParam === s.titulo}>
-                    {s.titulo}
-                  </option>
-                ))
-              }
-              <option value={GENERIC_OPTION} selected={servicioParam === GENERIC_OPTION}>
-                {GENERIC_OPTION}
-              </option>
-              <option value="Otro">Otro</option>
-            </select>
-          </div>
+    <button type="submit" id="contact-submit" class="btn ct__submit" data-rise>
+      <span id="contact-submit-label">{endpoint ? "Enviar mensaje" : "Abrir mi app de email"}</span>
+      <span aria-hidden="true">→</span>
+    </button>
 
-          <div>
-            <label for="presupuesto" class="field-label">Presupuesto (opcional)</label>
-            <select id="presupuesto" name="presupuesto" class="field">
-              <option value="">Elegí un rango</option>
-              <option value="Hasta USD 500">Hasta USD 500</option>
-              <option value="USD 500 - 1.500">USD 500 - 1.500</option>
-              <option value="Más de USD 1.500">Más de USD 1.500</option>
-              <option value="No lo sé todavía">No lo sé todavía</option>
-            </select>
-          </div>
-        </div>
+    <p id="contact-status" class="hidden" role="status" aria-live="polite"></p>
 
-        <div>
-          <label for="message" class="field-label">Contanos brevemente qué necesitás</label>
-          <textarea
-            id="message"
-            name="message"
-            required
-            rows={4}
-            aria-describedby="message-error"
-            class="field"
-          ></textarea>
-          <p id="message-error" class="field-error hidden" role="alert"></p>
-        </div>
-
-        <input
-          type="text"
-          name="_gotcha"
-          tabindex="-1"
-          autocomplete="off"
-          aria-hidden="true"
-          class="hidden"
-        />
-
-        <button
-          type="submit"
-          id="contact-submit"
-          class="tactile w-full min-h-14 inline-flex items-center justify-center gap-2 px-6 py-4 rounded-control bg-[var(--color-ivory)] text-[var(--color-navy-950)] font-mono text-[12px] uppercase tracking-[0.18em] font-bold hover:bg-[var(--color-neon)] disabled:opacity-60 disabled:cursor-not-allowed focus-visible:outline-2 focus-visible:outline-offset-2"
-        >
-          <span id="contact-submit-label">{endpoint ? "Enviar mensaje" : "Abrir mi app de email"}</span>
-          <span aria-hidden="true">→</span>
-        </button>
-
-        <p
-          id="contact-status"
-          class="hidden text-sm leading-relaxed rounded-control px-4 py-3"
-          role="status"
-          aria-live="polite"
-        ></p>
-
-        <p class="text-sm text-[var(--color-ink-soft)] leading-relaxed">
-          {endpoint
-            ? "Te respondemos en 24 h hábiles. "
-            : "Al tocar el botón se abre tu app de email con el mensaje armado: tenés que enviarlo desde ahí. "}
-          También podés escribirnos directo a{" "}
-          <a
-            href={`mailto:${email}`}
-            class="underline underline-offset-2 hover:text-[var(--color-dorado)]">
-            {email}
-          </a>.
-        </p>
-      </div>
-    </form>
-  </div>
+    <p class="ct__small">
+      {endpoint
+        ? "Te respondemos en 24 h hábiles. "
+        : "Al tocar el botón se abre tu app de email con el mensaje armado: tenés que enviarlo desde ahí. "}
+      También podés escribirnos directo a <a href={`mailto:${email}`}>{email}</a>.
+    </p>
+  </form>
 </section>
 
 <script is:inline
@@ -231,12 +131,12 @@ const { compact = false } = Astro.props;
       if (!status) return;
       status.textContent = text;
       status.className =
-        'text-sm leading-relaxed rounded-control px-4 py-3 ' +
+        '' +
         (kind === 'success'
           ? 'bg-[var(--color-ok-bg)] text-[var(--color-ok-ink)]'
           : kind === 'error'
             ? 'bg-[var(--color-err-bg)] text-[var(--color-err-ink)]'
-            : 'bg-[var(--color-azul-soft)] text-[var(--color-azul-deep)]');
+            : 'bg-[var(--color-surface)] text-[var(--color-fg)]');
     };
 
     const fieldError = (id, text) => {
@@ -328,14 +228,65 @@ const { compact = false } = Astro.props;
 </script>
 
 <style>
-  /* Dupla de mascotas: el navy saluda y el dorado (que trae un sobre) le responde con un salto */
-  .ct-bots { display: flex; align-items: flex-end; gap: 0.25rem; }
-  .ct-bots__friend { display: block; animation: ct-reply 2.4s ease-in-out infinite; }
-  @keyframes ct-reply {
-    0%, 70%, 100% { transform: none; }
-    78% { transform: translateY(-9px) rotate(-5deg); }
-    86% { transform: none; }
-    91% { transform: translateY(-3px); }
+  .ct { display: grid; gap: 4rem; margin-top: clamp(3rem, 6vw, 5rem); }
+  .ct__side { display: grid; gap: 2.5rem; align-content: start; }
+  .ct__wa { justify-self: start; }
+  .ct__mail { font-weight: 500; word-break: break-all; }
+  .ct__copy {
+    margin-top: 0.75rem;
+    min-height: 2.75rem;
+    padding: 0 1rem;
+    background: var(--color-surface-2);
+    color: var(--color-fg);
+    border: 0;
+    font: inherit;
+    font-size: var(--step-small);
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 160ms var(--ease-out-quart), transform 160ms var(--ease-out-quart);
   }
-  @media (prefers-reduced-motion: reduce) { .ct-bots__friend { animation: none; } }
+  .ct__copy:hover { background: var(--color-surface); }
+  .ct__copy:active { transform: scale(0.97); }
+  .ct__side strong { font-weight: 500; }
+  .ct__small { margin-top: 0.75rem; }
+
+  .ct__form { display: grid; gap: 1.5rem; }
+  .ct__pair { display: grid; gap: 1.5rem; }
+  .ct__field label { display: block; margin-bottom: 0.5rem; }
+  .ct__field input,
+  .ct__field select,
+  .ct__field textarea {
+    display: block;
+    width: 100%;
+    min-height: 3.25rem;
+    padding: 0.8rem 1rem;
+    background: var(--color-surface);
+    color: var(--color-fg);
+    border: 0;
+    border-radius: 0;
+    font: inherit;
+    transition: background-color 160ms var(--ease-out-quart);
+  }
+  .ct__field textarea { min-height: 9rem; resize: vertical; }
+  .ct__field select {
+    appearance: none;
+    padding-right: 2.5rem;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5 6 6.5l5-5' stroke='%23E9EDF3' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+  }
+  .ct__field option { background: var(--color-surface); color: var(--color-fg); }
+  .ct__field input:hover, .ct__field select:hover, .ct__field textarea:hover { background: var(--color-surface-2); }
+  .ct__field input:focus-visible, .ct__field select:focus-visible, .ct__field textarea:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 0; }
+  .ct__field [aria-invalid="true"] { outline: 2px solid #fca5a5; outline-offset: 0; }
+  .ct__err { margin-top: 0.4rem; font-size: var(--step-small); color: #fecaca; }
+  .ct__submit { justify-self: start; }
+  #contact-status { padding: 0.75rem 1rem; }
+
+  @media (min-width: 640px) { .ct__pair { grid-template-columns: 1fr 1fr; } }
+  @media (min-width: 1024px) {
+    .ct { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gutter); }
+    .ct__side { grid-column: 1 / span 4; }
+    .ct__form { grid-column: 6 / span 7; }
+  }
 </style>

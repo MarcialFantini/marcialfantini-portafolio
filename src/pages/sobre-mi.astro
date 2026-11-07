@@ -1,15 +1,24 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import SobreMi from "../components/SobreMi.astro";
-import MapaOperacion from "../components/MapaOperacion.astro";
-import FiltroAlcance from "../components/FiltroAlcance.astro";
-import Metodo from "../components/Metodo.astro";
+import Sobre from "../components/home/Sobre.astro";
 import site from "../data/site.json";
 
 const principios = [
-  { t: "Primero el problema", d: "Antes de hablar de tecnología, entendemos dónde se traba tu operación y cuánto te cuesta." },
-  { t: "Lo justo, ni más ni menos", d: "Construimos lo que se va a usar todos los días. Lo demás espera o no se hace." },
-  { t: "Por etapas, sin frenar", d: "Cada parte entra en uso antes de empezar la siguiente. Tu equipo sigue trabajando." },
+  { t: "Primero el problema.", d: "Antes de hablar de tecnología, entendemos dónde se traba tu operación y cuánto te cuesta." },
+  { t: "Lo justo, ni más ni menos.", d: "Construimos lo que se va a usar todos los días. Lo demás espera o no se hace." },
+  { t: "Por etapas, sin frenar.", d: "Cada parte entra en uso antes de empezar la siguiente. Tu equipo sigue trabajando." },
+];
+
+/* Ejemplo de una distribuidora: así se filtra lo que se pide en el diagnóstico. */
+const filtro = [
+  { t: "Control de stock", e: "Primera etapa", por: "Se usa todos los días" },
+  { t: "Alertas de reposición", e: "Primera etapa", por: "Evita quiebres de stock" },
+  { t: "Integrar facturación", e: "Primera etapa", por: "Elimina la doble carga" },
+  { t: "Tablero de ventas", e: "Más adelante", por: "Suma cuando haya datos" },
+  { t: "Informe mensual automático", e: "Más adelante", por: "Etapa 2" },
+  { t: "App móvil propia", e: "No hace falta", por: "Una web en el celular alcanza" },
+  { t: "Chat interno", e: "No hace falta", por: "Ya usan WhatsApp" },
+  { t: "20 formatos de reporte", e: "No hace falta", por: "Con 2 cubren todo" },
 ];
 
 const noHacemos = [
@@ -22,134 +31,115 @@ const noHacemos = [
 ---
 
 <Layout
-  title={`Nosotros — ${site.name}`}
-  description={`Somos ${site.name}, un equipo que desarrolla software a medida para PyMEs: inventario, procesos, automatizaciones, KPIs e informes. Conocé cómo pensamos y pedí tu diagnóstico gratuito.`}
+  title={`Sobre mí — ${site.name}`}
+  description={`${site.name} desarrolla software a medida para PyMEs desde ${site.location}: inventario, procesos, automatizaciones, KPIs e informes. Conocé cómo trabajamos y pedí tu diagnóstico gratuito.`}
 >
-  <div class="panel panel--night" data-chapter="Nosotros">
-    <section class="py-12 md:py-16" aria-labelledby="nos-title">
-      <div class="container-page">
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-end">
-          <div class="lg:col-span-8 reveal">
-            <p class="eyebrow mb-4">Nosotros</p>
-            <h1 id="nos-title" class="display-lg max-w-[20ch]">
-              Somos {site.name}. Ordenamos con software <span class="display-accent">la operación de tu PyME.</span>
-            </h1>
-          </div>
-          <p class="lg:col-span-4 reveal text-base md:text-lg text-[var(--color-ink-soft)] leading-relaxed">
-            Un equipo chico de desarrollo con base en {site.location}. Convertimos planillas, mensajes y tareas
-            repetidas en sistemas que tu equipo usa todos los días.
-          </p>
-        </div>
+  <section class="sm-hero wrap" aria-labelledby="sm-title">
+    <h1 id="sm-title" class="sm-hero__h1" data-split>Software con nombre y apellido.</h1>
+    <p class="sm-hero__lead" data-rise style="--i:1">
+      Un equipo chico de desarrollo con base en {site.location}. Convertimos planillas, mensajes y tareas repetidas en
+      sistemas que tu equipo usa todos los días.
+    </p>
+  </section>
 
-        <ul class="pr">
-          {
-            principios.map((p, i) => (
-              <li>
-                <span class="pr__n">{String(i + 1).padStart(2, "0")}</span>
-                <h2 class="pr__t">{p.t}</h2>
-                <p class="pr__d">{p.d}</p>
-              </li>
-            ))
-          }
-        </ul>
-      </div>
-    </section>
-  </div>
+  <Sobre />
 
-  <div class="panel panel--night" data-chapter="Quién responde"><SobreMi /></div>
+  <section class="sm-pr wrap" aria-label="Cómo pensamos">
+    <ul class="sm-pr__list">
+      {
+        principios.map((p, i) => (
+          <li data-rise style={`--i:${i}`}>
+            <h2 class="sm-pr__t">{p.t}</h2>
+            <p class="sm-pr__d">{p.d}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
 
-  <div class="panel" data-chapter="Cómo decidimos">
-    <section class="py-16 md:py-24" aria-labelledby="decide-title">
-      <div class="container-page">
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-10 items-end">
-          <h2 id="decide-title" class="display-lg lg:col-span-8 max-w-[20ch]">
-            No construimos todo lo que se pide. <span class="display-accent">Construimos lo que resuelve.</span>
-          </h2>
-          <p class="lg:col-span-4 text-[var(--color-ink-soft)] text-base md:text-lg leading-relaxed">
-            En el diagnóstico pasamos cada pedido por dos preguntas. Lo que no las supera no entra en la propuesta, y te
-            explicamos por qué.
-          </p>
-        </div>
-        <div class="mt-10 md:mt-14"><FiltroAlcance /></div>
-      </div>
-    </section>
-  </div>
+  <section class="sm-fl wrap" aria-labelledby="sm-fl-title">
+    <h2 id="sm-fl-title" class="sm-fl__h" data-split>Lo que resuelve, nada más</h2>
+    <p class="sm-fl__lead" data-rise style="--i:1">
+      En el diagnóstico pasamos cada pedido por dos preguntas: ¿resuelve el problema? ¿se va a usar todos los días? Lo que
+      no las supera no entra en la propuesta, y te explicamos por qué.
+    </p>
+    <div class="sm-fl__frag" data-ui role="group" aria-label="Ejemplo: lo que pidió una distribuidora, filtrado en el diagnóstico" data-rise style="--i:2">
+      <p class="sm-fl__cap"><span>Lo que se pide</span><span class="soft">Ejemplo de una distribuidora</span></p>
+      <table>
+        <thead><tr><th scope="col">Pedido</th><th scope="col">Decisión</th><th scope="col">Por qué</th></tr></thead>
+        <tbody>
+          {filtro.map((f) => (
+            <tr class:list={[f.e === "Primera etapa" && "is-yes", f.e === "No hace falta" && "is-no"]}>
+              <th scope="row">{f.t}</th><td>{f.e}</td><td>{f.por}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </section>
 
-  <div class="panel panel--night" data-chapter="Qué hacemos">
-    <section class="py-16 md:py-24" aria-labelledby="hacemos-title">
-      <div class="container-page">
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-10 items-end mb-12 md:mb-16">
-          <h2 id="hacemos-title" class="display-lg lg:col-span-8 max-w-[20ch]">
-            Del canal donde te compran <span class="display-accent">al número que mirás para decidir.</span>
-          </h2>
-          <a href="/servicios" class="svc__more lg:col-span-4 lg:justify-self-end self-end">
-            Ver todos los servicios <span aria-hidden="true">→</span>
-          </a>
-        </div>
-        <MapaOperacion inicial="todo" />
-      </div>
-    </section>
-  </div>
+  <section class="sm-no" aria-labelledby="sm-no-title">
+    <div class="sm-no__in wrap">
+      <h2 id="sm-no-title" class="sm-no__h" data-split>Lo que no vas a ver</h2>
+      <ul class="sm-no__list">
+        {noHacemos.map((d, i) => <li data-rise style={`--i:${i % 4}`}>{d}</li>)}
+      </ul>
+    </div>
+  </section>
 
-  <div class="panel" data-chapter="Cómo trabajamos"><Metodo /></div>
-
-  <div class="panel" data-chapter="Qué no hacemos">
-    <section class="py-16 md:py-24" aria-labelledby="no-title">
-      <div class="container-page grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-x-10">
-        <div class="lg:col-span-4">
-          <p class="eyebrow mb-4">Reglas claras</p>
-          <h2 id="no-title" class="display-md">Lo que <span class="display-accent">no vas a ver</span> con nosotros.</h2>
-        </div>
-        <ul class="hair-list text-lg lg:col-span-7 lg:col-start-6">
-          {noHacemos.map((d) => <li>{d}</li>)}
-        </ul>
-      </div>
-    </section>
-  </div>
-
-  <div class="panel panel--night" data-chapter="Contacto">
-    <section class="py-16 md:py-24">
-      <div class="container-page grid grid-cols-1 lg:grid-cols-12 gap-10 items-end">
-        <div class="lg:col-span-8 reveal">
-          <p class="eyebrow mb-4">Próximo paso</p>
-          <h2 class="display-lg">
-            Empecemos por un <span class="display-accent">diagnóstico gratis</span> de 30 minutos.
-          </h2>
-          <p class="mt-6 max-w-[56ch] text-lg text-[var(--color-ink-soft)] leading-relaxed">
-            Contanos dónde se traba tu operación y te respondemos en 24 horas hábiles.
-          </p>
-        </div>
-        <div class="lg:col-span-4 lg:justify-self-end flex flex-col sm:flex-row lg:flex-col gap-4 items-start">
-          <a href="/contacto?servicio=Diagn%C3%B3stico%20gratis" class="btn-sunset">
-            Pedir diagnóstico gratis <span aria-hidden="true">→</span>
-          </a>
-          <a href="/servicios" class="svc__more">Ver servicios <span aria-hidden="true">→</span></a>
-        </div>
-      </div>
-    </section>
-  </div>
+  <section class="sm-end wrap" aria-labelledby="sm-end-title">
+    <h2 id="sm-end-title" data-split>Empecemos por el diagnóstico.</h2>
+    <p class="sm-end__p" data-rise style="--i:1">Contanos dónde se traba tu operación y te respondemos en 24 horas hábiles. Son 30 minutos y es gratis.</p>
+    <div class="sm-end__actions" data-rise style="--i:2">
+      <a href="/contacto?servicio=Diagn%C3%B3stico%20gratis" class="btn">Pedir diagnóstico gratis <span aria-hidden="true">→</span></a>
+      <a href="/servicios">Ver servicios</a>
+    </div>
+  </section>
 </Layout>
 
 <style>
-  .pr {
-    list-style: none;
-    margin: clamp(2rem, 4vw, 2.75rem) 0 0;
-    padding: 0;
-    display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    gap: 1.25rem;
+  .sm-hero { padding-top: clamp(3rem, 8vw, 6rem); }
+  .sm-hero__h1 { font-size: clamp(2.25rem, 8vw, 8.5rem); line-height: 0.9; letter-spacing: -0.03em; max-width: 14ch; }
+  .sm-hero__lead { margin-top: 2rem; font-size: var(--step-lead); line-height: 1.3; max-width: 40ch; }
+
+  .sm-pr { margin-top: var(--section-gap); }
+  .sm-pr__list { list-style: none; margin: 0; padding: 0; display: grid; gap: 3rem; }
+  .sm-pr__t { font-size: clamp(2.25rem, 5vw, 5rem); line-height: 0.95; letter-spacing: -0.02em; }
+  .sm-pr__d { margin-top: 1rem; max-width: 44ch; }
+
+  .sm-fl { margin-top: var(--section-gap); display: grid; gap: 1.5rem; }
+  .sm-fl__lead { max-width: 56ch; }
+  .sm-fl__frag { margin-top: 1.5rem; background: var(--color-surface); padding: clamp(1.25rem, 2.5vw, 2rem); font-size: var(--step-small); overflow-x: auto; }
+  .sm-fl__cap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.25rem 1rem; font-weight: 500; margin-bottom: 1rem; }
+  .sm-fl__frag table { width: 100%; border-collapse: collapse; min-width: 30rem; }
+  .sm-fl__frag th, .sm-fl__frag td { text-align: left; padding: 0.65rem 0.75rem 0.65rem 0; }
+  .sm-fl__frag thead th { color: var(--color-soft); font-weight: 400; }
+  .sm-fl__frag tbody tr { border-top: 1px solid var(--color-surface-2); }
+  .sm-fl__frag tbody th { font-weight: 500; }
+  .sm-fl__frag tr.is-yes td:nth-child(2) { color: var(--color-accent); }
+  .sm-fl__frag tr.is-no th, .sm-fl__frag tr.is-no td { color: var(--color-soft); }
+  .sm-fl__frag tr.is-no th { text-decoration: line-through; }
+
+  .sm-no { margin-top: var(--section-gap); background: var(--color-surface); }
+  .sm-no__in { display: grid; gap: 2.5rem; padding-block: clamp(4rem, 8vw, 7rem); }
+  .sm-no__list { list-style: none; margin: 0; padding: 0; display: grid; gap: 1rem; }
+  .sm-no__list li { font-size: var(--step-lead); line-height: 1.3; max-width: 44ch; }
+
+  .sm-end { margin-top: var(--section-gap); display: grid; gap: 1.5rem; justify-items: start; }
+  .sm-end__p { max-width: 52ch; }
+  .sm-end__actions { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem 1.75rem; }
+  .sm-end__actions a:not(.btn) { display: inline-block; padding-block: 0.5rem; }
+
+  @media (min-width: 1024px) {
+    .sm-pr__list li { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gutter); align-items: baseline; }
+    .sm-pr__t { grid-column: 1 / span 7; }
+    .sm-pr__d { grid-column: 9 / span 4; margin-top: 0; }
+    .sm-fl { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gutter); }
+    .sm-fl__h { grid-column: 1 / span 6; }
+    .sm-fl__lead { grid-column: 8 / span 5; align-self: end; }
+    .sm-fl__frag { grid-column: 1 / -1; }
+    .sm-no__in { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gutter); }
+    .sm-no__h { grid-column: 1 / span 4; align-self: start; }
+    .sm-no__list { grid-column: 6 / span 7; }
   }
-  @media (min-width: 768px) { .pr { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 2rem; } }
-  .pr li { padding-top: 0.9rem; border-top: 1px solid rgba(255, 210, 74, 0.45); }
-  .pr__n { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.16em; color: var(--color-neon); }
-  .pr__t {
-    margin-top: 0.5rem;
-    font-family: var(--font-display);
-    font-weight: 700;
-    font-size: clamp(1.1rem, 1rem + 0.4vw, 1.25rem);
-    letter-spacing: -0.02em;
-    line-height: 1.15;
-    color: var(--color-ivory);
-  }
-  .pr__d { margin-top: 0.5rem; line-height: 1.55; color: var(--color-ivory-dim); max-width: 40ch; text-wrap: pretty; }
 </style>

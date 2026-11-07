@@ -3,7 +3,8 @@
 Landing personal de **Marcial Fantini**, desarrollador freelance full-stack argentino. Mood indie hacker: directo, sin fluff, orientado a resultados.
 
 **Stack**: Astro 7 + TypeScript + Tailwind v4 + Content Collections. Mobile-first. SSG puro.
-**Tipografías**: Bricolage Grotesque (display variable) + JetBrains Mono (números, KPIs), ambas self-hosted vía `@fontsource-variable/*`. Sin Google Fonts.
+**Tipografías**: Gambarino (display) + General Sans (texto), self-hosted en `public/fonts/` (Fontshare, licencia ITF Free Font). Sin CDNs ni Google Fonts. Sin monoespaciadas salvo en `<pre>`/`<code>`.
+**Dirección visual**: tasteskill `type-only-statement` (seed 442660410), paleta Night and cornflower. Ficha en `.taste-skill/direction.json`; reglas en `src/styles/global.css`.
 
 **Comandos**: `pnpm dev`, `pnpm build`, `pnpm preview`, `pnpm check` (alias de `astro check`). Sin variables de entorno. Datos editables en `src/data/*.json`.
 
@@ -11,15 +12,16 @@ Landing personal de **Marcial Fantini**, desarrollador freelance full-stack arge
 - `src/data/site.json` — nombre, tagline, email, redes
 - `src/data/servicios.json` — 4 servicios con precio orientativo
 - `src/data/metricas.json` — KPIs destacados del home
-- `src/data/testimonios.json` — 6 testimonios
+- `src/data/demos.json` — nombre por rubro, orden y captura de cada proyecto demo
+- `src/data/sobre.json` — foto, frase y stack de "Sobre mí"
 
 **Contenido en colecciones**:
 - `src/content/blog/*.md` — 14 posts en 5 categorías (`desarrollo`, `productos`, `carrera`, `escritura`, `ia`)
-- `src/content/proyectos/*.md` — 19 casos
+- `src/content/proyectos/*.md` — 19 proyectos demo (nunca presentarlos como clientes)
 - Schemas validados con Zod en `src/content.config.ts`
 
 **Páginas (`src/pages/`)**:
-- Estáticas: `index`, `sobre-mi`, `cv`, `ahora`, `testimonios`, `lectura`, `recurso`, `contacto`, `404`
+- Estáticas: `index`, `sobre-mi`, `contacto`, `privacidad`, `404` (las viejas `cv`, `ahora`, `testimonios`, `lectura`, `recurso` redirigen a `/sobre-mi`)
 - Dinámicas: `blog/[slug]`, `blog/tags/[tag]`, `proyectos/[slug]`, `servicios/[slug]`
 - API/endpoint: `rss.xml.ts` (requiere `export const prerender = true;` para SSG)
 

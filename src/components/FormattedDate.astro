@@ -26,4 +26,4 @@ const formatted = (() => {
 const isoDate = date.toISOString().slice(0, 10);
 ---
 
-<time datetime={isoDate} class={`font-mono text-sm ${className}`}>{formatted}</time>
+<time datetime={isoDate} class={className || undefined}>{formatted}</time>

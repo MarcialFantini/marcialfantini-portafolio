@@ -1,0 +1,69 @@
+---
+/* Orders: a conveyor brings an order, the SCARA swings round its column (scaleX -1 -> 1),
+   loads it on the AGV and the AGV drives it away. 8 s loop.
+   SCARA at (190,60): column axis 215, tool 320 (right) or 110 (left); load top = 152 + quill. */
+import Agv from "../Agv.astro";
+import Scara from "../Scara.astro";
+interface Props { class?: string }
+const { class: cls } = Astro.props;
+---
+
+<div class:list={["rbs sc-ped", cls]} data-rb aria-hidden="true">
+  <svg viewBox="0 0 360 210" focusable="false">
+    <rect x="0" y="200" width="360" height="8" class="r-floor" />
+    <!-- conveyor -->
+    <rect x="8" y="176" width="6" height="24" class="r-soft" />
+    <rect x="104" y="176" width="6" height="24" class="r-soft" />
+    <rect x="0" y="168" width="122" height="8" rx="4" class="r-soft" />
+    {[8, 30, 52, 74, 96, 116].map((cx) => <g class="pd-roll" style={`transform-origin:${cx}px 172px`}><rect x={cx - 3} y="171" width="6" height="2" class="r-dark" /></g>)}
+    <rect x="104" y="156" width="12" height="12" class="r-acc pd-belt" />
+
+    <g class="pd-agv">
+      <Agv x={272} y={152} s={0.8}><rect x="52.5" y="3" width="15" height="15" class="r-acc pd-agvbox" /></Agv>
+    </g>
+    <Scara x={190} y={60}><rect x="124" y="92" width="12" height="12" class="r-acc pd-grip" /></Scara>
+  </svg>
+</div>
+
+<style>
+  .pd-grip, .pd-agvbox { opacity: 0; }
+  .sc-ped :global(.s-arms) { transform: scaleX(-1); }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .sc-ped :global(*) { animation-duration: 8s; animation-iteration-count: infinite; animation-timing-function: ease-in-out; }
+    .pd-roll { animation: pd-roll 0.8s linear infinite; }
+    .pd-belt { animation-name: pd-belt; }
+    .sc-ped :global(.s-arms) { animation-name: pd-arms; }
+    .sc-ped :global(.s-z) { animation-name: pd-z; }
+    .sc-ped :global(.s-fl) { animation-name: pd-fl; }
+    .sc-ped :global(.s-fr) { animation-name: pd-fr; }
+    .pd-grip { animation-name: pd-grip; animation-timing-function: step-end; }
+    .pd-agvbox { animation-name: pd-agvbox; animation-timing-function: step-end; }
+    .pd-agv { animation-name: pd-agv; }
+    .sc-ped :global(.a-wheel) { animation-name: pd-wheel; }
+    .sc-ped :global(.r-eye) { animation-name: r-blink; animation-duration: 5s; }
+  }
+
+  @keyframes pd-roll { to { transform: rotate(360deg); } }
+  @keyframes pd-belt {
+    0% { transform: translateX(-110px); opacity: 0; }
+    5% { opacity: 1; }
+    30% { transform: none; }
+    39.9% { opacity: 1; }
+    40%, 100% { transform: none; opacity: 0; }
+  }
+  @keyframes pd-arms { 0%, 46% { transform: scaleX(-1); } 66%, 78% { transform: scaleX(1); } 96%, 100% { transform: scaleX(-1); } }
+  @keyframes pd-z { 0%, 28% { transform: translateY(-16px); } 34%, 40% { transform: translateY(4px); } 46%, 66% { transform: translateY(-16px); } 70%, 74% { transform: translateY(2.4px); } 78%, 100% { transform: translateY(-16px); } }
+  @keyframes pd-fl { 0%, 35% { transform: none; } 37%, 72% { transform: translateX(2px); } 74%, 100% { transform: none; } }
+  @keyframes pd-fr { 0%, 35% { transform: none; } 37%, 72% { transform: translateX(-2px); } 74%, 100% { transform: none; } }
+  @keyframes pd-grip { 0% { opacity: 0; } 40% { opacity: 1; } 73%, 100% { opacity: 0; } }
+  @keyframes pd-agvbox { 0% { opacity: 0; } 73% { opacity: 1; } 92%, 100% { opacity: 0; } }
+  @keyframes pd-agv {
+    0%, 76% { transform: none; opacity: 1; }
+    88% { opacity: 0; }
+    90%, 93% { transform: translateX(140px); opacity: 0; }
+    94% { transform: none; opacity: 0; }
+    100% { transform: none; opacity: 1; }
+  }
+  @keyframes pd-wheel { 0%, 76% { transform: rotate(0); } 90% { transform: rotate(540deg); } 93%, 100% { transform: rotate(0); } }
+</style>

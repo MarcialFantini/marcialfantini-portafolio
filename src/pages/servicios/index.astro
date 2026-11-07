@@ -1,50 +1,46 @@
 ---
 import Layout from "../../layouts/Layout.astro";
-import MapaOperacion from "../../components/MapaOperacion.astro";
-import AntesAhora from "../../components/AntesAhora.astro";
-import Metodo from "../../components/Metodo.astro";
 import servicios from "../../data/servicios.json";
 import site from "../../data/site.json";
 
 const sistema = servicios.find((s) => s.grupo === "sistema")!;
 const canales = servicios.filter((s) => s.grupo === "canal");
 
-const areas = ["Inventario", "Procesos", "Automatizaciones", "Monitoreo", "KPIs", "Informes", "Integraciones"];
+type Cifra = { v: number; suf?: string };
+const cifra = (c: Cifra) => `${c.v.toLocaleString("es-AR")}${c.suf ?? ""}`;
+const ejemplo = (g: { label: string; antes: Cifra; ahora: Cifra }) =>
+  `Ejemplo: de ${cifra(g.antes)} a ${cifra(g.ahora)}. ${g.label}.`;
 
 const faqsGenerales = [
   {
-    pregunta: "¿Cuánto cuesta?",
-    respuesta:
-      "Cada proyecto se cotiza aparte, porque depende del problema y del alcance. Después del diagnóstico gratis de 30 minutos te pasamos una propuesta cerrada por escrito: alcance, etapas, plazos y precio. Si algo cambia en el camino, se cotiza antes de hacerlo.",
+    q: "¿Cuánto cuesta?",
+    a: "Cada proyecto se cotiza aparte, porque depende del problema y del alcance. Después del diagnóstico gratis de 30 minutos te pasamos una propuesta cerrada por escrito: alcance, etapas, plazos y precio. Si algo cambia en el camino, se cotiza antes de hacerlo.",
   },
   {
-    pregunta: "¿Puedo empezar por la web y sumar el sistema después?",
-    respuesta:
-      "Sí. La página o la tienda se construyen pensando en conectarse después con pedidos, stock o facturación, así no hay que rehacer nada cuando des el siguiente paso.",
+    q: "¿Puedo empezar por la web y sumar el sistema después?",
+    a: "Sí. La página o la tienda se construyen pensando en conectarse después con pedidos, stock o facturación, así no hay que rehacer nada cuando des el siguiente paso.",
   },
   {
-    pregunta: "¿Cuánto tarda?",
-    respuesta:
-      "Las webs tienen un plazo orientativo en cada servicio. El software a medida se entrega por etapas: cada parte entra en uso antes de empezar la siguiente. Te confirmamos fechas en la propuesta.",
+    q: "¿Cuánto tarda?",
+    a: "Las webs tienen un plazo orientativo en cada servicio. El software a medida se entrega por etapas: cada parte entra en uso antes de empezar la siguiente. Te confirmamos fechas en la propuesta.",
   },
   {
-    pregunta: "¿Y si no estoy seguro de qué necesito?",
-    respuesta:
-      "Escribinos igual. En el diagnóstico gratis de 30 minutos vemos dónde se traba tu operación y te orientamos hacia la opción que mejor te sirve, aunque sea la más chica.",
+    q: "¿Y si no estoy seguro de qué necesito?",
+    a: "Escribinos igual. En el diagnóstico gratis de 30 minutos vemos dónde se traba tu operación y te orientamos hacia la opción que mejor te sirve, aunque sea la más chica.",
   },
 ];
 
 const incluyeTodos = [
-  "Diagnóstico gratis de 30 minutos.",
-  "Propuesta cerrada por escrito antes de arrancar.",
-  "Una persona real del equipo que te responde en 24 horas hábiles.",
-  "Entregas que podés ver y probar mientras se arma.",
+  "Diagnóstico gratis de 30 minutos",
+  "Propuesta cerrada por escrito antes de arrancar",
+  "Una persona real que te responde en 24 horas hábiles",
+  "Entregas que podés ver y probar mientras se arma",
 ];
 
 const noIncluye = [
-  "Hosting ni dominio: se contratan aparte y te ayudamos a elegirlos.",
-  "Promesas de resultados que dependen de cosas que no controlamos.",
-  "Empezar sin propuesta escrita.",
+  "Hosting ni dominio: se contratan aparte y te ayudamos a elegirlos",
+  "Promesas de resultados que dependen de cosas que no controlamos",
+  "Empezar sin propuesta escrita",
 ];
 
 const contactoHref = (titulo: string) => `/contacto?servicio=${encodeURIComponent(titulo)}`;
@@ -54,290 +50,143 @@ const contactoHref = (titulo: string) => `/contacto?servicio=${encodeURIComponen
   title={`Servicios — ${site.name}`}
   description="Software a medida para PyMEs (inventario, procesos, automatizaciones, KPIs e informes) y canales digitales conectados: página web, sitio institucional y tienda online. Propuesta cerrada después de un diagnóstico gratis."
 >
-  <div class="panel panel--night" data-chapter="Servicios">
-    <section class="py-12 md:py-16" aria-labelledby="svc-title">
-      <div class="container-page">
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-end">
-          <div class="lg:col-span-8 reveal">
-            <p class="eyebrow mb-4">Servicios</p>
-            <h1 id="svc-title" class="display-lg max-w-[18ch]">
-              Un sistema para cada parte de <span class="display-accent">tu operación.</span>
-            </h1>
-          </div>
-          <div class="lg:col-span-4 reveal">
-            <p class="text-base md:text-lg text-[var(--color-ink-soft)] leading-relaxed">
-              Software a medida para ordenar la operación de tu PyME, y los canales digitales que la alimentan: página,
-              sitio institucional o tienda online.
-            </p>
-            <a href={contactoHref("Diagnóstico gratis")} class="btn-sunset mt-6">
-              Contanos el problema <span aria-hidden="true">→</span>
-            </a>
-          </div>
+  <section class="sv-hero wrap" aria-labelledby="svc-title">
+    <h1 id="svc-title" class="sv-hero__h1" data-split>Un sistema para tu operación.</h1>
+    <div class="sv-hero__row">
+      <p class="sv-hero__lead" data-rise style="--i:1">
+        Software a medida para ordenar tu PyME, y los canales digitales que lo alimentan: página, sitio institucional o tienda online.
+      </p>
+      <a href={contactoHref("Diagnóstico gratis")} class="btn" data-rise style="--i:2">Contanos el problema <span aria-hidden="true">→</span></a>
+    </div>
+  </section>
+
+  <section id={sistema.id} class="sv-core" aria-labelledby="sistema-title">
+    <div class="sv-core__in wrap">
+      <h2 id="sistema-title" class="sv-core__h" data-split>{sistema.titulo}</h2>
+      <div class="sv-core__body">
+        <p class="sv-core__lead" data-rise>{sistema.descripcion}</p>
+        <p data-rise style="--i:1"><strong>Para quién.</strong> {sistema.idealPara}</p>
+        <p class="sv-core__ej" data-rise style="--i:2">{ejemplo(sistema.grafico)}</p>
+        <div class="sv-core__inc" data-rise style="--i:2">
+          <p><strong>Qué incluye</strong></p>
+          <ul>{sistema.queIncluye.map((t) => <li>{t}</li>)}</ul>
+        </div>
+        <div class="sv-core__actions" data-rise style="--i:3">
+          <a href={contactoHref(sistema.titulo)} class="btn sv-core__btn">{sistema.cta} <span aria-hidden="true">→</span></a>
+          <a href={`/servicios/${sistema.id}`}>Ver el detalle</a>
         </div>
       </div>
-    </section>
-  </div>
+    </div>
+  </section>
 
-  <div class="panel panel--night" data-chapter="Tu operación">
-    <section class="py-12 md:py-16" aria-labelledby="mapa-title">
-      <div class="container-page">
-        <h2 id="mapa-title" class="display-md max-w-[24ch] mb-8 md:mb-10">
-          Qué parte de tu operación <span class="display-accent">resuelve cada servicio.</span>
-        </h2>
-        <MapaOperacion />
-      </div>
-    </section>
-  </div>
+  <section class="sv-ch wrap" aria-labelledby="canales-title">
+    <h2 id="canales-title" class="sv-ch__h" data-split>La puerta de entrada</h2>
+    <p class="sv-ch__lead" data-rise style="--i:1">
+      Por acá te encuentran, te consultan y te compran. Lo que entra queda ordenado y listo para pasar al sistema cuando lo sumes.
+    </p>
+    <ul class="sv-ch__list">
+      {
+        canales.map((s) => (
+          <li id={s.id} class="sv-ch__item" data-rise>
+            <a href={`/servicios/${s.id}`} class="sv-ch__name">{s.titulo}</a>
+            <div class="sv-ch__info">
+              <p class="sv-ch__sub">{s.subtitulo}. {s.conecta} <a href={contactoHref(s.titulo)}>{s.cta}</a></p>
+              <p class="soft">{s.duracion}. {ejemplo(s.grafico)}</p>
+            </div>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
 
-  <div class="panel" data-chapter="Software a medida">
-    <section id={sistema.id} class="py-16 md:py-24" aria-labelledby="sistema-title">
-      <div class="container-page grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-x-12">
-        <div class="lg:col-span-7">
-          {sistema.badge && <p class="eyebrow mb-5">{sistema.badge}</p>}
-          <h2 id="sistema-title" class="display-lg max-w-[18ch]">
-            {sistema.titulo}. <span class="display-accent">El centro de tu operación.</span>
-          </h2>
-          <p class="mt-6 text-lg text-[var(--color-ink-soft)] leading-relaxed max-w-[58ch]">{sistema.descripcion}</p>
+  <section class="sv-terms wrap" aria-label="Qué incluye siempre">
+    <div data-rise>
+      <h2 class="sv-terms__h">Siempre incluye</h2>
+      <ul>{incluyeTodos.map((t) => <li>{t}</li>)}</ul>
+    </div>
+    <div data-rise style="--i:1">
+      <h2 class="sv-terms__h">No incluye</h2>
+      <ul>{noIncluye.map((t) => <li>{t}</li>)}</ul>
+    </div>
+  </section>
 
-          <ul class="sys__areas" aria-label="Áreas que resolvemos">
-            {areas.map((a) => <li><a href="/#problemas">{a}</a></li>)}
-          </ul>
+  <section class="sv-faq wrap" aria-labelledby="sv-faq-title">
+    <h2 id="sv-faq-title" class="sv-faq__h" data-split>Antes de firmar</h2>
+    <div class="sv-faq__text">
+      {faqsGenerales.map((f, i) => <p data-rise style={`--i:${i}`}><strong>{f.q}</strong> {f.a}</p>)}
+    </div>
+  </section>
 
-          <div class="mt-8">
-            <p class="svc__label">Para quién</p>
-            <p class="svc__text max-w-[58ch]">{sistema.idealPara}</p>
-          </div>
-        </div>
-
-        <div class="lg:col-span-5 flex flex-col gap-6">
-          <AntesAhora {...sistema.grafico} />
-          <div>
-            <p class="svc__label">Qué incluye</p>
-            <ul class="hair-list">
-              {sistema.queIncluye.map((t) => <li>{t}</li>)}
-            </ul>
-          </div>
-          <div class="flex flex-wrap items-center gap-x-6 gap-y-3">
-            <a href={contactoHref(sistema.titulo)} class="btn-sunset">
-              {sistema.cta} <span aria-hidden="true">→</span>
-            </a>
-            <a href={`/servicios/${sistema.id}`} class="svc__more">Ver el detalle <span aria-hidden="true">→</span></a>
-          </div>
-        </div>
-      </div>
-    </section>
-  </div>
-
-  <div class="panel" data-chapter="Canales digitales">
-    <section class="py-16 md:py-24" aria-labelledby="canales-title">
-      <div class="container-page">
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-10 items-end">
-          <div class="lg:col-span-8">
-            <p class="eyebrow mb-4">Canales digitales</p>
-            <h2 id="canales-title" class="display-lg max-w-[20ch]">
-              La puerta de entrada. <span class="display-accent">Conectada al sistema.</span>
-            </h2>
-          </div>
-          <p class="lg:col-span-4 text-[var(--color-ink-soft)] text-base md:text-lg leading-relaxed">
-            Por acá te encuentran, te consultan y te compran. Lo que entra queda ordenado y listo para pasar al sistema
-            cuando lo sumes.
-          </p>
-        </div>
-
-        <ul class="ch-grid reveal-stagger">
-          {
-            canales.map((s) => (
-              <li id={s.id} class="ch">
-                {s.badge && <p class="ch__badge">{s.badge}</p>}
-                <h3 class="ch__t">
-                  <a href={`/servicios/${s.id}`}>{s.titulo}</a>
-                </h3>
-                <p class="ch__sub">{s.subtitulo}</p>
-
-                <p class="ch__link">
-                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h12l4 6-10 12L2 9z" /></svg>
-                  <span>{s.conecta}</span>
-                </p>
-
-                <AntesAhora {...s.grafico} class="mt-5" />
-
-                <div class="ch__foot">
-                  <div>
-                    <p class="svc__label">Duración</p>
-                    <p class="svc__dur font-mono">{s.duracion}</p>
-                  </div>
-                  <div class="flex flex-wrap items-center gap-x-5 gap-y-3">
-                    <a href={contactoHref(s.titulo)} class="ch__cta">
-                      {s.cta} <span aria-hidden="true">→</span>
-                    </a>
-                    <a href={`/servicios/${s.id}`} class="svc__more">Detalle <span aria-hidden="true">→</span></a>
-                  </div>
-                </div>
-              </li>
-            ))
-          }
-        </ul>
-      </div>
-    </section>
-  </div>
-
-  <div class="panel" data-chapter="Cómo trabajamos"><Metodo /></div>
-
-  <div class="panel" data-chapter="Dudas">
-    <section class="py-16 md:py-24" aria-labelledby="dudas-title">
-      <div class="container-page grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-x-10">
-        <div class="lg:col-span-4">
-          <p class="eyebrow mb-4">Antes de empezar</p>
-          <h2 id="dudas-title" class="display-md">Lo que nos preguntan <span class="display-accent">antes de firmar.</span></h2>
-
-          <p class="svc__label mt-10">Siempre incluye</p>
-          <ul class="hair-list">
-            {incluyeTodos.map((t) => <li>{t}</li>)}
-          </ul>
-          <p class="svc__label mt-8">No incluye</p>
-          <ul class="hair-list">
-            {noIncluye.map((t) => <li>{t}</li>)}
-          </ul>
-        </div>
-        <div class="lg:col-span-7 lg:col-start-6">
-          {
-            faqsGenerales.map((faq) => (
-              <details class="qa">
-                <summary>
-                  <h3 class="font-display font-semibold text-base md:text-xl text-[var(--color-ink)] leading-snug flex-1">
-                    {faq.pregunta}
-                  </h3>
-                </summary>
-                <div class="qa__body">
-                  <p class="text-sm md:text-base text-[var(--color-ink-soft)] leading-relaxed">{faq.respuesta}</p>
-                </div>
-              </details>
-            ))
-          }
-        </div>
-      </div>
-    </section>
-  </div>
-
-  <div class="panel panel--night" data-chapter="Contacto">
-    <section class="py-16 md:py-24">
-      <div class="container-page grid grid-cols-1 lg:grid-cols-12 gap-10 items-end">
-        <div class="lg:col-span-8 reveal">
-          <p class="eyebrow mb-4">Próximo paso</p>
-          <h2 class="display-lg">¿Dónde se traba tu operación? <span class="display-accent">Hablemos.</span></h2>
-          <p class="mt-6 text-lg text-[var(--color-ink-soft)] leading-relaxed max-w-[56ch]">
-            Empezá por el diagnóstico gratis de 30 minutos. Si tu caso no se resuelve con nada de esto, te lo decimos y
-            te orientamos hacia otra opción.
-          </p>
-        </div>
-        <div class="lg:col-span-4 lg:justify-self-end">
-          <a href={contactoHref("Quiero hablar de mi proyecto")} class="btn-sunset">
-            Contanos qué necesitás <span aria-hidden="true">→</span>
-          </a>
-        </div>
-      </div>
-    </section>
-  </div>
+  <section class="sv-end wrap" aria-labelledby="sv-end-title">
+    <h2 id="sv-end-title" class="sv-end__h" data-split>¿Dónde se traba tu operación?</h2>
+    <p class="sv-end__p" data-rise style="--i:1">
+      Empezá por el diagnóstico gratis de 30 minutos. Si tu caso no se resuelve con nada de esto, te lo decimos y te orientamos hacia otra opción.
+    </p>
+    <a href={contactoHref("Quiero hablar de mi proyecto")} class="btn" data-rise style="--i:2">Contanos qué necesitás <span aria-hidden="true">→</span></a>
+  </section>
 </Layout>
 
 <style>
-  /* CTA sobre panel claro: navy con texto dorado, igual que en "Qué resolvemos" del home */
-  #software-a-medida :global(.btn-sunset) { background: var(--color-action); color: var(--color-neon); box-shadow: 0 8px 24px -12px rgba(15, 26, 58, 0.6); }
-  #software-a-medida :global(.btn-sunset:hover) { color: var(--color-on-gold); }
-  :global(.dark) #software-a-medida :global(.btn-sunset) { background: var(--color-neon); color: var(--color-on-gold); }
+  .sv-hero { padding-top: clamp(3rem, 8vw, 6rem); }
+  .sv-hero__h1 { font-size: clamp(3.5rem, 9vw, 9.375rem); line-height: 0.9; letter-spacing: -0.03em; max-width: 12ch; }
+  .sv-hero__row { display: grid; gap: 1.5rem; margin-top: 2.5rem; justify-items: start; }
+  .sv-hero__lead { font-size: var(--step-lead); line-height: 1.3; max-width: 34ch; }
 
-  .sys__areas {
-    list-style: none;
-    margin: 2rem 0 0;
-    padding: 0;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-  }
-  .sys__areas a {
-    display: inline-flex;
-    align-items: center;
-    min-height: 2.25rem;
-    padding: 0.4rem 0.85rem;
-    border-radius: 999px;
-    border: 1px solid var(--color-hair-strong);
-    font-family: var(--font-mono);
-    font-size: 11px;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--color-ink);
-    transition: background-color 200ms, border-color 200ms;
-  }
-  .sys__areas a:hover { background: #f5c542; border-color: #f5c542; color: var(--color-on-gold); }
+  .sv-core { margin-top: var(--section-gap); background: var(--color-accent); color: var(--color-accent-ink); }
+  .sv-core__in { display: grid; gap: 2.5rem; padding-block: clamp(4rem, 8vw, 7rem); }
+  .sv-core__h { font-size: clamp(3.5rem, 9vw, 9.375rem); line-height: 0.9; letter-spacing: -0.03em; color: var(--color-accent-ink); max-width: 9ch; }
+  .sv-core__body { display: grid; gap: 1.5rem; max-width: 60ch; }
+  .sv-core__lead { font-size: var(--step-lead); line-height: 1.3; }
+  .sv-core strong { font-weight: 500; }
+  .sv-core__inc ul { margin: 0.5rem 0 0; padding-left: 1.2em; display: grid; gap: 0.35rem; }
+  .sv-core__actions { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem 1.75rem; }
+  .sv-core__actions a:not(.btn) { display: inline-block; padding-block: 0.5rem; }
+  .sv-core__btn { background: var(--color-accent-ink); color: var(--color-fg); }
+  .sv-core__btn:hover { background: var(--color-surface); color: var(--color-fg); }
 
-  .ch-grid {
-    list-style: none;
-    margin: clamp(2.5rem, 5vw, 3.5rem) 0 0;
-    padding: 0;
-    display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    gap: 1rem;
+  .sv-ch { margin-top: var(--section-gap); }
+  .sv-ch__lead { margin-top: 1.5rem; font-size: var(--step-lead); line-height: 1.3; max-width: 40ch; }
+  .sv-ch__list { list-style: none; margin: 4rem 0 0; padding: 0; display: grid; gap: 5.5rem; }
+  .sv-ch__item { display: grid; gap: 1rem; }
+  .sv-ch__name {
+    font-family: var(--font-serif);
+    font-size: clamp(2rem, 4vw, 4rem);
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    text-decoration: none;
+    transition: color 200ms var(--ease-out-quart);
   }
-  @media (min-width: 1024px) { .ch-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
-  .ch {
-    display: flex;
-    flex-direction: column;
-    padding: 1.5rem;
-    border-radius: var(--radius-card);
-    border: 1px solid var(--color-hair);
-    background: var(--color-page);
-    transition: border-color 250ms var(--ease-out-quart);
+  .sv-ch__name:hover { color: var(--color-accent); }
+  .sv-ch__info { display: grid; gap: 0.5rem; max-width: 52ch; }
+  .sv-ch__info a { display: inline-block; padding-block: 0.4rem; }
+
+  .sv-terms { margin-top: var(--section-gap); display: grid; gap: 3rem; }
+  .sv-terms__h { font-family: var(--font-sans); font-size: var(--step-lead); font-weight: 500; letter-spacing: 0; line-height: 1.2; }
+  .sv-terms ul { margin: 1rem 0 0; padding-left: 1.2em; display: grid; gap: 0.5rem; max-width: 46ch; }
+
+  .sv-faq { margin-top: var(--section-gap); display: grid; gap: 2.5rem; }
+  .sv-faq__text p { margin-bottom: 1.25rem; break-inside: avoid; }
+  .sv-faq__text strong { font-weight: 500; }
+
+  .sv-end { margin-top: var(--section-gap); display: grid; gap: 1.5rem; justify-items: start; }
+  .sv-end__h { max-width: 16ch; }
+  .sv-end__p { max-width: 52ch; }
+
+  @media (min-width: 1024px) {
+    .sv-hero__row { grid-template-columns: 1fr auto; align-items: end; }
+    .sv-core__in { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gutter); }
+    .sv-core__h { grid-column: 1 / span 6; }
+    .sv-core__body { grid-column: 7 / span 6; align-self: end; }
+    .sv-ch__item { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gutter); align-items: baseline; }
+    .sv-ch__name { grid-column: 1 / span 7; }
+    .sv-ch__info { grid-column: 8 / span 5; }
+    .sv-ch__list { margin-left: 0; }
+    .sv-ch__h, .sv-ch__lead { margin-left: calc((100% - 11 * var(--gutter)) / 12 * 7 + 7 * var(--gutter)); }
+    .sv-terms { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gutter); }
+    .sv-terms > div:first-child { grid-column: 1 / span 5; }
+    .sv-terms > div:last-child { grid-column: 7 / span 5; }
+    .sv-faq { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gutter); }
+    .sv-faq__h { grid-column: 1 / span 4; align-self: start; }
+    .sv-faq__text { grid-column: 5 / -1; columns: 2; column-gap: 3.5rem; }
   }
-  .ch:hover { border-color: var(--color-hair-strong); }
-  .ch__badge {
-    font-family: var(--font-mono);
-    font-size: 10px;
-    letter-spacing: 0.22em;
-    text-transform: uppercase;
-    color: var(--color-mute);
-    margin-bottom: 0.75rem;
-  }
-  .ch__t {
-    font-family: var(--font-display);
-    font-weight: 700;
-    font-size: clamp(1.35rem, 1.1rem + 0.6vw, 1.65rem);
-    letter-spacing: -0.025em;
-    line-height: 1.1;
-    color: var(--color-ink);
-  }
-  .ch__t a:hover { color: var(--color-azul); }
-  .ch__sub { margin-top: 0.5rem; font-weight: 500; color: var(--color-ink-soft); }
-  .ch__link {
-    display: flex;
-    gap: 0.6rem;
-    margin-top: 1.25rem;
-    font-size: 0.95rem;
-    line-height: 1.5;
-    color: var(--color-ink);
-    text-wrap: pretty;
-  }
-  .ch__link svg {
-    flex: none;
-    width: 14px;
-    height: 14px;
-    margin-top: 0.3rem;
-    fill: #f5c542;
-    stroke: var(--color-ink);
-    stroke-width: 1.5;
-    stroke-linejoin: round;
-  }
-  .ch__foot {
-    margin-top: auto;
-    padding-top: 1.5rem;
-    display: grid;
-    gap: 1.25rem;
-  }
-  .ch__cta {
-    font-weight: 600;
-    color: var(--color-ink);
-    border-bottom: 2px solid #f5c542;
-    padding-bottom: 0.15rem;
-    transition: color 200ms;
-  }
-  .ch__cta:hover { color: var(--color-azul); }
 </style>

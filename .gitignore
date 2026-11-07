@@ -32,3 +32,10 @@ pnpm-debug.log*
 
 # Misc
 *.swp
+
+# Local script manager database
+gestor-guiones/data/
+__pycache__/
+
+# Taste-skill working files (screenshots, inspector reports)
+.taste-skill/

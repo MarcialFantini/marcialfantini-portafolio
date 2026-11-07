@@ -18,7 +18,7 @@ metricas:
   - { label: "Autores con perfil", value: "12" }
   - { label: "Categorías", value: "5" }
   - { label: "Suscriptores newsletter", value: "1.200" }
-draft: true
+draft: false
 ---
 
 Consultora de management con 12 consultores senior que querían consolidar su presencia editorial. El blog anterior estaba en Medium, sin SEO, sin dominio propio, sin suscripción.

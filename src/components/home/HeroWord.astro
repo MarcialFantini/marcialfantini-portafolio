@@ -1,0 +1,109 @@
+---
+import site from "../../data/site.json";
+import SceneHero from "../robots/scenes/SceneHero.astro";
+---
+
+<section class="hero" aria-labelledby="hero-title">
+  <h1 id="hero-title" class="hero__h1">
+    <span class="hero__word" aria-hidden="true">Fantini</span>
+    <span class="sr-only">{site.name}, software a medida para PyMEs</span>
+  </h1>
+
+  <div class="hero__copy wrap">
+    <p class="hero__lead" data-rise>Software a medida para que tu PyME deje de operar con planillas.</p>
+    <a href="/contacto?servicio=Diagn%C3%B3stico%20gratis" class="btn hero__cta" data-rise style="--i:1">
+      Contanos el problema <span class="hero__arrow" aria-hidden="true">→</span>
+    </a>
+    <p class="hero__note soft" data-rise style="--i:2">Diagnóstico gratis de 30 minutos · {site.location}</p>
+  </div>
+
+  <SceneHero class="hero__scene" />
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    overflow: hidden;
+    container-type: inline-size;
+    /* --fs: "Fantini" in Gambarino is 2.73em wide (ink), so this size makes it exactly 100% of the hero width.
+       Its ink fills a 0.8 line box top to bottom, so the word is 0.8 x --fs tall (29.3vw).
+       --hh: the hero is at least as tall as the copy plus the whole word, so nothing ever overlaps. */
+    --fs: calc(100cqw / 2.73);
+    --hh: max(34rem, calc(100svh - 4.5rem), calc(clamp(3rem, 12vh, 7rem) + 15rem + 29.3vw));
+    min-height: calc(100svh - 4.5rem);
+    min-height: var(--hh);
+  }
+
+  .hero__copy {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.5rem;
+    padding-top: clamp(2rem, 6vh, 6rem);
+    width: 58%;
+  }
+  .hero__cta { white-space: nowrap; padding-inline: 1rem; }
+  .hero__arrow { display: none; }
+  .hero__lead {
+    font-size: var(--step-lead);
+    line-height: 1.3;
+    max-width: 30ch;
+    font-weight: 500;
+  }
+  .hero__note { font-size: var(--step-small); }
+
+  .hero__h1 { margin: 0; font-size: inherit; }
+  :global(.hero__scene) { display: none; }
+  @media (min-width: 900px) {
+    :global(.hero__scene) {
+      display: block;
+      position: absolute;
+      z-index: 1;
+      /* Rests 1rem above the top of the word and only takes the height that is free above it.
+         The scene is 520 x 250, so width = free height x 2.08. */
+      top: auto;
+      bottom: calc(0.8 * var(--fs) + 1rem);
+      right: var(--gutter);
+      width: max(0px, min(46vw, 44rem, calc((var(--hh) - 0.8 * var(--fs) - 2.5rem) * 2.08)));
+    }
+  }
+  .hero__word {
+    position: absolute;
+    right: -0.06em;
+    top: -0.02em;
+    font-family: var(--font-serif);
+    font-size: 50vw;
+    line-height: 0.8;
+    letter-spacing: -0.03em;
+    white-space: nowrap;
+    writing-mode: vertical-rl;
+    color: var(--color-fg);
+    transform-origin: 100% 0;
+    animation: word-in 1100ms var(--ease-out-expo) both;
+  }
+  @keyframes word-in { from { opacity: 0; transform: translateY(6%); } }
+
+  @media (min-width: 768px) {
+    .hero__copy { width: auto; padding-top: clamp(3rem, 12vh, 7rem); }
+    .hero__cta { padding-inline: 1.5rem; }
+    .hero__arrow { display: inline; }
+    .hero__word {
+      writing-mode: horizontal-tb;
+      /* The whole word, edge to edge: no crop, no margin */
+      top: auto;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      width: 100%;
+      margin: 0;
+      font-size: var(--fs);
+      transform-origin: 50% 100%;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero__word { animation: none; }
+  }
+</style>

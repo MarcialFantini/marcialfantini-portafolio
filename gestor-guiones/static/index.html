@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gestor de guiones</title>
+<link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+<header class="topbar">
+  <h1>Gestor de guiones</h1>
+  <div class="viewtoggle" role="group" aria-label="Vista">
+    <button id="btn-lista" type="button" class="active">Lista</button>
+    <button id="btn-tablero" type="button">Tablero</button>
+  </div>
+  <span class="spacer"></span>
+  <span id="total" class="muted"></span>
+  <button id="btn-exportar-todos" type="button">Exportar todos</button>
+  <button id="btn-nuevo" type="button" class="primary" title="Ctrl+N">+ Nuevo</button>
+</header>
+
+<div class="layout">
+  <aside class="sidebar">
+    <label class="lbl">Buscar
+      <input id="q" type="search" placeholder="Buscá… (Ctrl+K o /)" autocomplete="off">
+    </label>
+    <label class="lbl">Estado
+      <select id="f-estado"><option value="">Todos</option></select>
+    </label>
+    <label class="lbl">Categoría
+      <select id="f-categoria"><option value="">Todas</option></select>
+    </label>
+    <label class="lbl">Pilar
+      <select id="f-pilar"><option value="">Todos</option></select>
+    </label>
+    <label class="lbl">Prioridad
+      <select id="f-prioridad">
+        <option value="">Todas</option>
+        <option value="1">Alta</option>
+        <option value="2">Media</option>
+        <option value="3">Baja</option>
+      </select>
+    </label>
+    <label class="lbl">Ordenar por
+      <select id="f-orden">
+        <option value="numero">Número</option>
+        <option value="prioridad">Prioridad</option>
+        <option value="fecha_publicacion">Fecha de publicación</option>
+        <option value="actualizado">Última edición</option>
+      </select>
+    </label>
+    <button id="btn-limpiar" type="button" class="link">Limpiar filtros</button>
+    <h2 class="side-h">Por estado</h2>
+    <ul id="counts" class="counts"></ul>
+  </aside>
+
+  <main class="main">
+    <div id="list" class="list" tabindex="-1"></div>
+    <div id="board" class="board" hidden></div>
+  </main>
+
+  <section class="editor" id="editor-wrap">
+    <div id="empty" class="empty">Elegí un guion de la lista o creá uno nuevo.</div>
+    <form id="editor" hidden autocomplete="off" onsubmit="return false">
+      <div class="ed-head">
+        <span id="ed-num" class="num"></span>
+        <span id="save-ind" class="save-ind" aria-live="polite"></span>
+        <span class="spacer"></span>
+        <button id="btn-dup" type="button">Duplicar</button>
+        <a id="btn-md" class="btn" href="#" download>Exportar .md</a>
+        <span id="del-zone" class="del-zone">
+          <button id="btn-del" type="button" class="danger">Eliminar</button>
+          <span id="del-confirm" hidden>
+            <span>¿Seguro?</span>
+            <button id="btn-del-yes" type="button" class="danger solid">Sí, eliminar</button>
+            <button id="btn-del-no" type="button">Cancelar</button>
+          </span>
+        </span>
+      </div>
+
+      <input id="f_titulo" data-field="titulo" class="title-input" type="text" placeholder="Título">
+
+      <div class="grid3">
+        <label class="lbl">Estado <select data-field="estado" id="f_estado"></select></label>
+        <label class="lbl">Pilar <select data-field="pilar" id="f_pilar"></select></label>
+        <label class="lbl">Prioridad
+          <select data-field="prioridad" id="f_prioridad">
+            <option value="1">1 - Alta</option>
+            <option value="2">2 - Media</option>
+            <option value="3">3 - Baja</option>
+          </select>
+        </label>
+      </div>
+      <div class="grid3">
+        <label class="lbl">Categoría
+          <input data-field="categoria" id="f_categoria" type="text" list="dl-categorias">
+          <datalist id="dl-categorias"></datalist>
+        </label>
+        <label class="lbl">Fecha de grabación <input data-field="fecha_grabacion" type="date"></label>
+        <label class="lbl">Fecha de publicación <input data-field="fecha_publicacion" type="date"></label>
+      </div>
+      <div class="grid2">
+        <fieldset class="plat">
+          <legend>Plataformas</legend>
+          <label><input type="checkbox" data-plat="tiktok"> TikTok</label>
+          <label><input type="checkbox" data-plat="instagram"> Instagram</label>
+          <label><input type="checkbox" data-plat="youtube"> YouTube</label>
+          <label><input type="checkbox" data-plat="linkedin"> LinkedIn</label>
+        </fieldset>
+        <label class="lbl">Etiquetas (separadas por coma) <input data-field="etiquetas" type="text"></label>
+      </div>
+
+      <label class="lbl">Hook amplio <textarea data-field="hook_amplio" rows="2"></textarea></label>
+      <label class="lbl">Hook filtro <textarea data-field="hook_filtro" rows="2"></textarea></label>
+      <label class="lbl">Contenido <textarea data-field="contenido" rows="3"></textarea></label>
+      <label class="lbl">Cierre <textarea data-field="cierre" rows="2"></textarea></label>
+      <label class="lbl">CTA <textarea data-field="cta" rows="2"></textarea></label>
+      <label class="lbl">
+        <span class="lbl-row">Guion <span id="stats" class="muted stats">0 palabras · ≈ 0 s</span></span>
+        <textarea data-field="guion" id="f_guion" class="big" rows="10"></textarea>
+      </label>
+      <label class="lbl">Notas de grabación <textarea data-field="notas" rows="3"></textarea></label>
+      <p id="ed-meta" class="muted small"></p>
+    </form>
+  </section>
+</div>
+
+<div id="toasts" class="toasts" aria-live="polite"></div>
+<script type="module" src="/app.js"></script>
+</body>
+</html>

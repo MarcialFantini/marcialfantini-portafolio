@@ -1,7 +1,7 @@
 ---
 import Layout from "../../layouts/Layout.astro";
 import FormattedDate from "../../components/FormattedDate.astro";
-import PostCard from "../../components/PostCard.astro";
+import PostList from "../../components/PostList.astro";
 import { render } from "astro:content";
 import { getPublishedPosts } from "../../lib/content";
 import type { GetStaticPaths } from "astro";
@@ -16,225 +16,76 @@ export const getStaticPaths = (async () => {
 
 const { post } = Astro.props;
 const { Content } = await render(post);
-const { title, description, pubDate, category, readingTime, tags } = post.data;
+const { title, description, pubDate, readingTime, tags } = post.data;
 
 const sortedAll = await getPublishedPosts();
-const postIndex = sortedAll.findIndex((p) => p.id === post.id) + 1;
-const placeholderIndex = String(postIndex).padStart(2, "0");
 const related = sortedAll
-  .filter(
-    (p) => p.id !== post.id && (p.data.category === post.data.category || p.data.tags.some((t) => post.data.tags.includes(t)))
-  )
-  .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime())
+  .filter((p) => p.id !== post.id && (p.data.category === post.data.category || p.data.tags.some((t) => tags.includes(t))))
   .slice(0, 3);
 
-// Compute word count from rendered content body (rendered markdown)
 const body = post.body ?? "";
-const wordCount = body.trim().split(/\s+/).length;
-const computedReadingTime = Math.max(1, Math.round(wordCount / 220));
-const finalReadingTime = readingTime ?? computedReadingTime;
+const minutes = readingTime ?? Math.max(1, Math.round(body.trim().split(/\s+/).length / 220));
 
-// Build TOC from headings
-const headingRegex = /^(#{2,3})\s+(.+)$/gm;
-const toc: { level: number; text: string; id: string }[] = [];
-let m: RegExpExecArray | null;
-while ((m = headingRegex.exec(body)) !== null) {
-  const level = m[1].length;
-  const text = m[2].trim();
-  const id = text
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .replace(/[^a-z0-9\s-]/g, "")
-    .trim()
-    .replace(/\s+/g, "-");
-  toc.push({ level, text, id });
-}
-
-const categoryLabels: Record<string, string> = {
-  desarrollo: "Desarrollo",
-  productos: "Productos",
-  carrera: "Carrera",
-  escritura: "Escritura",
-  ia: "IA / Tools",
-};
+// Table of contents from h2/h3 in the markdown source
+const slugify = (t: string) =>
+  t.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^a-z0-9\s-]/g, "").trim().replace(/\s+/g, "-");
+const toc = Array.from(body.matchAll(/^(#{2,3})\s+(.+)$/gm)).map((m) => ({ level: m[1].length, text: m[2].trim(), id: slugify(m[2].trim()) }));
 
 const canonicalURL = new URL(`/blog/${post.id}`, Astro.site ?? "https://www.marcialfantini.site").toString();
-const shareText = `${title} — ${description}`;
 ---
 
-<Layout
-  title={`${title} — ${"Marcial Fantini"}`}
-  description={description}
-  pageType="article"
->
-  <div class="scroll-progress-bar" aria-hidden="true"></div>
-
-  <article>
-    <header class="pt-12 md:pt-20 pb-10 md:pb-14 border-b border-[var(--color-border)]">
-      <div class="container-page max-w-3xl reveal">
-        <nav class="mb-8 font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-mute)]">
-          <ol class="flex flex-wrap items-center gap-2">
-            <li><a href="/" class="hover:text-[var(--color-azul)]">Inicio</a></li>
-            <li aria-hidden="true">/</li>
-            <li><a href="/blog" class="hover:text-[var(--color-azul)]">Blog</a></li>
-            <li aria-hidden="true">/</li>
-            <li class="text-[var(--color-ink)] truncate max-w-[60vw]">{title}</li>
-          </ol>
-        </nav>
-
-        <div class="placeholder-image placeholder-image--azul-card h-56 md:h-72 rounded-card mb-8 shadow-md relative overflow-hidden">
-          <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
-            <span class="font-impact text-[clamp(8rem,20vw,16rem)] text-white/15 select-none tabular-nums leading-none">
-              {placeholderIndex}
-            </span>
-          </div>
-        </div>
-
-        <div class="flex items-center flex-wrap gap-3 mb-5 text-xs font-mono text-[var(--color-mute)]">
-          <span class="px-2.5 py-1 rounded-control bg-[var(--color-azul-soft)] text-[var(--color-azul-deep)] font-semibold uppercase tracking-[0.18em]">
-            {categoryLabels[category] ?? category}
-          </span>
-          <span class="w-1 h-1 rounded-full bg-[var(--color-border)]"></span>
-          <FormattedDate date={pubDate} format="long" />
-          <span class="w-1 h-1 rounded-full bg-[var(--color-border)]"></span>
-          <span>{finalReadingTime} min lectura</span>
-        </div>
-
-        <h1 class="font-impact text-[clamp(2rem,5vw,3.75rem)] uppercase leading-[0.95] text-[var(--color-ink)] tracking-tight mb-6">
-          {title}
-        </h1>
-        <p class="text-xl text-[var(--color-ink-soft)] leading-relaxed">
-          {description}
-        </p>
-
-        {tags.length > 0 && (
-          <div class="mt-8 flex flex-wrap gap-2">
-            {
-              tags.map((t) => (
-                <a
-                  href={`/blog/tags/${t}`}
-                  class="font-mono text-xs px-2.5 py-1 rounded-control border border-[var(--color-border)] text-[var(--color-ink-soft)] hover:border-[var(--color-azul)] hover:text-[var(--color-azul)] tactile"
-                >
-                  #{t}
-                </a>
-              ))
-            }
-          </div>
-        )}
-      </div>
+<Layout title={title} description={description} pageType="article">
+  <article class="bp wrap">
+    <header class="bp__head">
+      <h1 class="bp__h1" data-split>{title}</h1>
+      <p class="bp__lead" data-rise style="--i:1">{description}</p>
+      <p class="bp__meta soft" data-rise style="--i:2"><FormattedDate date={pubDate} /> · {minutes} min de lectura</p>
     </header>
 
-    <div class="container-page py-12 md:py-16">
-      <div class="grid grid-cols-1 lg:grid-cols-[1fr_220px] gap-12">
-        <div class="prose-editorial reveal" data-post-body>
-          <Content />
-        </div>
+    <div class="bp__grid">
+      <div class="prose-mf" data-post-body><Content /></div>
 
+      <aside class="bp__aside">
         {toc.length >= 2 && (
-          <aside class="hidden lg:block">
-            <div class="sticky top-24">
-              <p class="font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--color-mute)] mb-4">
-                En este post
-              </p>
-              <nav aria-label="Tabla de contenidos">
-                <ul class="space-y-2 text-sm border-l border-[var(--color-border)] pl-4">
-                  {
-                    toc.map((h) => (
-                      <li class={h.level === 3 ? "pl-3" : ""}>
-                        <a
-                          href={`#${h.id}`}
-                          class="font-mono text-[var(--color-ink-soft)] hover:text-[var(--color-azul)] leading-snug"
-                        >
-                          {h.text}
-                        </a>
-                      </li>
-                    ))
-                  }
-                </ul>
-              </nav>
-
-              <p class="font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--color-mute)] mt-8 mb-3">
-                Compartir
-              </p>
-              <div class="flex flex-col gap-2">
-                <button
-                  type="button"
-                  data-share="copy"
-                  data-share-url={canonicalURL}
-                  class="tactile inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-control bg-[var(--color-azul-soft)] text-[var(--color-azul-deep)] font-mono text-[10px] uppercase tracking-[0.18em] font-semibold hover:bg-[var(--color-action)] hover:text-white"
-                >
-                  <span aria-hidden="true">⎘</span>
-                  <span data-share-label>Copiar link</span>
-                </button>
-                <a
-                  href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(canonicalURL)}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="tactile inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-control border border-[var(--color-border)] text-[var(--color-ink-soft)] font-mono text-[10px] uppercase tracking-[0.18em] font-semibold hover:border-[var(--color-azul)] hover:text-[var(--color-azul)]"
-                >
-                  Twitter <span aria-hidden="true">↗</span>
-                </a>
-                <a
-                  href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(canonicalURL)}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="tactile inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-control border border-[var(--color-border)] text-[var(--color-ink-soft)] font-mono text-[10px] uppercase tracking-[0.18em] font-semibold hover:border-[var(--color-azul)] hover:text-[var(--color-azul)]"
-                >
-                  LinkedIn <span aria-hidden="true">↗</span>
-                </a>
-              </div>
-            </div>
-          </aside>
+          <nav aria-label="En este post">
+            <p class="soft">En este post</p>
+            <ul>{toc.map((h) => <li class:list={[h.level === 3 && "is-sub"]}><a href={`#${h.id}`}>{h.text}</a></li>)}</ul>
+          </nav>
         )}
-      </div>
+        <div class="bp__share">
+          <button type="button" data-share="copy" data-share-url={canonicalURL}><span data-share-label>Copiar link</span></button>
+          <a href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(canonicalURL)}`} target="_blank" rel="noopener noreferrer">LinkedIn</a>
+        </div>
+        {tags.length > 0 && (
+          <p class="bp__tags">Temas: {tags.map((t, i) => <><a href={`/blog/tags/${t}`}>{t}</a>{i < tags.length - 1 ? ", " : "."}</>)}</p>
+        )}
+      </aside>
     </div>
   </article>
 
   {related.length > 0 && (
-    <section class="py-16 md:py-24 border-t border-[var(--color-border)] bg-[var(--color-blanco)]">
-      <div class="container-page">
-        <h2 class="font-impact text-[clamp(1.75rem,4vw,3rem)] uppercase leading-[0.95] text-[var(--color-ink)] tracking-tight mb-10 reveal">
-          Posts relacionados.
-        </h2>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-5 reveal-stagger">
-          {related.map((p) => <PostCard post={p} />)}
-        </div>
-
-        <div class="mt-14 pt-10 border-t border-[var(--color-border)] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-          <p class="font-display text-xl md:text-2xl tracking-tight text-[var(--color-ink)] max-w-md">
-            ¿Tenés un proyecto en mente?
-          </p>
-          <a
-            href="/contacto"
-            class="tactile inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-control bg-[var(--color-deep)] text-white font-semibold hover:bg-[var(--color-azul)] border border-[var(--color-deep)]"
-          >
-            Hablemos
-            <span aria-hidden="true">→</span>
-          </a>
-        </div>
-      </div>
+    <section class="bp-rel wrap" aria-labelledby="bp-rel-title">
+      <h2 id="bp-rel-title" class="bp-rel__h" data-split>Seguí leyendo</h2>
+      <PostList posts={related} />
     </section>
   )}
+
+  <section class="bp-end wrap" aria-label="Contacto">
+    <p class="bp-end__p" data-rise>¿Tenés un problema operativo que querés resolver con software?</p>
+    <a href="/contacto" class="btn" data-rise style="--i:1">Contanos el problema <span aria-hidden="true">→</span></a>
+  </section>
 </Layout>
 
 <script>
-  (function () {
-    // Add ids to post body h2/h3 if missing (TOC anchor targets)
-    const article = document.querySelector('[data-post-body]');
+  function setupPost() {
+    // Anchor ids for the table of contents
+    const article = document.querySelector("[data-post-body]");
     if (article instanceof HTMLElement) {
-      let i = 0;
       const seen = new Set<string>();
-      article.querySelectorAll('h2, h3').forEach((el) => {
+      let i = 0;
+      article.querySelectorAll("h2, h3").forEach((el) => {
         if (el.id) return;
-        const txt = (el.textContent ?? '').trim();
-        let id = txt
-          .toLowerCase()
-          .normalize('NFD')
-          .replace(/[\u0300-\u036f]/g, '')
-          .replace(/[^a-z0-9\s-]/g, '')
-          .trim()
-          .replace(/\s+/g, '-');
+        let id = (el.textContent ?? "").trim().toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^a-z0-9\s-]/g, "").trim().replace(/\s+/g, "-");
         if (!id) id = `h-${i++}`;
         let unique = id;
         let n = 2;
@@ -243,43 +94,59 @@ const shareText = `${title} — ${description}`;
         el.id = unique;
       });
     }
-
-    // Scroll progress bar
-    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const bar = document.querySelector('.scroll-progress-bar') as HTMLElement | null;
-    if (bar && !reduce) {
-      const update = () => {
-        const article = document.querySelector('[data-post-body]') as HTMLElement | null;
-        if (!article) return;
-        const rect = article.getBoundingClientRect();
-        const winH = window.innerHeight;
-        const total = rect.height - winH;
-        const scrolled = -rect.top;
-        const pct = total > 0 ? Math.min(1, Math.max(0, scrolled / total)) : 0;
-        bar.style.setProperty('--scroll-progress', `${Math.round(pct * 100)}%`);
-      };
-      update();
-      window.addEventListener('scroll', update, { passive: true });
-      document.addEventListener('astro:page-load', update);
-    }
-
-    // Share buttons
-    document.querySelectorAll('[data-share]').forEach((btn) => {
-      btn.addEventListener('click', async () => {
-        const action = btn.getAttribute('data-share');
-        const url = btn.getAttribute('data-share-url') ?? window.location.href;
-        if (action === 'copy') {
-          const label = btn.querySelector('[data-share-label]');
-          try {
-            await navigator.clipboard.writeText(url);
-            if (label) label.textContent = '¡Copiado!';
-            setTimeout(() => { if (label) label.textContent = 'Copiar link'; }, 2200);
-          } catch {
-            if (label) label.textContent = 'No se pudo copiar';
-            setTimeout(() => { if (label) label.textContent = 'Copiar link'; }, 2200);
-          }
+    document.querySelectorAll<HTMLElement>("[data-share]").forEach((btn) => {
+      if (btn.dataset.bound) return;
+      btn.dataset.bound = "1";
+      btn.addEventListener("click", async () => {
+        const label = btn.querySelector("[data-share-label]");
+        const url = btn.getAttribute("data-share-url") ?? window.location.href;
+        try {
+          await navigator.clipboard.writeText(url);
+          if (label) label.textContent = "Copiado";
+        } catch {
+          if (label) label.textContent = "No se pudo copiar";
         }
+        setTimeout(() => { if (label) label.textContent = "Copiar link"; }, 2200);
       });
     });
-  })();
+  }
+  document.addEventListener("astro:page-load", setupPost);
 </script>
+
+<style>
+  .bp__head { padding-top: clamp(3rem, 8vw, 6rem); }
+  .bp__h1 { font-size: clamp(2rem, 3.4vw, 3.25rem); line-height: 1; letter-spacing: -0.02em; max-width: 30em; }
+  .bp__lead { margin-top: 1.5rem; font-size: var(--step-lead); line-height: 1.3; max-width: 44ch; }
+  .bp__meta { margin-top: 1.25rem; font-size: var(--step-small); }
+
+  .bp__grid { display: grid; gap: 3rem; margin-top: clamp(3rem, 6vw, 5rem); }
+  .bp__aside { display: grid; gap: 2rem; align-content: start; font-size: var(--step-small); }
+  .bp__aside ul { list-style: none; margin: 0.75rem 0 0; padding: 0; display: grid; gap: 0.5rem; }
+  .bp__aside li.is-sub { padding-left: 1rem; }
+  .bp__aside a { text-decoration: none; }
+  .bp__aside a:hover { color: var(--color-accent); }
+  .bp__share { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem 1.25rem; }
+  .bp__share button {
+    min-height: 2.75rem;
+    padding: 0 1rem;
+    background: var(--color-surface-2);
+    color: var(--color-fg);
+    border: 0;
+    font: inherit;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 160ms var(--ease-out-quart);
+  }
+  .bp__share button:hover { background: var(--color-surface); }
+  .bp__tags a { text-decoration: underline; }
+
+  .bp-rel { margin-top: var(--section-gap); display: grid; gap: 3rem; }
+  .bp-end { margin-top: var(--section-gap); display: grid; gap: 1.5rem; justify-items: start; }
+  .bp-end__p { font-size: var(--step-lead); line-height: 1.3; max-width: 34ch; }
+
+  @media (min-width: 1024px) {
+    .bp__grid { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gutter); }
+    .prose-mf { grid-column: 1 / span 7; }
+    .bp__aside { grid-column: 9 / span 4; position: sticky; top: 2rem; }
+  }
+</style>
