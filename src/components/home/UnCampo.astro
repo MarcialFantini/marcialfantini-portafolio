@@ -17,6 +17,9 @@ const waUrl = site.whatsapp
       <span>Contámelo en una línea.</span>
     </h2>
 
+    <p class="uc__staff soft" data-rise>
+      ¿Trabajás en la empresa y no sos el dueño? Contame igual qué te hace perder tiempo. Armamos juntos el caso para presentarlo.
+    </p>
     <form class="uc__form" action={waAction} method="get" target="_blank" data-rise style="--i:1">
       <label for="uc-text" class="sr-only">Tu problema, en una línea</label>
       <input
@@ -76,6 +79,7 @@ const waUrl = site.whatsapp
     line-height: 1.1;
     letter-spacing: -0.01em;
   }
+  .uc__staff { margin-top: 1.25rem; max-width: 34rem; }
   .uc__form {
     display: flex;
     align-items: center;
