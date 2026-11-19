@@ -1,0 +1,219 @@
+---
+/* Chapter: a held title with photos flying past it (desktop pin), then the three steps. */
+import { stock } from "../../lib/stock";
+import Video from "./Video.astro";
+
+const fotos = [
+  { k: "a", img: stock("proceso-charla", 700) },
+  { k: "b", img: stock("proceso-cuaderno", 600) },
+  { k: "c", img: stock("proceso-entrega", 700) },
+  { k: "d", img: stock("equipo-mesa", 600) },
+];
+const pasos = [
+  { k: "cal", t: "Me contás el problema.", d: "Una charla de 30 minutos, gratis." },
+  { k: "doc", t: "Te paso un precio cerrado.", d: "Por escrito y por etapas. Sin sorpresas." },
+  { k: "app", t: "Lo usás desde la primera etapa.", d: "Te enseño a usarlo y queda a tu nombre." },
+];
+---
+
+<section id="proceso" class="pr" data-field="mist" aria-labelledby="proceso-title">
+  <div class="pr__stage">
+    <h2 id="proceso-title" class="pr__title">CÓMO <small>se</small><br />TRABAJA</h2>
+    <div class="pr__photos">
+      {
+        fotos.map((f) => (
+          <img
+            class={`pr__ph pr__ph--${f.k}`}
+            data-fly={f.k}
+            src={f.img.src}
+            srcset={f.img.srcset}
+            sizes="(min-width: 768px) 24vw, 44vw"
+            alt={f.img.alt}
+            width={f.img.width}
+            height={f.img.height}
+            loading="lazy"
+            decoding="async"
+          />
+        ))
+      }
+      <div class="pr__ph pr__ph--e" data-fly="e"><Video name="equipo" /></div>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <ol class="pr__steps">
+      {
+        pasos.map((p) => (
+          <li data-step>
+            <div class={`pr__art pr__art--${p.k}`} data-ui data-art>
+              {p.k === "cal" && (
+                <>
+                  <p class="a-head">Charla de 30 minutos</p>
+                  <p class="a-meta">Videollamada · Gratis</p>
+                  <div class="a-slots">
+                    <span class="a-slot">Mar 10:00</span>
+                    <span class="a-slot a-slot--on">Jue 16:30</span>
+                  </div>
+                </>
+              )}
+              {p.k === "doc" && (
+                <>
+                  <p class="a-head">Propuesta</p>
+                  <p class="a-meta">Precio cerrado</p>
+                  <ul class="a-stages">
+                    <li>Etapa 1</li>
+                    <li>Etapa 2</li>
+                    <li>Etapa 3</li>
+                  </ul>
+                </>
+              )}
+              {p.k === "app" && (
+                <p class="a-head">Tu sistema</p>
+                  <ul class="a-checks">
+                  {["Etapa 1 en uso", "Capacitación", "Código a tu nombre"].map((c) => (
+                    <li>
+                      <svg viewBox="0 0 20 20" width="22" height="22" aria-hidden="true"><path d="M4 10.5l4 4 8-9" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="square" /></svg>
+                      <span>{c}</span>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+            <h3>{p.t}</h3>
+            <p>{p.d}</p>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>
+
+<script>
+  import { gsap, ScrollTrigger, onPage, reduced } from "../../scripts/motion";
+
+  onPage(() => {
+    const root = document.querySelector<HTMLElement>("#proceso");
+    if (!root) return;
+    const ctx = gsap.context(() => {
+      const mm = gsap.matchMedia();
+      const stage = root.querySelector<HTMLElement>(".pr__stage")!;
+      const ph = (k: string) => root.querySelector<HTMLElement>(`[data-fly="${k}"]`)!;
+
+      mm.add("(min-width: 768px) and (prefers-reduced-motion: no-preference)", () => {
+        const tl = gsap.timeline({
+          defaults: { ease: "none" },
+          scrollTrigger: { trigger: stage, start: "top top", end: "+=150%", pin: true, scrub: 0.6 },
+        });
+        // Side columns only: x travel enters from the edges, y drift passes the clear centre zone
+        tl.fromTo(ph("a"), { xPercent: -140, yPercent: 40 }, { xPercent: 0, yPercent: -30, duration: 1 }, 0)
+          .fromTo(ph("b"), { xPercent: 140, yPercent: 120 }, { xPercent: 0, yPercent: -40, duration: 1 }, 0.1)
+          .fromTo(ph("c"), { xPercent: -140, yPercent: 160 }, { xPercent: 0, yPercent: -60, duration: 1 }, 0.25)
+          .fromTo(ph("d"), { xPercent: -140, yPercent: 200 }, { xPercent: 0, yPercent: -40, duration: 1 }, 0.4)
+          .fromTo(ph("e"), { xPercent: 140, yPercent: 200 }, { xPercent: 0, yPercent: -70, duration: 1 }, 0.35);
+      });
+
+      mm.add("(max-width: 767px) and (prefers-reduced-motion: no-preference)", () => {
+        gsap.from(root.querySelectorAll(".pr__ph"), {
+          y: 28,
+          opacity: 0,
+          duration: 0.9,
+          ease: "power4.out",
+          stagger: 0.075,
+          scrollTrigger: { trigger: ".pr__photos", start: "top 80%", once: true },
+        });
+      });
+
+      if (!reduced()) {
+        gsap.from(root.querySelectorAll("[data-step]"), {
+          y: 28,
+          opacity: 0,
+          duration: 0.9,
+          ease: "power4.out",
+          stagger: 0.18,
+          scrollTrigger: { trigger: ".pr__steps", start: "top 80%", once: true },
+        });
+        // Artefacts arrive tilted and settle to their resting angle
+        root.querySelectorAll<HTMLElement>("[data-art]").forEach((el, i) => {
+          gsap.fromTo(el, { rotate: i % 2 ? 6 : -6, y: 36 }, {
+            rotate: 0, y: 0, duration: 1.1, ease: "back.out(1.4)", delay: 0.15 + i * 0.18,
+            scrollTrigger: { trigger: ".pr__steps", start: "top 80%", once: true },
+          });
+        });
+      }
+    }, root);
+    return () => ctx.revert();
+  });
+</script>
+
+<style>
+  .pr { overflow-x: clip; padding-bottom: clamp(4rem, 9vw, 8rem); }
+
+  .pr__stage { padding: clamp(4rem, 9vw, 6rem) var(--gutter) 2rem; }
+  .pr__title {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(4rem, 15vw, 9.5rem);
+    line-height: 0.88;
+    letter-spacing: -0.01em;
+    text-transform: uppercase;
+    margin: 0 auto;
+    max-width: 1200px;
+  }
+  .pr__title small { font-family: var(--font-sans); font-weight: 400; font-size: 0.32em; text-transform: none; letter-spacing: 0; }
+
+  /* Mobile: loose two-column offset arrangement */
+  .pr__photos { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 2.5rem; align-items: start; }
+  .pr__ph { width: 100%; height: auto; display: block; object-fit: cover; }
+  .pr__ph--a { aspect-ratio: 4 / 5; }
+  .pr__ph--b { aspect-ratio: 1 / 1; margin-top: 3rem; }
+  .pr__ph--c { aspect-ratio: 1 / 1; }
+  .pr__ph--d { aspect-ratio: 4 / 5; margin-top: 3rem; }
+  .pr__ph--e { aspect-ratio: 4 / 5; grid-column: 1 / -1; }
+  .pr__ph--e :global(.vslot) { width: 100%; height: 100%; }
+
+  .pr__steps { list-style: none; margin: 3rem 0 0; padding: 0; display: grid; gap: 3rem; }
+  .pr__steps h3 { font-family: var(--font-display); font-weight: 500; font-size: clamp(2rem, 1.3rem + 3vw, 3.5rem); line-height: 1; margin: 0 0 0.4rem; }
+  .pr__steps p { margin: 0; font-size: var(--step-lead); line-height: 1.3; max-width: 36ch; }
+  .pr__art { background: var(--color-paper); color: var(--color-ink); padding: 1.25rem; min-height: 13.5rem; margin-bottom: 1.5rem; max-width: 22rem; transform-origin: 50% 100%; }
+  .pr__art p { margin: 0; }
+  .pr__art--cal { rotate: -1.5deg; }
+  .pr__art--doc { rotate: 1.2deg; }
+  .pr__art--app { rotate: -1deg; max-width: 16rem; min-height: 20rem; background: var(--color-field-night); color: var(--color-paper); border-radius: 0; }
+  .a-head { font-family: var(--font-display); font-weight: 600; font-size: 1.75rem; line-height: 1; }
+  .a-meta { font-size: 1rem; margin-top: 0.35rem !important; }
+  .a-slots { display: grid; gap: 0.5rem; margin-top: 1.25rem; }
+  .a-slot { display: block; padding: 0.7rem 0.9rem; background: var(--color-field-mist); font-size: 1rem; font-weight: 500; }
+  .a-slot--on { background: var(--color-accent); color: #fff; }
+  .a-stages { list-style: none; margin: 1.1rem 0 0; padding: 0; display: grid; gap: 0.5rem; }
+  .a-stages li { padding: 0.7rem 0.9rem; background: var(--color-field-lime); font-size: 1rem; font-weight: 500; }
+  .a-stages li:nth-child(2) { background: var(--color-field-mist); }
+  .a-stages li:nth-child(3) { background: var(--color-field-cornflower); }
+  .a-checks { list-style: none; margin: 1.5rem 0 0; padding: 0; display: grid; gap: 0.9rem; }
+  .a-checks li { display: flex; align-items: center; gap: 0.75rem; font-size: 1.0625rem; font-weight: 500; }
+  .a-checks svg { flex: none; color: var(--color-field-lime); }
+  /* Three columns only when each step title fits in two lines */
+  @media (min-width: 1100px) {
+    .pr__steps { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  }
+
+  @media (min-width: 768px) {
+    .pr__stage {
+      position: relative;
+      height: 100svh;
+      padding: 0;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+    }
+    .pr__title { text-align: center; margin: 0; position: relative; z-index: 1; }
+    .pr__photos { position: absolute; inset: 0; display: block; margin: 0; pointer-events: none; }
+    .pr__ph { position: absolute; margin: 0 !important; }
+    /* Outer 27% on each side stay free of the title column */
+    .pr__ph--a { left: 3vw; top: 14vh; width: 20vw; aspect-ratio: 4 / 5; }
+    .pr__ph--b { right: 3vw; top: 8vh; width: 17vw; aspect-ratio: 1 / 1; }
+    .pr__ph--c { left: 8vw; top: 52vh; width: 15vw; aspect-ratio: 1 / 1; }
+    .pr__ph--d { left: 24vw; top: 74vh; width: 12vw; aspect-ratio: 4 / 3; }
+    .pr__ph--e { right: 6vw; top: 50vh; width: 21vw; aspect-ratio: 4 / 3; grid-column: auto; }
+    .pr__steps { gap: var(--gutter); margin-top: clamp(3rem, 6vw, 5rem); }
+  }
+</style>

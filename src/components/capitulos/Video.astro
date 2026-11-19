@@ -1,0 +1,66 @@
+---
+// Shared video slot for the chapters. Muted loop that only loads and plays while on screen;
+// the poster is the fallback (no JS, reduced motion, slow networks, or an empty src).
+// Usage: <Video name="hero" class="my-cover" /> — slots live in src/data/media.json.
+import media from "../../data/media.json";
+
+interface Props {
+  name: Exclude<keyof typeof media, "_note">;
+  class?: string;
+  /** Load the poster eagerly (above the fold). */
+  eager?: boolean;
+}
+
+const { name, class: className, eager = false } = Astro.props;
+const m = media[name];
+---
+
+<div class:list={["vslot", className]} data-vslot>
+  {
+    m.src ? (
+      <video
+        class="vslot__v"
+        muted
+        loop
+        playsinline
+        preload="none"
+        poster={m.poster}
+        aria-label={m.alt}
+        data-src={m.src}
+      />
+    ) : (
+      <img class="vslot__v" src={m.poster} alt={m.alt} loading={eager ? "eager" : "lazy"} decoding="async" />
+    )
+  }
+</div>
+
+<style>
+  .vslot { position: relative; overflow: hidden; background: var(--color-field-night); }
+  .vslot__v { display: block; width: 100%; height: 100%; object-fit: cover; }
+</style>
+
+<script>
+  // One observer for every slot: attach the source and play when visible, pause when not.
+  function setup() {
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const videos = document.querySelectorAll<HTMLVideoElement>("[data-vslot] video[data-src]");
+    if (reduce || !("IntersectionObserver" in window)) return;
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          const v = e.target as HTMLVideoElement;
+          if (e.isIntersecting) {
+            if (!v.src) v.src = v.dataset.src!;
+            v.play().catch(() => {});
+          } else {
+            v.pause();
+          }
+        }
+      },
+      { rootMargin: "200px 0px" },
+    );
+    videos.forEach((v) => io.observe(v));
+    document.addEventListener("astro:before-swap", () => io.disconnect(), { once: true });
+  }
+  document.addEventListener("astro:page-load", setup);
+</script>

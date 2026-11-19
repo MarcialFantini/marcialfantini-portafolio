@@ -1,0 +1,353 @@
+---
+import { stock } from "../../lib/stock";
+import Video from "./Video.astro";
+import servicios from "../../data/servicios.json";
+
+// Slides of the changing image: video or photo, caption, and an illustrative UI card.
+const slides = [
+  { kind: "video", name: "hero", caption: "Depósito", card: ["Pedido 1042", "Despachado"] },
+  { kind: "photo", photo: stock("hero-deposito", 2000), caption: "Depósito", card: ["Stock 30x40", "142 u."] },
+  { kind: "photo", photo: stock("rubro-dietetica", 2000), caption: "Dietética", card: ["Frutos secos", "Reponer 12 kg"] },
+  { kind: "photo", photo: stock("rubro-restaurante", 2000), caption: "Restaurante", card: ["Mesa 4", "Cobrada"] },
+  { kind: "video", name: "local", caption: "Local de ropa", card: ["Remera talle M", "Quedan 6"] },
+  { kind: "photo", photo: stock("rubro-distribuidora", 2000), caption: "Distribuidora", card: ["Ruta Córdoba Norte", "18 entregas"] },
+] as const;
+
+const tileField = ["cornflower", "lime", "mist", "night"];
+const tilePhoto = ["ciclo-escaneo", "rubro-moda", "equipo-mesa", "ciclo-cajas"];
+const tiles = servicios.map((s, i) => ({
+  href: `/servicios/${s.id}`,
+  titulo: s.titulo,
+  field: tileField[i % 4],
+  photo: stock(tilePhoto[i % 4], 800),
+}));
+---
+
+<section id="hero" class="cap-hero" data-field="paper" aria-labelledby="hero-title">
+  <div class="cap-hero__pin" data-pin>
+    <div class="cap-hero__top wrap">
+      <h1 id="hero-title">TU PYME <small>en</small> ORDEN</h1>
+
+      <div class="cap-hero__row">
+        <p class="cap-hero__lead">
+          Conecto lo que ya usás, construyo lo que falta, te muestro los números y dejo todo con respaldo.
+        </p>
+        <div class="cap-hero__actions">
+          <a class="btn" href="/contacto?servicio=Diagn%C3%B3stico%20gratis">Contame tu problema</a>
+          <a class="cap-hero__link" href="#diagnostico">Ver cómo diagnostico</a>
+        </div>
+        <p class="cap-hero__note">La primera charla es gratis y dura 30 minutos.</p>
+      </div>
+    </div>
+
+    <div class="cap-hero__stage" data-stage>
+      <div class="cap-hero__slides" data-slides>
+        {
+          slides.map((sl, i) => (
+            <div class:list={["cap-hero__slide", i === 0 && "is-active"]} data-slide aria-hidden={i === 0 ? "false" : "true"}>
+              {sl.kind === "video" ? (
+                <Video name={sl.name} eager={i === 0} />
+              ) : (
+                <img
+                  src={sl.photo.src}
+                  srcset={sl.photo.srcset}
+                  sizes="100vw"
+                  alt={sl.photo.alt}
+                  width={sl.photo.width}
+                  height={sl.photo.height}
+                  loading={i === 1 ? "eager" : "lazy"}
+                  decoding="async"
+                />
+              )}
+            </div>
+          ))
+        }
+      </div>
+
+      <div class="cap-hero__card" aria-hidden="true">
+        {
+          slides.map((sl, i) => (
+            <p class:list={["cap-hero__cardtxt", i === 0 && "is-active"]} data-card>
+              <strong>{sl.card[0]}</strong>
+              <span>{sl.card[1]}</span>
+            </p>
+          ))
+        }
+        <span class="cap-hero__cardnote">Ejemplo ilustrativo</span>
+      </div>
+
+      <div class="cap-hero__ui">
+        <p class="cap-hero__caption" aria-live="polite" data-caption>{slides[0].caption}</p>
+        <div class="cap-hero__dots" role="group" aria-label="Elegir imagen">
+          {
+            slides.map((sl, i) => (
+              <button
+                type="button"
+                class:list={["cap-hero__dot", i === 0 && "is-active"]}
+                data-dot
+                data-caption-text={sl.caption}
+                aria-label={`${sl.caption} (${i + 1} de ${slides.length})`}
+                aria-pressed={i === 0 ? "true" : "false"}
+              />
+            ))
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <ul class="cap-hero__tiles wrap" aria-label="Servicios">
+    {
+      tiles.map((t) => (
+        <li>
+          <a class="tile" href={t.href} data-tile={t.field}>
+            <span class="tile__img">
+              <img src={t.photo.src} srcset={t.photo.srcset} sizes="(min-width: 900px) 25vw, 50vw" alt="" width={t.photo.width} height={t.photo.height} loading="lazy" decoding="async" />
+            </span>
+            <span class="tile__body">
+              <span class="tile__title">{t.titulo}</span>
+              <span class="tile__arrow" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M4 12h15M13 6l6 6-6 6" /></svg>
+              </span>
+            </span>
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</section>
+
+<script>
+  import { gsap, ScrollTrigger, onPage, reduced } from "../../scripts/motion";
+
+  // Stepped block (echoes the brand mark: block + bar) that opens to the full rectangle.
+  const SHAPE_FROM = "polygon(20% 0%, 80% 0%, 80% 76%, 68% 76%, 68% 100%, 32% 100%, 32% 76%, 20% 76%)";
+  const SHAPE_TO = "polygon(0% 0%, 100% 0%, 100% 100%, 100% 100%, 100% 100%, 0% 100%, 0% 100%, 0% 100%)";
+  const INTERVAL = 4500;
+
+  onPage(() => {
+    const root = document.querySelector<HTMLElement>("#hero");
+    if (!root) return;
+    const stage = root.querySelector<HTMLElement>("[data-stage]")!;
+    const slidesEl = root.querySelector<HTMLElement>("[data-slides]")!;
+    const pin = root.querySelector<HTMLElement>("[data-pin]")!;
+    const slides = [...root.querySelectorAll<HTMLElement>("[data-slide]")];
+    const cards = [...root.querySelectorAll<HTMLElement>("[data-card]")];
+    const dots = [...root.querySelectorAll<HTMLButtonElement>("[data-dot]")];
+    const caption = root.querySelector<HTMLElement>("[data-caption]")!;
+
+    // Slideshow: crossfade + slight scale, pauses on hover/focus, static under reduced motion.
+    let current = 0;
+    let timer: number | undefined;
+    let paused = false;
+    const show = (n: number) => {
+      current = (n + slides.length) % slides.length;
+      slides.forEach((el, i) => {
+        el.classList.toggle("is-active", i === current);
+        el.setAttribute("aria-hidden", i === current ? "false" : "true");
+      });
+      cards.forEach((el, i) => el.classList.toggle("is-active", i === current));
+      dots.forEach((el, i) => {
+        el.classList.toggle("is-active", i === current);
+        el.setAttribute("aria-pressed", i === current ? "true" : "false");
+      });
+      caption.textContent = dots[current].dataset.captionText ?? "";
+    };
+    const stop = () => {
+      if (timer) window.clearInterval(timer);
+      timer = undefined;
+    };
+    const start = () => {
+      stop();
+      if (reduced() || paused) return;
+      timer = window.setInterval(() => show(current + 1), INTERVAL);
+    };
+    dots.forEach((d, i) =>
+      d.addEventListener("click", () => {
+        show(i);
+        start();
+      }),
+    );
+    const hold = () => {
+      paused = true;
+      stop();
+    };
+    const release = () => {
+      paused = false;
+      start();
+    };
+    stage.addEventListener("mouseenter", hold);
+    stage.addEventListener("mouseleave", release);
+    stage.addEventListener("focusin", hold);
+    stage.addEventListener("focusout", release);
+    start();
+
+    // Scroll mask
+    const ctx = gsap.context(() => {
+      if (reduced()) return;
+      const mm = gsap.matchMedia();
+      mm.add("(min-width: 768px)", () => {
+        const tl = gsap.timeline({
+          scrollTrigger: { trigger: pin, start: "top top", end: "+=90%", scrub: 0.6, pin: true, anticipatePin: 1 },
+        });
+        tl.fromTo(stage, { clipPath: SHAPE_FROM }, { clipPath: SHAPE_TO, ease: "power2.inOut" }, 0);
+        tl.fromTo(slidesEl, { scale: 1.12 }, { scale: 1, ease: "none" }, 0);
+      });
+      mm.add("(max-width: 767px)", () => {
+        const tl = gsap.timeline({
+          scrollTrigger: { trigger: stage, start: "top 85%", end: "center 45%", scrub: 0.6 },
+        });
+        tl.fromTo(stage, { clipPath: SHAPE_FROM }, { clipPath: SHAPE_TO, ease: "power2.inOut" }, 0);
+        tl.fromTo(slidesEl, { scale: 1.1 }, { scale: 1, ease: "none" }, 0);
+      });
+    }, root);
+
+    ScrollTrigger.refresh();
+    return () => {
+      stop();
+      ctx.revert();
+    };
+  });
+</script>
+
+<style>
+  .cap-hero { overflow: clip; }
+  .cap-hero__pin {
+    display: flex;
+    flex-direction: column;
+    min-height: calc(100svh - 4.5rem);
+  }
+  .cap-hero__top { width: 100%; padding-top: 0.5rem; }
+  h1 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(3.4rem, 13.2vw, 12.5rem);
+    line-height: 0.88;
+    letter-spacing: -0.015em;
+    max-width: none;
+  }
+  h1 small {
+    font-family: var(--font-sans);
+    font-weight: 400;
+    font-size: 0.42em;
+    letter-spacing: 0;
+    margin-inline: 0.04em;
+  }
+  .cap-hero__row {
+    display: grid;
+    gap: 1rem;
+    padding-block: 1.25rem 1.5rem;
+    align-items: start;
+  }
+  .cap-hero__lead { font-size: var(--step-body); line-height: 1.4; max-width: 34ch; }
+  .cap-hero__actions { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem 1.5rem; }
+  .cap-hero__link { color: var(--color-ink); text-decoration: underline; text-underline-offset: 0.2em; min-height: 2.75rem; display: inline-flex; align-items: center; }
+  .cap-hero__note { font-size: var(--step-body); }
+
+  .cap-hero__stage {
+    flex: 1;
+    /* Tall enough for the footage to read, not just the leftover under the headline */
+    min-height: max(26rem, 62svh);
+    overflow: hidden;
+    position: relative;
+  }
+  .cap-hero__slides { position: absolute; inset: 0; transform-origin: 50% 40%; }
+  .cap-hero__slide {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transform: scale(1.06);
+    transition: opacity 0.9s var(--ease-out-quart, ease), transform 5.5s linear;
+  }
+  .cap-hero__slide.is-active { opacity: 1; transform: scale(1); z-index: 1; }
+  .cap-hero__slide img,
+  .cap-hero__slide :global(.vslot) {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 40%;
+  }
+  .cap-hero__card {
+    position: absolute;
+    z-index: 3;
+    top: 1rem;
+    right: 1rem;
+    display: grid;
+    min-width: 11.5rem;
+    padding: 0.75rem 1rem 0.65rem;
+    background: var(--color-field-lime);
+    color: var(--color-ink);
+  }
+  .cap-hero__cardtxt { grid-area: 1 / 1; display: grid; align-content: start; gap: 0.1rem; opacity: 0; transition: opacity 0.5s ease; }
+  .cap-hero__cardtxt.is-active { opacity: 1; }
+  .cap-hero__cardtxt strong { font-family: var(--font-display); font-weight: 600; font-size: 1.45rem; line-height: 1.05; }
+  .cap-hero__cardtxt span { font-size: 1rem; font-weight: 500; }
+  .cap-hero__cardnote { grid-area: 2 / 1; margin-top: 0.4rem; font-size: 0.875rem; }
+  .cap-hero__ui {
+    position: absolute;
+    z-index: 3;
+    left: 1rem;
+    right: 1rem;
+    bottom: 1rem;
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+  .cap-hero__caption { background: var(--color-field-night); color: var(--color-paper); font-size: 1rem; font-weight: 500; padding: 0.5rem 0.9rem; }
+  .cap-hero__dots { display: flex; gap: 0.1rem; }
+  .cap-hero__dot {
+    width: 2.25rem;
+    height: 2.75rem;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+    display: grid;
+    place-items: center;
+  }
+  .cap-hero__dot::before { content: ""; width: 1.3rem; height: 0.7rem; background: var(--color-paper); opacity: 0.6; transition: opacity 0.3s, background 0.3s; }
+  .cap-hero__dot.is-active::before { opacity: 1; background: var(--color-field-lime); }
+  .cap-hero__dot:focus-visible { outline: 2px solid var(--color-paper); outline-offset: -2px; }
+
+  .cap-hero__tiles {
+    list-style: none;
+    padding-block: 0.75rem 2.5rem;
+    margin-inline: auto;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5rem;
+  }
+  .tile { display: grid; grid-template-rows: auto 1fr; height: 100%; color: var(--color-ink); text-decoration: none; }
+  .tile[data-tile="cornflower"] { background: var(--color-field-cornflower); }
+  .tile[data-tile="lime"] { background: var(--color-field-lime); }
+  .tile[data-tile="mist"] { background: var(--color-field-mist); }
+  .tile[data-tile="night"] { background: var(--color-field-night); color: var(--color-paper); }
+  .tile__img { display: block; overflow: hidden; aspect-ratio: 4 / 3; }
+  .tile__img img { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s var(--ease-out-quart, ease); }
+  .tile__body { display: flex; align-items: start; justify-content: space-between; gap: 0.5rem; padding: 0.75rem 0.85rem 1rem; }
+  .tile__title { font-family: var(--font-display); font-weight: 600; font-size: 1.3rem; line-height: 1.1; }
+  .tile__arrow { flex: none; transform: translateX(-0.6rem); opacity: 0; transition: transform 0.35s var(--ease-out-quart, ease), opacity 0.35s; }
+  .tile:hover .tile__img img,
+  .tile:focus-visible .tile__img img { transform: scale(1.06); }
+  .tile:hover .tile__arrow,
+  .tile:focus-visible .tile__arrow { transform: none; opacity: 1; }
+  .tile:focus-visible { outline: 3px solid var(--color-accent); outline-offset: 2px; }
+  @media (hover: none) { .tile__arrow { transform: none; opacity: 1; } }
+
+  @media (min-width: 768px) {
+    .cap-hero__row { grid-template-columns: 1fr 1.5fr 0.9fr; align-items: center; gap: 2rem; }
+    .cap-hero__note { text-align: right; }
+    .cap-hero__stage { min-height: max(34rem, 75svh); }
+    .cap-hero__card { top: 1.5rem; right: 1.5rem; }
+    .cap-hero__ui { left: 1.5rem; right: 1.5rem; bottom: 1.5rem; }
+  }
+  @media (min-width: 900px) {
+    .cap-hero__tiles { grid-template-columns: repeat(4, 1fr); gap: 0.75rem; }
+    .tile__title { font-size: 1.5rem; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .cap-hero__slide { transition: none; transform: none; }
+  }
+</style>

@@ -1,0 +1,142 @@
+---
+import { stock } from "../../lib/stock";
+import { getPublishedPosts } from "../../lib/content";
+import FormattedDate from "../FormattedDate.astro";
+
+// Category -> placeholder stock photo (posts have no images of their own).
+const COVER: Record<string, string> = {
+  desarrollo: "marcial-placeholder",
+  productos: "rubro-lanzamiento",
+  carrera: "equipo-mesa",
+  escritura: "proceso-cuaderno",
+  ia: "rubro-auditoria",
+};
+
+const posts = (await getPublishedPosts()).slice(0, 6).map((p) => ({
+  slug: p.id,
+  title: p.data.title,
+  date: p.data.pubDate,
+  photo: stock(COVER[p.data.category] ?? "proceso-charla", 800),
+}));
+---
+
+{posts.length > 0 ? (
+<section id="journal" class="cap-journal" data-field="paper" aria-labelledby="journal-title">
+  <div class="cap-journal__inner">
+    <div class="cap-journal__head">
+      <h2 id="journal-title"><span>LO QUE <small>voy</small></span> <span>ESCRIBIENDO</span></h2>
+      <p>Lo que aprendo armando sistemas para pymes, escrito sin vueltas.</p>
+      <div class="cap-journal__actions">
+        <a class="cap-journal__all" href="/blog">Ver el blog</a>
+        <div class="cap-journal__nav">
+          <button type="button" data-prev aria-label="Notas anteriores">←</button>
+          <button type="button" data-next aria-label="Notas siguientes">→</button>
+        </div>
+      </div>
+    </div>
+
+    <ul class="cap-journal__row" role="list" data-row aria-label="Últimas notas del blog">
+      {posts.map((p) => (
+        <li class="post">
+          <a class="post__link" href={`/blog/${p.slug}`} draggable="false">
+            <img src={p.photo.src} srcset={p.photo.srcset} sizes="(min-width: 768px) 28vw, 78vw" alt="" width={p.photo.width} height={p.photo.height} loading="lazy" decoding="async" draggable="false" />
+            <span class="post__title">{p.title}</span>
+            <FormattedDate date={p.date} class="post__date" />
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+) : null}
+
+<style>
+  .cap-journal { padding-block: clamp(4rem, 8vw, 7rem); overflow-x: clip; }
+  .cap-journal__inner { display: grid; gap: 2rem; }
+  .cap-journal__head { padding-inline: var(--gutter); }
+
+  h2 {
+    margin: 0; font-family: var(--font-display); font-weight: 600; line-height: 0.9;
+    font-size: clamp(3.25rem, 15vw, 5rem); text-transform: uppercase; letter-spacing: -0.01em;
+  }
+  h2 span { display: block; }
+  h2 small { font-family: var(--font-sans); font-weight: 400; font-size: 0.4em; text-transform: none; letter-spacing: 0; }
+  .cap-journal__head p { margin: 1.25rem 0 0; font-size: var(--step-body); max-width: 30ch; }
+  .cap-journal__actions { margin-top: 1.25rem; display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap; }
+  .cap-journal__all { color: var(--color-ink); font-weight: 500; text-underline-offset: 0.25em; }
+  .cap-journal__nav { display: flex; gap: 0.5rem; }
+  .cap-journal__nav button {
+    width: 3rem; height: 3rem; border: 0; cursor: pointer; font-size: 1.375rem; line-height: 1;
+    background: var(--color-ink); color: var(--color-paper);
+    transition: transform 160ms var(--ease-out-quart);
+  }
+  .cap-journal__nav button:active { transform: scale(0.94); }
+  .cap-journal__nav button:focus-visible { outline: 3px solid var(--color-accent); outline-offset: 2px; }
+
+  .cap-journal__row {
+    list-style: none; margin: 0; padding: 0 var(--gutter);
+    display: flex; gap: clamp(1rem, 2vw, 1.75rem);
+    overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding-inline: var(--gutter);
+    overscroll-behavior-x: contain; scrollbar-width: none; min-width: 0;
+  }
+  .cap-journal__row::-webkit-scrollbar { display: none; }
+  .cap-journal__row.is-dragging { scroll-snap-type: none; cursor: grabbing; user-select: none; }
+  .post { flex: 0 0 78vw; scroll-snap-align: start; }
+  .post__link { display: block; color: inherit; text-decoration: none; }
+  .post img { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; background: var(--color-field-mist); }
+  .post__title { display: block; margin-top: 0.85rem; font-size: 1.1875rem; font-weight: 500; line-height: 1.25; }
+  .post__date { display: block; margin-top: 0.35rem; font-size: 1rem; color: var(--color-soft); }
+  .post__link:hover .post__title, .post__link:focus-visible .post__title { text-decoration: underline; text-underline-offset: 0.2em; }
+
+  @media (min-width: 768px) {
+    .cap-journal__inner { grid-template-columns: minmax(18rem, 30rem) minmax(0, 1fr); gap: clamp(2rem, 4vw, 4rem); align-items: start; padding-left: max(var(--gutter), calc((100vw - 1200px) / 2 + var(--gutter))); }
+    .cap-journal__head { padding-inline: 0; position: sticky; top: 6rem; }
+    h2 { font-size: clamp(4rem, 6.5vw, 6.25rem); }
+    .cap-journal__row { padding-left: 0; padding-right: var(--gutter); scroll-padding-inline: 0; }
+    .post { flex-basis: 28vw; max-width: 26rem; }
+  }
+</style>
+
+<script>
+  import { onPage } from "../../scripts/motion";
+
+  onPage(() => {
+    const root = document.querySelector<HTMLElement>("#journal");
+    const row = root?.querySelector<HTMLElement>("[data-row]");
+    if (!root || !row) return;
+    const step = () => Math.max(240, row.clientWidth * 0.8);
+    const prev = root.querySelector("[data-prev]");
+    const next = root.querySelector("[data-next]");
+    const goPrev = () => row.scrollBy({ left: -step(), behavior: "smooth" });
+    const goNext = () => row.scrollBy({ left: step(), behavior: "smooth" });
+    prev?.addEventListener("click", goPrev);
+    next?.addEventListener("click", goNext);
+
+    // Mouse drag (touch already scrolls natively).
+    let down = false, moved = false, startX = 0, startLeft = 0;
+    const onDown = (e: PointerEvent) => {
+      if (e.pointerType !== "mouse" || e.button !== 0) return;
+      down = true; moved = false; startX = e.clientX; startLeft = row.scrollLeft;
+    };
+    const onMove = (e: PointerEvent) => {
+      if (!down) return;
+      const dx = e.clientX - startX;
+      if (Math.abs(dx) > 5) { moved = true; row.classList.add("is-dragging"); }
+      if (moved) row.scrollLeft = startLeft - dx;
+    };
+    const onUp = () => { down = false; row.classList.remove("is-dragging"); };
+    const onClick = (e: Event) => { if (moved) { e.preventDefault(); e.stopPropagation(); moved = false; } };
+    row.addEventListener("pointerdown", onDown);
+    window.addEventListener("pointermove", onMove);
+    window.addEventListener("pointerup", onUp);
+    row.addEventListener("click", onClick, true);
+    return () => {
+      prev?.removeEventListener("click", goPrev);
+      next?.removeEventListener("click", goNext);
+      row.removeEventListener("pointerdown", onDown);
+      window.removeEventListener("pointermove", onMove);
+      window.removeEventListener("pointerup", onUp);
+      row.removeEventListener("click", onClick, true);
+    };
+  });
+</script>

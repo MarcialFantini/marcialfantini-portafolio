@@ -2,19 +2,20 @@
 import site from "../data/site.json";
 import { hasPublishedPosts, hasPublishedProjects } from "../lib/content";
 
+const action = { href: "/contacto?servicio=Diagn%C3%B3stico%20gratis", label: "Contame tu problema" };
 const navItems = [
   { href: "/servicios", label: "Servicios" },
   ...((await hasPublishedProjects()) ? [{ href: "/proyectos", label: "Proyectos" }] : []),
   ...((await hasPublishedPosts()) ? [{ href: "/blog", label: "Blog" }] : []),
   { href: "/sobre-mi", label: "Sobre mí" },
-  { href: "/contacto", label: "Contacto" },
 ];
 
 const pathname = Astro.url.pathname;
 const isActive = (href: string) => pathname === href || pathname.startsWith(href + "/");
 ---
 
-<header class="sh wrap" data-site-header>
+<header class="sh" data-site-header>
+ <div class="sh__in wrap">
   <a href="/" class="sh__name plain" aria-label={`${site.name}, ir al inicio`}>{site.name}</a>
 
   <nav class="sh__nav" aria-label="Principal">
@@ -27,6 +28,8 @@ const isActive = (href: string) => pathname === href || pathname.startsWith(href
     }
   </nav>
 
+  <a href={action.href} class="btn sh__cta">{action.label}</a>
+
   <button type="button" class="sh__menu" aria-expanded="false" aria-controls="sh-sheet" data-menu>
     Menú
   </button>
@@ -34,8 +37,10 @@ const isActive = (href: string) => pathname === href || pathname.startsWith(href
   <div class="sh__sheet" id="sh-sheet" hidden>
     <nav aria-label="Móvil">
       {navItems.map((item) => <a href={item.href}>{item.label}</a>)}
+      <a href={action.href}>{action.label}</a>
     </nav>
   </div>
+ </div>
 </header>
 
 <script>
@@ -65,6 +70,10 @@ const isActive = (href: string) => pathname === href || pathname.startsWith(href
   .sh {
     position: relative;
     z-index: var(--z-header);
+    background: var(--color-paper);
+  }
+  .sh__in {
+    position: relative;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -73,11 +82,16 @@ const isActive = (href: string) => pathname === href || pathname.startsWith(href
     font-size: var(--step-small);
   }
   .sh__name {
-    font-size: var(--step-body);
-    font-weight: 500;
+    font-family: var(--font-display);
+    font-size: 1.75rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    text-transform: uppercase;
+    line-height: 1;
     color: var(--color-fg);
   }
-  .sh__nav { display: none; gap: 1.75rem; }
+  .sh__nav { display: none; gap: 1.75rem; margin-left: auto; }
+  .sh__cta { display: none; min-height: 2.75rem; padding-block: 0.5rem; }
   .sh__nav a {
     color: var(--color-fg);
     font-size: var(--step-body);
@@ -87,6 +101,7 @@ const isActive = (href: string) => pathname === href || pathname.startsWith(href
   .sh__nav a[aria-current="page"] { color: var(--color-accent); }
 
   .sh__menu {
+    margin-left: auto;
     min-height: 2.75rem;
     padding: 0 0.25rem;
     background: none;
@@ -100,7 +115,7 @@ const isActive = (href: string) => pathname === href || pathname.startsWith(href
   .sh__sheet {
     position: absolute;
     inset: 100% 0 auto 0;
-    background: var(--color-surface);
+    background: var(--color-paper);
     padding: 1rem var(--gutter) 2rem;
   }
   .sh__sheet nav { display: flex; flex-direction: column; }
@@ -117,6 +132,7 @@ const isActive = (href: string) => pathname === href || pathname.startsWith(href
 
   @media (min-width: 768px) {
     .sh__nav { display: flex; }
+    .sh__cta { display: inline-flex; }
     .sh__menu, .sh__sheet { display: none; }
   }
 </style>

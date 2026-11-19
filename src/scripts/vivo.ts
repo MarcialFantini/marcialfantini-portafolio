@@ -9,13 +9,19 @@
  */
 const reduced = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 const cleanups: (() => void)[] = [];
+const pokeTimers = new WeakMap<Element, number>();
 
 function poke(scene: Element | null | undefined) {
   if (!scene || reduced()) return;
+  const previous = pokeTimers.get(scene);
+  if (previous) window.clearTimeout(previous);
   scene.classList.remove("rb-poke");
   void (scene as HTMLElement).offsetWidth;
   scene.classList.add("rb-poke");
-  window.setTimeout(() => scene.classList.remove("rb-poke"), 650);
+  pokeTimers.set(scene, window.setTimeout(() => {
+    scene.classList.remove("rb-poke");
+    pokeTimers.delete(scene);
+  }, 1150));
 }
 
 function bindEyes() {

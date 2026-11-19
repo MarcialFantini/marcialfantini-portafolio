@@ -12,6 +12,8 @@ interface Props {
   ogImage?: string;
   pageType?: string;
   noindex?: boolean;
+  /** Full-bleed page: drops the 1200px column so chapter fields can reach both edges. */
+  bleed?: boolean;
 }
 
 const {
@@ -20,6 +22,7 @@ const {
   ogImage = "/og-default.png",
   pageType = "website",
   noindex = false,
+  bleed = false,
 } = Astro.props;
 
 const showRss = await hasPublishedPosts();
@@ -139,7 +142,7 @@ const professionalService = {
   <body class="min-h-[100dvh] flex flex-col antialiased">
     <a href="#main-content" class="skip-link">Saltar al contenido principal</a>
     <Header />
-    <main id="main-content" class="flex-1 page">
+    <main id="main-content" class:list={["flex-1", !bleed && "page"]}>
       <slot />
     </main>
     <Footer />

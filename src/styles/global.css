@@ -46,38 +46,46 @@
   --font-sans: "Barlow", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --font-code: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace; /* taste-skill-ignore: only for real <pre>/<code> */
 
-  /* Night and cornflower */
-  --color-bg: #0a0d14;
-  --color-surface: #131824;
-  --color-surface-2: #1b2130;
-  --color-surface-3: #e9edf3;
-  --color-fg: #e9edf3;
-  --color-soft: #8891a1;
-  --color-accent: #5a9bfc;
-  --color-accent-ink: #0a0d14;
-  --color-accent-hi: #8fbaff;
-  --color-accent-deep: #23488a;
-  --color-accent-floor: #4a87e6;
-  --color-placeholder: #4d5566;
-  --color-err-line: #fca5a5;
-  --color-grid: #1f2636;
+  /* Bone and cornflower: light ground, near-black ink, one blue accent (all pairs AA, >= 5.4:1) */
+  --color-bg: #f2f1ec;
+  --color-surface: #e8e7e1;
+  --color-surface-2: #dedcd5;
+  --color-surface-3: #0e1116;
+  --color-fg: #0e1116;
+  --color-soft: #5b6070;
+  --color-accent: #2557d6;
+  --color-accent-ink: #ffffff;
+  --color-accent-hi: #1b44b0;
+  --color-accent-deep: #1b44b0;
+  --color-accent-floor: #2557d6;
+  --color-placeholder: #8a8f9b;
+  --color-err-line: #b42318;
+  --color-grid: #dedcd5;
 
-  /* Chapter grounds: one tint per chapter, all inside the night palette */
-  --color-tint-1: #0f1628;
-  --color-tint-2: #11161e;
-  --color-tint-3: #0d1322;
-  --color-tint-4: #12171f;
-  --color-ok: #7fd6a4;
+  /* Chapter fields: each chapter takes one whole field, text in the paired ink */
+  --color-paper: #f2f1ec;
+  --color-ink: #0e1116;
+  --color-field-cornflower: #5a9bfc; /* ink: --color-ink */
+  --color-field-lime: #d7f25c;       /* ink: --color-ink */
+  --color-field-mist: #e3e9f6;       /* ink: --color-ink */
+  --color-field-night: #0e1116;      /* ink: --color-paper */
 
-  /* Robots: joints and floor tuned for 3:1 against every ground they stand on */
-  --color-rb-soft: #9aa4b6;
-  --color-rb-floor: #56658a;
+  /* Legacy chapter tints, kept so inner pages still resolve */
+  --color-tint-1: #e3e9f6;
+  --color-tint-2: #e8e7e1;
+  --color-tint-3: #e3e9f6;
+  --color-tint-4: #e8e7e1;
+  --color-ok: #1e7f4f;
+
+  /* Robots: joints and floor tuned for 3:1 against the light ground */
+  --color-rb-soft: #6b7385;
+  --color-rb-floor: #8f98ab;
 
   /* Form status colours */
-  --color-ok-bg: #12261c;
-  --color-ok-ink: #a7f3c4;
-  --color-err-bg: #2c1518;
-  --color-err-ink: #fecaca;
+  --color-ok-bg: #dcf2e4;
+  --color-ok-ink: #14532d;
+  --color-err-bg: #fde2e1;
+  --color-err-ink: #7f1d1d;
 
   /* One radius for the whole site: square. */
 
@@ -91,7 +99,7 @@
   --z-progress: 90;
   --z-rail: 70;
   --z-skip: 100;
-  color-scheme: dark;
+  color-scheme: light;
 
   /* Five type steps. Display sizes live with their sections. */
   --step-small: clamp(0.8125rem, 0.79rem + 0.1vw, 0.875rem);
@@ -277,16 +285,24 @@
   @keyframes r-blink { 0%, 91%, 100% { transform: scaleY(1); } 94% { transform: scaleY(0.1); } }
   .rb-paused, .rb-paused * { animation-play-state: paused !important; }
 
-  /* Alive: eyes follow the pointer (--ex/--ey set by vivo.ts), a robot hops when reached or tapped */
+  /* Shared input, machine-specific response. Each gesture returns to the scene's working pose. */
   .r-eye { translate: var(--ex, 0px) var(--ey, 0px); transition: translate 200ms var(--ease-out-quart); }
   [data-rb]:not(.cap__graph) { cursor: pointer; }
-  .rb-poke > svg { animation: rb-hop 600ms var(--ease-out-expo); }
-  @keyframes rb-hop {
-    0% { transform: none; }
-    35% { transform: translateY(-8px); }
-    70% { transform: translateY(1px); }
-    100% { transform: none; }
+  .rb-cobot > .rb-gesture { transform-origin: 60px 124px; }
+  .rb-scara > .rb-gesture { transform-origin: 25px 45px; }
+  .rb-ind > .rb-gesture { transform-origin: 70px 120px; }
+  @media (prefers-reduced-motion: no-preference) {
+    .rb-poke .rb-agv > .rb-gesture { animation: rb-agv-check 1.15s var(--ease-out-quart); }
+    .rb-poke .rb-cobot > .rb-gesture { animation: rb-cobot-check 1.15s ease-in-out; }
+    .rb-poke .rb-scara > .rb-gesture { animation: rb-scara-check 1.15s ease-in-out; }
+    .rb-poke .rb-gantry > .rb-gesture { animation: rb-gantry-check 1.15s ease-in-out; }
+    .rb-poke .rb-ind > .rb-gesture { animation: rb-ind-check 1.15s ease-in-out; }
   }
+  @keyframes rb-agv-check { 0%, 100% { transform: none; } 30%, 50% { transform: translateX(6px); } 75% { transform: translateX(-2px); } }
+  @keyframes rb-cobot-check { 0%, 100% { transform: none; } 30%, 50% { transform: rotate(-8deg); } 75% { transform: rotate(3deg); } }
+  @keyframes rb-scara-check { 0%, 100% { transform: none; } 30%, 50% { transform: rotate(-7deg); } 75% { transform: rotate(2deg); } }
+  @keyframes rb-gantry-check { 0%, 100% { transform: none; } 30%, 50% { transform: translateX(10px); } 75% { transform: translateX(-3px); } }
+  @keyframes rb-ind-check { 0%, 100% { transform: none; } 30%, 50% { transform: rotate(-6deg); } 75% { transform: rotate(2deg); } }
   @media (prefers-reduced-motion: reduce) {
     .rbs * { animation: none !important; transition: none !important; }
   }
