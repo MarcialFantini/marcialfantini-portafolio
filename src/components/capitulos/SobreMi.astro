@@ -1,0 +1,330 @@
+---
+/* Chapter: who builds it. Interactive stack (list + media panel), rotating line, honest team block. */
+import { stock } from "../../lib/stock";
+import sobre from "../../data/sobre.json";
+import Video from "./Video.astro";
+
+const main = stock("marcial-placeholder", 1000);
+const t1 = stock("equipo-reunion", 800);
+const t2 = stock("equipo-mesa", 800);
+
+// One media panel per stack area, in the same order as sobre.json -> stack.
+const panels = [
+  { kind: "video", name: "teclado" },
+  { kind: "photo", photo: stock("ciclo-estanterias", 1400) },
+  { kind: "photo", photo: stock("caos-celular", 1400) },
+  { kind: "video", name: "equipo" },
+] as const;
+
+const examples = [
+  "un tablero de cobranzas",
+  "el stock de una distribuidora",
+  "turnos por WhatsApp para una clínica",
+  "pedidos que llegan solos al taller",
+];
+---
+
+<section id="sobre-mi" class="sm" data-field="cornflower" aria-labelledby="sobre-mi-title">
+  <div class="wrap">
+    <div class="sm__top">
+      <div class="sm__text">
+        <h2 id="sobre-mi-title" class="sm__title" data-sm>QUIÉN <small>lo</small><br />ARMA</h2>
+
+        <p class="sm__now" data-sm>
+          <span>Esta semana estoy armando:</span>
+          <span class="sm__rot" data-rot>
+            {examples.map((e) => <span class="sm__rot-i">{e}</span>)}
+          </span>
+        </p>
+
+        <p class="sm__lead" data-sm>
+          Cada sistema que ves acá lo diseño y lo construyo yo. Y después de la puesta en marcha, respondo yo.
+        </p>
+
+        <ul class="sm__stack" data-sm data-stack>
+          {
+            sobre.stack.map((s, i) => (
+              <li class={`sm__area${i === 0 ? " is-active" : ""}`} data-i={i}>
+                <button type="button" class="sm__tab" aria-pressed={i === 0 ? "true" : "false"}>
+                  <span>{s.area}</span>
+                  <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
+                    <path d="M4 12h15M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" />
+                  </svg>
+                </button>
+                <div class="sm__more">
+                  {/* Chips before the sentence: the sentence then separates them from the next area's name */}
+                  <ul class="sm__chips">
+                    {s.tec.map((t) => <li>{t}</li>)}
+                  </ul>
+                  <p>{s.para}</p>
+                </div>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+
+      <div class="sm__media" data-sm data-media aria-hidden="true">
+        {
+          panels.map((p, i) => (
+            <div class={`sm__panel${i === 0 ? " is-active" : ""}`} data-i={i}>
+              {p.kind === "video" ? (
+                <Video name={p.name} class="sm__vid" />
+              ) : (
+                <img
+                  src={p.photo.src}
+                  srcset={p.photo.srcset}
+                  sizes="(min-width: 900px) 50vw, 92vw"
+                  alt=""
+                  width={p.photo.width}
+                  height={p.photo.height}
+                  loading="lazy"
+                  decoding="async"
+                />
+              )}
+            </div>
+          ))
+        }
+      </div>
+    </div>
+
+    <div class="sm__bottom">
+      <div class="sm__portrait" data-sm>
+        <img
+          class="sm__main"
+          data-par="-6"
+          src={main.src}
+          srcset={main.srcset}
+          sizes="(min-width: 900px) 34vw, 90vw"
+          alt={main.alt}
+          width={main.width}
+          height={main.height}
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
+
+      <div class="sm__team">
+        <div class="sm__team-text" data-sm>
+          <h3>Trabajo con un equipo chico de colaboradores; vos hablás conmigo.</h3>
+          <p>Yo coordino y respondo. Quien te escribe, te escucha y te entrega es la misma persona.</p>
+          <a class="sm__btn" href="/contacto?servicio=Diagn%C3%B3stico%20gratis">
+            <span>Contame tu problema</span>
+            <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
+              <path d="M4 12h15M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" />
+            </svg>
+          </a>
+        </div>
+        <div class="sm__duo">
+          <img
+            class="sm__t1"
+            data-par="-10"
+            src={t1.src}
+            srcset={t1.srcset}
+            sizes="(min-width: 900px) 24vw, 60vw"
+            alt={t1.alt}
+            width={t1.width}
+            height={t1.height}
+            loading="lazy"
+            decoding="async"
+          />
+          <img
+            class="sm__t2"
+            data-par="14"
+            src={t2.src}
+            srcset={t2.srcset}
+            sizes="(min-width: 900px) 22vw, 55vw"
+            alt={t2.alt}
+            width={t2.width}
+            height={t2.height}
+            loading="lazy"
+            decoding="async"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  import { gsap, ScrollTrigger, onPage, reduced } from "../../scripts/motion";
+
+  onPage(() => {
+    const root = document.querySelector<HTMLElement>("#sobre-mi");
+    if (!root) return;
+    const calm = reduced();
+    root.classList.add("js");
+    const timers: number[] = [];
+
+    // --- Interactive stack ---
+    const areas = Array.from(root.querySelectorAll<HTMLElement>(".sm__area"));
+    const panels = Array.from(root.querySelectorAll<HTMLElement>(".sm__panel"));
+    let current = 0;
+    let touched = false;
+    let auto: number | undefined;
+
+    const show = (n: number) => {
+      current = n;
+      areas.forEach((a, i) => {
+        a.classList.toggle("is-active", i === n);
+        a.querySelector("button")?.setAttribute("aria-pressed", String(i === n));
+      });
+      panels.forEach((p, i) => p.classList.toggle("is-active", i === n));
+    };
+    const stop = () => {
+      touched = true;
+      if (auto) clearInterval(auto);
+    };
+    areas.forEach((a, i) => {
+      const b = a.querySelector("button")!;
+      b.addEventListener("click", () => { stop(); show(i); });
+      b.addEventListener("mouseenter", () => {
+        if (matchMedia("(hover: hover)").matches) { stop(); show(i); }
+      });
+      b.addEventListener("focus", () => { stop(); show(i); });
+    });
+    if (!calm) {
+      auto = window.setInterval(() => {
+        if (!touched && !document.hidden) show((current + 1) % areas.length);
+      }, 5000);
+      timers.push(auto);
+    }
+
+    // --- Rotating line ---
+    const rot = root.querySelector<HTMLElement>("[data-rot]");
+    const items = rot ? Array.from(rot.querySelectorAll<HTMLElement>(".sm__rot-i")) : [];
+    if (rot && items.length > 1) {
+      rot.classList.add("is-live");
+      items.forEach((el, i) => el.classList.toggle("is-on", i === 0));
+      if (!calm) {
+        let k = 0;
+        const t = window.setInterval(() => {
+          const out = items[k];
+          k = (k + 1) % items.length;
+          const inn = items[k];
+          gsap.set(inn, { yPercent: 100 });
+          inn.classList.add("is-on");
+          gsap.to(out, {
+            yPercent: -100, duration: 0.6, ease: "power3.inOut",
+            onComplete: () => { out.classList.remove("is-on"); gsap.set(out, { clearProps: "transform" }); },
+          });
+          gsap.to(inn, { yPercent: 0, duration: 0.6, ease: "power3.inOut" });
+        }, 2500);
+        timers.push(t);
+      }
+    }
+
+    const ctx = gsap.context(() => {
+      if (calm) return;
+      gsap.from(gsap.utils.toArray<HTMLElement>("[data-sm]", root), {
+        y: 28, opacity: 0, duration: 0.9, ease: "power4.out", stagger: 0.075,
+        scrollTrigger: { trigger: root, start: "top 65%", once: true },
+      });
+      gsap.utils.toArray<HTMLElement>("[data-par]", root).forEach((el) => {
+        const d = parseFloat(el.dataset.par || "0");
+        gsap.fromTo(el, { yPercent: -d }, {
+          yPercent: d, ease: "none",
+          scrollTrigger: { trigger: el, start: "top bottom", end: "bottom top", scrub: true },
+        });
+      });
+    }, root);
+    return () => {
+      timers.forEach((t) => clearInterval(t));
+      ctx.revert();
+      root.classList.remove("js");
+    };
+  });
+</script>
+
+<style>
+  .sm { padding-block: clamp(4rem, 9vw, 8rem); overflow: clip; }
+  .sm__top { display: grid; gap: 2.5rem; }
+  .sm__text { display: grid; gap: 1.6rem; align-content: start; min-width: 0; }
+
+  .sm__title {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(4rem, 15vw, 9.5rem);
+    line-height: 0.88;
+    letter-spacing: -0.01em;
+    text-transform: uppercase;
+    margin: 0;
+  }
+  .sm__title small { font-family: var(--font-sans); font-weight: 400; font-size: 0.32em; text-transform: none; letter-spacing: 0; }
+
+  .sm__now { margin: 0; display: flex; flex-wrap: wrap; gap: 0.25rem 0.6ch; font-size: var(--step-lead); line-height: 1.3; font-weight: 500; }
+  .sm__rot { display: inline-grid; }
+  .sm__rot-i { grid-area: 1 / 1; font-weight: 600; }
+  .sm__rot:not(.is-live) .sm__rot-i:not(:first-child) { display: none; }
+  .sm__rot.is-live { overflow: hidden; }
+  .sm__rot.is-live .sm__rot-i { visibility: hidden; }
+  .sm__rot.is-live .sm__rot-i.is-on { visibility: visible; }
+
+  .sm__lead { margin: 0; max-width: 44ch; font-size: var(--step-body); line-height: 1.55; }
+
+  .sm__stack { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.25rem; }
+  .sm__tab {
+    all: unset;
+    box-sizing: border-box;
+    cursor: pointer;
+    width: 100%;
+    min-height: 3.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(1.75rem, 2.6vw, 2.25rem);
+    line-height: 1.1;
+    text-transform: uppercase;
+    padding-block: 0.4rem;
+    transition: opacity 0.3s var(--ease-out-quart);
+  }
+  .sm__tab svg { flex: none; transform: translateX(-8px); opacity: 0; transition: transform 0.3s var(--ease-out-quart), opacity 0.3s; }
+  .sm__area.is-active .sm__tab svg { transform: none; opacity: 1; }
+  :global(.js) .sm__area:not(.is-active) .sm__tab { opacity: 0.82; }
+  :global(.js) .sm__area:not(.is-active) .sm__tab:hover { opacity: 1; }
+  .sm__tab:focus-visible { outline: 3px solid var(--color-ink); outline-offset: 2px; }
+
+  .sm__more { display: grid; gap: 0.7rem; padding-bottom: 0.9rem; font-size: var(--step-body); line-height: 1.5; max-width: 46ch; }
+  .sm__more p { margin: 0; }
+  .sm__chips { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0.4rem; }
+  .sm__chips li { background: var(--color-ink); color: var(--color-paper); font-size: 0.9375rem; line-height: 1; padding: 0.55rem 0.8rem; }
+
+  /* With JS only the active area keeps its detail open. */
+  :global(.js) .sm__area:not(.is-active) .sm__more { display: none; }
+
+  .sm__media { position: relative; aspect-ratio: 4 / 3; order: -1; background: var(--color-ink); overflow: hidden; }
+  .sm__panel { position: absolute; inset: 0; opacity: 0; transform: scale(1.06); transition: opacity 0.7s var(--ease-out-quart), transform 1.1s var(--ease-out-quart); }
+  .sm__panel.is-active { opacity: 1; transform: none; }
+  .sm__panel img, .sm__panel :global(.vslot) { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+  .sm__bottom { display: grid; gap: 2.5rem; margin-top: clamp(3rem, 7vw, 6rem); }
+  .sm__portrait { overflow: hidden; }
+  .sm__main { width: 100%; height: 112%; aspect-ratio: 4 / 5; object-fit: cover; display: block; }
+
+  .sm__team { display: grid; gap: 2rem; align-content: center; min-width: 0; }
+  .sm__team-text { display: grid; gap: 1rem; justify-items: start; }
+  .sm__team-text h3 { margin: 0; font-family: var(--font-display); font-weight: 600; font-size: clamp(1.4rem, 2.7vw, 2.4rem); line-height: 1.02; text-wrap: balance; text-transform: uppercase; }
+  .sm__team-text p { margin: 0; max-width: 44ch; font-size: var(--step-body); line-height: 1.55; }
+
+  .sm__duo { position: relative; height: clamp(15rem, 62vw, 22rem); }
+  .sm__duo img { position: absolute; object-fit: cover; display: block; }
+  .sm__t1 { left: 0; top: 0; width: 62%; aspect-ratio: 4 / 3; height: auto; }
+  .sm__t2 { right: 0; bottom: 0; width: 55%; aspect-ratio: 4 / 3; height: auto; }
+
+  .sm__btn {
+    display: inline-flex; align-items: center; gap: 0.7rem; min-height: 3rem; padding: 0.7rem 1.5rem;
+    background: var(--color-ink); color: var(--color-paper); font-weight: 500; font-size: var(--step-body); text-decoration: none; margin-top: 0.5rem;
+  }
+  .sm__btn svg { transition: transform 0.3s var(--ease-out-quart); }
+  .sm__btn:hover svg, .sm__btn:focus-visible svg { transform: translateX(6px); }
+
+  @media (min-width: 900px) {
+    .sm__top { grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); column-gap: clamp(2rem, 5vw, 5rem); align-items: start; }
+    .sm__media { order: 0; aspect-ratio: 4 / 5; position: sticky; top: 6rem; }
+    .sm__bottom { grid-template-columns: minmax(0, 3fr) minmax(0, 8fr); column-gap: clamp(2rem, 5vw, 5rem); align-items: center; }
+    .sm__duo { height: 26rem; }
+  }
+</style>

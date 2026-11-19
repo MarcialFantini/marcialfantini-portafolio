@@ -1,0 +1,149 @@
+---
+import site from "../../data/site.json";
+import Video from "./Video.astro";
+
+// One field: the text travels to WhatsApp as ?text= (works without JS).
+const waAction = site.whatsapp ? `https://wa.me/${site.whatsapp}` : "/contacto";
+---
+
+<section id="cierre" class="cap-cierre" data-field="night" aria-labelledby="cierre-title">
+  <div class="cap-cierre__stage" data-stage>
+    <div class="cap-cierre__img" data-img><Video name="cierre" /></div>
+    <div class="cap-cierre__scrim" aria-hidden="true"></div>
+    <h2 id="cierre-title"><span>CONTAME</span> <span><small>tu</small> PROBLEMA</span></h2>
+  </div>
+
+  <div class="cap-cierre__form wrap">
+    <p class="cap-cierre__lead">Una línea alcanza. Se abre WhatsApp con tu mensaje.</p>
+    <form action={waAction} method="get" target="_blank">
+      <label for="cierre-text" class="sr-only">Tu problema, en una línea</label>
+      <input id="cierre-text" name="text" type="text" required autocomplete="off" placeholder="Ej.: perdemos pedidos entre WhatsApp y Excel" />
+      <button class="btn" type="submit">Enviar</button>
+    </form>
+    <p class="cap-cierre__note">Te respondo en 24 h hábiles. La primera charla de 30 minutos es gratis.</p>
+    <a class="cap-cierre__mail" href={`mailto:${site.email}`}>{site.email}</a>
+  </div>
+
+  <div class="wrap">
+    <ul class="cap-cierre__opts">
+      <li>
+        <a href={site.whatsapp ? `https://wa.me/${site.whatsapp}` : "/contacto"} target="_blank" rel="noopener" data-ui>
+          <svg viewBox="0 0 40 40" width="48" height="48" aria-hidden="true"><path d="M6 8h28v20H17l-8 7v-7H6z" fill="currentColor" /></svg>
+          <span>WhatsApp</span>
+        </a>
+      </li>
+      <li>
+        <a href={`mailto:${site.email}`} data-ui>
+          <svg viewBox="0 0 40 40" width="48" height="48" aria-hidden="true"><path d="M4 8h32v24H4z" fill="currentColor" /><path d="M4 8l16 14L36 8" fill="none" stroke="var(--opt-bg)" stroke-width="3" /></svg>
+          <span>Email</span>
+        </a>
+      </li>
+      <li>
+        <a href="/contacto" data-ui>
+          <svg viewBox="0 0 40 40" width="48" height="48" aria-hidden="true"><path d="M7 4h26v32H7z" fill="currentColor" /><path d="M13 13h14M13 20h14M13 27h8" stroke="var(--opt-bg)" stroke-width="3" /></svg>
+          <span>Formulario completo</span>
+        </a>
+      </li>
+    </ul>
+    <p class="cap-cierre__clock" data-clock>Córdoba, Argentina</p>
+  </div>
+
+  <p class="cap-cierre__credit wrap">
+    <a href="https://unsplash.com/?utm_source=marcial_fantini_portfolio&utm_medium=referral" target="_blank" rel="noopener">Fotos y videos provisorios de Unsplash, StockSnap y Mixkit.</a>
+  </p>
+</section>
+
+<style>
+  .cap-cierre { padding-bottom: 2rem; }
+  .cap-cierre__stage { position: relative; min-height: 100svh; display: grid; place-items: center; overflow: hidden; }
+  .cap-cierre__img { position: absolute; inset: 0; will-change: transform; }
+  .cap-cierre__img :global(.vslot) { width: 100%; height: 100%; }
+  .cap-cierre__scrim { position: absolute; inset: 0; background: rgb(14 17 22 / 0.62); }
+  h2 {
+    position: relative; margin: 0; padding-inline: var(--gutter); text-align: center;
+    font-family: var(--font-display); font-weight: 600; line-height: 0.88; text-transform: uppercase;
+    letter-spacing: -0.01em; color: var(--color-paper); font-size: clamp(3.25rem, 15.5vw, 7rem);
+  }
+  h2 span { display: block; }
+  h2 small { font-family: var(--font-sans); font-weight: 400; font-size: 0.35em; text-transform: none; letter-spacing: 0; }
+
+  .cap-cierre__form { padding-top: clamp(3rem, 6vw, 5rem); max-width: 44rem; }
+  .cap-cierre__lead { margin: 0 0 1.25rem; font-size: var(--step-lead); }
+  .cap-cierre form { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+  .cap-cierre input {
+    flex: 1 1 16rem; min-width: 0; height: 3.5rem; padding: 0 1.1rem; border: 0; border-radius: 0;
+    background: var(--color-paper); color: var(--color-ink); font: inherit;
+  }
+  .cap-cierre input::placeholder { color: #5b6270; }
+  .cap-cierre input:focus-visible { outline: 3px solid var(--color-field-cornflower); outline-offset: 2px; }
+  .cap-cierre .btn { height: 3.5rem; border: 0; cursor: pointer; }
+  .cap-cierre__note { margin: 1rem 0 0; font-size: var(--step-body); }
+  .cap-cierre__mail { display: inline-block; margin-top: 0.75rem; color: var(--color-paper); font-weight: 500; text-underline-offset: 0.25em; }
+  .cap-cierre__opts { list-style: none; margin: clamp(3rem, 6vw, 5rem) 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); grid-auto-rows: 1fr; gap: var(--gutter); }
+  .cap-cierre__opts a {
+    --opt-bg: var(--color-paper);
+    display: flex; flex-direction: column; justify-content: space-between; gap: 2rem; height: 100%; min-height: 9.5rem; padding: clamp(0.75rem, 2vw, 1.5rem);
+    background: var(--opt-bg); color: var(--color-ink); text-decoration: none;
+    font-family: var(--font-display); font-weight: 600; font-size: clamp(1.1rem, 0.7rem + 1.8vw, 2.25rem); line-height: 1;
+    transition: transform 0.4s var(--ease-out-quart, ease-out);
+  }
+  .cap-cierre__opts li:nth-child(2) a { --opt-bg: var(--color-field-lime); }
+  .cap-cierre__opts li:nth-child(3) a { --opt-bg: var(--color-field-cornflower); }
+  .cap-cierre__opts a:hover, .cap-cierre__opts a:focus-visible { transform: translateY(-6px); }
+  .cap-cierre__opts svg { width: clamp(2rem, 5vw, 3.5rem); height: auto; }
+  .cap-cierre__clock { margin: 1.25rem 0 0; font-size: var(--step-body); }
+  .cap-cierre__credit { margin: clamp(3rem, 6vw, 5rem) 0 0; font-size: 0.875rem; }
+  .cap-cierre__credit a { color: var(--color-paper); text-underline-offset: 0.2em; }
+
+  @media (min-width: 768px) {
+    .cap-cierre__opts a { aspect-ratio: 1 / 1; }
+    h2 { font-size: clamp(7rem, 17vw, 16rem); }
+  }
+</style>
+
+<script>
+  import { gsap, onPage, reduced } from "../../scripts/motion";
+
+  onPage(() => {
+    const root = document.querySelector<HTMLElement>("#cierre");
+    if (!root) return;
+
+    // With JS the message goes out with a greeting in front.
+    const form = root.querySelector<HTMLFormElement>("form");
+    const onSubmit = (e: Event) => {
+      const input = form?.querySelector<HTMLInputElement>("input[name=text]");
+      if (!form || !input?.value.trim() || !form.action.includes("wa.me")) return;
+      e.preventDefault();
+      window.open(`${form.action}?text=${encodeURIComponent(`Hola, quiero resolver esto: ${input.value.trim()}`)}`, "_blank", "noopener");
+    };
+    form?.addEventListener("submit", onSubmit);
+
+    // Live local time, refreshed every minute.
+    const clock = root.querySelector<HTMLElement>("[data-clock]");
+    const fmt = new Intl.DateTimeFormat("es-AR", { timeZone: "America/Argentina/Cordoba", hour: "2-digit", minute: "2-digit", hour12: false });
+    const tick = () => { if (clock) clock.textContent = `Ahora en Córdoba son las ${fmt.format(new Date())}`; };
+    tick();
+    const timer = window.setInterval(tick, 60_000);
+
+    const ctx = gsap.context(() => {
+      const stage = root.querySelector<HTMLElement>("[data-stage]");
+      const img = root.querySelector<HTMLElement>("[data-img]");
+      if (!stage || !img || reduced()) return;
+      const mm = gsap.matchMedia();
+      mm.add("(min-width: 768px)", () => {
+        // Slow drift while the stage (and its giant title) stays pinned for one viewport.
+        gsap.fromTo(img, { scale: 1, yPercent: 0 }, {
+          scale: 1.18, yPercent: -4, ease: "none",
+          scrollTrigger: { trigger: stage, start: "top top", end: "+=100%", pin: true, scrub: 0.6 },
+        });
+      });
+      mm.add("(max-width: 767px)", () => {
+        gsap.fromTo(img, { scale: 1 }, {
+          scale: 1.12, ease: "none",
+          scrollTrigger: { trigger: stage, start: "top bottom", end: "bottom top", scrub: 0.6 },
+        });
+      });
+    }, root);
+    return () => { form?.removeEventListener("submit", onSubmit); window.clearInterval(timer); ctx.revert(); };
+  });
+</script>

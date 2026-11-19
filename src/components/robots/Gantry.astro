@@ -10,6 +10,7 @@ const { x = 0, y = 0, w = 220, h = 150, class: cls } = Astro.props;
   <rect x={w - 12} y="16" width="8" height={h - 16} class="r-soft" />
   <rect x="0" y={h - 6} width="16" height="6" rx="2" class="r-soft" />
   <rect x={w - 16} y={h - 6} width="16" height="6" rx="2" class="r-soft" />
+  <g class="rb-gesture">
   <g class="g-x">
     <g class="g-z">
       <rect x="25" y="-26" width="6" height="96" rx="2" class="r-soft" />
@@ -19,11 +20,14 @@ const { x = 0, y = 0, w = 220, h = 150, class: cls } = Astro.props;
       <rect x="32" y="72" width="4" height="10" rx="1.5" class="r-soft g-fr" />
     </g>
   </g>
+  </g>
   <rect x="0" y="10" width={w} height="10" rx="3" class="r-ink" />
+  <g class="rb-gesture">
   <g class="g-x">
     <rect x="14" y="4" width="28" height="20" rx="3" class="r-soft" />
     <rect x="17" y="8" width="22" height="10" rx="3" class="r-dark" />
     <rect x="20" y="10" width="4" height="6" rx="1" class="r-acc r-eye" />
     <rect x="31" y="10" width="4" height="6" rx="1" class="r-acc r-eye" />
+  </g>
   </g>
 </svg>

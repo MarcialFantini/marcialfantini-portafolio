@@ -1,0 +1,162 @@
+{
+  "titulo": "Cuatro preguntas, un minuto. Te digo por dónde empezar.",
+  "preguntas": [
+    {
+      "id": "tiempo",
+      "texto": "¿Qué te quita más tiempo?",
+      "opciones": [
+        {
+          "label": "Cargar lo mismo en varios lados",
+          "pesos": {
+            "software-a-medida": 3
+          },
+          "foto": "rubro-auditoria"
+        },
+        {
+          "label": "No saber cuánto stock o plata hay",
+          "pesos": {
+            "software-a-medida": 3
+          },
+          "foto": "rubro-mayorista"
+        },
+        {
+          "label": "Seguir pedidos y clientes por WhatsApp",
+          "pesos": {
+            "ecommerce": 3,
+            "software-a-medida": 1
+          },
+          "foto": "rubro-pedidos"
+        },
+        {
+          "label": "No tengo presencia online que venda",
+          "pesos": {
+            "web-productos-servicios": 3,
+            "web-empresarial": 1
+          },
+          "foto": "rubro-moda"
+        }
+      ]
+    },
+    {
+      "id": "info",
+      "texto": "¿Dónde está hoy la información?",
+      "opciones": [
+        {
+          "label": "En planillas",
+          "pesos": {
+            "software-a-medida": 2
+          },
+          "foto": "rubro-consultora"
+        },
+        {
+          "label": "En papel",
+          "pesos": {
+            "software-a-medida": 2,
+            "web-productos-servicios": 1
+          },
+          "foto": "rubro-juridico"
+        },
+        {
+          "label": "En un sistema que no se habla con nada",
+          "pesos": {
+            "software-a-medida": 3
+          },
+          "foto": "rubro-inmobiliaria"
+        },
+        {
+          "label": "En la cabeza de alguien",
+          "pesos": {
+            "software-a-medida": 1,
+            "web-empresarial": 1,
+            "web-productos-servicios": 1
+          },
+          "foto": "rubro-dietetica"
+        }
+      ]
+    },
+    {
+      "id": "gente",
+      "texto": "¿Cuánta gente lo usaría?",
+      "opciones": [
+        {
+          "label": "Solo yo",
+          "pesos": {
+            "web-productos-servicios": 1
+          },
+          "foto": "rubro-peluqueria"
+        },
+        {
+          "label": "Entre 2 y 5 personas",
+          "pesos": {
+            "software-a-medida": 1
+          },
+          "foto": "rubro-ferreteria"
+        },
+        {
+          "label": "Más de 5 personas",
+          "pesos": {
+            "software-a-medida": 1,
+            "web-empresarial": 1
+          },
+          "foto": "rubro-distribuidora"
+        }
+      ]
+    },
+    {
+      "id": "cuando",
+      "texto": "¿Para cuándo lo necesitás?",
+      "opciones": [
+        {
+          "label": "Este mes",
+          "pesos": {
+            "web-productos-servicios": 1
+          },
+          "foto": "rubro-lanzamiento"
+        },
+        {
+          "label": "En 2 o 3 meses",
+          "pesos": {
+            "software-a-medida": 1,
+            "ecommerce": 1
+          },
+          "foto": "rubro-muebles"
+        },
+        {
+          "label": "Estoy explorando",
+          "pesos": {
+            "software-a-medida": 1
+          },
+          "foto": "rubro-revista"
+        }
+      ]
+    }
+  ],
+  "porque": {
+    "software-a-medida": "Lo que contás es un problema de procesos: conviene un sistema hecho a tu medida que ordene los datos en un solo lugar.",
+    "web-productos-servicios": "Lo que te falta es que te encuentren y te escriban: una página clara con WhatsApp resuelve eso rápido.",
+    "web-empresarial": "Necesitás que tu empresa se vea seria y ordenada: un sitio institucional te da esa cara.",
+    "ecommerce": "Tus ventas pasan por mensajes: una tienda online ordena pedidos y pagos sin coordinar a mano."
+  },
+  "pasos": {
+    "software-a-medida": [
+      "Nos sentamos a mirar cómo cargan hoy los datos y cuál es la planilla que manda.",
+      "Armamos una primera versión con lo que más tiempo te come, para que la uses enseguida.",
+      "Sumamos el resto de a poco, con tu equipo probando cada cambio."
+    ],
+    "web-productos-servicios": [
+      "Elegimos qué productos o servicios mostrar y cómo los buscaría tu cliente.",
+      "Armamos la página con fotos reales y un botón directo a tu WhatsApp.",
+      "La publicamos y la ajustamos con las primeras consultas que lleguen."
+    ],
+    "web-empresarial": [
+      "Definimos qué tiene que contar tu empresa y a quién le habla.",
+      "Ordenamos el sitio: quiénes son, qué hacen y cómo contactarlos.",
+      "Lo publicamos con tu dominio y un mail propio."
+    ],
+    "ecommerce": [
+      "Cargamos tu catálogo y definimos cómo se cobra y cómo se envía.",
+      "Conectamos los pedidos para que lleguen ordenados, sin pasar por el chat.",
+      "Probamos una compra de punta a punta antes de abrirla al público."
+    ]
+  }
+}

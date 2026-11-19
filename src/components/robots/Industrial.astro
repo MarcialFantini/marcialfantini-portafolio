@@ -8,6 +8,7 @@ const { x = 0, y = 0, s = 1, class: cls } = Astro.props;
 <svg aria-hidden="true" class:list={["rb rb-ind", cls]} x={x} y={y} width={150 * s} height={150 * s} viewBox="0 0 150 150" overflow="visible">
   <rect x="40" y="134" width="60" height="16" rx="3" class="r-soft" />
   <rect x="52" y="118" width="36" height="18" rx="4" class="r-ink" />
+  <g class="rb-gesture">
   <g class="i-a1">
     <rect x="60" y="52" width="20" height="72" rx="10" class="r-ink" />
     <circle cx="70" cy="120" r="12" class="r-soft" />
@@ -26,5 +27,6 @@ const { x = 0, y = 0, s = 1, class: cls } = Astro.props;
       <rect x="94" y="54" width="4" height="7" rx="1" class="r-acc r-eye" />
       <rect x="103" y="54" width="4" height="7" rx="1" class="r-acc r-eye" />
     </g>
+  </g>
   </g>
 </svg>

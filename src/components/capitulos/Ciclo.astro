@@ -1,0 +1,304 @@
+---
+/* Chapter: the cycle. Connect, create, inform, back up as a literal loop over footage.
+   Desktop: the section pins and scroll walks a marker around the loop, swapping the stage panel.
+   Mobile / no JS / reduced motion: small loop on top, then the four stages stacked with their mini interface. */
+import Video from "./Video.astro";
+
+const stages = [
+  {
+    name: "Conectar",
+    p: "WhatsApp, el Excel, tu tienda y tu facturación se pasan los datos solos. Cada dato se carga una sola vez.",
+    out: ["Nadie copia y pega a mano", "Lo que ya funciona se queda", "Sin errores de tipeo"],
+  },
+  {
+    name: "Crear",
+    p: "Si una tarea depende de una planilla o de la memoria de alguien, la convierto en un sistema simple: pedidos, stock, turnos, cobranzas.",
+    out: ["A tu forma de trabajar", "Facturas y avisos salen solos", "Lo ves desde el celular"],
+  },
+  {
+    name: "Informar",
+    p: "Ventas, cobros y stock en una pantalla, con un aviso cuando algo se desvía.",
+    out: ["Sin armar informes a mano", "Aviso antes de que lo note el cliente", "Decisiones con datos, no a ojo"],
+  },
+  {
+    name: "Respaldar",
+    p: "Copias automáticas, procesos documentados y alguien que responde si algo falla.",
+    out: ["Copias diarias de todo", "Procesos por escrito", "Hablás conmigo, no con un call center"],
+  },
+];
+
+// 24x24 line icons, one per stage
+const icons = [
+  '<circle cx="5.5" cy="12" r="3"/><circle cx="18.5" cy="12" r="3"/><path d="M8.5 12h7"/>',
+  '<rect x="3" y="4" width="18" height="16"/><path d="M3 9h18M7 14h6"/>',
+  '<path d="M5 20v-8M12 20V5M19 20V9"/>',
+  '<path d="M12 3l8 3v6c0 5-4 8-8 9-4-1-8-4-8-9V6z"/><path d="M8.5 12l2.5 2.5 4.5-5"/>',
+];
+const bars = [38, 52, 44, 66, 58, 82];
+
+/* Stadium loop, 600x340 box. Path starts top-centre and runs clockwise; nodes sit at 0, 25, 50, 75 % of its length. */
+const nodes = [
+  // Labels sit clear of the marker ring (r=36 + stroke) as it travels the path
+  { x: 300, y: 20, lx: 300, ly: 90, a: "middle" },
+  { x: 580, y: 170, lx: 512, ly: 180, a: "end" },
+  { x: 300, y: 320, lx: 300, ly: 262, a: "middle" },
+  { x: 20, y: 170, lx: 88, ly: 180, a: "start" },
+];
+const d = "M300 20 H430 A150 150 0 0 1 430 320 H170 A150 150 0 0 1 170 20 Z";
+---
+
+<section id="ciclo" class="cap-ciclo" data-field="night" aria-labelledby="ciclo-title">
+  <div class="bg" aria-hidden="true">
+    <Video name="ciclo" class="bg__v" />
+    <div class="bg__scrim"></div>
+  </div>
+
+  <div class="stage" data-stage>
+    <div class="wrap stage__in">
+      <h2 id="ciclo-title" class="title">El ciclo <small>de</small> tu negocio</h2>
+
+      <svg class="loop" viewBox="0 0 600 340" role="img" aria-label="Un ciclo de cuatro etapas: conectar, crear, informar y respaldar" focusable="false">
+        <path class="loop__path" data-path d={d} pathLength="1" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"></path>
+        {
+          nodes.map((n, i) => (
+            <g>
+              <circle class="loop__node" data-node cx={n.x} cy={n.y} r="26" stroke="currentColor" stroke-width="3"></circle>
+              <g
+                class="loop__ico"
+                data-ico
+                transform={`translate(${n.x - 18} ${n.y - 18}) scale(1.5)`}
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.2"
+                stroke-linecap="square"
+                set:html={icons[i]}
+              />
+              <text x={n.lx} y={n.ly} text-anchor={n.a} class="loop__t">{stages[i].name}</text>
+            </g>
+          ))
+        }
+        <circle class="loop__marker" data-marker cx="0" cy="0" r="36" fill="none" stroke-width="4"></circle>
+      </svg>
+
+      <div class="panel">
+        <ol class="stages" data-stages>
+          <li class="st" data-stagelist>
+            <h3 class="st__h">{stages[0].name}</h3>
+            <p class="st__p">{stages[0].p}</p>
+            <div class="ui ui--flow" data-ui>
+              <div class="flow__col"><span>WhatsApp</span><span>Tienda</span><span>Excel</span></div>
+              <span class="flow__ar" aria-hidden="true">&rarr;</span>
+              <div class="flow__core">Tu sistema</div>
+              <span class="flow__ar" aria-hidden="true">&rarr;</span>
+              <div class="flow__col"><span>Stock</span><span>Facturas</span></div>
+            </div>
+            <ul class="st__out">{stages[0].out.map((o) => <li>{o}</li>)}</ul>
+          </li>
+          <li class="st" data-stagelist>
+            <h3 class="st__h">{stages[1].name}</h3>
+            <p class="st__p">{stages[1].p}</p>
+            <div class="ui ui--table" data-ui>
+              <div class="row row--h"><span>Pedido</span><span>Producto</span><span>Stock</span><span></span></div>
+              <div class="row"><span>#1042</span><span>Harina 000</span><span class="low">4</span><span><span class="mini">Reponer</span></span></div>
+              <div class="row"><span>#1043</span><span>Aceite 1,5 L</span><span>28</span><span></span></div>
+              <div class="row"><span>#1044</span><span>Yerba 1 kg</span><span>61</span><span></span></div>
+            </div>
+            <ul class="st__out">{stages[1].out.map((o) => <li>{o}</li>)}</ul>
+          </li>
+          <li class="st" data-stagelist>
+            <h3 class="st__h">{stages[2].name}</h3>
+            <p class="st__p">{stages[2].p}</p>
+            <div class="ui ui--kpi" data-ui>
+              <div class="kpi__top"><span>Ventas del mes</span><span class="kpi__tag">Ejemplo</span></div>
+              <div class="kpi__n">$ 1.240.000</div>
+              <div class="kpi__bars" aria-hidden="true">{bars.map((h) => <i style={`height:${h}%`}></i>)}</div>
+            </div>
+            <ul class="st__out">{stages[2].out.map((o) => <li>{o}</li>)}</ul>
+          </li>
+          <li class="st" data-stagelist>
+            <h3 class="st__h">{stages[3].name}</h3>
+            <p class="st__p">{stages[3].p}</p>
+            <div class="ui ui--list" data-ui>
+              <div class="bk"><span>Copia de la base</span><span>Hoy 03:00</span><span class="ok">Guardada</span></div>
+              <div class="bk"><span>Copia de la base</span><span>Ayer 03:00</span><span class="ok">Guardada</span></div>
+              <div class="bk"><span>Copia de la base</span><span>Dom 03:00</span><span class="ok">Guardada</span></div>
+            </div>
+            <ul class="st__out">{stages[3].out.map((o) => <li>{o}</li>)}</ul>
+          </li>
+        </ol>
+        <a class="btn cta" href="#diagnostico">Contame cuál te falta</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .cap-ciclo {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+  }
+  .bg { position: absolute; inset: 0; z-index: -1; overflow: hidden; }
+  .bg :global(.bg__v) { position: absolute; inset: 0; }
+  /* Neutral scrim so paper-coloured text holds contrast over the footage */
+  .bg__scrim { position: absolute; inset: 0; background: rgba(14, 17, 22, 0.8); }
+
+  .stage { padding-block: clamp(4rem, 9vw, 7rem); }
+  .stage__in {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2.5rem;
+  }
+
+  .title {
+    font-family: var(--font-display);
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: clamp(3rem, 1.5rem + 7vw, 8rem);
+    line-height: 0.92;
+    text-wrap: balance;
+    margin: 0;
+  }
+  .title :global(small) {
+    font-family: var(--font-sans);
+    font-weight: 400;
+    text-transform: none;
+    font-size: 0.4em;
+    letter-spacing: 0;
+  }
+
+  .loop { width: min(100%, 26rem); height: auto; justify-self: center; color: var(--color-paper); overflow: visible; }
+  .loop__node { fill: #0e1116; }
+  .loop__ico { color: var(--color-paper); }
+  .loop__t { fill: var(--color-paper); font-family: var(--font-sans); font-weight: 500; font-size: 28px; }
+  .loop__marker { display: none; stroke: #d7f25c; }
+
+  .panel { display: grid; gap: 5.5rem; }
+  .cta { justify-self: start; }
+
+  /* Stacked stages need clear air: a tight gap makes the last outcome read as a label of the next title */
+  .stages { list-style: none; margin: 0; padding: 0; display: grid; gap: 5.5rem; }
+  .st { display: grid; gap: 0.9rem; align-content: start; }
+  .st__h { font-family: var(--font-display); font-weight: 600; font-size: clamp(2.25rem, 1.6rem + 2.4vw, 3.5rem); line-height: 1; margin: 0; }
+  .st__p { font-size: var(--step-lead); line-height: 1.3; max-width: 34ch; margin: 0; }
+  .st__out { margin: 0.25rem 0 0; padding-left: 1.1rem; display: grid; gap: 0.35rem; font-size: var(--step-body); }
+
+  /* Mini interfaces: flat paper cards on the night field */
+  .ui { background: #f2f1ec; color: #0e1116; padding: 1rem; font-size: 1rem; max-width: 30rem; }
+  .ui--flow { display: grid; grid-template-columns: 1fr auto 1fr auto 1fr; gap: 0.4rem; align-items: center; text-align: center; }
+  .flow__col { display: grid; gap: 0.35rem; }
+  .flow__col span, .flow__core { background: #e3e9f6; padding: 0.4rem 0.25rem; font-size: 0.9rem; font-weight: 500; }
+  .flow__core { background: #0e1116; color: #f2f1ec; padding: 1.1rem 0.25rem; font-weight: 600; }
+  .flow__ar { font-weight: 600; }
+  .row { display: grid; grid-template-columns: 3.6rem 1fr 2.8rem 5.2rem; gap: 0.5rem; align-items: center; padding: 0.45rem 0.5rem; font-size: 0.95rem; }
+  .row--h { font-size: 0.9rem; font-weight: 600; }
+  .row:nth-child(odd):not(.row--h) { background: #e3e9f6; }
+  .low { font-weight: 700; color: #b42318; }
+  .mini { display: inline-block; font-size: 0.9rem; font-weight: 600; background: #0e1116; color: #f2f1ec; padding: 0.25rem 0.6rem; }
+  .kpi__top { display: flex; justify-content: space-between; font-weight: 600; }
+  .kpi__tag { font-weight: 500; font-size: 0.9rem; background: #e3e9f6; padding: 0 0.5rem; }
+  .kpi__n { font-family: var(--font-display); font-weight: 600; font-size: 2.4rem; line-height: 1.1; margin: 0.25rem 0 0.6rem; }
+  .kpi__bars { display: flex; align-items: flex-end; gap: 0.5rem; height: 4.5rem; }
+  .kpi__bars i { flex: 1; background: #5a9bfc; }
+  .kpi__bars i:last-child { background: #0e1116; }
+  .ui--list { display: grid; gap: 0.35rem; }
+  .bk { display: grid; grid-template-columns: 1fr auto auto; gap: 0.75rem; background: #e3e9f6; padding: 0.5rem 0.7rem; font-size: 0.95rem; }
+  .ok { font-weight: 700; color: #0a6b3a; }
+
+  /* Live (pinned) mode, enabled from JS at >= 768px */
+  .is-live .stage { height: 100svh; padding-block: 2rem; display: grid; align-items: center; }
+  .is-live .stage__in {
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    grid-template-areas: "title title" "loop panel";
+    gap: 1.5rem clamp(2rem, 5vw, 5rem);
+    align-items: center;
+  }
+  .is-live .title { grid-area: title; }
+  .is-live .loop { grid-area: loop; width: 100%; max-height: 52svh; justify-self: stretch; }
+  .is-live .loop__marker { display: block; }
+  .is-live .panel { grid-area: panel; gap: 1.5rem; }
+  .is-live .stages { display: grid; }
+  .is-live .st { grid-area: 1 / 1; gap: 0.6rem; }
+  .is-live .st__out { display: none; }
+  .is-live .st__h { font-size: clamp(2.5rem, 1.6rem + 2.4vw, 4rem); }
+  .is-live .st__p { font-size: 1.1rem; max-width: 40ch; }
+</style>
+
+<script>
+  import { gsap, ScrollTrigger, onPage, reduced } from "../../scripts/motion";
+  import { MotionPathPlugin } from "gsap/MotionPathPlugin";
+
+  gsap.registerPlugin(MotionPathPlugin);
+
+  onPage(() => {
+    const root = document.querySelector<HTMLElement>("#ciclo");
+    if (!root) return;
+
+    const path = root.querySelector<SVGPathElement>("[data-path]")!;
+    const marker = root.querySelector<SVGCircleElement>("[data-marker]")!;
+    const nodes = gsap.utils.toArray<SVGCircleElement>("[data-node]", root);
+    const icos = gsap.utils.toArray<SVGGElement>("[data-ico]", root);
+    const items = gsap.utils.toArray<HTMLElement>("[data-stagelist]", root);
+    const mm = gsap.matchMedia();
+
+    const ctx = gsap.context(() => {
+      // The loop draws itself on entry (all sizes)
+      if (!reduced()) {
+        gsap.fromTo(
+          path,
+          { strokeDashoffset: 1 },
+          {
+            strokeDashoffset: 0,
+            duration: 1.8,
+            ease: "power2.inOut",
+            scrollTrigger: { trigger: root, start: "top 60%", once: true },
+          }
+        );
+      }
+
+      mm.add("(min-width: 768px) and (prefers-reduced-motion: no-preference)", () => {
+        root.classList.add("is-live");
+        gsap.set(items.slice(1), { autoAlpha: 0 });
+        const lime = getComputedStyle(marker).stroke;
+
+        const tl = gsap.timeline({
+          defaults: { ease: "none" },
+          scrollTrigger: {
+            trigger: root,
+            start: "top top",
+            end: "+=200%",
+            pin: true,
+            scrub: 0.6,
+            anticipatePin: 1,
+          },
+        });
+
+        tl.to(marker, { motionPath: { path, align: path, alignOrigin: [0.5, 0.5], start: 0, end: 0.75 }, duration: 3 }, 0);
+        tl.to({}, { duration: 1 }, 3); // hold on the last stage
+        const on = (i: number, at: number) => {
+          tl.fromTo(nodes[i], { fill: "#0e1116" }, { fill: lime, duration: 0.1 }, at);
+          tl.to(icos[i], { color: "#0e1116", duration: 0.1 }, at);
+        };
+        on(0, 0);
+
+        for (let i = 1; i < items.length; i++) {
+          // Sequential, not a crossfade: two stage titles must never sit on top of each other mid-swap
+          tl.to(items[i - 1], { autoAlpha: 0, y: -24, duration: 0.15 }, i - 0.25);
+          tl.fromTo(items[i], { autoAlpha: 0, y: 24 }, { autoAlpha: 1, y: 0, duration: 0.2 }, i - 0.05);
+          on(i, i);
+        }
+
+        return () => {
+          root.classList.remove("is-live");
+          gsap.set([...items, marker, ...nodes, ...icos], { clearProps: "all" });
+        };
+      });
+    }, root);
+
+    return () => {
+      mm.revert();
+      ctx.revert();
+      ScrollTrigger.refresh();
+    };
+  });
+</script>

@@ -5,6 +5,7 @@ const { x = 0, y = 0, s = 1, class: cls } = Astro.props;
 ---
 
 <svg aria-hidden="true" class:list={["rb rb-agv", cls]} x={x} y={y} width={120 * s} height={60 * s} viewBox="0 0 120 60" overflow="visible">
+  <g class="rb-gesture">
   <g class="a-load"><slot /></g>
   <rect x="4" y="18" width="112" height="8" rx="3" class="r-soft" />
   <rect x="8" y="24" width="104" height="22" rx="4" class="r-ink" />
@@ -23,5 +24,6 @@ const { x = 0, y = 0, s = 1, class: cls } = Astro.props;
     <circle cx="92" cy="50" r="8" class="r-soft" />
     <rect x="91" y="43" width="2" height="14" class="r-ink" />
     <rect x="85" y="49" width="14" height="2" class="r-ink" />
+  </g>
   </g>
 </svg>

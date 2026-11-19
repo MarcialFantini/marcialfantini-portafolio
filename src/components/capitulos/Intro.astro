@@ -1,0 +1,95 @@
+---
+// First-visit intro: the overlay is created by JS only, so nothing blocks the page without it.
+---
+
+<script>
+  import { gsap, onPage, reduced } from "../../scripts/motion";
+
+  const KEY = "mf-intro-seen";
+  let shownThisLoad = false;
+
+  const seen = (): boolean => {
+    try {
+      return localStorage.getItem(KEY) === "1";
+    } catch {
+      return false;
+    }
+  };
+  const markSeen = () => {
+    try {
+      localStorage.setItem(KEY, "1");
+    } catch {
+      /* storage unavailable */
+    }
+  };
+
+  onPage(() => {
+    if (shownThisLoad || reduced() || seen()) return;
+    if (new URLSearchParams(location.search).has("nointro")) return;
+    shownThisLoad = true;
+    markSeen();
+
+    const el = document.createElement("div");
+    el.className = "mf-intro";
+    el.setAttribute("aria-hidden", "true");
+    el.innerHTML =
+      '<p class="mf-intro__line"><span class="mf-intro__w">Marcial</span>' +
+      '<svg class="mf-intro__w mf-intro__mark" viewBox="0 0 64 64"><rect width="64" height="64" fill="#2557D6"/>' +
+      '<text x="32" y="33" font-family="Barlow Condensed, sans-serif" font-size="40" font-weight="600" fill="#fff" text-anchor="middle" dominant-baseline="central">MF</text></svg>' +
+      '<span class="mf-intro__w">Fantini</span></p>';
+    document.body.appendChild(el);
+    const prevOverflow = document.documentElement.style.overflow;
+    document.documentElement.style.overflow = "hidden";
+
+    let done = false;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") lift();
+    };
+    const finish = () => {
+      if (done) return;
+      done = true;
+      document.removeEventListener("keydown", onKey);
+      document.documentElement.style.overflow = prevOverflow;
+      el.remove();
+    };
+    const tl = gsap.timeline({ onComplete: finish });
+    function lift() {
+      tl.clear();
+      gsap.to(el, { yPercent: -100, duration: 0.3, ease: "power3.in", onComplete: finish });
+    }
+    document.addEventListener("keydown", onKey);
+    el.addEventListener("click", lift);
+
+    tl.from(el.querySelectorAll(".mf-intro__w"), { yPercent: 60, opacity: 0, duration: 0.4, stagger: 0.12, ease: "power3.out" }).to(
+      el,
+      { yPercent: -100, duration: 0.5, ease: "power3.inOut" },
+      "+=0.25",
+    );
+
+    return finish;
+  });
+</script>
+
+<style is:global>
+  .mf-intro {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    display: grid;
+    place-items: center;
+    background: var(--color-paper);
+    color: var(--color-ink);
+    cursor: pointer;
+  }
+  .mf-intro__line {
+    display: flex;
+    align-items: center;
+    gap: 0.18em;
+    font-family: var(--font-display);
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: clamp(2.6rem, 10vw, 9rem);
+    line-height: 1;
+  }
+  .mf-intro__mark { width: 0.8em; height: 0.8em; }
+</style>
