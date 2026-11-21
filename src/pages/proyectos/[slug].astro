@@ -1,6 +1,13 @@
 ---
 import Layout from "../../layouts/Layout.astro";
-import MediaSlot from "../../components/home/MediaSlot.astro";
+import SubHero from "../../components/sub/SubHero.astro";
+import Field from "../../components/sub/Field.astro";
+import FichaUI from "../../components/proyectos/FichaUI.astro";
+import Captura from "../../components/proyectos/Captura.astro";
+import { capturaDe } from "../../components/proyectos/capturas";
+import ProyectoTile from "../../components/proyectos/ProyectoTile.astro";
+import CierreDiagnostico from "../../components/proyectos/CierreDiagnostico.astro";
+import { FEATURES, GROUPS, LINEA, RUBRO, UI_BY_ID, groupOf, titleParts } from "../../components/proyectos/catalogo";
 import demos from "../../data/demos.json";
 import { render } from "astro:content";
 import { getPublishedProjects } from "../../lib/content";
@@ -17,129 +24,168 @@ export const getStaticPaths = (async () => {
 /* Proyecto demo: construido para mostrar qué se puede hacer. El negocio y las cifras son un escenario de ejemplo. */
 const { proyecto } = Astro.props;
 const { Content } = await render(proyecto);
-const { title, cliente, descripcion, problema, resultado, stack, role, url, metricas } = proyecto.data;
+const { title, cliente, descripcion, problema, stack, role, duracion, url, repo, tags } = proyecto.data;
 
-const demo = demos.find((d) => d.id === proyecto.id);
-const nombre = demo?.nombre ?? title;
+const nombre = demos.find((d) => d.id === proyecto.id)?.nombre ?? title;
+const rubro = RUBRO[proyecto.id] ?? cliente;
+const group = groupOf(proyecto);
+const { label: groupLabel, field: heroField } = GROUPS[group];
+const Ui = UI_BY_ID[proyecto.id];
+// A real screenshot of the sibling project wins over the drawn interface.
+const captura = capturaDe(proyecto.id);
+const features = (FEATURES[proyecto.id] ?? tags.slice(0, 3)).slice(0, 3);
 
+// Long names get a smaller title so they stay within three lines down to 390px.
+const longestWord = Math.max(...nombre.split(/\s+/).map((w) => w.length));
+const isLong = nombre.length > 26 || longestWord > 11;
+const parts = titleParts(nombre);
+
+// Only render links that exist in the frontmatter.
+const liveUrl = url?.trim() || "";
+// Repo URLs point to the public sibling repos (checked 2026-11-19); projects without a real repo have no `repo`.
+const repoUrl = repo?.trim() || "";
+
+// Related: same group first, then the rest in the curated order; three in total.
 const orden = demos.map((d) => d.id);
-const published = await getPublishedProjects();
-const otros = published
+const others = (await getPublishedProjects())
   .filter((p) => p.id !== proyecto.id)
-  .sort((a, b) => orden.indexOf(a.id) - orden.indexOf(b.id))
-  .slice(0, 4)
-  .map((p) => ({ id: p.id, nombre: demos.find((d) => d.id === p.id)?.nombre ?? p.data.title }));
+  .sort((a, b) => orden.indexOf(a.id) - orden.indexOf(b.id));
+const related = [...others.filter((p) => groupOf(p) === group), ...others.filter((p) => groupOf(p) !== group)]
+  .slice(0, 3)
+  .map((p) => {
+    const g = groupOf(p);
+    return {
+      id: p.id,
+      nombre: demos.find((d) => d.id === p.id)?.nombre ?? p.data.title,
+      rubro: RUBRO[p.id] ?? p.data.cliente,
+      linea: LINEA[p.id] ?? p.data.descripcion,
+      group: g,
+      groupLabel: GROUPS[g].label,
+      img: capturaDe(p.id),
+    };
+  });
 ---
 
-<Layout title={`${nombre} (proyecto demo)`} description={descripcion} pageType="article">
-  <article class="pd wrap">
-    <header class="pd__head">
-      <h1 class="pd__h1">{nombre}</h1>
-      <p class="pd__lead" data-rise>{descripcion}</p>
-      <p class="pd__demo" data-rise style="--i:1">
-        Proyecto demo, construido para mostrar qué se puede hacer. El negocio ({cliente}) y sus cifras son un escenario de ejemplo, no un cliente.
-      </p>
-    </header>
-
-    <MediaSlot
-      kind="captura"
-      src={demo?.captura || undefined}
-      alt={`Captura de ${nombre}`}
-      label={`Captura: ${nombre} (pendiente)`}
-      ratio="16 / 9"
-      class="pd__shot"
-      eager
-    />
-
-    <div class="pd__body">
-      <aside class="pd__facts" data-rise>
-        <dl>
-          <div><dt>Rol</dt><dd>{role}</dd></div>
-          <div><dt>Con qué</dt><dd>{stack.join(", ")}</dd></div>
-          {url && <div><dt>En vivo</dt><dd><a href={url} target="_blank" rel="noopener noreferrer">Ver la demo</a></dd></div>}
-        </dl>
-      </aside>
-
-      <div class="pd__main">
-        <section data-rise>
-          <h2 class="pd__h2">El escenario</h2>
-          <p class="pd__statement">{problema}</p>
-        </section>
-
-        <section data-rise>
-          <h2 class="pd__h2">Lo que construí</h2>
-          <div class="prose-mf pd__prose"><Content /></div>
-        </section>
-
-        <section data-rise>
-          <h2 class="pd__h2">Lo que resuelve</h2>
-          <p class="pd__statement">{resultado}</p>
-        </section>
-
-        {metricas.length > 0 && (
-          <section data-rise>
-            <h2 class="pd__h2">Datos del escenario</h2>
-            <dl class="pd__nums">
-              {metricas.map((m) => (
-                <div><dt>{m.label}</dt><dd>{m.value}</dd></div>
-              ))}
-            </dl>
-          </section>
+<Layout title={`${nombre} (proyecto demo)`} description={descripcion} pageType="article" bleed>
+  <div id="pd-hero" class:list={[isLong && "is-long"]}>
+    <SubHero field={heroField} lead={descripcion} back={{ href: "/proyectos", label: "Proyectos" }}>
+      <Fragment slot="title">{parts.map((p, i) => (<>{i > 0 && " "}{p.small ? <small>{p.t}</small> : p.t}</>))}</Fragment>
+      <Fragment slot="actions">
+        <p class="pd-meta"><span class="pd-meta__rubro">{rubro}</span> · {groupLabel}</p>
+        <p class="pd-note">Proyecto demo, construido para mostrar qué se puede hacer. El negocio ({cliente}) y sus cifras son un escenario de ejemplo, no un cliente.</p>
+      </Fragment>
+      <div slot="aside" class="pd-aside">
+        {captura ? (
+          <Captura src={captura} nombre={cliente} href={liveUrl || undefined} eager />
+        ) : Ui ? (
+          <Ui />
+        ) : (
+          <FichaUI rubro={rubro} group={groupLabel} features={features} field={heroField} />
         )}
-
-        <div class="pd__cta" data-rise>
-          <a href="/contacto" class="btn">Hablemos de uno similar</a>
-        </div>
       </div>
-    </div>
-  </article>
+    </SubHero>
+  </div>
 
-  {otros.length > 0 && (
-    <section class="pd-more wrap" aria-labelledby="pd-more-title">
-      <h2 id="pd-more-title" class="pd__h2">Otros demos (<a href="/proyectos">ver los {published.length}</a>)</h2>
-      <p class="pd-more__list">
-        {otros.map((o, i) => (
-          <>
-            <a href={`/proyectos/${o.id}`}>{o.nombre}</a>
-            {i < otros.length - 1 ? ", " : "."}
-          </>
+  <Field field="paper" id="detalle">
+    <div class="pd-body">
+      <div class="pd-main">
+        <section class="pd-scn" data-reveal>
+          <h2 class="pd-h2">El escenario</h2>
+          <p class="pd-statement">{problema}</p>
+        </section>
+        <p class="pd-warn">Lo que sigue es un caso de ejemplo: el negocio, los números y los resultados son ilustrativos, no mediciones de un cliente real.</p>
+        <div class="prose-mf pd-prose" data-reveal><Content /></div>
+      </div>
+
+      <aside class="pd-facts" aria-label="Ficha técnica" data-reveal="right">
+        <dl class="pd-dl">
+          <div><dt>Rol</dt><dd>{role}</dd></div>
+          <div><dt>Duración</dt><dd>{duracion}</dd></div>
+        </dl>
+        <div class="pd-stack">
+          <h2 class="pd-h3">Con qué está hecho</h2>
+          <ul class="pd-stack__list" role="list">
+            {stack.map((s) => <li>{s}</li>)}
+          </ul>
+        </div>
+        {(liveUrl || repoUrl) && (
+          <ul class="pd-links" role="list">
+            {liveUrl && <li><a href={liveUrl} target="_blank" rel="noopener noreferrer">Ver la demo en vivo <span aria-hidden="true">↗</span></a></li>}
+            {repoUrl && <li><a href={repoUrl} target="_blank" rel="noopener noreferrer">Ver el código <span aria-hidden="true">↗</span></a></li>}
+          </ul>
+        )}
+      </aside>
+    </div>
+  </Field>
+
+  {related.length > 0 && (
+    <Field field="bone" id="otros">
+      <Fragment slot="title">OTROS <small>proyectos</small></Fragment>
+      <ul class="pd-rel" role="list">
+        {related.map((r) => (
+          <ProyectoTile href={`/proyectos/${r.id}`} nombre={r.nombre} rubro={r.rubro} linea={r.linea} group={r.group} groupLabel={r.groupLabel} img={r.img} />
         ))}
-      </p>
-    </section>
+      </ul>
+      <a class="pd-all" href="/proyectos">Ver los {others.length + 1} proyectos demo</a>
+    </Field>
   )}
+
+  <CierreDiagnostico />
 </Layout>
 
 <style>
-  .pd__head { padding-top: clamp(2rem, 5vw, 4rem); }
-  .pd__h1 { font-size: clamp(2.25rem, 7vw, 7.5rem); line-height: 0.9; letter-spacing: -0.03em; }
-  .pd__lead { margin-top: 1.5rem; font-size: var(--step-lead); line-height: 1.3; max-width: 40ch; }
-  .pd__demo { margin-top: 1.5rem; font-size: var(--step-small); color: var(--color-soft); max-width: 60ch; }
+  /* Title size tuned per name length; the id beats SubHero's scoped selectors. */
+  #pd-hero :global(.sh__title) { font-size: clamp(2.75rem, 1.2rem + 5.5vw, 6rem); }
+  #pd-hero.is-long :global(.sh__title) { font-size: clamp(2.25rem, 1rem + 4.4vw, 4.75rem); }
 
-  :global(.pd__shot) { margin-top: clamp(3rem, 6vw, 5rem); }
+  .pd-meta { margin: 0; font-size: var(--step-body); font-weight: 500; }
+  .pd-note { margin: 0; max-width: 46ch; font-size: var(--step-body); line-height: 1.45; }
+  .pd-aside { min-width: 0; }
 
-  .pd__body { display: grid; gap: 3rem; margin-top: clamp(4rem, 8vw, 7rem); }
-  .pd__facts dl { display: grid; gap: 1.25rem; font-size: var(--step-small); }
-  .pd__facts dt { color: var(--color-soft); }
-  .pd__facts dd { margin: 0.15rem 0 0; }
-  .pd__main { display: grid; gap: 4.5rem; }
-  .pd__h2 { font-size: var(--step-lead); font-family: var(--font-sans); font-weight: 500; letter-spacing: 0; line-height: 1.2; margin-bottom: 1rem; }
-  .pd__statement { font-size: var(--step-lead); line-height: 1.35; max-width: 44ch; }
-  .pd__prose { max-width: 65ch; }
+  .pd-body { display: grid; gap: 3.5rem; }
+  .pd-main { display: grid; gap: 3rem; min-width: 0; }
+  .pd-h2 { margin: 0 0 0.9rem; font-family: var(--font-sans); font-size: var(--step-lead); font-weight: 500; letter-spacing: 0; line-height: 1.2; }
+  .pd-h3 { margin: 0 0 0.75rem; font-family: var(--font-sans); font-size: var(--step-body); font-weight: 500; letter-spacing: 0; line-height: 1.3; }
+  .pd-statement {
+    margin: 0; max-width: 34ch; font-family: var(--font-display); font-weight: 500;
+    font-size: var(--step-statement); line-height: 1.15;
+  }
+  .pd-prose { max-width: 65ch; }
+  .pd-warn {
+    margin: 0; max-width: 65ch; padding: 1rem 1.25rem; background: var(--color-field-mist);
+    font-size: var(--step-body); line-height: 1.45; font-weight: 500;
+  }
 
-  .pd__nums { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2rem var(--gutter); }
-  .pd__nums div { display: flex; flex-direction: column-reverse; gap: 0.5rem; }
-  .pd__nums dd { font-family: var(--font-display); font-size: var(--step-head); line-height: 0.95; letter-spacing: -0.02em; margin: 0; }
-  .pd__nums dt { font-size: var(--step-small); color: var(--color-soft); }
+  .pd-facts { display: grid; gap: 2rem; align-content: start; padding-top: 1.25rem; border-top: 4px solid var(--color-ink); }
+  .pd-dl { margin: 0; display: grid; gap: 1rem; }
+  .pd-dl dt { font-size: 1rem; color: var(--color-soft); }
+  .pd-dl dd { margin: 0.15rem 0 0; font-size: var(--step-body); font-weight: 500; }
+  .pd-stack__list { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0.4rem; }
+  .pd-stack__list li { padding: 0.3rem 0.6rem; background: var(--color-surface); font-size: 0.9375rem; font-weight: 500; }
+  .pd-links { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.6rem; }
+  .pd-links a { font-weight: 500; color: var(--color-ink); text-underline-offset: 0.25em; }
+  .pd-links a:hover { color: var(--color-accent); }
 
-  .pd-more { margin-top: var(--section-gap); }
-  .pd-more__list { font-size: var(--step-statement); line-height: 1.25; max-width: 40ch; }
-  .pd-more__list a { text-decoration: none; color: var(--color-soft); transition: color 200ms var(--ease-out-quart); }
-  .pd-more__list a:hover { color: var(--color-fg); }
+  .pd-rel { list-style: none; margin: 0; padding: 0; display: grid; gap: 3rem var(--gutter); }
+  .pd-all { justify-self: start; font-weight: 500; color: var(--color-ink); text-underline-offset: 0.25em; }
+  .pd-all:hover { color: var(--color-accent); }
 
+  @media (min-width: 640px) {
+    .pd-rel { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
   @media (min-width: 1024px) {
-    .pd__body { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gutter); }
-    .pd__facts { grid-column: 1 / span 3; }
-    .pd__main { grid-column: 5 / span 7; }
-    .pd__nums { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .pd-body { grid-template-columns: minmax(0, 8fr) minmax(0, 3.5fr); column-gap: clamp(3rem, 6vw, 6rem); }
+    .pd-facts { position: sticky; top: 6rem; }
+    .pd-rel { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   }
 </style>
+
+<script>
+  import { onPage } from "../../scripts/motion";
+  import { animateUis } from "../../components/proyectos/uiMotion";
+
+  onPage(() => {
+    const root = document.getElementById("pd-hero");
+    return root ? animateUis(root) : undefined;
+  });
+</script>

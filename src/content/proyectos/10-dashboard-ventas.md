@@ -1,7 +1,7 @@
 ---
 title: "Dashboard de Ventas Mayoristas"
 slug: "dashboard-ventas"
-cliente: "Distribuidora Cuyo"
+cliente: "Mayorista Central"
 categoria: "dashboard"
 descripcion: "Dashboard interno con KPIs de ventas, cohortes de clientes, productos más vendidos y comparativa interanual."
 problema: "Distribuidora con 30 vendedores en ruta. Tomaban decisiones con datos del día anterior en Excel, sin poder cruzar cohortes ni comparativas."
@@ -10,7 +10,8 @@ stack: ["Astro", "TypeScript", "D3.js", "SQLite", "Node API"]
 fecha: 2025-12-12
 duracion: "8 semanas"
 role: "Diseño + desarrollo full-stack + data viz"
-repo: "https://github.com/MarcialFantini/dashboard-ventas"
+repo: "https://github.com/MarcialFantini/ferreteria-central"
+url: "https://10-dashboard-ventas.vercel.app"
 tags: ["dashboard", "data-viz", "b2b"]
 featured: true
 metricas:

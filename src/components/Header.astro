@@ -2,7 +2,7 @@
 import site from "../data/site.json";
 import { hasPublishedPosts, hasPublishedProjects } from "../lib/content";
 
-const action = { href: "/contacto?servicio=Diagn%C3%B3stico%20gratis", label: "Contame tu problema" };
+const action = { href: "/contacto?servicio=Diagn%C3%B3stico%20gratis", label: "Agendar diagnóstico de 30 minutos", short: "Agendar diagnóstico" };
 const navItems = [
   { href: "/servicios", label: "Servicios" },
   ...((await hasPublishedProjects()) ? [{ href: "/proyectos", label: "Proyectos" }] : []),
@@ -28,7 +28,10 @@ const isActive = (href: string) => pathname === href || pathname.startsWith(href
     }
   </nav>
 
-  <a href={action.href} class="btn sh__cta">{action.label}</a>
+  <a href={action.href} class="btn sh__cta">
+    <span class="sh__cta-short">{action.short}</span>
+    <span class="sh__cta-full">{action.label}</span>
+  </a>
 
   <button type="button" class="sh__menu" aria-expanded="false" aria-controls="sh-sheet" data-menu>
     Menú
@@ -37,7 +40,7 @@ const isActive = (href: string) => pathname === href || pathname.startsWith(href
   <div class="sh__sheet" id="sh-sheet" hidden>
     <nav aria-label="Móvil">
       {navItems.map((item) => <a href={item.href}>{item.label}</a>)}
-      <a href={action.href}>{action.label}</a>
+      <a href={action.href}>{action.short}</a>
     </nav>
   </div>
  </div>
@@ -91,7 +94,9 @@ const isActive = (href: string) => pathname === href || pathname.startsWith(href
     color: var(--color-fg);
   }
   .sh__nav { display: none; gap: 1.75rem; margin-left: auto; }
-  .sh__cta { display: none; min-height: 2.75rem; padding-block: 0.5rem; }
+  .sh__cta { display: none; min-height: 2.75rem; padding-block: 0.5rem; white-space: nowrap; }
+  /* Full label only where the bar has room for it */
+  .sh__cta-full { display: none; }
   .sh__nav a {
     color: var(--color-fg);
     font-size: var(--step-body);
@@ -134,5 +139,9 @@ const isActive = (href: string) => pathname === href || pathname.startsWith(href
     .sh__nav { display: flex; }
     .sh__cta { display: inline-flex; }
     .sh__menu, .sh__sheet { display: none; }
+  }
+  @media (min-width: 1100px) {
+    .sh__cta-short { display: none; }
+    .sh__cta-full { display: inline; }
   }
 </style>

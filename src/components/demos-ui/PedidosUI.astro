@@ -1,0 +1,85 @@
+---
+// Drawn order tracker: each order shows its progress across four states; one order advances in the loop.
+import Ventana from "./Ventana.astro";
+
+const STATES = ["Recibido", "En preparación", "Despachado", "Entregado"];
+// `step` is how many states are complete; `advance` marks the order that moves one state in the loop.
+const orders = [
+  { id: "#4826", to: "Rosario", qty: "18 bultos", total: "$ 412.700", step: 1 },
+  { id: "#4821", to: "Córdoba", qty: "12 bultos", total: "$ 184.300", step: 2, advance: true },
+  { id: "#4819", to: "Santa Fe", qty: "30 bultos", total: "$ 655.900", step: 3 },
+  { id: "#4812", to: "Rafaela", qty: "22 bultos", total: "$ 318.200", step: 4 },
+  { id: "#4808", to: "Paraná", qty: "7 bultos", total: "$ 96.450", step: 4 },
+];
+---
+
+<Ventana ui="pedidos" title="Pedidos" where="Seguimiento mayorista" label="Pantalla de ejemplo del seguimiento de pedidos: cada pedido con su avance entre recibido, en preparación, despachado y entregado">
+  <div class="head">
+    <span class="head__t">Pedidos de la semana</span>
+    <span class="swap head__s">
+      <span class="soft" data-off>Actualizado recién</span>
+      <span class="chip chip--new" data-on>Nuevo pedido #4827</span>
+    </span>
+  </div>
+
+  <div class="list">
+    {orders.map((o, i) => (
+      <div class={`order${i === orders.length - 1 ? " order--last" : ""}`} data-row>
+        <span class="order__id">{o.id}</span>
+        <span class="order__to">{o.to} <span class="soft">· {o.qty}</span></span>
+        <span class="order__total">{o.total}</span>
+        <span class="track">
+          {STATES.map((_, s) => (
+            <span class="seg">
+              {s < o.step && <span class={`seg__fill${o.step === 4 ? " seg__fill--done" : ""}`} data-grow-x></span>}
+              {o.advance && s === o.step && <span class="seg__fill" data-fill></span>}
+            </span>
+          ))}
+        </span>
+        <span class="order__state">
+          {o.advance ? (
+            <span class="swap">
+              <span data-off>{STATES[o.step - 1]}</span>
+              <span class="order__moved" data-on>{STATES[o.step]}</span>
+            </span>
+          ) : (
+            STATES[o.step - 1]
+          )}
+        </span>
+      </div>
+    ))}
+  </div>
+
+  <div class="steps">{STATES.map((s, i) => <span><b>{i + 1}</b> {s}</span>)}</div>
+</Ventana>
+
+<style>
+  .head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.4rem 1rem; min-height: 1.75rem; }
+  .head__t { font-weight: 600; }
+  .head__s { justify-items: end; align-items: center; }
+
+  .list { display: grid; gap: 2px; }
+  .order {
+    display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 0.45rem 0.75rem;
+    padding: 0.65rem 0.7rem; background: var(--color-paper);
+  }
+  .order__id { font-weight: 600; }
+  .order__to { font-weight: 500; }
+  .order__total { font-weight: 500; text-align: right; }
+  .track { grid-column: 1 / span 2; display: flex; gap: 3px; }
+  .seg { position: relative; flex: 1; height: 0.5rem; background: var(--color-surface-2); overflow: hidden; }
+  .seg__fill { position: absolute; inset: 0; background: var(--color-accent); transform-origin: 0 50%; }
+  .seg__fill--done { background: var(--color-field-night); }
+  .order__state { text-align: right; font-weight: 500; min-width: 7.5rem; }
+  .order__state .swap { justify-items: end; }
+  .order__moved { color: var(--color-accent); }
+  .order--last { display: none; }
+
+  .steps { display: none; }
+
+  @media (min-width: 640px) {
+    .order--last { display: grid; }
+    .steps { display: flex; flex-wrap: wrap; gap: 0.25rem 1.25rem; font-size: 0.8125rem; color: var(--color-soft); }
+    .steps b { font-weight: 600; color: var(--color-ink); }
+  }
+</style>

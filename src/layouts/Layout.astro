@@ -32,7 +32,7 @@ const canonicalURL = new URL(Astro.url.pathname, siteURL);
 const isHome = Astro.url.pathname === "/";
 
 // Home: titulo fijo. Resto: "<Pagina> | Marcial Fantini" (normaliza el sufijo " — Marcial Fantini").
-const HOME_TITLE = `${site.name} | Mejoro cómo opera tu PyME`;
+const HOME_TITLE = `${site.name} · Software a medida para empresas`;
 const suffix = ` | ${site.name}`;
 const title = isHome
   ? HOME_TITLE
@@ -45,7 +45,7 @@ const title = isHome
         : titleProp + suffix;
 
 const ogImageURL = new URL(ogImage, siteURL).toString();
-const ogAlt = `${site.name}: ${site.tagline}. Software a medida para PyMEs.`;
+const ogAlt = `${site.name}: ${site.tagline}. Software a medida para empresas.`;
 const logoURL = new URL("/icon-512.png", siteURL).toString();
 
 import servicios from "../data/servicios.json";
@@ -92,6 +92,8 @@ const professionalService = {
     <meta name="color-scheme" content="dark" />
     <meta name="theme-color" content="#0a0d14" />
     <link rel="preload" href="/fonts/barlow-condensed-500.woff2" as="font" type="font/woff2" crossorigin />
+    <!-- Weight used by the hero headline and the header name: preloaded so the swap does not shift the first screen -->
+    <link rel="preload" href="/fonts/barlow-condensed-600.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="/fonts/barlow-400.woff2" as="font" type="font/woff2" crossorigin />
 
     <title>{title}</title>

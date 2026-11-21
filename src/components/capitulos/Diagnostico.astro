@@ -2,23 +2,30 @@
 import data from "../../data/diagnostico.json";
 import servicios from "../../data/servicios.json";
 import site from "../../data/site.json";
-import { stock, stockGroup } from "../../lib/stock";
+import { stock } from "../../lib/stock";
 
-const photos = stockGroup("rubro-", 640);
+// Operations imagery only (warehouse, dispatch, paperwork), one slot per photo spot so nothing repeats.
+const photos = [
+  "hero-deposito", "rubro-pedidos", "ciclo-estanterias", "rubro-distribuidora", "caos-tickets", "rubro-mayorista",
+  "hero-alt-autoelevador", "ciclo-cajas", "rubro-ferreteria", "caos-biblioratos", "ciclo-escaneo", "caos-papeles",
+  "rubro-muebles", "equipo-reunion", "caos-postits", "rubro-auditoria", "caos-anotando",
+].map((name) => stock(name, 640));
 
 // Floating objects. [kind, left%, top%, size px, rotation deg, mobile?: [left%, top%, size px]]
-// kind: "p" = sector photo (cycled), or a drawn SME object. Centre zone (30-70% x) stays clear.
+// kind: "p" = operations photo, or a drawn back-office object. Every piece is unique.
+// Centre zone (30-70% x) stays clear. Phones show only the six spots with a mobile tuple:
+// three above the title, three below it.
 type Spot = [string, number, number, number, number, [number, number, number]?];
 const spots: Spot[] = [
-  ["p", 2, 4, 150, -6, [3, 2, 92]],
-  ["label", 15, 2, 130, 5, [38, 1, 112]],
-  ["p", 6, 24, 110, 4, [60, 17, 76]],
+  ["p", 2, 4, 150, -6, [4, 2.5, 128]],
+  ["label", 15, 2, 130, 5, [44, 1.5, 132]],
+  ["p", 6, 24, 110, 4, [64, 8, 108]],
   ["bubble", 16, 25, 160, -3],
   ["p", 1, 46, 170, -4],
   ["receipt", 19, 46, 112, 6],
-  ["p", 5, 70, 120, 5, [4, 74, 80]],
-  ["chart", 18, 67, 130, -5],
-  ["p", 2, 86, 130, -3, [3, 89, 70]],
+  ["p", 5, 70, 120, 5, [5, 79, 118]],
+  ["chart", 18, 67, 130, -5, [39, 85, 104]],
+  ["p", 2, 86, 130, -3],
   ["cal", 17, 87, 100, 4],
   ["p", 30, 2, 90, -5],
   ["p", 44, 0, 120, 4],
@@ -27,14 +34,14 @@ const spots: Spot[] = [
   ["label2", 46, 90, 124, -3],
   ["p", 60, 87, 120, 4],
   ["p", 76, 4, 130, 5],
-  ["cal", 90, 2, 100, -5, [76, 3, 72]],
+  ["count", 90, 2, 100, -5],
   ["p", 80, 20, 170, -4],
-  ["chart", 76, 44, 130, 5],
+  ["stock", 76, 44, 130, 5],
   ["p", 88, 48, 120, -6],
-  ["receipt", 79, 66, 110, -5],
+  ["order", 79, 66, 116, -5],
   ["p", 90, 72, 100, 4],
-  ["p", 75, 84, 150, 5, [70, 80, 90]],
-  ["bubble2", 85, 90, 150, -4, [34, 88, 120]],
+  ["p", 75, 84, 150, 5, [67, 77, 112]],
+  ["bubble2", 85, 90, 150, -4],
   ["p", 23, 8, 84, 6],
   ["p", 69, 90, 96, -5],
 ];
@@ -84,13 +91,28 @@ const payload = {
           <div class="dg__bars"><i style="height:40%"></i><i style="height:65%"></i><i style="height:50%"></i><i style="height:85%"></i><i style="height:100%"></i></div>
         )}
         {f.kind === "cal" && (<><em>Mar</em><strong>14</strong></>)}
+        {f.kind === "count" && (<><strong>7</strong><em>sin facturar</em></>)}
+        {f.kind === "stock" && (
+          <>
+            <b>Stock</b>
+            <div class="dg__rows"><i style="width:85%"></i><i style="width:55%"></i><i style="width:20%"></i><i style="width:65%"></i></div>
+          </>
+        )}
+        {f.kind === "order" && (
+          <>
+            <b>Pedido 2087</b>
+            <span><u class="is-on"></u><i style="width:70%"></i></span>
+            <span><u class="is-on"></u><i style="width:50%"></i></span>
+            <span><u></u><i style="width:60%"></i></span>
+          </>
+        )}
       </div>
     ))}
   </div>
 
   <div class="dg__stage">
     <div class="dg__intro" id="dg-intro">
-      <h2 id="diagnostico-title" class="dg__title">¿Qué necesita <small>tu</small> PyME?</h2>
+      <h2 id="diagnostico-title" class="dg__title">¿Dónde <small>se</small> traba <small>tu</small> operación?</h2>
       <p class="dg__lead">{data.titulo}</p>
       <button type="button" class="btn dg__start" id="dg-start" hidden>Empezar el diagnóstico <span aria-hidden="true">→</span></button>
     </div>
@@ -175,6 +197,20 @@ const payload = {
   .dg__o--cal em { font-style: normal; font-size: 0.8125rem; font-weight: 600; background: var(--color-accent); color: #fff; padding: 0.3rem 0.6rem; }
   .dg__o--cal strong { flex: 1; display: grid; place-items: center; font-family: var(--font-display); font-weight: 600; font-size: 2.75rem; line-height: 1; }
 
+  .dg__o--count { background: var(--color-ink); color: var(--color-paper); aspect-ratio: 1; display: flex; flex-direction: column; justify-content: center; padding: 0.75rem; }
+  .dg__o--count strong { font-family: var(--font-display); font-weight: 600; font-size: 3rem; line-height: 0.9; }
+  .dg__o--count em { font-style: normal; font-size: 0.875rem; font-weight: 500; line-height: 1.15; margin-top: 0.3rem; }
+  .dg__o--stock { background: #fff; padding: 0.8rem; display: flex; flex-direction: column; gap: 0.6rem; }
+  .dg__o--stock b, .dg__o--order b { font-size: 0.875rem; font-weight: 600; line-height: 1.1; }
+  .dg__rows { display: grid; gap: 0.45rem; }
+  .dg__rows i { display: block; height: 10px; background: var(--color-ink); }
+  .dg__rows i:nth-child(3) { background: var(--color-accent); }
+  .dg__o--order { background: var(--color-paper); padding: 0.75rem; display: flex; flex-direction: column; gap: 0.5rem; }
+  .dg__o--order span { display: flex; align-items: center; gap: 0.45rem; }
+  .dg__o--order u { flex: none; width: 12px; height: 12px; background: #C9D3EA; text-decoration: none; }
+  .dg__o--order u.is-on { background: var(--color-accent); }
+  .dg__o--order i { display: block; height: 6px; background: var(--color-ink); }
+
   /* Stage: intro and panel share one cell */
   .dg__stage { position: relative; z-index: 1; display: grid; justify-items: center; }
   .dg__stage > * { grid-area: 1 / 1; }
@@ -251,9 +287,7 @@ const payload = {
     .dg__intro { padding-inline: var(--gutter); }
     .dg__o { display: none; }
     .dg__o.has-m { display: block; left: var(--ml); top: var(--mt); width: var(--ms); }
-    .dg__o--receipt.has-m, .dg__o--label.has-m, .dg__o--bubble2.has-m { padding: 0.45rem; }
-    .dg__o--receipt.has-m i:nth-of-type(n + 3) { display: none; }
-    .dg__o--cal strong { font-size: 1.75rem; }
+    .dg__o--chart.has-m { padding: 0.7rem; }
     .dg:not(.is-js) .dg__o:not(.has-m) { display: none; }
     .dg__opts { grid-template-columns: 1fr; gap: 0.6rem; }
     .dg__tile, .dg__opt:last-child:nth-child(odd) .dg__tile { flex-direction: row; align-items: center; }
@@ -316,10 +350,12 @@ const payload = {
       const score: Record<string, number> = {};
       const order: string[] = D.servicios.map((s: any) => s.id);
       const lines: string[] = [];
+      const answers = new URLSearchParams();
       D.preguntas.forEach((q: any, i: number) => {
         const el = picked(i)!;
         const o = q.opciones[Number(el.dataset.i)];
         lines.push(`- ${q.texto} ${o.label}`);
+        answers.set(q.id, o.label);
         for (const [id, w] of Object.entries(o.pesos)) score[id] = (score[id] || 0) + (w as number);
       });
       // Highest score wins; ties fall back to catalogue order (software first).
@@ -332,7 +368,9 @@ const payload = {
       list.replaceChildren(...(D.pasos[bestId] || []).map((t: string) => Object.assign(document.createElement("li"), { textContent: t })));
       const msg = `Hola Marcial, hice el diagnóstico en tu web.\n${lines.join("\n")}\nMe recomendó: ${svc.titulo}.\nQuiero que lo charlemos.`;
       (root.querySelector("#dg-wa") as HTMLAnchorElement).href = `https://wa.me/${D.whatsapp}?text=${encodeURIComponent(msg)}`;
-      (root.querySelector("#dg-form-link") as HTMLAnchorElement).href = `/contacto?servicio=${encodeURIComponent(svc.titulo)}`;
+      // Same param names the no-JS form submits, so /contacto prefills the message either way.
+      answers.set("servicio", svc.titulo);
+      (root.querySelector("#dg-form-link") as HTMLAnchorElement).href = `/contacto?${answers.toString()}`;
       form.hidden = true;
       result.hidden = false;
       setBar(steps.length);

@@ -1,5 +1,5 @@
 {
-  "titulo": "Cuatro preguntas, un minuto. Te digo por dónde empezar.",
+  "titulo": "Cinco preguntas, un minuto. Te digo por dónde empezar.",
   "preguntas": [
     {
       "id": "tiempo",
@@ -28,12 +28,11 @@
           "foto": "rubro-pedidos"
         },
         {
-          "label": "No tengo presencia online que venda",
+          "label": "Tenemos un sistema de gestión, pero no cubre todo",
           "pesos": {
-            "web-productos-servicios": 3,
-            "web-empresarial": 1
+            "software-a-medida": 3
           },
-          "foto": "rubro-moda"
+          "foto": "ciclo-escaneo"
         }
       ]
     },
@@ -70,7 +69,41 @@
             "web-empresarial": 1,
             "web-productos-servicios": 1
           },
-          "foto": "rubro-dietetica"
+          "foto": "caos-anotando"
+        }
+      ]
+    },
+    {
+      "id": "sistema",
+      "texto": "¿Qué sistema usan hoy?",
+      "opciones": [
+        {
+          "label": "Planillas de Excel o Google Sheets",
+          "pesos": {
+            "software-a-medida": 2
+          },
+          "foto": "rubro-lanzamiento"
+        },
+        {
+          "label": "Un sistema de gestión (Tango, Contabilium u otro)",
+          "pesos": {
+            "software-a-medida": 2
+          },
+          "foto": "ciclo-estanterias"
+        },
+        {
+          "label": "Varios sistemas que no se conectan",
+          "pesos": {
+            "software-a-medida": 3
+          },
+          "foto": "caos-tickets"
+        },
+        {
+          "label": "Nada formal todavía",
+          "pesos": {
+            "software-a-medida": 1
+          },
+          "foto": "caos-postits"
         }
       ]
     },
@@ -79,23 +112,23 @@
       "texto": "¿Cuánta gente lo usaría?",
       "opciones": [
         {
-          "label": "Solo yo",
-          "pesos": {
-            "web-productos-servicios": 1
-          },
-          "foto": "rubro-peluqueria"
-        },
-        {
-          "label": "Entre 2 y 5 personas",
+          "label": "Hasta 10 personas",
           "pesos": {
             "software-a-medida": 1
+          },
+          "foto": "equipo-mesa"
+        },
+        {
+          "label": "11 a 50",
+          "pesos": {
+            "software-a-medida": 2
           },
           "foto": "rubro-ferreteria"
         },
         {
-          "label": "Más de 5 personas",
+          "label": "Más de 50",
           "pesos": {
-            "software-a-medida": 1,
+            "software-a-medida": 2,
             "web-empresarial": 1
           },
           "foto": "rubro-distribuidora"
@@ -111,7 +144,7 @@
           "pesos": {
             "web-productos-servicios": 1
           },
-          "foto": "rubro-lanzamiento"
+          "foto": "ciclo-cajas"
         },
         {
           "label": "En 2 o 3 meses",

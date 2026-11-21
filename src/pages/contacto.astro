@@ -1,26 +1,73 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import SubHero from "../components/sub/SubHero.astro";
+import Field from "../components/sub/Field.astro";
 import Contacto from "../components/Contacto.astro";
 import site from "../data/site.json";
+
+const pasos = [
+  { t: "Me escribís", d: "Por el formulario, WhatsApp o email." },
+  { t: "Te respondo en 24 h hábiles", d: "Leo lo que me contaste y te contesto." },
+  { t: "Diagnóstico de 30 minutos", d: "Gratis. Vemos dónde se traba tu operación." },
+];
 ---
 
 <Layout
   title={`Contacto — ${site.name}`}
-  description={`Contanos qué problema querés resolver: software a medida, página web o tienda online. Escribinos a ${site.email} o usá el formulario y te respondemos en 24 h hábiles.`}
+  description={`Contame qué empresa es, qué proceso se traba y qué sistema usan hoy. Escribime a ${site.email} o usá el formulario y te respondo en 24 h hábiles.`}
+  bleed
 >
-  <section class="cp wrap" aria-labelledby="cp-title">
-    <h1 id="cp-title" class="cp__h1" data-split>Contanos el problema.</h1>
-    <p class="cp__lead" data-rise style="--i:1">
-      Tres cosas alcanzan: qué negocio tenés, qué te duele hoy y por qué ahora. Te respondemos en 24 h hábiles, y si querés
-      arrancamos con un diagnóstico gratis de 30 minutos.
-    </p>
-  </section>
+  <SubHero
+    field="lime"
+    lead="Contame qué empresa es, qué proceso se traba y qué sistema usan hoy. Te respondo en 24 h hábiles, y si querés arrancamos con un diagnóstico gratis de 30 minutos."
+  >
+    <Fragment slot="title">Contame <small>el</small> problema</Fragment>
+  </SubHero>
 
-  <Contacto />
+  <Field field="cornflower" id="cp-form" class="cp-field">
+    <Contacto>
+      <div slot="before" class="cp-next">
+        <h2 class="cp-next__h" data-sub-title>Qué <small>pasa</small> después</h2>
+        <ol class="cp-next__list" data-stagger>
+          {
+            pasos.map((p, i) => (
+              <li>
+                <span class="cp-next__n" aria-hidden="true">{i + 1}</span>
+                <span class="cp-next__body">
+                  <span class="cp-next__t">{p.t}</span>
+                  <span class="cp-next__d">{p.d}</span>
+                </span>
+              </li>
+            ))
+          }
+        </ol>
+      </div>
+    </Contacto>
+  </Field>
 </Layout>
 
 <style>
-  .cp { padding-top: clamp(3rem, 8vw, 6rem); }
-  .cp__h1 { font-size: clamp(3rem, 9vw, 9.375rem); line-height: 0.9; letter-spacing: -0.03em; max-width: 11ch; }
-  .cp__lead { margin-top: 2rem; font-size: var(--step-lead); line-height: 1.3; max-width: 42ch; }
+  /* Last field meets the footer directly (footer keeps a --section-gap top margin) */
+  :global(.cp-field) { margin-bottom: calc(-1 * var(--section-gap)); }
+
+  .cp-next { display: grid; gap: 1.5rem; }
+  .cp-next__h {
+    margin: 0;
+    font-family: var(--font-display); font-weight: 600; text-transform: uppercase;
+    font-size: clamp(2.5rem, 1.6rem + 4vw, 4.5rem); line-height: 0.9;
+  }
+  .cp-next__h :global(small) { font-family: var(--font-sans); font-weight: 400; text-transform: none; font-size: 0.38em; }
+  .cp-next__h :global(.sw) { display: inline-block; }
+
+  .cp-next__list { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
+  .cp-next__list li { display: grid; grid-template-columns: 3.5rem minmax(0, 1fr); align-items: stretch; background: var(--color-paper); }
+  .cp-next__n {
+    display: grid; place-items: center;
+    font-family: var(--font-display); font-weight: 600; font-size: 2.25rem; line-height: 1;
+    background: var(--color-field-night); color: var(--color-paper);
+  }
+  .cp-next__list li:nth-child(3) .cp-next__n { background: var(--color-field-lime); color: var(--color-ink); }
+  .cp-next__body { display: grid; gap: 0.2rem; padding: 0.9rem 1rem; }
+  .cp-next__t { font-weight: 500; font-size: var(--step-body); line-height: 1.2; }
+  .cp-next__d { font-size: var(--step-small); line-height: 1.35; }
 </style>

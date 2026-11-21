@@ -10,7 +10,8 @@ stack: ["Astro", "TypeScript", "Tailwind CSS", "SheetJS"]
 fecha: 2025-04-18
 duracion: "4 semanas"
 role: "Diseño + desarrollo full-stack"
-repo: "https://github.com/MarcialFantini/catalogo-ferreteria"
+repo: "https://github.com/MarcialFantini/ferreteria-el-tornillo"
+url: "https://02-catalogo-ferreteria.vercel.app"
 tags: ["catalogo", "ferreteria", "mayorista"]
 featured: true
 metricas:

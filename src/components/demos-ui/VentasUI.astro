@@ -1,0 +1,111 @@
+---
+// Drawn sales dashboard: KPI figures, monthly bars against the previous year (SVG) and top products.
+import Ventana from "./Ventana.astro";
+
+// Sample data, in millions of pesos per month (last twelve months).
+const months = ["Dic", "Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov"];
+const now = [11.2, 12.8, 12.1, 14.6, 13.9, 15.2, 14.1, 16.8, 15.9, 17.4, 16.6, 18.4];
+const prev = [9.8, 10.4, 11.0, 11.9, 12.4, 12.2, 12.9, 13.6, 13.1, 14.8, 14.2, 15.1];
+const TOP = 20;
+const y = (v: number) => 100 - (v / TOP) * 100;
+const line = prev.map((v, i) => `${i * 20 + 10},${y(v).toFixed(1)}`).join(" ");
+
+const top = [
+  { p: "Caja 30x40 reforzada", u: "1.840 u.", w: 100 },
+  { p: "Cinta de embalar 48 mm", u: "1.312 u.", w: 71 },
+  { p: "Film stretch 50 cm", u: "968 u.", w: 53 },
+];
+---
+
+<Ventana ui="ventas" title="Ventas" where="Mayorista · este mes" label="Pantalla de ejemplo del tablero de ventas: ventas del mes, pedidos, ticket promedio, comparación con el año anterior y productos más vendidos">
+  <div class="kpis">
+    <div class="kpi kpi--main" data-row>
+      <span class="soft">Ventas del mes</span>
+      <strong class="swap">
+        <span data-off data-count="18430500" data-pre="$ ">$ 18.430.500</span>
+        <span data-on>$ 18.516.800</span>
+      </strong>
+      <span class="kpi__d">+22 % contra el mismo mes del año anterior</span>
+    </div>
+    <div class="kpi" data-row>
+      <span class="soft">Pedidos</span>
+      <strong class="swap"><span data-off data-count="214">214</span><span data-on>215</span></strong>
+    </div>
+    <div class="kpi" data-row>
+      <span class="soft">Ticket promedio</span>
+      <strong class="swap"><span data-off data-count="86124" data-pre="$ ">$ 86.124</span><span data-on>$ 86.125</span></strong>
+    </div>
+  </div>
+
+  <div class="chart" data-row>
+    <div class="chart__head">
+      <span class="chart__t">Ventas por mes, en millones</span>
+      <span class="chip chip--new" data-on>Nueva venta · $ 86.300</span>
+    </div>
+    <svg viewBox="0 0 240 100" preserveAspectRatio="none" aria-hidden="true">
+      {now.map((v, i) => (
+        <rect
+          class={i === now.length - 1 ? "bar bar--now" : "bar"}
+          x={i * 20 + 4} y={y(v)} width="12" height={(v / TOP) * 100}
+          data-grow-y
+          data-bump={i === now.length - 1 ? "" : undefined}
+        />
+      ))}
+      <polyline class="prev" points={line} data-row />
+    </svg>
+    <div class="months">{months.map((m, i) => <span class={i % 2 ? "odd" : ""}>{m}</span>)}</div>
+    <div class="legend">
+      <span><i class="k k--now"></i>Últimos 12 meses</span>
+      <span><i class="k k--prev"></i>Año anterior</span>
+    </div>
+  </div>
+
+  <div class="top">
+    <span class="top__t">Más vendidos</span>
+    {top.map((t) => (
+      <div class="top__row" data-row>
+        <span class="top__p">{t.p}</span>
+        <span class="top__u">{t.u}</span>
+        <span class="top__track"><span class="top__fill" style={`width:${t.w}%`} data-grow-x></span></span>
+      </div>
+    ))}
+  </div>
+</Ventana>
+
+<style>
+  .kpis { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; }
+  .kpi { display: grid; gap: 0.15rem; align-content: start; padding: 0.7rem 0.8rem; background: var(--color-field-mist); }
+  .kpi--main { grid-column: 1 / -1; background: var(--color-field-night); color: var(--color-paper); }
+  .kpi--main .soft { color: inherit; opacity: 0.75; }
+  .kpi strong { font-family: var(--font-display); font-weight: 600; font-size: 1.75rem; line-height: 1; }
+  .kpi--main strong { font-size: clamp(2.25rem, 9vw, 3rem); }
+  .kpi__d { color: var(--color-field-lime); font-weight: 500; }
+
+  .chart { display: grid; gap: 0.4rem; }
+  .chart__head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.4rem 1rem; min-height: 1.75rem; }
+  .chart__t { font-weight: 600; }
+  svg { display: block; width: 100%; height: 7.5rem; background: var(--color-paper); overflow: visible; }
+  .bar { fill: var(--color-field-cornflower); }
+  .bar--now { fill: var(--color-accent); }
+  .prev { fill: none; stroke: var(--color-ink); stroke-width: 2; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
+  .months { display: grid; grid-template-columns: repeat(12, 1fr); text-align: center; font-size: 0.8125rem; color: var(--color-soft); }
+  .months .odd { visibility: hidden; }
+  .legend { display: flex; flex-wrap: wrap; gap: 0.25rem 1.25rem; font-size: 0.8125rem; }
+  .legend span { display: inline-flex; align-items: center; gap: 0.4rem; }
+  .k { display: block; width: 0.75rem; height: 0.75rem; background: var(--color-accent); }
+  .k--prev { height: 2px; background: var(--color-ink); }
+
+  .top { display: grid; gap: 0.5rem; }
+  .top__t { font-weight: 600; }
+  .top__row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 0.2rem 0.75rem; }
+  .top__u { font-weight: 500; }
+  .top__track { grid-column: 1 / -1; display: block; height: 0.4rem; background: var(--color-field-mist); overflow: hidden; }
+  .top__fill { display: block; height: 100%; background: var(--color-field-night); transform-origin: 0 50%; }
+  .top__row:nth-of-type(n + 3) { display: none; }
+
+  @media (min-width: 640px) {
+    svg { height: 9rem; }
+    .months .odd { visibility: visible; }
+    .top__row:nth-of-type(n + 3) { display: grid; }
+  }
+</style>

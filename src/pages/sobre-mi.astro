@@ -1,12 +1,19 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import Sobre from "../components/home/Sobre.astro";
+import SubHero from "../components/sub/SubHero.astro";
+import Field from "../components/sub/Field.astro";
+import Filtro from "../components/sobre/Filtro.astro";
 import site from "../data/site.json";
+import sobre from "../data/sobre.json";
+
+const nombre = site.name.split(" ")[0];
+// Real portrait goes here once it exists: set `foto` in src/data/sobre.json (or `aboutPhoto` in site.json).
+const foto = sobre.foto || site.aboutPhoto || "";
 
 const principios = [
-  { t: "Primero el problema.", d: "Antes de hablar de tecnología, entendemos dónde se traba tu operación y cuánto te cuesta." },
-  { t: "Lo justo, ni más ni menos.", d: "Construimos lo que se va a usar todos los días. Lo demás espera o no se hace." },
-  { t: "Por etapas, sin frenar.", d: "Cada parte entra en uso antes de empezar la siguiente. Tu equipo sigue trabajando." },
+  { t: "Primero el problema", d: "Antes de hablar de tecnología, entiendo dónde se traba tu operación y cuánto te cuesta." },
+  { t: "Lo justo, ni más ni menos", d: "Construyo lo que se va a usar todos los días. Lo demás espera o no se hace." },
+  { t: "Por etapas, sin frenar", d: "Cada parte entra en uso antes de empezar la siguiente. Tu equipo sigue trabajando." },
 ];
 
 /* Ejemplo de una distribuidora: así se filtra lo que se pide en el diagnóstico. */
@@ -19,127 +26,199 @@ const filtro = [
   { t: "App móvil propia", e: "No hace falta", por: "Una web en el celular alcanza" },
   { t: "Chat interno", e: "No hace falta", por: "Ya usan WhatsApp" },
   { t: "20 formatos de reporte", e: "No hace falta", por: "Con 2 cubren todo" },
+] as const;
+
+const titular = ["Código", "Datos", "Accesos"];
+
+const compromisos = [
+  { t: "Un solo responsable", d: "No un call center" },
+  { t: "Precio por escrito", d: "Antes de cada cambio" },
+  { t: "Todo a tu nombre", d: "El sistema y tus datos" },
 ];
 
-const noHacemos = [
-  "No te pedimos que entiendas de tecnología: nos ocupamos de lo técnico.",
-  "No cobramos el diagnóstico de 30 minutos.",
-  "No empezamos sin una propuesta escrita con alcance, plazos y precio.",
-  "No construimos de más: si algo no resuelve tu problema, te lo decimos.",
-  "No te dejamos atado: código, datos y accesos quedan a nombre de tu empresa.",
+const noHago = [
+  "No te pido que entiendas de tecnología: me ocupo de lo técnico.",
+  "No cobro el diagnóstico de 30 minutos.",
+  "No empiezo sin una propuesta escrita con alcance, plazos y precio.",
+  "No construyo de más: si algo no resuelve tu problema, te lo digo.",
 ];
+
+const diagnostico = "/contacto?servicio=Diagn%C3%B3stico%20gratis";
 ---
 
 <Layout
   title={`Sobre mí — ${site.name}`}
-  description={`${site.name} desarrolla software a medida para PyMEs desde ${site.location}: inventario, procesos, automatizaciones, KPIs e informes. Conocé cómo trabajamos y pedí tu diagnóstico gratuito.`}
+  description={`${site.name} desarrolla software a medida para PyMEs desde ${site.location}: inventario, procesos, automatizaciones, KPIs e informes. Conocé cómo trabajo y pedí tu diagnóstico gratuito.`}
+  bleed
 >
-  <section class="sm-hero wrap" aria-labelledby="sm-title">
-    <h1 id="sm-title" class="sm-hero__h1" data-split>Software con nombre y apellido.</h1>
-    <p class="sm-hero__lead" data-rise style="--i:1">
-      Un equipo chico de desarrollo con base en {site.location}. Convertimos planillas, mensajes y tareas repetidas en
-      sistemas que tu equipo usa todos los días.
-    </p>
-  </section>
+  <SubHero
+    field="mist"
+    lead={`Soy ${nombre}, desde ${site.location}. Convierto planillas, mensajes y tareas repetidas en sistemas que tu equipo usa todos los días, y respondo por cada uno después.`}
+  >
+    <Fragment slot="title">Software <small>con</small> nombre y apellido</Fragment>
+    <Fragment slot="actions">
+      <a class="btn" href={diagnostico}>Agendar diagnóstico de 30 minutos</a>
+    </Fragment>
+    <div slot="aside" class="sm-card">
+      <div class="sm-card__face">
+        {
+          foto ? (
+            /* PHOTO SLOT: real portrait, rendered when sobre.json `foto` (or site.json `aboutPhoto`) is set. */
+            <img src={foto} alt={`Retrato de ${site.name}`} width="640" height="800" loading="eager" />
+          ) : (
+            /* PHOTO SLOT (empty): no real portrait yet, so the card shows the monogram. Never a stock photo. */
+            <span class="sm-card__mono" aria-hidden="true">{site.shortName}</span>
+          )
+        }
+      </div>
+      <div class="sm-card__body">
+        <p class="sm-card__name">{site.name}</p>
+        <p class="sm-card__role">Responsable de cada sistema · {site.location}</p>
+        <ul class="sm-card__rows">
+          {compromisos.map((c) => <li><span>{c.t}</span><span>{c.d}</span></li>)}
+        </ul>
+        <p class="sm-card__note">Hablás con quien hace el trabajo.</p>
+      </div>
+    </div>
+  </SubHero>
 
-  <Sobre />
-
-  <section class="sm-pr wrap" aria-label="Cómo pensamos">
-    <ul class="sm-pr__list">
+  <Field field="paper" id="sm-principios">
+    <Fragment slot="title">Así <small>lo</small> pienso</Fragment>
+    <ol class="sm-pr" data-stagger>
       {
         principios.map((p, i) => (
-          <li data-rise style={`--i:${i}`}>
-            <h2 class="sm-pr__t">{p.t}</h2>
+          <li>
+            <span class="sm-pr__n" aria-hidden="true">{i + 1}</span>
+            <h3 class="sm-pr__t">{p.t}</h3>
             <p class="sm-pr__d">{p.d}</p>
           </li>
         ))
       }
-    </ul>
-  </section>
+    </ol>
+  </Field>
 
-  <section class="sm-fl wrap" aria-labelledby="sm-fl-title">
-    <h2 id="sm-fl-title" class="sm-fl__h" data-split>Lo que resuelve, nada más</h2>
-    <p class="sm-fl__lead" data-rise style="--i:1">
-      En el diagnóstico pasamos cada pedido por dos preguntas: ¿resuelve el problema? ¿se va a usar todos los días? Lo que
-      no las supera no entra en la propuesta, y te explicamos por qué.
-    </p>
-    <div class="sm-fl__frag" data-ui role="group" aria-label="Ejemplo: lo que pidió una distribuidora, filtrado en el diagnóstico" data-rise style="--i:2">
-      <p class="sm-fl__cap"><span>Lo que se pide</span><span class="soft">Ejemplo de una distribuidora</span></p>
-      <table>
-        <thead><tr><th scope="col">Pedido</th><th scope="col">Decisión</th><th scope="col">Por qué</th></tr></thead>
-        <tbody>
-          {filtro.map((f) => (
-            <tr class:list={[f.e === "Primera etapa" && "is-yes", f.e === "No hace falta" && "is-no"]}>
-              <th scope="row">{f.t}</th><td>{f.e}</td><td>{f.por}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  </section>
+  <Field
+    field="cornflower"
+    id="sm-filtro"
+    lead="En el diagnóstico paso cada pedido por dos preguntas: ¿resuelve el problema? ¿Se va a usar todos los días? Lo que no las supera no entra en la propuesta, y te explico por qué."
+  >
+    <Fragment slot="title">Lo que <small>hace</small> falta</Fragment>
+    <Filtro filas={[...filtro]} caption="Ejemplo de una distribuidora" />
+  </Field>
 
-  <section class="sm-no" aria-labelledby="sm-no-title">
-    <div class="sm-no__in wrap">
-      <h2 id="sm-no-title" class="sm-no__h" data-split>Lo que no vas a ver</h2>
-      <ul class="sm-no__list">
-        {noHacemos.map((d, i) => <li data-rise style={`--i:${i % 4}`}>{d}</li>)}
+  <Field field="night" id="sm-atado">
+    <Fragment slot="title">No <small>te dejo</small> atado</Fragment>
+    <div class="sm-at">
+      <p class="sm-at__lead" data-reveal>Código, datos y accesos quedan a nombre de tu empresa.</p>
+      <ul class="sm-at__reg" aria-label="A nombre de quién queda cada parte del sistema" data-stagger>
+        {
+          titular.map((t) => (
+            <li>
+              <span class="sm-at__what">{t}</span>
+              <span class="sm-at__who">
+                <span class="sm-at__lbl">A nombre de</span>
+                <span class="sm-at__co">Tu empresa</span>
+              </span>
+            </li>
+          ))
+        }
       </ul>
     </div>
-  </section>
+  </Field>
 
-  <section class="sm-end wrap" aria-labelledby="sm-end-title">
-    <h2 id="sm-end-title" data-split>Empecemos por el diagnóstico.</h2>
-    <p class="sm-end__p" data-rise style="--i:1">Contanos dónde se traba tu operación y te respondemos en 24 horas hábiles. Son 30 minutos y es gratis.</p>
-    <div class="sm-end__actions" data-rise style="--i:2">
-      <a href="/contacto?servicio=Diagn%C3%B3stico%20gratis" class="btn">Pedir diagnóstico gratis</a>
-      <a href="/servicios">Ver servicios</a>
+  <Field field="lime" id="sm-manana">
+    <Fragment slot="title">¿Y si <small>mañana</small> no estoy?</Fragment>
+    <div class="sm-mn">
+      <p class="sm-mn__a" data-reveal="left">El sistema no queda a mi nombre.</p>
+      <p class="sm-mn__p" data-reveal>
+        El código, los datos y los accesos ya son de tu empresa. No tenés que pedirme permiso ni esperar a que yo
+        esté para seguir usándolos o para que otra persona trabaje sobre ellos.
+      </p>
     </div>
-  </section>
+  </Field>
+
+  <Field field="bone" id="sm-no">
+    <Fragment slot="title">Lo que <small>no vas a</small> ver</Fragment>
+    <ul class="sm-no" data-stagger>
+      {noHago.map((d) => <li>{d}</li>)}
+    </ul>
+  </Field>
+
+  <Field field="night" id="sm-cta" class="sm-cta">
+    <Fragment slot="title">Empezá <small>por el</small> diagnóstico</Fragment>
+    <div class="sm-cta__in">
+      <p class="sm-cta__p" data-reveal>
+        Contame dónde se traba tu operación y te respondo en 24 h hábiles. Son 30 minutos y es gratis.
+      </p>
+      <div class="sm-cta__actions" data-reveal>
+        <a class="btn sm-cta__btn" href={diagnostico}>Agendar diagnóstico de 30 minutos</a>
+        <a class="sm-cta__alt" href="/servicios">Ver servicios</a>
+      </div>
+    </div>
+  </Field>
 </Layout>
 
 <style>
-  .sm-hero { padding-top: clamp(3rem, 8vw, 6rem); }
-  .sm-hero__h1 { font-size: clamp(2.25rem, 8vw, 8.5rem); line-height: 0.9; letter-spacing: -0.03em; max-width: 14ch; }
-  .sm-hero__lead { margin-top: 2rem; font-size: var(--step-lead); line-height: 1.3; max-width: 40ch; }
+  /* Hero aside: a drawn "ficha" for the person responsible. Complete without a portrait. */
+  .sm-card { display: grid; grid-template-columns: minmax(0, 1fr); background: var(--color-paper); max-width: 34rem; }
+  .sm-card__face { background: var(--color-field-night); color: var(--color-paper); aspect-ratio: 16 / 9; display: grid; place-items: center; overflow: hidden; }
+  .sm-card__face img { width: 100%; height: 100%; object-fit: cover; }
+  .sm-card__mono { font-family: var(--font-display); font-weight: 600; font-size: clamp(5rem, 3rem + 10vw, 9rem); line-height: 1; color: var(--color-field-lime); }
+  .sm-card__body { padding: 1.25rem; display: grid; gap: 0.4rem; }
+  .sm-card__name { margin: 0; font-family: var(--font-display); font-weight: 600; text-transform: uppercase; font-size: clamp(2rem, 1.5rem + 2vw, 2.75rem); line-height: 0.95; }
+  .sm-card__role { margin: 0 0 0.75rem; font-size: var(--step-small); color: var(--color-soft); }
+  .sm-card__rows { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
+  .sm-card__rows li { display: flex; justify-content: space-between; gap: 1rem; padding: 0.7rem 0.9rem; background: var(--color-field-mist); font-size: var(--step-small); }
+  .sm-card__rows li span:first-child { font-weight: 500; }
+  .sm-card__rows li span:last-child { text-align: right; }
+  .sm-card__note { margin: 0.75rem 0 0; font-weight: 500; }
 
-  .sm-pr { margin-top: var(--section-gap); }
-  .sm-pr__list { list-style: none; margin: 0; padding: 0; display: grid; gap: 3rem; }
-  .sm-pr__t { font-size: clamp(2.25rem, 5vw, 5rem); line-height: 0.95; letter-spacing: -0.02em; }
-  .sm-pr__d { margin-top: 1rem; max-width: 44ch; }
+  /* Principles: three big numbered rows separated by deliberate 3px rules */
+  .sm-pr { list-style: none; margin: 0; padding: 0; display: grid; }
+  .sm-pr li { display: grid; grid-template-columns: auto minmax(0, 1fr); column-gap: 1rem; row-gap: 0.75rem; padding-block: 1.75rem; border-top: 3px solid var(--color-ink); }
+  .sm-pr__n { grid-row: span 2; font-family: var(--font-display); font-weight: 600; font-size: clamp(3rem, 2rem + 4vw, 5.5rem); line-height: 0.8; color: var(--color-accent); }
+  .sm-pr__t { margin: 0; font-family: var(--font-display); font-weight: 600; text-transform: uppercase; font-size: clamp(2rem, 1.3rem + 3vw, 4rem); line-height: 0.92; }
+  .sm-pr__d { margin: 0; max-width: 42ch; }
 
-  .sm-fl { margin-top: var(--section-gap); display: grid; gap: 1.5rem; }
-  .sm-fl__lead { max-width: 56ch; }
-  .sm-fl__frag { margin-top: 1.5rem; background: var(--color-surface); padding: clamp(1.25rem, 2.5vw, 2rem); font-size: var(--step-small); overflow-x: auto; }
-  .sm-fl__cap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.25rem 1rem; font-weight: 500; margin-bottom: 1rem; }
-  .sm-fl__frag table { width: 100%; border-collapse: collapse; min-width: 30rem; }
-  .sm-fl__frag th, .sm-fl__frag td { text-align: left; padding: 0.65rem 0.75rem 0.65rem 0; }
-  .sm-fl__frag thead th { color: var(--color-soft); font-weight: 400; }
-  .sm-fl__frag tbody tr { border-top: 1px solid var(--color-surface-2); }
-  .sm-fl__frag tbody th { font-weight: 500; }
-  .sm-fl__frag tr.is-yes td:nth-child(2) { color: var(--color-accent); }
-  .sm-fl__frag tr.is-no th, .sm-fl__frag tr.is-no td { color: var(--color-soft); }
-  .sm-fl__frag tr.is-no th { text-decoration: line-through; }
+  /* Not tied: one statement + a drawn ownership register */
+  .sm-at { display: grid; gap: clamp(2rem, 4vw, 3rem); }
+  .sm-at__lead { margin: 0; max-width: 20ch; font-family: var(--font-display); font-weight: 600; font-size: clamp(2rem, 1.3rem + 3vw, 3.75rem); line-height: 0.98; color: var(--color-field-lime); }
+  .sm-at__reg { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
+  .sm-at__reg li { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 0.5rem 1rem; padding: 1rem 1.25rem; background: var(--color-paper); color: var(--color-ink); }
+  .sm-at__what { font-family: var(--font-display); font-weight: 600; text-transform: uppercase; font-size: clamp(1.75rem, 1.3rem + 2vw, 2.75rem); line-height: 1; }
+  .sm-at__who { display: inline-flex; align-items: center; gap: 0.6rem; }
+  .sm-at__lbl { font-size: var(--step-small); color: var(--color-soft); }
+  .sm-at__co { padding: 0.35rem 0.75rem; background: var(--color-field-lime); font-weight: 500; }
 
-  .sm-no { margin-top: var(--section-gap); background: var(--color-surface); }
-  .sm-no__in { display: grid; gap: 2.5rem; padding-block: clamp(4rem, 8vw, 7rem); }
-  .sm-no__list { list-style: none; margin: 0; padding: 0; display: grid; gap: 1rem; }
-  .sm-no__list li { font-size: var(--step-lead); line-height: 1.3; max-width: 44ch; }
+  /* If tomorrow I'm not here */
+  .sm-mn { display: grid; gap: 1.25rem; }
+  .sm-mn__a { margin: 0; font-family: var(--font-display); font-weight: 600; font-size: clamp(2rem, 1.3rem + 3vw, 3.75rem); line-height: 0.98; max-width: 18ch; }
+  .sm-mn__p { margin: 0; font-size: var(--step-lead); line-height: 1.3; max-width: 40ch; }
 
-  .sm-end { margin-top: var(--section-gap); display: grid; gap: 1.5rem; justify-items: start; }
-  .sm-end__p { max-width: 52ch; }
-  .sm-end__actions { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem 1.75rem; }
-  .sm-end__actions a:not(.btn) { display: inline-block; padding-block: 0.5rem; }
+  .sm-no { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
+  .sm-no li { padding: 1.1rem 1.25rem; background: var(--color-paper); font-size: var(--step-lead); line-height: 1.3; }
 
+  /* Closing night field meets the footer directly (footer keeps a --section-gap top margin) */
+  :global(.sm-cta) { margin-bottom: calc(-1 * var(--section-gap)); }
+  .sm-cta__in { display: grid; gap: 1.5rem; justify-items: start; }
+  .sm-cta__p { margin: 0; font-size: var(--step-lead); line-height: 1.3; max-width: 40ch; }
+  .sm-cta__actions { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem 1.75rem; width: 100%; }
+  .sm-cta__btn { width: 100%; min-height: 4rem; background: var(--color-field-lime); color: var(--color-ink); font-size: var(--step-lead); text-align: center; }
+  .sm-cta__btn:hover, .sm-cta__btn:focus-visible { background: var(--color-paper); color: var(--color-ink); }
+  .sm-cta__alt { display: inline-block; padding-block: 0.5rem; color: var(--color-paper); font-weight: 500; text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 0.3em; }
+  .sm-cta__alt:hover { color: var(--color-field-lime); }
+
+  @media (min-width: 640px) {
+    .sm-cta__btn { width: auto; }
+  }
   @media (min-width: 1024px) {
-    .sm-pr__list li { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gutter); align-items: baseline; }
-    .sm-pr__t { grid-column: 1 / span 7; }
-    .sm-pr__d { grid-column: 9 / span 4; margin-top: 0; }
-    .sm-fl { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gutter); }
-    .sm-fl__h { grid-column: 1 / span 6; }
-    .sm-fl__lead { grid-column: 8 / span 5; align-self: end; }
-    .sm-fl__frag { grid-column: 1 / -1; }
-    .sm-no__in { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gutter); }
-    .sm-no__h { grid-column: 1 / span 4; align-self: start; }
-    .sm-no__list { grid-column: 6 / span 7; }
+    .sm-card { grid-template-columns: minmax(0, 2fr) minmax(0, 3fr); max-width: none; }
+    .sm-card__face { aspect-ratio: auto; min-height: 100%; }
+    .sm-pr li { grid-template-columns: 6rem minmax(0, 7fr) minmax(0, 5fr); column-gap: 2rem; align-items: start; }
+    .sm-pr__n { grid-row: auto; }
+    .sm-pr__d { padding-top: 0.5rem; }
+    .sm-at { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); align-items: center; gap: 4rem; }
+    .sm-mn { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); align-items: end; gap: 4rem; }
+    .sm-no { grid-template-columns: 1fr 1fr; }
   }
 </style>

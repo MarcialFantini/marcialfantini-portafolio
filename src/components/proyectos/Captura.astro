@@ -1,0 +1,54 @@
+---
+// A real screenshot of a demo project inside a browser frame. Links to the live demo when there is one.
+// Plain <img> on purpose: sharp is not installed, so astro:assets cannot transform (same approach as src/lib/stock.ts).
+
+interface Props {
+  src: ImageMetadata;
+  /** Business name shown in the frame bar (the fictional company of the demo). */
+  nombre: string;
+  /** Live demo URL, if deployed. */
+  href?: string;
+  eager?: boolean;
+}
+const { src, nombre, href, eager = false } = Astro.props;
+const Tag = href ? "a" : "div";
+---
+
+<figure class="cap">
+  <Tag class="cap__frame" {...(href ? { href, target: "_blank", rel: "noopener noreferrer" } : {})}>
+    <span class="cap__bar">
+      <span class="cap__marks" aria-hidden="true"><i></i><i></i><i></i></span>
+      <span class="cap__name">{nombre}</span>
+      <span class="cap__tag">Captura real</span>
+    </span>
+    <img
+      class="cap__img"
+      src={src.src}
+      width={src.width}
+      height={src.height}
+      alt={`Pantalla principal del sistema de demostración de ${nombre}`}
+      loading={eager ? "eager" : "lazy"}
+      fetchpriority={eager ? "high" : "auto"}
+      decoding="async"
+    />
+  </Tag>
+  {href && (
+    <figcaption class="cap__cap">
+      <a href={href} target="_blank" rel="noopener noreferrer">Abrir la demo en vivo <span aria-hidden="true">↗</span></a>
+    </figcaption>
+  )}
+</figure>
+
+<style>
+  .cap { margin: 0; display: grid; gap: 0.75rem; min-width: 0; }
+  .cap__frame { display: block; background: var(--color-field-night); color: var(--color-paper); text-decoration: none; }
+  .cap__bar { display: flex; align-items: center; gap: 0.75rem; padding: 0.6rem 0.9rem; font-size: 0.875rem; }
+  .cap__marks { display: flex; gap: 0.3rem; flex: none; }
+  .cap__marks i { display: block; width: 0.55rem; height: 0.55rem; background: var(--color-soft); }
+  .cap__name { font-weight: 500; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .cap__tag { margin-left: auto; flex: none; padding: 0.15rem 0.5rem; font-size: 0.8125rem; font-weight: 500; background: var(--color-field-lime); color: var(--color-ink); }
+  .cap__img { display: block; width: 100%; height: auto; transition: opacity 200ms ease; }
+  a.cap__frame:hover .cap__img { opacity: 0.92; }
+  a.cap__frame:focus-visible { outline: 3px solid var(--color-accent); outline-offset: 4px; }
+  .cap__cap a { color: inherit; font-weight: 500; text-decoration: underline; text-underline-offset: 0.25em; }
+</style>

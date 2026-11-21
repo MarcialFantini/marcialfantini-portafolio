@@ -1,0 +1,120 @@
+---
+/* Drawn browser frame showing the kind of page a web service delivers. Sample layout only ("Ejemplo" chip).
+   tipo: "web" (products / services page), "empresa" (institutional site), "tienda" (online shop).
+   Blocks rise in sequence via data-stagger (subflow.ts); complete and static without JS. */
+interface Props {
+  tipo: "web" | "empresa" | "tienda";
+  /** Compact version for lists: no body detail below the hero block. */
+  mini?: boolean;
+}
+const { tipo, mini = false } = Astro.props;
+
+const labels = {
+  web: "Ejemplo de página de productos o servicios: portada, tres productos y botón de WhatsApp",
+  empresa: "Ejemplo de sitio institucional: menú de secciones, portada y tres servicios",
+  tienda: "Ejemplo de tienda online: catálogo de productos con precio y carrito",
+} as const;
+const url = { web: "tuempresa.com.ar", empresa: "tuempresa.com.ar/nosotros", tienda: "tienda.tuempresa.com.ar" }[tipo];
+const productos = [
+  { n: "Caja 30x40", p: "$ 1.850" },
+  { n: "Cinta 48 mm", p: "$ 2.300" },
+  { n: "Film stretch", p: "$ 9.400" },
+  { n: "Esquinero 1 m", p: "$ 640" },
+];
+---
+
+<div class:list={["br", mini && "br--mini"]} role="img" aria-label={labels[tipo]}>
+  <div class="br__bar">
+    <span class="br__marks"><i></i><i></i><i></i></span>
+    <span class="br__url">{url}</span>
+    <span class="br__demo">Ejemplo</span>
+  </div>
+  <div class="br__body" data-stagger>
+    {
+      tipo === "empresa" && (
+        <div class="br__nav">
+          <b>Tu empresa</b>
+          <span>Nosotros</span>
+          <span>Servicios</span>
+          <span class="is-on">Contacto</span>
+        </div>
+      )
+    }
+    {
+      tipo === "tienda" && (
+        <div class="br__nav">
+          <b>Tu tienda</b>
+          <span>Catálogo</span>
+          <span class="is-on">Carrito (2)</span>
+        </div>
+      )
+    }
+    <div class:list={["br__hero", `br__hero--${tipo}`]}>
+      <span class="br__line br__line--xl"></span>
+      <span class="br__line"></span>
+      {tipo === "web" && <span class="br__wa">Escribinos por WhatsApp</span>}
+    </div>
+    {
+      !mini && tipo !== "tienda" && (
+        <div class="br__cols">
+          <span><i></i><b class="br__line"></b></span>
+          <span><i></i><b class="br__line"></b></span>
+          <span><i></i><b class="br__line"></b></span>
+        </div>
+      )
+    }
+    {
+      !mini && tipo === "tienda" && (
+        <div class="br__shop">
+          {productos.map((p) => (
+            <span class="br__prod">
+              <i></i>
+              <span>{p.n}</span>
+              <b>{p.p}</b>
+            </span>
+          ))}
+        </div>
+      )
+    }
+  </div>
+</div>
+
+<style>
+  .br { background: #fff; color: var(--color-ink); font-size: 0.875rem; line-height: 1.3; }
+  .br__bar { display: flex; align-items: center; gap: 0.75rem; padding: 0.6rem 0.9rem; background: var(--color-field-night); color: var(--color-paper); }
+  .br__marks { display: flex; gap: 0.3rem; flex: none; }
+  .br__marks i { display: block; width: 0.55rem; height: 0.55rem; background: var(--color-soft); }
+  .br__url {
+    flex: 1; min-width: 0; padding: 0.15rem 0.5rem; background: var(--color-paper); color: var(--color-ink);
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  .br__demo { flex: none; padding: 0.15rem 0.5rem; font-size: 0.8125rem; font-weight: 500; background: var(--color-field-lime); color: var(--color-ink); }
+
+  .br__body { display: grid; gap: 0.9rem; padding: 0.9rem; }
+  .br__nav { display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem 1rem; font-weight: 500; }
+  .br__nav b { margin-right: auto; font-weight: 600; }
+  .br__nav .is-on { padding: 0.15rem 0.5rem; background: var(--color-accent); color: var(--color-accent-ink); }
+
+  .br__hero { display: grid; gap: 0.5rem; justify-items: start; padding: 1rem; background: var(--color-field-mist); }
+  .br__hero--tienda { background: var(--color-field-lime); }
+  .br__hero--empresa { background: var(--color-surface); }
+  .br__line { display: block; width: 70%; height: 0.55rem; background: var(--color-surface-2); }
+  .br__line--xl { width: 85%; height: 1.1rem; background: var(--color-field-night); }
+  .br__wa { margin-top: 0.4rem; padding: 0.35rem 0.7rem; background: var(--color-accent); color: var(--color-accent-ink); font-weight: 500; }
+
+  .br__cols { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.6rem; }
+  .br__cols > span { display: grid; gap: 0.4rem; }
+  .br__cols i { display: block; aspect-ratio: 4 / 3; background: var(--color-surface); }
+
+  .br__shop { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.6rem; }
+  .br__prod { display: grid; gap: 0.2rem; font-weight: 500; }
+  .br__prod i { display: block; aspect-ratio: 16 / 9; background: var(--color-surface); }
+  .br__prod b { font-weight: 600; }
+
+  .br--mini .br__body { padding: 0.6rem; gap: 0.6rem; }
+  .br--mini .br__hero { padding: 0.7rem; }
+
+  @media (min-width: 640px) {
+    .br__shop { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  }
+</style>

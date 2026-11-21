@@ -10,7 +10,7 @@ stack: ["Node.js", "MercadoLibre API", "TiendaNube API", "PostgreSQL", "AFIP SDK
 fecha: 2025-08-30
 duracion: "7 semanas"
 role: "Integración + backend"
-repo: "https://github.com/MarcialFantini/mercadolibre-erp"
+repo: "https://github.com/MarcialFantini/distribuidora-del-litoral"
 tags: ["integracion", "mercadolibre", "erp", "stock"]
 featured: false
 metricas:

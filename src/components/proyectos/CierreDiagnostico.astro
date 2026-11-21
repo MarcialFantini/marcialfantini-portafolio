@@ -1,0 +1,22 @@
+---
+// Closing night field for the project pages: one action, the free 30-minute diagnosis.
+import Field from "../sub/Field.astro";
+
+const href = `/contacto?servicio=${encodeURIComponent("Diagnóstico gratis")}`;
+---
+
+<Field field="night" id="diagnostico" class="cd-end" lead="Contame cómo trabajan hoy y en media hora te digo qué sistema tiene sentido armar, cuánto llevaría y si conviene empezar por algo más chico.">
+  <Fragment slot="title">¿Uno <small>así</small> PARA <small>tu</small> EMPRESA?</Fragment>
+  <div class="cd" data-reveal>
+    <a class="btn cd__btn" href={href}>Agendar diagnóstico de 30 minutos <span aria-hidden="true">→</span></a>
+    <p class="cd__note">Gratis y sin compromiso. Respondo en 24 horas hábiles.</p>
+  </div>
+</Field>
+
+<style>
+  .cd { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem 1.75rem; }
+  .cd__btn { max-width: 100%; white-space: normal; text-align: left; }
+  .cd__note { margin: 0; font-size: var(--step-body); }
+  /* Meets the footer directly (footer keeps a --section-gap top margin) */
+  :global(.cd-end) { margin-bottom: calc(-1 * var(--section-gap)); }
+</style>

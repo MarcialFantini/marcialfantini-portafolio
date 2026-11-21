@@ -1,0 +1,110 @@
+---
+/* Scope filter: what the client asks for vs. what the operation needs. Rows enter one by one on scroll;
+   the strike on "No hace falta" rows draws itself after the row lands. Readable as a plain list without JS. */
+interface Fila {
+  t: string;
+  e: "Primera etapa" | "Más adelante" | "No hace falta";
+  por: string;
+}
+interface Props {
+  filas: Fila[];
+  caption: string;
+}
+const { filas, caption } = Astro.props;
+const kind = (e: Fila["e"]) => (e === "Primera etapa" ? "yes" : e === "Más adelante" ? "later" : "no");
+---
+
+<div class="flt" data-filtro>
+  <p class="flt__cap">{caption}</p>
+  <div class="flt__head" aria-hidden="true">
+    <span>Lo que te piden</span>
+    <span>Lo que hace falta</span>
+  </div>
+  <ol class="flt__list">
+    {
+      filas.map((f) => (
+        <li class:list={["flt__row", `is-${kind(f.e)}`]} data-filtro-row>
+          <span class="flt__ask">
+            <span class="flt__lbl">Lo que te piden:</span>
+            <span class="flt__t">
+              {f.t}
+              {kind(f.e) === "no" && <span class="flt__strike" aria-hidden="true" data-filtro-strike />}
+            </span>
+          </span>
+          <span class="flt__need">
+            <span class="flt__lbl">Lo que hace falta:</span>
+            <span class="flt__chip">{f.e}</span>
+            <span class="flt__por">{f.por}</span>
+          </span>
+        </li>
+      ))
+    }
+  </ol>
+</div>
+
+<script>
+  import { gsap, onPage, reduced } from "../../scripts/motion";
+
+  onPage(() => {
+    const root = document.querySelector<HTMLElement>("[data-filtro]");
+    if (!root || reduced()) return;
+    const ctx = gsap.context(() => {
+      root.querySelectorAll<HTMLElement>("[data-filtro-row]").forEach((row) => {
+        const strike = row.querySelector<HTMLElement>("[data-filtro-strike]");
+        const tl = gsap.timeline({ scrollTrigger: { trigger: row, start: "top 88%", once: true } });
+        tl.from(row, { x: -56, autoAlpha: 0, duration: 0.7, ease: "power3.out" });
+        tl.from(row.querySelector(".flt__chip"), { scale: 0.6, autoAlpha: 0, duration: 0.4, ease: "back.out(2)" }, "-=0.25");
+        if (strike) tl.from(strike, { scaleX: 0, transformOrigin: "0% 50%", duration: 0.5, ease: "power2.inOut" }, "-=0.1");
+      });
+    }, root);
+    return () => ctx.revert();
+  });
+</script>
+
+<style>
+  .flt { display: grid; gap: 4px; }
+  .flt__cap { margin: 0 0 1rem; font-size: var(--step-body); font-weight: 500; }
+  .flt__head { display: none; }
+  .flt__list { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
+
+  .flt__row {
+    display: grid; gap: 0.75rem;
+    padding: 1.1rem 1.25rem;
+    background: var(--color-paper);
+  }
+  .flt__lbl { display: block; margin-bottom: 0.2rem; font-size: var(--step-small); color: var(--color-soft); }
+  .flt__t {
+    position: relative; display: inline-block;
+    font-family: var(--font-display); font-weight: 600; text-transform: uppercase;
+    font-size: clamp(1.5rem, 1.1rem + 2vw, 2.75rem); line-height: 0.95;
+  }
+  .flt__strike {
+    position: absolute; left: -0.1em; right: -0.1em; top: 50%;
+    height: 4px; margin-top: -2px; background: var(--color-ink);
+  }
+  .flt__need { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 0.9rem; }
+  .flt__need .flt__lbl { flex-basis: 100%; margin: 0; }
+  .flt__chip {
+    display: inline-block; padding: 0.3rem 0.7rem;
+    font-size: var(--step-small); font-weight: 500; white-space: nowrap;
+  }
+  .flt__por { font-size: var(--step-body); line-height: 1.3; }
+
+  .is-yes .flt__chip { background: var(--color-field-night); color: var(--color-paper); }
+  .is-later .flt__chip { background: var(--color-field-mist); color: var(--color-ink); }
+  .is-no { background: var(--color-surface); }
+  .is-no .flt__t { color: var(--color-soft); }
+  .is-no .flt__chip { background: var(--color-field-lime); color: var(--color-ink); }
+
+  @media (min-width: 900px) {
+    .flt__head {
+      display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 2rem;
+      padding: 0 1.75rem 0.75rem;
+      font-family: var(--font-display); font-weight: 600; font-size: var(--step-lead); line-height: 1;
+    }
+    .flt__row { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); align-items: center; gap: 2rem; padding: 1.25rem 1.75rem; }
+    .flt__lbl { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+    .flt__need { flex-wrap: nowrap; }
+    .flt__chip { min-width: 9.5rem; text-align: center; }
+  }
+</style>

@@ -1,7 +1,7 @@
 ---
 title: "Blog Editorial Consultora"
 slug: "blog-consultora"
-cliente: "Consultora Estrada & Cía"
+cliente: "Consultora Norte"
 categoria: "blog"
 descripcion: "Blog editorial con autores múltiples, secciones por área de consultoría y newsletter integrada."
 problema: "Consultora boutique con 12 consultores senior. Querían posicionarse orgánicamente en Google y consolidar su voz editorial en temas donde son referentes."
@@ -10,7 +10,8 @@ stack: ["Astro", "TypeScript", "Tailwind CSS", "MDX", "Beehiiv API"]
 fecha: 2025-08-15
 duracion: "5 semanas"
 role: "Diseño + desarrollo full-stack"
-repo: "https://github.com/MarcialFantini/blog-consultora"
+repo: "https://github.com/MarcialFantini/consultora-norte"
+url: "https://06-blog-consultora.vercel.app"
 tags: ["blog", "editorial", "consultora"]
 featured: false
 metricas:

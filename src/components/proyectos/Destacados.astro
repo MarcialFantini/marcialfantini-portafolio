@@ -1,0 +1,84 @@
+---
+// The three demos with a drawn interface, shown large and live, each linking to its page.
+import Field from "../sub/Field.astro";
+import type { Field as FieldName } from "./catalogo";
+import { FEATURED, LINEA, RUBRO } from "./catalogo";
+
+interface Props {
+  field: FieldName;
+  items: { id: string; nombre: string }[];
+}
+const { field, items } = Astro.props;
+const slots = ["lead", "left", "right"];
+const cards = FEATURED.flatMap((f, i) => {
+  const it = items.find((x) => x.id === f.id);
+  return it ? [{ ...it, Ui: f.Ui, slot: slots[i], rubro: RUBRO[f.id] ?? "", linea: LINEA[f.id] ?? "" }] : [];
+});
+---
+
+{cards.length > 0 && (
+  <Field field={field} id="destacados" lead="Stock, ventas y pedidos: tres sistemas de operación armados de punta a punta. Lo que ves en cada pantalla son datos de ejemplo.">
+    <Fragment slot="title">TRES <small>sistemas</small> FUNCIONANDO</Fragment>
+    <ul class="dc" role="list">
+      {cards.map((c) => {
+        const Ui = c.Ui;
+        return (
+          <li class={`dc__card dc__card--${c.slot}`}>
+            <a class="dc__link" href={`/proyectos/${c.id}`}>
+              <div class="dc__ui"><Ui /></div>
+              <div class="dc__cap">
+                <span class="dc__rubro">{c.rubro}</span>
+                <h3 class="dc__name">{c.nombre}</h3>
+                <span class="dc__line">{c.linea}</span>
+                <span class="dc__go">Ver el sistema <span class="dc__arr" aria-hidden="true">→</span></span>
+              </div>
+            </a>
+          </li>
+        );
+      })}
+    </ul>
+  </Field>
+)}
+
+<style>
+  .dc { list-style: none; margin: 0; padding: 0; display: grid; gap: 3.5rem; }
+  .dc__card { min-width: 0; }
+  .dc__link { display: grid; gap: 1.1rem; color: inherit; text-decoration: none; }
+  .dc__link:focus-visible { outline: 3px solid var(--color-accent); outline-offset: 6px; }
+  .dc__ui { min-width: 0; transition: transform 0.5s var(--ease-out-expo); }
+  .dc__cap { display: grid; gap: 0.35rem; justify-items: start; }
+  .dc__rubro { font-size: 1rem; color: var(--color-soft); }
+  .dc__name {
+    margin: 0; font-family: var(--font-display); font-weight: 600; letter-spacing: 0;
+    font-size: clamp(1.875rem, 1.4rem + 1.6vw, 2.75rem); line-height: 1;
+  }
+  .dc__line { font-size: var(--step-body); line-height: 1.45; max-width: 38ch; }
+  .dc__go { margin-top: 0.4rem; font-weight: 500; text-decoration: underline; text-underline-offset: 0.25em; }
+  .dc__arr { display: inline-block; transition: transform 0.35s var(--ease-out-expo); }
+  @media (hover: hover) {
+    .dc__link:hover .dc__ui { transform: translateY(-6px); }
+    .dc__link:hover .dc__arr { transform: translateX(0.4rem); }
+    .dc__link:hover .dc__go { color: var(--color-accent); }
+  }
+
+  @media (min-width: 900px) {
+    .dc { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 2rem; row-gap: 5rem; align-items: start; }
+    .dc__card--lead { grid-column: 1 / -1; }
+    .dc__card--lead .dc__link { grid-template-columns: minmax(0, 8fr) minmax(0, 4fr); column-gap: 2rem; align-items: end; }
+    .dc__card--left { grid-column: 1 / span 5; }
+    .dc__card--right { grid-column: 7 / -1; margin-top: 6rem; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .dc__ui, .dc__arr { transition: none; }
+  }
+</style>
+
+<script>
+  import { onPage } from "../../scripts/motion";
+  import { animateUis } from "./uiMotion";
+
+  onPage(() => {
+    const root = document.getElementById("destacados");
+    return root ? animateUis(root) : undefined;
+  });
+</script>

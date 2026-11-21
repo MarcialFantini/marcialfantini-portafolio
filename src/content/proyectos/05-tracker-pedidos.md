@@ -1,7 +1,7 @@
 ---
 title: "Tracker Pedidos Mayoristas"
 slug: "tracker-pedidos"
-cliente: "Logística Patagónica"
+cliente: "Logística Andina"
 categoria: "panel"
 descripcion: "App interna para que clientes mayoristas rastreen el estado de sus pedidos en tiempo real."
 problema: "Operador logístico con 80 clientes mayoristas. El call center recibía 200 llamadas por día preguntando 'dónde está mi pedido'."
@@ -10,7 +10,8 @@ stack: ["Astro", "TypeScript", "Node API", "SQLite", "WebSockets"]
 fecha: 2025-07-08
 duracion: "5 semanas"
 role: "Diseño + desarrollo full-stack"
-repo: "https://github.com/MarcialFantini/tracker-pedidos"
+repo: "https://github.com/MarcialFantini/reparto-veloz"
+url: "https://05-tracker-pedidos.vercel.app"
 tags: ["logistica", "tracker", "b2b"]
 featured: false
 metricas:

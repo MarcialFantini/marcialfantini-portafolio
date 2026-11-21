@@ -1,0 +1,143 @@
+---
+/* Small drawn screen for one capability of the custom-software offer, inside the shared Ventana frame.
+   Everything shown is sample data ("Demo" chip in the frame bar). Motion comes from subflow.ts:
+   data-grow bars, data-count figures, data-stagger rows. Static and complete without JS. */
+import Ventana from "../demos-ui/Ventana.astro";
+
+interface Props {
+  kind: "inventario" | "automatizaciones" | "kpis" | "integraciones";
+}
+const { kind } = Astro.props;
+
+const stock = [
+  { p: "Caja 30x40", lvl: 22, low: true, n: 47 },
+  { p: "Cinta 48 mm", lvl: 64, low: false, n: 86 },
+  { p: "Film stretch", lvl: 88, low: false, n: 158 },
+];
+const flow = [
+  { when: "Cuando", what: "Entra un pedido de la tienda" },
+  { when: "Hace", what: "Descuenta stock y arma el remito" },
+  { when: "Avisa", what: "Al depósito, con el pedido listo" },
+];
+const bars = [38, 52, 46, 61, 58, 74, 82];
+const sources = ["Tienda web", "Planilla", "Facturación", "WhatsApp"];
+---
+
+{
+  kind === "inventario" && (
+    <Ventana ui="cap-inv" title="Inventario" where="Depósito" label="Ejemplo de pantalla de inventario: nivel de stock por producto con uno bajo el mínimo">
+      <div class="inv" data-stagger>
+        {stock.map((r) => (
+          <div class="inv__row">
+            <span class="inv__name">{r.p}</span>
+            <span class="inv__track"><span class:list={["inv__fill", r.low && "is-low"]} style={`width:${r.lvl}%`} data-grow /></span>
+            <b class="inv__n">{r.n}</b>
+            {r.low ? <span class="chip chip--low">Reponer</span> : <span class="chip">OK</span>}
+          </div>
+        ))}
+      </div>
+    </Ventana>
+  )
+}
+
+{
+  kind === "automatizaciones" && (
+    <Ventana ui="cap-auto" title="Regla" where="Pedidos nuevos" label="Ejemplo de automatización: cuando entra un pedido, el sistema descuenta stock, arma el remito y avisa al depósito">
+      <ol class="auto" data-stagger>
+        {flow.map((s, i) => (
+          <li class="auto__step">
+            <span class:list={["auto__when", i === 0 && "is-first"]}>{s.when}</span>
+            <span>{s.what}</span>
+          </li>
+        ))}
+      </ol>
+    </Ventana>
+  )
+}
+
+{
+  kind === "kpis" && (
+    <Ventana ui="cap-kpi" title="Tablero" where="Este mes" label="Ejemplo de tablero de indicadores: pedidos del mes y evolución semanal en barras">
+      <div class="kpi">
+        <p class="kpi__fig">
+          <b data-count="312">312</b>
+          <span class="soft">pedidos del mes</span>
+        </p>
+        <div class="kpi__bars" aria-hidden="true">
+          {bars.map((h, i) => (
+            <span class:list={["kpi__bar", i === bars.length - 1 && "is-now"]} style={`height:${h}%`} data-grow="y" />
+          ))}
+        </div>
+      </div>
+    </Ventana>
+  )
+}
+
+{
+  kind === "integraciones" && (
+    <Ventana ui="cap-int" title="Conexiones" where="Sistema" label="Ejemplo de integraciones: tienda web, planilla, facturación y WhatsApp conectadas a un mismo sistema">
+      <div class="int">
+        <ul class="int__src" data-stagger>
+          {sources.map((s) => (
+            <li>
+              <span class="chip">{s}</span>
+              <span class="int__wire" data-grow />
+            </li>
+          ))}
+        </ul>
+        <div class="int__hub" data-reveal="right">
+          <b>Sistema</b>
+          <span>Un solo dato, sin pasar a mano</span>
+        </div>
+      </div>
+    </Ventana>
+  )
+}
+
+<style>
+  /* Inventario */
+  .inv { display: grid; gap: 2px; }
+  .inv__row {
+    display: grid; grid-template-columns: minmax(0, 1fr) 3.5rem 2.5rem auto; align-items: center; gap: 0.6rem;
+    padding: 0.5rem 0.6rem; background: var(--color-paper);
+  }
+  .inv__name { font-weight: 500; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .inv__track { position: relative; display: block; height: 0.5rem; background: var(--color-surface-2); }
+  .inv__fill { position: absolute; inset: 0 auto 0 0; background: var(--color-field-night); }
+  .inv__fill.is-low { background: var(--color-accent); }
+  .inv__n { text-align: right; font-weight: 600; }
+
+  /* Automatizaciones */
+  .auto { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; }
+  .auto__step {
+    position: relative; display: grid; grid-template-columns: 4.25rem minmax(0, 1fr); align-items: center; gap: 0.75rem;
+    padding: 0.55rem 0.6rem; background: var(--color-paper); font-weight: 500;
+  }
+  .auto__step + .auto__step { margin-top: 0.9rem; }
+  /* 2px connector between steps */
+  .auto__step + .auto__step::before {
+    content: ""; position: absolute; left: 2.6rem; top: -0.9rem; width: 2px; height: 0.9rem; background: var(--color-field-night);
+  }
+  .auto__when { padding: 0.2rem 0.4rem; text-align: center; background: var(--color-field-mist); font-size: 0.8125rem; }
+  .auto__when.is-first { background: var(--color-field-lime); }
+
+  /* KPIs */
+  .kpi { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: end; gap: 1.25rem; }
+  .kpi__fig { margin: 0; display: grid; gap: 0.15rem; }
+  .kpi__fig b { font-family: var(--font-display); font-weight: 600; font-size: 3rem; line-height: 0.9; }
+  .kpi__bars { display: flex; align-items: flex-end; gap: 4px; height: 5.5rem; }
+  .kpi__bar { flex: 1; background: var(--color-field-mist); }
+  .kpi__bar.is-now { background: var(--color-accent); }
+
+  /* Integraciones */
+  .int { display: grid; grid-template-columns: auto minmax(2rem, 1fr) auto; align-items: center; }
+  .int__src { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.4rem; grid-column: 1 / 3; }
+  .int__src li { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; }
+  .int__wire { display: block; height: 2px; background: var(--color-field-night); }
+  .int__hub {
+    grid-column: 3; display: grid; gap: 0.25rem; align-self: stretch; align-content: center;
+    max-width: 8.5rem; padding: 0.75rem; background: var(--color-field-night); color: var(--color-paper);
+  }
+  .int__hub b { font-family: var(--font-display); font-size: 1.5rem; font-weight: 600; line-height: 1; }
+  .int__hub span { font-size: 0.8125rem; line-height: 1.25; }
+</style>

@@ -4,6 +4,8 @@ import Video from "./Video.astro";
 
 // One field: the text travels to WhatsApp as ?text= (works without JS).
 const waAction = site.whatsapp ? `https://wa.me/${site.whatsapp}` : "/contacto";
+// Primary action: same destination as the header action (src/components/Header.astro)
+const diagnostico = "/contacto?servicio=Diagn%C3%B3stico%20gratis";
 ---
 
 <section id="cierre" class="cap-cierre" data-field="night" aria-labelledby="cierre-title">
@@ -13,48 +15,49 @@ const waAction = site.whatsapp ? `https://wa.me/${site.whatsapp}` : "/contacto";
     <h2 id="cierre-title"><span>CONTAME</span> <span><small>tu</small> PROBLEMA</span></h2>
   </div>
 
-  <div class="cap-cierre__form wrap">
-    <p class="cap-cierre__lead">Una línea alcanza. Se abre WhatsApp con tu mensaje.</p>
-    <form action={waAction} method="get" target="_blank">
-      <label for="cierre-text" class="sr-only">Tu problema, en una línea</label>
-      <input id="cierre-text" name="text" type="text" required autocomplete="off" placeholder="Ej.: perdemos pedidos entre WhatsApp y Excel" />
-      <button class="btn" type="submit">Enviar</button>
-    </form>
-    <p class="cap-cierre__note">Te respondo en 24 h hábiles. La primera charla de 30 minutos es gratis.</p>
-    <a class="cap-cierre__mail" href={`mailto:${site.email}`}>{site.email}</a>
-  </div>
+  <div class="cap-cierre__close wrap">
+    <div class="cap-cierre__main">
+      <p class="cap-cierre__lead">El primer paso es un diagnóstico de 30 minutos, sin costo.</p>
+      <a class="btn cap-cierre__cta" href={diagnostico}>Agendar diagnóstico de 30 minutos</a>
+      <p class="cap-cierre__note">Te respondo en 24 h hábiles.</p>
+    </div>
 
-  <div class="wrap">
-    <ul class="cap-cierre__opts">
-      <li>
-        <a href={site.whatsapp ? `https://wa.me/${site.whatsapp}` : "/contacto"} target="_blank" rel="noopener" data-ui>
-          <svg viewBox="0 0 40 40" width="48" height="48" aria-hidden="true"><path d="M6 8h28v20H17l-8 7v-7H6z" fill="currentColor" /></svg>
-          <span>WhatsApp</span>
-        </a>
-      </li>
-      <li>
-        <a href={`mailto:${site.email}`} data-ui>
-          <svg viewBox="0 0 40 40" width="48" height="48" aria-hidden="true"><path d="M4 8h32v24H4z" fill="currentColor" /><path d="M4 8l16 14L36 8" fill="none" stroke="var(--opt-bg)" stroke-width="3" /></svg>
-          <span>Email</span>
-        </a>
-      </li>
-      <li>
-        <a href="/contacto" data-ui>
-          <svg viewBox="0 0 40 40" width="48" height="48" aria-hidden="true"><path d="M7 4h26v32H7z" fill="currentColor" /><path d="M13 13h14M13 20h14M13 27h8" stroke="var(--opt-bg)" stroke-width="3" /></svg>
-          <span>Formulario completo</span>
-        </a>
-      </li>
-    </ul>
-    <p class="cap-cierre__clock" data-clock>Córdoba, Argentina</p>
+    <div class="cap-cierre__alt">
+      <p class="cap-cierre__sub">Si preferís adelantar el tema, describilo en una línea: se abre WhatsApp con el mensaje listo para que lo envíes.</p>
+      <form action={waAction} method="get" target="_blank">
+        <label for="cierre-text" class="sr-only">Tu problema, en una línea</label>
+        <input id="cierre-text" name="text" type="text" required autocomplete="off" placeholder="Ej.: se nos pierden pedidos" />
+        <button class="btn" type="submit">Abrir WhatsApp</button>
+      </form>
+      <ul class="cap-cierre__opts">
+        <li>
+          <a href={site.whatsapp ? `https://wa.me/${site.whatsapp}` : "/contacto"} target="_blank" rel="noopener">
+            <svg viewBox="0 0 40 40" width="22" height="22" aria-hidden="true"><path d="M6 8h28v20H17l-8 7v-7H6z" fill="currentColor" /></svg>
+            <span>WhatsApp</span>
+          </a>
+        </li>
+        <li>
+          <a href={`mailto:${site.email}`}>
+            <svg viewBox="0 0 40 40" width="22" height="22" aria-hidden="true"><path d="M4 8h32v24H4z" fill="currentColor" /><path d="M4 8l16 14L36 8" fill="none" stroke="var(--color-field-night)" stroke-width="3" /></svg>
+            <span>Email</span>
+          </a>
+        </li>
+        <li>
+          <a href="/contacto">
+            <svg viewBox="0 0 40 40" width="22" height="22" aria-hidden="true"><path d="M7 4h26v32H7z" fill="currentColor" /><path d="M13 13h14M13 20h14M13 27h8" stroke="var(--color-field-night)" stroke-width="3" /></svg>
+            <span>Formulario completo</span>
+          </a>
+        </li>
+      </ul>
+      <p class="cap-cierre__clock" data-clock>Córdoba, Argentina</p>
+    </div>
   </div>
-
-  <p class="cap-cierre__credit wrap">
-    <a href="https://unsplash.com/?utm_source=marcial_fantini_portfolio&utm_medium=referral" target="_blank" rel="noopener">Fotos y videos provisorios de Unsplash, StockSnap y Mixkit.</a>
-  </p>
 </section>
 
 <style>
-  .cap-cierre { padding-bottom: 2rem; }
+  /* The footer keeps a --section-gap top margin that would show the page ground as a band;
+     pulling the section's bottom edge over it lets night meet the footer directly. */
+  .cap-cierre { padding-bottom: clamp(3rem, 6vw, 5rem); margin-bottom: calc(-1 * var(--section-gap)); }
   .cap-cierre__stage { position: relative; min-height: 100svh; display: grid; place-items: center; overflow: hidden; }
   .cap-cierre__img { position: absolute; inset: 0; will-change: transform; }
   .cap-cierre__img :global(.vslot) { width: 100%; height: 100%; }
@@ -67,36 +70,52 @@ const waAction = site.whatsapp ? `https://wa.me/${site.whatsapp}` : "/contacto";
   h2 span { display: block; }
   h2 small { font-family: var(--font-sans); font-weight: 400; font-size: 0.35em; text-transform: none; letter-spacing: 0; }
 
-  .cap-cierre__form { padding-top: clamp(3rem, 6vw, 5rem); max-width: 44rem; }
-  .cap-cierre__lead { margin: 0 0 1.25rem; font-size: var(--step-lead); }
+  .cap-cierre__close { padding-top: clamp(3rem, 6vw, 5rem); display: grid; grid-template-columns: minmax(0, 1fr); gap: clamp(2.5rem, 5vw, 4rem); }
+  .cap-cierre__main { display: grid; justify-items: start; gap: 1.25rem; align-content: start; }
+  .cap-cierre__lead {
+    margin: 0; max-width: 16ch; text-wrap: balance;
+    font-family: var(--font-display); font-weight: 600; font-size: clamp(2.25rem, 1.5rem + 3vw, 3.75rem); line-height: 0.98;
+  }
+  /* Primary action: the one lime block on the night field */
+  .cap-cierre .cap-cierre__cta {
+    width: 100%; min-height: 4rem; padding: 0.75rem 1.5rem; text-align: center;
+    background: var(--color-field-lime); color: var(--color-ink); font-size: var(--step-lead); font-weight: 500;
+  }
+  .cap-cierre .cap-cierre__cta:hover, .cap-cierre .cap-cierre__cta:focus-visible { background: var(--color-paper); color: var(--color-ink); }
+  .cap-cierre__note { margin: 0; font-size: var(--step-body); }
+
+  .cap-cierre__alt { display: grid; gap: 1.25rem; align-content: start; }
+  .cap-cierre__sub { margin: 0; font-size: var(--step-body); max-width: 46ch; }
   .cap-cierre form { display: flex; gap: 0.5rem; flex-wrap: wrap; }
   .cap-cierre input {
-    flex: 1 1 16rem; min-width: 0; height: 3.5rem; padding: 0 1.1rem; border: 0; border-radius: 0;
-    background: var(--color-paper); color: var(--color-ink); font: inherit;
+    flex: 1 1 14rem; min-width: 0; height: 3.5rem; padding: 0 1.1rem; border: 0; border-radius: 0;
+    background: var(--color-paper); color: var(--color-ink); font: inherit; text-overflow: ellipsis;
   }
   .cap-cierre input::placeholder { color: #5b6270; }
   .cap-cierre input:focus-visible { outline: 3px solid var(--color-field-cornflower); outline-offset: 2px; }
-  .cap-cierre .btn { height: 3.5rem; border: 0; cursor: pointer; }
-  .cap-cierre__note { margin: 1rem 0 0; font-size: var(--step-body); }
-  .cap-cierre__mail { display: inline-block; margin-top: 0.75rem; color: var(--color-paper); font-weight: 500; text-underline-offset: 0.25em; }
-  .cap-cierre__opts { list-style: none; margin: clamp(3rem, 6vw, 5rem) 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); grid-auto-rows: 1fr; gap: var(--gutter); }
+  .cap-cierre form .btn { flex: 1 1 auto; height: 3.5rem; border: 0; cursor: pointer; }
+
+  /* Three quiet secondary routes on one row */
+  .cap-cierre__opts { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0.25rem clamp(1.25rem, 3vw, 2rem); }
   .cap-cierre__opts a {
-    --opt-bg: var(--color-paper);
-    display: flex; flex-direction: column; justify-content: space-between; gap: 2rem; height: 100%; min-height: 9.5rem; padding: clamp(0.75rem, 2vw, 1.5rem);
-    background: var(--opt-bg); color: var(--color-ink); text-decoration: none;
-    font-family: var(--font-display); font-weight: 600; font-size: clamp(1.1rem, 0.7rem + 1.8vw, 2.25rem); line-height: 1;
-    transition: transform 0.4s var(--ease-out-quart, ease-out);
+    display: inline-flex; align-items: center; gap: 0.6rem; min-height: 2.75rem;
+    color: var(--color-paper); font-size: var(--step-body); font-weight: 500;
+    text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 0.3em;
+    transition: color 0.2s var(--ease-out-quart, ease-out);
   }
-  .cap-cierre__opts li:nth-child(2) a { --opt-bg: var(--color-field-lime); }
-  .cap-cierre__opts li:nth-child(3) a { --opt-bg: var(--color-field-cornflower); }
-  .cap-cierre__opts a:hover, .cap-cierre__opts a:focus-visible { transform: translateY(-6px); }
-  .cap-cierre__opts svg { width: clamp(2rem, 5vw, 3.5rem); height: auto; }
-  .cap-cierre__clock { margin: 1.25rem 0 0; font-size: var(--step-body); }
-  .cap-cierre__credit { margin: clamp(3rem, 6vw, 5rem) 0 0; font-size: 0.875rem; }
-  .cap-cierre__credit a { color: var(--color-paper); text-underline-offset: 0.2em; }
+  .cap-cierre__opts a:hover, .cap-cierre__opts a:focus-visible { color: var(--color-field-lime); }
+  .cap-cierre__opts svg { flex: none; }
+  .cap-cierre__clock { margin: 0; font-size: var(--step-body); }
+
+  @media (min-width: 640px) {
+    .cap-cierre .cap-cierre__cta { width: auto; }
+    .cap-cierre form .btn { flex: 0 0 auto; }
+  }
+  @media (min-width: 900px) {
+    .cap-cierre__close { grid-template-columns: minmax(0, 6fr) minmax(0, 6fr); align-items: start; }
+  }
 
   @media (min-width: 768px) {
-    .cap-cierre__opts a { aspect-ratio: 1 / 1; }
     h2 { font-size: clamp(7rem, 17vw, 16rem); }
   }
 </style>

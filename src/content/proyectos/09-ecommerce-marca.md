@@ -10,7 +10,8 @@ stack: ["Next.js", "TypeScript", "Stripe", "PostgreSQL", "Vercel"]
 fecha: 2025-11-18
 duracion: "10 semanas"
 role: "Diseño + desarrollo full-stack"
-repo: "https://github.com/MarcialFantini/ecommerce-marca"
+repo: "https://github.com/MarcialFantini/verdeo-tienda"
+url: "https://09-ecommerce-marca.vercel.app"
 tags: ["ecommerce", "stripe", "nextjs"]
 featured: false
 metricas:

@@ -1,5 +1,12 @@
 ---
 import Layout from "../../layouts/Layout.astro";
+import SubHero from "../../components/sub/SubHero.astro";
+import Field from "../../components/sub/Field.astro";
+import Destacados from "../../components/proyectos/Destacados.astro";
+import ProyectoTile from "../../components/proyectos/ProyectoTile.astro";
+import { capturaDe } from "../../components/proyectos/capturas";
+import CierreDiagnostico from "../../components/proyectos/CierreDiagnostico.astro";
+import { FEATURED, GROUPS, GROUP_ORDER, LINEA, RUBRO, groupOf } from "../../components/proyectos/catalogo";
 import demos from "../../data/demos.json";
 import { getPublishedProjects } from "../../lib/content";
 
@@ -7,62 +14,138 @@ import { getPublishedProjects } from "../../lib/content";
 const orden = demos.map((d) => d.id);
 const proyectos = (await getPublishedProjects())
   .sort((a, b) => orden.indexOf(a.id) - orden.indexOf(b.id))
-  .map((p) => ({ ...p, nombre: demos.find((d) => d.id === p.id)?.nombre ?? p.data.title }));
+  .map((p) => ({
+    id: p.id,
+    nombre: demos.find((d) => d.id === p.id)?.nombre ?? p.data.title,
+    rubro: RUBRO[p.id] ?? p.data.cliente,
+    linea: LINEA[p.id] ?? p.data.descripcion,
+    group: groupOf(p),
+  }));
 const empty = proyectos.length === 0;
+
+const featuredIds = new Set<string>(FEATURED.map((f) => f.id));
+// Remaining demos, ordered by group so the full list reads grouped even without the filter.
+const resto = proyectos
+  .filter((p) => !featuredIds.has(p.id))
+  .sort((a, b) => GROUP_ORDER.indexOf(a.group) - GROUP_ORDER.indexOf(b.group));
+const grupos = GROUP_ORDER.map((key) => ({ key, label: GROUPS[key].label, n: resto.filter((p) => p.group === key).length })).filter((g) => g.n > 0);
 ---
 
 <Layout
   title="Proyectos demo"
-  description="Proyectos de demostración de software a medida para PyMEs: inventario, pedidos, tableros, integraciones y webs. Construidos para mostrar qué se puede hacer."
+  description="Proyectos de demostración de software a medida para empresas: inventario, pedidos, tableros, integraciones y webs. Construidos para mostrar qué se puede hacer."
   noindex={empty}
+  bleed
 >
-  <section class="pi wrap">
-    <h1 class="pi__h1" data-split>Proyectos demo</h1>
-    <p class="pi__lead" data-rise style="--i:1">
-      {empty
-        ? "Estamos preparando los demos. Mientras tanto, contanos qué necesitás y te respondemos en 24 horas hábiles."
-        : `${proyectos.length} proyectos construidos para mostrar qué se puede hacer. Los negocios y sus cifras son escenarios de ejemplo, no clientes.`}
-    </p>
+  <SubHero
+    field="cornflower"
+    lead={empty
+      ? "Estoy preparando los demos. Mientras tanto, contame qué necesitás y te respondo en 24 horas hábiles."
+      : `${proyectos.length} sistemas construidos para mostrar qué se puede hacer en una empresa: stock, ventas, pedidos, cobranzas, integraciones y más.`}
+  >
+    <Fragment slot="title">PROYECTOS <small>que</small> PODÉS VER</Fragment>
+    <Fragment slot="actions">
+      <p class="pi-note">Son proyectos de demostración, no trabajos para clientes. Los negocios y sus cifras son escenarios de ejemplo.</p>
+      {empty && <a href="/contacto" class="btn">Contame el problema</a>}
+    </Fragment>
+  </SubHero>
 
-    {
-      empty ? (
-        <a href="/contacto" class="btn pi__cta">Contanos el problema</a>
-      ) : (
-        <ul class="pi__list">
-          {proyectos.map((p) => (
-            <li class="pi__item" data-rise>
-              <a href={`/proyectos/${p.id}`} class="pi__name">{p.nombre}</a>
-              <p class="pi__desc">{p.data.descripcion} <span class="soft">Con {p.data.stack.join(", ")}.</span></p>
-            </li>
+  {!empty && <Destacados field="mist" items={proyectos} />}
+
+  {resto.length > 0 && (
+    <Field field="paper" id="rubros" lead={`${resto.length} demos más, de gestión interna a sitios. Elegí el tipo de sistema que te interesa.`}>
+      <Fragment slot="title">PARA <small>cada</small> RUBRO</Fragment>
+
+      <div class="pi-filter" data-pi-filter hidden>
+        <p class="pi-filter__t" id="pi-filter-t">Tipo de sistema</p>
+        <div class="pi-filter__btns" role="group" aria-labelledby="pi-filter-t">
+          <button type="button" class="pi-chip" data-key="all" aria-pressed="true">Todos <span class="pi-chip__n">{resto.length}</span></button>
+          {grupos.map((g) => (
+            <button type="button" class="pi-chip" data-key={g.key} aria-pressed="false">{g.label} <span class="pi-chip__n">{g.n}</span></button>
           ))}
-        </ul>
-      )
-    }
-  </section>
+        </div>
+        <p class="sr-only" aria-live="polite" data-pi-status></p>
+      </div>
+
+      <ul class="pi-grid" role="list" data-pi-grid>
+        {resto.map((p) => (
+          <ProyectoTile
+            href={`/proyectos/${p.id}`}
+            nombre={p.nombre}
+            rubro={p.rubro}
+            linea={p.linea}
+            group={p.group}
+            groupLabel={GROUPS[p.group].label}
+            img={capturaDe(p.id)}
+          />
+        ))}
+      </ul>
+    </Field>
+  )}
+
+  <CierreDiagnostico />
 </Layout>
 
 <style>
-  .pi { padding-top: clamp(3rem, 8vw, 6rem); }
-  .pi__h1 { font-size: clamp(3.5rem, 9vw, 9.375rem); line-height: 0.9; letter-spacing: -0.03em; }
-  .pi__lead { margin-top: 2rem; font-size: var(--step-lead); line-height: 1.3; max-width: 44ch; }
-  .pi__cta { margin-top: 2rem; }
+  .pi-note { margin: 0; max-width: 46ch; font-size: var(--step-body); line-height: 1.45; font-weight: 500; }
 
-  .pi__list { list-style: none; margin: clamp(4rem, 8vw, 7rem) 0 0; padding: 0; display: grid; gap: 3rem; }
-  .pi__item { display: grid; gap: 0.5rem; }
-  .pi__name {
-    font-family: var(--font-display);
-    font-size: var(--step-statement);
-    line-height: 1.05;
-    letter-spacing: -0.02em;
-    text-decoration: none;
-    transition: color 200ms var(--ease-out-quart);
+  .pi-filter { display: grid; gap: 0.75rem; }
+  .pi-filter[hidden] { display: none; }
+  .pi-filter__t { margin: 0; font-weight: 500; }
+  .pi-filter__btns { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .pi-chip {
+    display: inline-flex; align-items: center; gap: 0.5rem; min-height: 2.75rem; padding: 0.5rem 0.9rem;
+    border: 2px solid var(--color-ink); background: transparent; color: var(--color-ink);
+    font: inherit; font-size: 1rem; font-weight: 500; cursor: pointer;
+    transition: background-color 0.18s, color 0.18s;
   }
-  .pi__name:hover { color: var(--color-accent); }
-  .pi__desc { max-width: 60ch; }
+  .pi-chip__n { font-variant-numeric: tabular-nums; opacity: 0.75; }
+  .pi-chip:hover { background: var(--color-field-mist); }
+  .pi-chip[aria-pressed="true"] { background: var(--color-ink); color: var(--color-paper); }
+  .pi-chip:focus-visible { outline: 3px solid var(--color-accent); outline-offset: 3px; }
 
+  .pi-grid { list-style: none; margin: 0; padding: 0; display: grid; gap: 3rem var(--gutter); }
+  @media (min-width: 640px) {
+    .pi-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
   @media (min-width: 1024px) {
-    .pi__item { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gutter); align-items: baseline; }
-    .pi__name { grid-column: 1 / span 6; }
-    .pi__desc { grid-column: 7 / span 6; }
+    .pi-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); row-gap: 4rem; }
   }
 </style>
+
+<script>
+  import { onPage, ScrollTrigger } from "../../scripts/motion";
+
+  // Client-side filter by system type. Without JS the bar stays hidden and the full grouped list shows.
+  onPage(() => {
+    const bar = document.querySelector<HTMLElement>("[data-pi-filter]");
+    const grid = document.querySelector<HTMLElement>("[data-pi-grid]");
+    if (!bar || !grid) return;
+    const buttons = Array.from(bar.querySelectorAll<HTMLButtonElement>("button[data-key]"));
+    const tiles = Array.from(grid.querySelectorAll<HTMLElement>("[data-group]"));
+    const status = bar.querySelector<HTMLElement>("[data-pi-status]");
+    bar.hidden = false;
+
+    const apply = (key: string) => {
+      let shown = 0;
+      for (const t of tiles) {
+        const on = key === "all" || t.dataset.group === key;
+        t.hidden = !on;
+        if (on) shown++;
+      }
+      for (const b of buttons) b.setAttribute("aria-pressed", String(b.dataset.key === key));
+      if (status) status.textContent = `Mostrando ${shown} ${shown === 1 ? "proyecto" : "proyectos"}`;
+      // Page height changed: keep the scroll-triggered reveals below in the right place.
+      ScrollTrigger.refresh();
+    };
+    const onClick = (e: Event) => {
+      const b = (e.target as HTMLElement).closest<HTMLButtonElement>("button[data-key]");
+      if (b?.dataset.key) apply(b.dataset.key);
+    };
+    bar.addEventListener("click", onClick);
+    return () => {
+      bar.removeEventListener("click", onClick);
+      apply("all");
+    };
+  });
+</script>

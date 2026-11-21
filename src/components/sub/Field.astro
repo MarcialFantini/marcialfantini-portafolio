@@ -1,0 +1,76 @@
+---
+/* A full-bleed colour field for inner pages, same palette as the home chapters.
+   Neighbouring Fields should not share a colour. Optional big heading (slot "title") in the
+   big-word / small-connector pattern, e.g. <Fragment slot="title">Qué <small>se</small> entrega</Fragment>.
+   Use inside a Layout with `bleed` and a [data-subflow] root (SubHero provides it). */
+export type FieldName = "paper" | "mist" | "cornflower" | "lime" | "night" | "bone";
+
+interface Props {
+  field?: FieldName;
+  id?: string;
+  /** Text shown beside / under the heading. */
+  lead?: string;
+  /** Vertical padding: "l" (default) for normal sections, "s" for tight bands. */
+  pad?: "s" | "l";
+  class?: string;
+}
+const { field = "paper", id, lead, pad = "l", class: cls } = Astro.props;
+const titleId = id ? `${id}-title` : undefined;
+const hasTitle = Astro.slots.has("title");
+---
+
+<section id={id} class:list={["fld", `fld--${field}`, `fld--pad-${pad}`, cls]} aria-labelledby={hasTitle ? titleId : undefined}>
+  <div class="wrap fld__in">
+    {
+      hasTitle && (
+        <header class:list={["fld__head", lead && "fld__head--lead"]}>
+          <h2 id={titleId} class="fld__title" data-sub-title>
+            <slot name="title" />
+          </h2>
+          {lead && <p class="fld__lead" data-reveal>{lead}</p>}
+        </header>
+      )
+    }
+    <slot />
+  </div>
+</section>
+
+<style>
+  .fld { position: relative; color: var(--color-ink); }
+  .fld--paper { background: var(--color-paper); }
+  .fld--bone { background: var(--color-surface); }
+  .fld--mist { background: var(--color-field-mist); }
+  .fld--cornflower { background: var(--color-field-cornflower); }
+  .fld--lime { background: var(--color-field-lime); }
+  .fld--night { background: var(--color-field-night); color: var(--color-paper); }
+  .fld--night :global(:is(h1, h2, h3, h4)) { color: var(--color-paper); }
+
+  .fld--pad-l { padding-block: clamp(4.5rem, 10vw, 8rem) clamp(5rem, 11vw, 9rem); }
+  .fld--pad-s { padding-block: clamp(2.5rem, 5vw, 4rem); }
+
+  .fld__in { display: grid; gap: clamp(2.25rem, 5vw, 4rem); }
+  .fld__head { display: grid; gap: 1.25rem; }
+  .fld__title {
+    margin: 0;
+    font-family: var(--font-display);
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: clamp(3rem, 1.4rem + 7vw, 7rem);
+    line-height: 0.9;
+    letter-spacing: 0;
+    text-wrap: balance;
+  }
+  .fld__title :global(small) {
+    font-family: var(--font-sans);
+    font-weight: 400;
+    text-transform: none;
+    font-size: 0.36em;
+  }
+  .fld__title :global(.sw) { display: inline-block; }
+  .fld__lead { margin: 0; font-size: var(--step-lead); line-height: 1.3; max-width: 34ch; }
+
+  @media (min-width: 1024px) {
+    .fld__head--lead { grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); align-items: end; gap: 3rem; }
+    .fld__head--lead .fld__lead { justify-self: end; }
+  }
+</style>

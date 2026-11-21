@@ -1,6 +1,5 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import Intro from "../components/capitulos/Intro.astro";
 import Hero from "../components/capitulos/Hero.astro";
 import Caos from "../components/capitulos/Caos.astro";
 import Ciclo from "../components/capitulos/Ciclo.astro";
@@ -17,17 +16,16 @@ import site from "../data/site.json";
   Chapter format (see docs/plan-rediseno-formato.md §4). Each chapter is one full field;
   neighbours never share a field colour. The field comes from data-field (styles below).
 -->
-<Layout title={`${site.name} · Mejoro cómo opera tu PyME`} description={site.description} bleed>
-  <Intro />
+<Layout title={`${site.name} · Software a medida para empresas`} description={site.description} bleed>
   <div class="chapters">
     <Hero />
     <Caos />
     <Ciclo />
+    <Proceso />
     <Demos />
     <SobreMi />
     <Diagnostico />
     <Journal />
-    <Proceso />
     <Cierre />
   </div>
 </Layout>

@@ -1,0 +1,110 @@
+---
+// One demo project as a tile: a small colour-field visual with a drawn motif per group, then sector,
+// name and a one-line outcome. The visual is decorative; the text carries the content.
+import type { GroupKey } from "./catalogo";
+
+interface Props {
+  href: string;
+  nombre: string;
+  rubro: string;
+  linea: string;
+  group: GroupKey;
+  groupLabel: string;
+  headingLevel?: 2 | 3;
+  /** Real screenshot of the project; replaces the drawn motif when present. */
+  img?: ImageMetadata;
+}
+const { href, nombre, rubro, linea, group, groupLabel, headingLevel = 3, img } = Astro.props;
+const H = `h${headingLevel}` as "h2" | "h3";
+---
+
+<li class="tile" data-group={group}>
+  <a class="tile__link" href={href}>
+    <div class:list={["tile__vis", `tile__vis--${group}`]} aria-hidden="true">
+      {img && <img class="tile__shot" src={img.src} width={img.width} height={img.height} alt="" loading="lazy" decoding="async" />}
+      <span class:list={["tile__group", img && "tile__group--chip"]}>{groupLabel}</span>
+      {!img && (<>
+      {group === "gestion" && (
+        <span class="m m-bars">{[42, 64, 52, 86, 72].map((h) => <i style={`height:${h}%`} data-grow="y"></i>)}</span>
+      )}
+      {group === "venta" && (
+        <span class="m m-grid">{[0, 1, 2, 3, 4, 5].map((i) => <i class:list={[i === 4 && "on"]}></i>)}</span>
+      )}
+      {group === "integracion" && (
+        <span class="m m-link"><i></i><b data-grow></b><i></i></span>
+      )}
+      {group === "reservas" && (
+        <span class="m m-cal">{Array.from({ length: 21 }, (_, i) => <i class:list={[(i === 9 || i === 16) && "on"]}></i>)}</span>
+      )}
+      {(group === "sitios" || group === "otros") && (
+        <span class="m m-page"><i class="h" data-grow></i><i></i><i></i><i class="s"></i></span>
+      )}
+      </>)}
+    </div>
+    <span class="tile__rubro">{rubro}</span>
+    <H class="tile__name">{nombre}</H>
+    <span class="tile__line">{linea}</span>
+    <span class="tile__go">Ver el proyecto <span class="tile__arr" aria-hidden="true">→</span></span>
+  </a>
+</li>
+
+<style>
+  .tile { min-width: 0; }
+  .tile[hidden] { display: none; }
+  .tile__link { display: grid; gap: 0.45rem; align-content: start; color: inherit; text-decoration: none; }
+  .tile__link:focus-visible { outline: 3px solid var(--color-accent); outline-offset: 6px; }
+
+  .tile__vis {
+    --m: var(--color-ink);
+    position: relative; display: grid; align-content: space-between; gap: 1rem;
+    aspect-ratio: 16 / 10; padding: 1rem; margin-bottom: 0.65rem; overflow: hidden;
+    color: var(--color-ink); transition: transform 0.45s var(--ease-out-expo);
+  }
+  .tile__vis--gestion { background: var(--color-field-cornflower); }
+  .tile__vis--venta { background: var(--color-field-lime); }
+  .tile__vis--integracion { background: var(--color-field-night); color: var(--color-paper); --m: var(--color-paper); }
+  .tile__vis--reservas { background: var(--color-field-mist); --m: var(--color-accent); }
+  .tile__vis--sitios { background: var(--color-accent); color: var(--color-accent-ink); --m: var(--color-paper); }
+  .tile__vis--otros { background: var(--color-surface-2); }
+  /* Real screenshot: fills the tile, top of the page visible */
+  .tile__vis:has(.tile__shot) { position: relative; padding: 0; }
+  .tile__shot { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: top center; transition: transform 400ms ease; }
+  .tile__link:hover .tile__shot { transform: scale(1.03); }
+  .tile__group--chip { position: absolute; left: 0.6rem; top: 0.6rem; z-index: 1; padding: 0.15rem 0.5rem; background: var(--color-field-night); color: var(--color-paper); }
+  .tile__group { font-size: 0.9375rem; font-weight: 500; }
+
+  .m { display: grid; align-self: end; width: 62%; max-width: 15rem; }
+  .m i, .m b { display: block; background: var(--m); }
+  .m-bars { grid-auto-flow: column; grid-auto-columns: 1fr; gap: 0.5rem; align-items: end; height: 5.5rem; }
+  .m-grid { grid-template-columns: repeat(3, 1fr); gap: 0.5rem; }
+  .m-grid i { aspect-ratio: 1; background: transparent; border: 2px solid var(--m); }
+  .m-grid i.on { background: var(--m); }
+  .m-link { grid-template-columns: 2.75rem 1fr 2.75rem; align-items: center; }
+  .m-link i { aspect-ratio: 1; border: 2px solid var(--m); background: transparent; }
+  .m-link i:last-child { background: var(--color-field-lime); border-color: var(--color-field-lime); }
+  .m-link b { height: 2px; }
+  .m-cal { grid-template-columns: repeat(7, 1fr); gap: 0.3rem; }
+  .m-cal i { aspect-ratio: 1; background: transparent; border: 2px solid var(--color-ink); }
+  .m-cal i.on { background: var(--m); border-color: var(--m); }
+  .m-page { gap: 0.5rem; }
+  .m-page i { height: 0.5rem; }
+  .m-page i.h { height: 1.25rem; width: 70%; }
+  .m-page i.s { width: 55%; }
+
+  .tile__rubro { font-size: 1rem; color: var(--color-soft); }
+  .tile__name {
+    margin: 0; font-family: var(--font-display); font-weight: 600; letter-spacing: 0;
+    font-size: clamp(1.625rem, 1.35rem + 1vw, 2.125rem); line-height: 1;
+  }
+  .tile__line { font-size: var(--step-body); line-height: 1.45; max-width: 40ch; }
+  .tile__go { margin-top: 0.3rem; font-weight: 500; text-decoration: underline; text-underline-offset: 0.25em; }
+  .tile__arr { display: inline-block; transition: transform 0.35s var(--ease-out-expo); }
+  @media (hover: hover) {
+    .tile__link:hover .tile__vis { transform: translateY(-6px); }
+    .tile__link:hover .tile__arr { transform: translateX(0.4rem); }
+    .tile__link:hover .tile__go { color: var(--color-accent); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .tile__vis, .tile__arr { transition: none; }
+  }
+</style>

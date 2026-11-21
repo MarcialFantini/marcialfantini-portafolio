@@ -1,6 +1,9 @@
 ---
 import Layout from "../../layouts/Layout.astro";
-
+import SubHero from "../../components/sub/SubHero.astro";
+import Field from "../../components/sub/Field.astro";
+import StockUI from "../../components/demos-ui/StockUI.astro";
+import Navegador from "../../components/servicios/Navegador.astro";
 import servicios from "../../data/servicios.json";
 import site from "../../data/site.json";
 import type { GetStaticPaths } from "astro";
@@ -14,27 +17,45 @@ export const getStaticPaths = (async () => {
 
 const { servicio } = Astro.props;
 
+// Big-title pattern per service: [big, small connector, big]. Falls back to the plain title.
+const bigTitle: Record<string, [string, string, string]> = {
+  "software-a-medida": ["Software", "a", "medida"],
+  "web-productos-servicios": ["Página web", "de", "productos"],
+  "web-empresarial": ["Web", "de tu", "empresa"],
+  ecommerce: ["Tienda", "para vender", "online"],
+};
+const title = bigTitle[servicio.id];
+
+const tipoWeb: Record<string, "web" | "empresa" | "tienda"> = {
+  "web-productos-servicios": "web",
+  "web-empresarial": "empresa",
+  ecommerce: "tienda",
+};
+
+// Duration as a figure: the number part big, the qualifier small.
+const orientativo = servicio.duracion.includes("(orientativo)");
+const duracion = servicio.duracion.replace(/\s*\(orientativo\)/, "");
+
 const cotiza = {
   pregunta: "¿Cuánto cuesta?",
   respuesta:
-    "Se cotiza según tu caso. Después del diagnóstico gratis de 30 minutos te pasamos una propuesta cerrada por escrito, con alcance, plazos y precio. Si algo cambia en el camino, se cotiza antes de hacerlo.",
+    "Se cotiza según tu caso. Después del diagnóstico de 30 minutos te paso una propuesta cerrada por escrito, con alcance, plazos y precio. Si algo cambia en el camino, se cotiza antes de hacerlo.",
 };
 
-// Preguntas frecuentes por servicio.
 const faqsPorServicio: Record<string, { pregunta: string; respuesta: string }[]> = {
   "web-productos-servicios": [
     cotiza,
     {
       pregunta: "¿Cuánto tarda?",
-      respuesta: "Orientativamente entre 1 y 3 semanas. Depende de qué tan rápido nos pases textos, fotos y definiciones. Te confirmamos la fecha en la propuesta.",
+      respuesta: "Orientativamente entre 1 y 3 semanas. Depende de qué tan rápido me pases textos, fotos y definiciones. La fecha queda en la propuesta.",
     },
     {
       pregunta: "¿Tengo que tener los textos y las fotos listos?",
-      respuesta: "No es obligatorio. Te ayudamos a ordenar qué contar y cómo. Si ya tenés material, mejor; si no, lo vemos juntos.",
+      respuesta: "No es obligatorio. Te ayudo a ordenar qué contar y cómo. Si ya tenés material, mejor; si no, lo vemos juntos.",
     },
     {
-      pregunta: "¿Podré hacer cambios después?",
-      respuesta: "Sí. Te mostramos cómo hacer cambios simples, o los hacemos por vos si preferís. Lo dejamos aclarado en la propuesta.",
+      pregunta: "¿Voy a poder hacer cambios después?",
+      respuesta: "Sí. Te muestro cómo hacer cambios simples, o los hago por vos si preferís. Queda aclarado en la propuesta.",
     },
   ],
   "web-empresarial": [
@@ -45,169 +66,212 @@ const faqsPorServicio: Record<string, { pregunta: string; respuesta: string }[]>
     },
     {
       pregunta: "¿Cuánto tarda?",
-      respuesta: "Orientativamente entre 2 y 4 semanas, según el alcance y la rapidez con la que tengamos el contenido.",
+      respuesta: "Orientativamente entre 2 y 4 semanas, según el alcance y qué tan rápido esté el contenido.",
     },
   ],
-  "ecommerce": [
+  ecommerce: [
     cotiza,
     {
       pregunta: "¿Qué medios de pago puedo usar?",
-      respuesta: "Integramos medios de pago habituales, como Mercado Pago. Definimos cuál conviene según tu negocio y tu forma de cobrar.",
+      respuesta: "Integro medios de pago habituales, como Mercado Pago. Definimos juntos cuál conviene según tu forma de cobrar.",
     },
     {
       pregunta: "¿Se conecta con mi stock y mi facturación?",
-      respuesta: "Puede hacerlo. Si ya usás un sistema, lo integramos; si no, la tienda queda preparada para sumar control de stock y facturación más adelante sin rehacerla.",
+      respuesta: "Puede hacerlo. Si ya usás un sistema, lo integro; si no, la tienda queda preparada para sumar control de stock y facturación más adelante sin rehacerla.",
     },
     {
       pregunta: "¿Cuánto tarda?",
-      respuesta: "Orientativamente entre 4 y 8 semanas. Cuanto antes tengamos productos, fotos y precios, más rápido se publica.",
+      respuesta: "Orientativamente entre 4 y 8 semanas. Cuanto antes estén productos, fotos y precios, más rápido se publica.",
     },
   ],
   "software-a-medida": [
     {
       pregunta: "¿Cuánto cuesta un software a medida?",
-      respuesta: "Depende del problema, por eso no hay un precio fijo. Después del diagnóstico te pasamos una propuesta cerrada con alcance, etapas, plazos y precio por escrito.",
+      respuesta: "Depende del problema, por eso no hay un precio fijo. Después del diagnóstico te paso una propuesta cerrada con alcance, etapas, plazos y precio por escrito.",
     },
     {
       pregunta: "¿Cómo empezamos?",
-      respuesta: "Con el diagnóstico gratis de 30 minutos. Contanos qué proceso querés mejorar y te decimos con honestidad si conviene hacerlo a medida o usar algo que ya exista.",
+      respuesta: "Con el diagnóstico de 30 minutos. Contame qué proceso querés mejorar y te digo con honestidad si conviene hacerlo a medida o usar algo que ya exista.",
     },
     {
       pregunta: "¿Voy a ver avances durante el desarrollo?",
-      respuesta: "Sí. Trabajamos por etapas: cada parte entra en uso antes de empezar la siguiente, así ajustamos el rumbo a tiempo.",
+      respuesta: "Sí. Trabajo por etapas: cada parte entra en uso antes de empezar la siguiente, así se ajusta el rumbo a tiempo.",
     },
   ],
 };
 
 const faqItems = faqsPorServicio[servicio.id] ?? [];
 const contactoHref = `/contacto?servicio=${encodeURIComponent(servicio.titulo)}`;
+const diagnostico = "/contacto?servicio=Diagn%C3%B3stico%20gratis";
 
 const noIncluye = [
-  "Hosting ni dominio: se contratan aparte y te ayudamos a elegirlos.",
-  "Promesas de resultados que dependen de cosas que no controlamos.",
-  "Empezar sin propuesta escrita.",
+  "hosting ni dominio: se contratan aparte y te ayudo a elegirlos",
+  "promesas de resultados que dependen de cosas que no controlo",
+  "empezar sin propuesta escrita",
 ];
 
 type Cifra = { v: number; suf?: string };
-const cifra = (c: Cifra) => `${c.v.toLocaleString("es-AR")}${c.suf ?? ""}`;
+const g = servicio.grafico;
+const pct = (c: Cifra) => `${Math.max(Math.round((c.v / Math.max(g.antes.v, g.ahora.v)) * 100), 6)}%`;
 const otros = servicios.filter((s) => s.id !== servicio.id);
 ---
 
-<Layout title={`${servicio.titulo} — ${site.name}`} description={servicio.descripcion}>
-  <section class="sd-hero wrap" aria-labelledby="sd-title">
-    <h1 id="sd-title" class="sd-hero__h1" data-split>{servicio.titulo}</h1>
-    <div class="sd-hero__grid">
-      <div class="sd-hero__copy">
-        <p class="sd-hero__lead" data-rise style="--i:1">{servicio.subtitulo}.</p>
-        <p data-rise style="--i:2">{servicio.descripcion}</p>
-      </div>
-      <dl class="sd-hero__facts" data-rise style="--i:2">
-        <div><dt class="soft">Duración</dt><dd>{servicio.duracion}</dd></div>
-        <div><dt class="soft">Cómo se cotiza</dt><dd>Propuesta cerrada por escrito, después del diagnóstico gratis de 30 minutos.</dd></div>
-        <div><a href={contactoHref} class="btn">{servicio.cta}</a></div>
-      </dl>
-    </div>
-  </section>
-
-  <section class="sd-get" aria-labelledby="sd-get-title">
-    <div class="sd-get__in wrap">
-      <h2 id="sd-get-title" class="sr-only">Lo que conseguís</h2>
-      <p class="sd-get__statement" data-rise>{servicio.resultadoCuantificado}</p>
-      <div class="sd-get__side">
-        <p data-rise style="--i:1"><strong>Para quién es.</strong> {servicio.idealPara}</p>
-        <div class="sd-get__nums" data-rise style="--i:2">
-          <dl>
-            <div><dt class="soft">Antes</dt><dd>{cifra(servicio.grafico.antes)}</dd></div>
-            <div><dt class="soft">Con el sistema</dt><dd class="is-now">{cifra(servicio.grafico.ahora)}</dd></div>
-          </dl>
-          <p class="sd-get__ej soft">Ejemplo ilustrativo · {servicio.grafico.label}</p>
+<Layout title={`${servicio.titulo} — ${site.name}`} description={servicio.descripcion} bleed>
+  <SubHero field="paper" lead={`${servicio.subtitulo}.`} back={{ href: "/servicios", label: "Servicios" }}>
+    <Fragment slot="title">
+      {title ? <>{title[0]} <small>{title[1]}</small> {title[2]}</> : servicio.titulo}
+    </Fragment>
+    <Fragment slot="actions">
+      <dl class="sd-facts">
+        <div>
+          <dt>Duración</dt>
+          <dd><b>{duracion}</b>{orientativo && <span>orientativo</span>}</dd>
         </div>
-      </div>
-    </div>
-  </section>
+        <div>
+          <dt>Cómo se cotiza</dt>
+          <dd><b>Precio cerrado</b><span>por escrito, después del diagnóstico de 30 minutos</span></dd>
+        </div>
+      </dl>
+      <a href={contactoHref} class="btn">{servicio.cta}</a>
+    </Fragment>
+    <Fragment slot="aside">
+      {servicio.id === "software-a-medida" ? <StockUI /> : <Navegador tipo={tipoWeb[servicio.id] ?? "web"} />}
+    </Fragment>
+  </SubHero>
 
-  <section class="sd-inc wrap" aria-labelledby="sd-inc-title">
-    <h2 id="sd-inc-title" class="sd-inc__h" data-split>Qué incluye</h2>
-    <ul class="sd-inc__list">
-      {servicio.queIncluye.map((item, i) => <li data-rise style={`--i:${i % 4}`}>{item}</li>)}
-    </ul>
-    <p class="sd-inc__no soft" data-rise>No incluye: {noIncluye.map((t) => t.replace(/\.$/, "").toLowerCase()).join("; ")}.</p>
-  </section>
+  <Field field="mist" id="para-quien">
+    <Fragment slot="title">Para <small>quién</small> es</Fragment>
+    <div class="sd-who">
+      <div class="sd-who__text" data-reveal>
+        <p class="sd-who__lead">{servicio.idealPara}</p>
+        <p>{servicio.descripcion}</p>
+      </div>
+      <figure class="sd-ex" data-reveal="right">
+        <p class="sd-ex__statement">{servicio.resultadoCuantificado}</p>
+        <div class="sd-ex__bars">
+          <div class="sd-ex__row">
+            <span>Antes</span>
+            <span class="sd-ex__track"><i style={`width:${pct(g.antes)}`} data-grow></i></span>
+            <b><span data-count={g.antes.v}>{g.antes.v}</span>{g.antes.suf}</b>
+          </div>
+          <div class="sd-ex__row sd-ex__row--now">
+            <span>Después</span>
+            <span class="sd-ex__track"><i style={`width:${pct(g.ahora)}`} data-grow></i></span>
+            <b><span data-count={g.ahora.v}>{g.ahora.v}</span>{g.ahora.suf}</b>
+          </div>
+        </div>
+        <figcaption>Ejemplo ilustrativo: {g.label.toLowerCase()}.</figcaption>
+      </figure>
+    </div>
+  </Field>
+
+  <Field field="lime" id="incluye">
+    <Fragment slot="title">Qué <small>incluye</small></Fragment>
+    <ol class="sd-inc" data-stagger>
+      {
+        servicio.queIncluye.map((item, i) => (
+          <li>
+            <span class="sd-inc__n" aria-hidden="true">{String(i + 1).padStart(2, "0")}</span>
+            <span>{item}</span>
+          </li>
+        ))
+      }
+    </ol>
+    <p class="sd-no" data-reveal><strong>No incluye:</strong> {noIncluye.join("; ")}.</p>
+    <p class="sd-conecta" data-reveal><strong>Cómo se conecta.</strong> {servicio.conecta}</p>
+  </Field>
 
   {
     faqItems.length > 0 && (
-      <section class="sd-faq wrap" aria-labelledby="sd-faq-title">
-        <h2 id="sd-faq-title" class="sd-faq__h" data-split>Preguntas concretas</h2>
-        <div class="sd-faq__text">
-          {faqItems.map((f, i) => <p data-rise style={`--i:${i}`}><strong>{f.pregunta}</strong> {f.respuesta}</p>)}
-        </div>
-      </section>
+      <Field field="bone" id="preguntas">
+        <Fragment slot="title">Preguntas <small>concretas</small></Fragment>
+        <dl class="sd-faq" data-stagger>
+          {faqItems.map((f) => (
+            <div>
+              <dt>{f.pregunta}</dt>
+              <dd>{f.respuesta}</dd>
+            </div>
+          ))}
+        </dl>
+      </Field>
     )
   }
 
-  <section class="sd-end wrap" aria-labelledby="sd-end-title">
-    <h2 id="sd-end-title" data-split>¿Te encaja?</h2>
-    <p class="sd-end__p" data-rise style="--i:1">
-      Empezá por el diagnóstico gratis de 30 minutos. Si no es lo que te conviene, te lo decimos y te orientamos.
-    </p>
-    <a href={contactoHref} class="btn" data-rise style="--i:2">{servicio.cta}</a>
-    <p class="sd-end__more" data-rise style="--i:3">
-      Otros servicios:{" "}
-      {otros.map((o, i) => (
-        <>
-          <a href={`/servicios/${o.id}`}>{o.titulo}</a>
-          {i < otros.length - 1 ? ", " : "."}
-        </>
-      ))}
-    </p>
-  </section>
+  <Field field="night" id="empezar" class="sd-end">
+    <Fragment slot="title">¿Te <small>sirve</small> esto?</Fragment>
+    <div class="sd-end__row" data-reveal>
+      <p>El primer paso es un diagnóstico de 30 minutos, sin costo. Si no es lo que te conviene, te lo digo y te oriento.</p>
+      <a href={diagnostico} class="btn">Agendar diagnóstico de 30 minutos</a>
+    </div>
+    <nav class="sd-more" aria-label="Otros servicios">
+      <p>Otros servicios</p>
+      <ul data-stagger>
+        {otros.map((o) => <li><a href={`/servicios/${o.id}`}>{o.titulo}</a></li>)}
+      </ul>
+    </nav>
+  </Field>
 </Layout>
 
 <style>
-  .sd-hero { padding-top: clamp(3rem, 8vw, 6rem); }
-  .sd-hero__h1 { font-size: clamp(2.5rem, 6.5vw, 7rem); line-height: 0.92; letter-spacing: -0.03em; max-width: 16ch; }
-  .sd-hero__grid { display: grid; gap: 2.5rem; margin-top: 3rem; }
-  .sd-hero__copy { display: grid; gap: 1rem; max-width: 60ch; }
-  .sd-hero__lead { font-size: var(--step-lead); line-height: 1.3; font-weight: 500; }
-  .sd-hero__facts { display: grid; gap: 1.25rem; font-size: var(--step-small); align-content: start; }
-  .sd-hero__facts dd { margin: 0.15rem 0 0; font-size: var(--step-body); }
+  /* Hero figures */
+  .sd-facts { flex: 1 1 100%; margin: 0; display: grid; gap: 1.25rem; }
+  .sd-facts > div { padding-top: 0.75rem; border-top: 3px solid var(--color-ink); }
+  .sd-facts dt { font-weight: 500; color: var(--color-soft); }
+  .sd-facts dd { margin: 0.25rem 0 0; display: grid; gap: 0.2rem; }
+  .sd-facts b { font-family: var(--font-display); font-weight: 600; font-size: clamp(2rem, 1.5rem + 1.6vw, 2.75rem); line-height: 0.95; }
+  .sd-facts dd span { max-width: 26ch; }
 
-  .sd-get { margin-top: var(--section-gap); background: var(--color-surface); }
-  .sd-get__in { display: grid; gap: 3rem; padding-block: clamp(4rem, 8vw, 7rem); }
-  .sd-get__statement { font-family: var(--font-display); font-size: var(--step-statement); line-height: 1.15; letter-spacing: -0.01em; max-width: 38ch; }
-  .sd-get__side { display: grid; gap: 2.5rem; align-content: start; max-width: 52ch; }
-  .sd-get strong { font-weight: 500; }
-  .sd-get__ej { font-size: var(--step-small); margin-top: 1rem; }
-  .sd-get__nums dl { display: grid; grid-template-columns: 1fr 1fr; gap: var(--gutter); }
-  .sd-get__nums dl div { display: flex; flex-direction: column-reverse; gap: 0.25rem; }
-  .sd-get__nums dt { font-size: var(--step-small); }
-  .sd-get__nums dd { margin: 0; font-family: var(--font-display); font-size: var(--step-head); line-height: 0.95; letter-spacing: -0.02em; }
-  .sd-get__nums dd.is-now { color: var(--color-accent); }
+  /* Para quién */
+  .sd-who { display: grid; gap: 3rem; align-items: start; }
+  .sd-who__text { display: grid; gap: 1.25rem; max-width: 52ch; }
+  .sd-who__text p { margin: 0; }
+  .sd-who__lead { font-size: var(--step-lead); line-height: 1.3; font-weight: 500; }
 
-  .sd-inc { margin-top: var(--section-gap); }
-  .sd-inc__list { list-style: none; margin: 2.5rem 0 0; padding: 0; display: grid; gap: 0.75rem; }
-  .sd-inc__list li { font-size: var(--step-statement); line-height: 1.2; letter-spacing: -0.01em; max-width: 32ch; }
-  .sd-inc__no { margin-top: 2.5rem; font-size: var(--step-small); max-width: 70ch; }
+  .sd-ex { margin: 0; display: grid; gap: 1.5rem; padding: clamp(1.25rem, 3vw, 2rem); background: #fff; }
+  .sd-ex__statement { margin: 0; font-family: var(--font-display); font-weight: 600; font-size: var(--step-statement); line-height: 1.1; }
+  .sd-ex__bars { display: grid; gap: 0.75rem; }
+  .sd-ex__row { display: grid; grid-template-columns: 4.5rem minmax(0, 1fr) 4rem; align-items: center; gap: 0.75rem; font-weight: 500; }
+  .sd-ex__row b { text-align: right; font-family: var(--font-display); font-size: 2rem; font-weight: 600; line-height: 1; }
+  .sd-ex__track { display: block; height: 0.9rem; background: var(--color-surface); }
+  .sd-ex__track i { display: block; height: 100%; background: var(--color-field-night); }
+  .sd-ex__row--now .sd-ex__track i { background: var(--color-accent); }
+  .sd-ex__row--now b { color: var(--color-accent); }
+  .sd-ex figcaption { color: var(--color-soft); font-size: var(--step-small); }
 
-  .sd-faq { margin-top: var(--section-gap); display: grid; gap: 2.5rem; }
-  .sd-faq__text p { margin-bottom: 1.25rem; break-inside: avoid; }
-  .sd-faq__text strong { font-weight: 500; }
+  /* Qué incluye */
+  .sd-inc { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; }
+  .sd-inc li {
+    display: grid; grid-template-columns: 2.75rem minmax(0, 1fr); gap: 1rem; align-items: baseline;
+    padding-block: 1rem; border-top: 3px solid var(--color-ink);
+    font-size: var(--step-lead); line-height: 1.25;
+  }
+  .sd-inc__n { font-family: var(--font-display); font-weight: 600; }
+  .sd-no, .sd-conecta { margin: 0; max-width: 70ch; }
+  .sd-no strong, .sd-conecta strong { font-weight: 600; }
 
-  .sd-end { margin-top: var(--section-gap); display: grid; gap: 1.5rem; justify-items: start; }
-  .sd-end__p { max-width: 52ch; }
-  .sd-end__more { font-size: var(--step-small); }
-  .sd-end__more a { display: inline-block; padding-block: 0.4rem; }
+  /* FAQ */
+  .sd-faq { margin: 0; display: grid; gap: 2rem; }
+  .sd-faq dt { font-weight: 600; font-size: var(--step-lead); line-height: 1.2; }
+  .sd-faq dd { margin: 0.5rem 0 0; max-width: 52ch; }
+
+  /* Closing */
+  :global(.sd-end) { margin-bottom: calc(-1 * var(--section-gap)); }
+  .sd-end__row { display: grid; gap: 1.5rem; justify-items: start; }
+  .sd-end__row p { margin: 0; font-size: var(--step-lead); line-height: 1.3; max-width: 40ch; }
+  .sd-more { display: grid; gap: 0.75rem; padding-top: 1.5rem; border-top: 3px solid var(--color-paper); }
+  .sd-more p { margin: 0; font-weight: 500; }
+  .sd-more ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0.5rem 2rem; }
+  .sd-more a { display: inline-block; padding-block: 0.4rem; color: var(--color-paper); }
+  .sd-more a:hover { color: var(--color-field-lime); }
+
+  @media (min-width: 720px) {
+    .sd-facts { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 2rem; }
+    .sd-inc { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 3rem; }
+    .sd-faq { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 3.5rem; }
+  }
 
   @media (min-width: 1024px) {
-    .sd-hero__grid { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gutter); }
-    .sd-hero__copy { grid-column: 1 / span 6; }
-    .sd-hero__facts { grid-column: 9 / span 4; }
-    .sd-get__in { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gutter); }
-    .sd-get__statement { grid-column: 1 / span 7; }
-    .sd-get__side { grid-column: 9 / span 4; }
-    .sd-inc { padding-left: calc((100% - 11 * var(--gutter)) / 12 * 4 + 4 * var(--gutter)); }
-    .sd-faq { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gutter); }
-    .sd-faq__h { grid-column: 1 / span 4; align-self: start; }
-    .sd-faq__text { grid-column: 5 / -1; columns: 2; column-gap: 3.5rem; }
+    .sd-who { grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: 5rem; }
+    .sd-end__row { grid-template-columns: minmax(0, 1fr) auto; align-items: end; column-gap: 4rem; }
   }
 </style>

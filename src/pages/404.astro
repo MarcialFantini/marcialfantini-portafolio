@@ -1,46 +1,89 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import SceneLost from "../components/robots/scenes/SceneLost.astro";
+import SubHero from "../components/sub/SubHero.astro";
+
+// Drawn stock screen: the missing page is the one product out of stock; the rest are links that are in stock.
+const enStock = [
+  { t: "Inicio", href: "/" },
+  { t: "Servicios", href: "/servicios" },
+  { t: "Proyectos", href: "/proyectos" },
+];
 ---
 
 <Layout
   title="Página no encontrada"
-  description="La página que buscás no existe. Volvé al inicio o escribinos si pensás que fue un error."
+  description="La página que buscás no existe. Volvé al inicio, mirá los servicios o los proyectos."
   noindex
+  bleed
 >
-  <section class="nf" aria-labelledby="nf-title">
-    <div class="nf__copy wrap">
-      <h1 id="nf-title" class="nf__h1" data-split>Esta página no existe.</h1>
-      <p class="nf__p" data-rise style="--i:1">
-        Si llegaste desde un link, avisanos y lo corregimos. Si escribiste la dirección a mano, probablemente tenga un error.
-      </p>
-      <div class="nf__actions" data-rise style="--i:2">
-        <a href="/" class="btn">Volver al inicio</a>
-        <a href="/contacto">Escribinos</a>
+  <SubHero
+    field="cornflower"
+    lead="Si llegaste desde un link, avisame y lo corrijo. Si escribiste la dirección a mano, probablemente tenga un error."
+  >
+    <Fragment slot="title">404 <small>página sin</small> stock</Fragment>
+    <Fragment slot="actions">
+      <a href="/" class="btn nf__home">Volver al inicio</a>
+      <a href="/contacto" class="nf__link">Avisame del error</a>
+    </Fragment>
+    <div slot="aside" class="nf-inv">
+      <p class="nf-inv__bar"><span class="nf-inv__title">Inventario</span><span>Sitio</span></p>
+      <div class="nf-inv__body">
+        <p class="nf-inv__row nf-inv__row--low">
+          <span class="nf-inv__name">Página que buscabas</span>
+          <span class="nf-inv__num">Stock <b>0</b></span>
+          <span class="nf-inv__chip nf-inv__chip--low">Bajo mínimo</span>
+        </p>
+        <p class="nf-inv__sub">Reponer con:</p>
+        <ul class="nf-inv__list">
+          {
+            enStock.map((p) => (
+              <li>
+                <a class="nf-inv__row" href={p.href}>
+                  <span class="nf-inv__name">{p.t}</span>
+                  <span class="nf-inv__chip">En stock</span>
+                  <span class="nf-inv__arr" aria-hidden="true">→</span>
+                </a>
+              </li>
+            ))
+          }
+        </ul>
       </div>
-      <SceneLost class="nf__crew" />
     </div>
-    <p class="nf__word" aria-hidden="true">404</p>
-  </section>
+  </SubHero>
 </Layout>
 
 <style>
-  .nf { position: relative; overflow: hidden; min-height: calc(100svh - 4.5rem); }
-  .nf__copy { position: relative; z-index: 1; padding-top: clamp(3rem, 10vh, 7rem); display: grid; gap: 1.5rem; justify-items: start; }
-  .nf__h1 { font-size: clamp(2.5rem, 6vw, 6rem); line-height: 0.92; letter-spacing: -0.03em; max-width: 12ch; }
-  .nf__p { max-width: 46ch; }
-  :global(.nf__crew) { width: min(100%, 36rem); margin-top: 2rem; overflow: hidden; }
-  .nf__actions { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem 1.75rem; }
-  .nf__actions a:not(.btn) { display: inline-block; padding-block: 0.5rem; }
-  .nf__word {
-    position: absolute;
-    right: -0.04em;
-    bottom: -0.2em;
-    font-family: var(--font-display);
-    font-size: clamp(14rem, 42vw, 44rem);
-    line-height: 0.8;
-    letter-spacing: -0.04em;
-    color: var(--color-surface-2);
-    white-space: nowrap;
+  /* The single field meets the footer directly (footer keeps a --section-gap top margin) */
+  :global(.sh:has(.nf-inv)) { margin-bottom: calc(-1 * var(--section-gap)); }
+
+  .nf__home { background: var(--color-field-night); color: var(--color-paper); }
+  .nf__home:hover { background: var(--color-ink); color: var(--color-field-lime); }
+  .nf__link { display: inline-block; padding-block: 0.5rem; color: var(--color-ink); font-weight: 500; text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 0.3em; }
+
+  .nf-inv { background: var(--color-paper); color: var(--color-ink); max-width: 34rem; font-variant-numeric: tabular-nums; }
+  .nf-inv__bar { display: flex; justify-content: space-between; gap: 1rem; margin: 0; padding: 0.65rem 1rem; background: var(--color-field-night); color: var(--color-paper); font-size: var(--step-small); }
+  .nf-inv__title { font-weight: 500; }
+  .nf-inv__body { padding: 1rem; display: grid; gap: 0.75rem; }
+  .nf-inv__row {
+    display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 0.9rem;
+    margin: 0; padding: 0.85rem 1rem; background: var(--color-field-mist); color: var(--color-ink); text-decoration: none;
   }
+  .nf-inv__row--low { background: var(--color-surface); border-left: 4px solid var(--color-accent); }
+  .nf-inv__name { flex: 1 1 10rem; font-weight: 500; }
+  .nf-inv__row--low .nf-inv__name { font-family: var(--font-display); font-weight: 600; text-transform: uppercase; font-size: 1.5rem; line-height: 1; }
+  .nf-inv__num b { font-family: var(--font-display); font-weight: 600; font-size: 1.75rem; }
+  .nf-inv__chip { padding: 0.2rem 0.55rem; font-size: 0.8125rem; font-weight: 500; white-space: nowrap; background: var(--color-field-lime); }
+  .nf-inv__chip--low { background: var(--color-accent); color: var(--color-accent-ink); }
+  .nf-inv__sub { margin: 0.5rem 0 0; font-size: var(--step-small); color: var(--color-soft); }
+  .nf-inv__list { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
+  .nf-inv__arr { display: inline-block; transition: transform 200ms var(--ease-out-quart); }
+  a.nf-inv__row:hover { background: var(--color-field-lime); }
+  a.nf-inv__row:hover .nf-inv__chip { background: var(--color-paper); }
+  a.nf-inv__row:hover .nf-inv__arr { transform: translateX(4px); }
+  a.nf-inv__row:focus-visible { outline: 3px solid var(--color-ink); outline-offset: 2px; }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .nf-inv__chip--low { animation: nf-blink 1.6s steps(1) infinite; }
+  }
+  @keyframes nf-blink { 50% { opacity: 0.35; } }
 </style>

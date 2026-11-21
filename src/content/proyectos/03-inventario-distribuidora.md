@@ -10,7 +10,8 @@ stack: ["Astro", "TypeScript", "SQLite", "Node API"]
 fecha: 2025-05-25
 duracion: "6 semanas"
 role: "Diseño + desarrollo full-stack"
-repo: "https://github.com/MarcialFantini/inventario-distribuidora"
+repo: "https://github.com/MarcialFantini/distribuidora-el-faro"
+url: "https://03-inventario-distribuidora.vercel.app"
 tags: ["inventario", "b2b", "panel"]
 featured: true
 metricas:

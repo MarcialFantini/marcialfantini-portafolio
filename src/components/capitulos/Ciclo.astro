@@ -1,304 +1,368 @@
 ---
-/* Chapter: the cycle. Connect, create, inform, back up as a literal loop over footage.
-   Desktop: the section pins and scroll walks a marker around the loop, swapping the stage panel.
-   Mobile / no JS / reduced motion: small loop on top, then the four stages stacked with their mini interface. */
-import Video from "./Video.astro";
+/* Chapter: the answer to Caos. The same sources from the mess (WhatsApp, web shop, spreadsheet, invoicing)
+   flow into one system and come out as results (dashboard, alert, invoice, backup).
+   Desktop (>= 1024px wide, >= 700px tall, motion allowed): the section pins and scroll walks the four steps:
+     Conectar: the tilted source cards straighten and wire in.
+     Crear: the system fills its log and the stock figure settles on one number.
+     Informar / Respaldar: results come out on the right.
+   Other sizes: stacked flow that assembles once on entry. No JS / reduced motion: final state, all visible.
+   Everything in the cards is sample data. */
+import Ventana from "../demos-ui/Ventana.astro";
 
-const stages = [
-  {
-    name: "Conectar",
-    p: "WhatsApp, el Excel, tu tienda y tu facturación se pasan los datos solos. Cada dato se carga una sola vez.",
-    out: ["Nadie copia y pega a mano", "Lo que ya funciona se queda", "Sin errores de tipeo"],
-  },
-  {
-    name: "Crear",
-    p: "Si una tarea depende de una planilla o de la memoria de alguien, la convierto en un sistema simple: pedidos, stock, turnos, cobranzas.",
-    out: ["A tu forma de trabajar", "Facturas y avisos salen solos", "Lo ves desde el celular"],
-  },
-  {
-    name: "Informar",
-    p: "Ventas, cobros y stock en una pantalla, con un aviso cuando algo se desvía.",
-    out: ["Sin armar informes a mano", "Aviso antes de que lo note el cliente", "Decisiones con datos, no a ojo"],
-  },
-  {
-    name: "Respaldar",
-    p: "Copias automáticas, procesos documentados y alguien que responde si algo falla.",
-    out: ["Copias diarias de todo", "Procesos por escrito", "Hablás conmigo, no con un call center"],
-  },
+const inputs = [
+  { src: "WhatsApp", text: "Pedido Sra. Gómez: 3 cajas 30x40" },
+  { src: "Tienda web", text: "Pedido #2087 · 2 cajas 30x40" },
+  { src: "Planilla", text: "Stock_FINAL.xlsx · 142 u." },
+  { src: "Facturación", text: "Rosales · factura pendiente" },
 ];
 
-// 24x24 line icons, one per stage
-const icons = [
-  '<circle cx="5.5" cy="12" r="3"/><circle cx="18.5" cy="12" r="3"/><path d="M8.5 12h7"/>',
-  '<rect x="3" y="4" width="18" height="16"/><path d="M3 9h18M7 14h6"/>',
-  '<path d="M5 20v-8M12 20V5M19 20V9"/>',
-  '<path d="M12 3l8 3v6c0 5-4 8-8 9-4-1-8-4-8-9V6z"/><path d="M8.5 12l2.5 2.5 4.5-5"/>',
+const log = [
+  { src: "Planilla", what: "Stock importado", val: "+142" },
+  { src: "WhatsApp", what: "Pedido Sra. Gómez", val: "−3" },
+  { src: "Tienda web", what: "Pedido #2087", val: "−2" },
+  { src: "Facturación", what: "Factura A a Rosales", val: "Emitida" },
 ];
-const bars = [38, 52, 44, 66, 58, 82];
 
-/* Stadium loop, 600x340 box. Path starts top-centre and runs clockwise; nodes sit at 0, 25, 50, 75 % of its length. */
-const nodes = [
-  // Labels sit clear of the marker ring (r=36 + stroke) as it travels the path
-  { x: 300, y: 20, lx: 300, ly: 90, a: "middle" },
-  { x: 580, y: 170, lx: 512, ly: 180, a: "end" },
-  { x: 300, y: 320, lx: 300, ly: 262, a: "middle" },
-  { x: 20, y: 170, lx: 88, ly: 180, a: "start" },
+const outputs = [
+  { kind: "Tablero del día", text: "23 pedidos · $ 1.284.300", tone: "" },
+  { kind: "Aviso de reposición", text: "Caja 30x40 bajo el mínimo", tone: "alert" },
+  { kind: "Factura", text: "A 0003-00012845 enviada a Rosales", tone: "" },
+  { kind: "Respaldo", text: "Copia de hoy 03:00 · Guardada", tone: "" },
 ];
-const d = "M300 20 H430 A150 150 0 0 1 430 320 H170 A150 150 0 0 1 170 20 Z";
+
+const steps = [
+  { name: "Conectar", p: "WhatsApp, la tienda, las planillas y la facturación cargan en un mismo lugar." },
+  { name: "Crear", p: "Un sistema hecho a cómo ya trabajás: cada dato se carga una sola vez." },
+  { name: "Informar", p: "Tablero, avisos y facturas salen solos, sin armar informes a mano." },
+  { name: "Respaldar", p: "Copias diarias, procesos por escrito y soporte directo si algo falla." },
+];
 ---
 
 <section id="ciclo" class="cap-ciclo" data-field="night" aria-labelledby="ciclo-title">
-  <div class="bg" aria-hidden="true">
-    <Video name="ciclo" class="bg__v" />
-    <div class="bg__scrim"></div>
-  </div>
-
   <div class="stage" data-stage>
     <div class="wrap stage__in">
-      <h2 id="ciclo-title" class="title">El ciclo <small>de</small> tu negocio</h2>
+      <header class="head">
+        <h2 id="ciclo-title" class="title">Así <small>se</small> ordena</h2>
+        <p class="lead">Lo que hoy vive en cuatro lugares pasa a uno solo. Se carga una vez y se ve en todos lados.</p>
+      </header>
 
-      <svg class="loop" viewBox="0 0 600 340" role="img" aria-label="Un ciclo de cuatro etapas: conectar, crear, informar y respaldar" focusable="false">
-        <path class="loop__path" data-path d={d} pathLength="1" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"></path>
+      <div class="flow" data-flow>
+        <div class="col col--in">
+          {
+            inputs.map((c) => (
+              <div class="card card--in" data-in>
+                <span class="card__src">{c.src}</span>
+                <span class="card__t">{c.text}</span>
+              </div>
+            ))
+          }
+        </div>
+
+        <div class="col col--lin" aria-hidden="true">
+          {inputs.map(() => <span class="link" data-lin><i class="link__run"><b></b></i></span>)}
+        </div>
+        <span class="vlink" data-vlink aria-hidden="true"><i class="vlink__run"><b></b></i></span>
+
+        <div class="core" data-core>
+          <Ventana ui="sistema" title="Tu sistema" where="Stock y pedidos" label="Ejemplo: el sistema reúne los cuatro movimientos y muestra un solo número de stock, 137 unidades de caja 30x40.">
+            <div class="sku">
+              <span class="sku__name">Caja 30x40 reforzada</span>
+              <span class="sku__n"><b data-stock>137</b> u.</span>
+              <span class="sku__note soft">Un solo número, en todos los depósitos</span>
+            </div>
+            <ol class="log">
+              {
+                log.map((r) => (
+                  <li class="log__row" data-log>
+                    <span class="chip">{r.src}</span>
+                    <span class="log__what">{r.what}</span>
+                    <span class="log__val">{r.val}</span>
+                  </li>
+                ))
+              }
+            </ol>
+          </Ventana>
+        </div>
+
+        <span class="vlink" data-vlink aria-hidden="true"><i class="vlink__run"><b></b></i></span>
+        <div class="col col--lout" aria-hidden="true">
+          {outputs.map(() => <span class="link" data-lout><i class="link__run"><b></b></i></span>)}
+        </div>
+
+        <div class="col col--out">
+          {
+            outputs.map((c) => (
+              <div class:list={["card card--out", c.tone && `card--${c.tone}`]} data-out>
+                <span class="card__src">{c.kind}</span>
+                <span class="card__t">{c.text}</span>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+
+      <ol class="steps">
         {
-          nodes.map((n, i) => (
-            <g>
-              <circle class="loop__node" data-node cx={n.x} cy={n.y} r="26" stroke="currentColor" stroke-width="3"></circle>
-              <g
-                class="loop__ico"
-                data-ico
-                transform={`translate(${n.x - 18} ${n.y - 18}) scale(1.5)`}
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2.2"
-                stroke-linecap="square"
-                set:html={icons[i]}
-              />
-              <text x={n.lx} y={n.ly} text-anchor={n.a} class="loop__t">{stages[i].name}</text>
-            </g>
+          steps.map((s, i) => (
+            <li class="step" data-step>
+              <span class="step__bar" data-stepbar aria-hidden="true" />
+              <h3 class="step__h">
+                <span class="step__n">{i + 1}</span> {s.name}
+              </h3>
+              <p class="step__p">{s.p}</p>
+            </li>
           ))
         }
-        <circle class="loop__marker" data-marker cx="0" cy="0" r="36" fill="none" stroke-width="4"></circle>
-      </svg>
+      </ol>
 
-      <div class="panel">
-        <ol class="stages" data-stages>
-          <li class="st" data-stagelist>
-            <h3 class="st__h">{stages[0].name}</h3>
-            <p class="st__p">{stages[0].p}</p>
-            <div class="ui ui--flow" data-ui>
-              <div class="flow__col"><span>WhatsApp</span><span>Tienda</span><span>Excel</span></div>
-              <span class="flow__ar" aria-hidden="true">&rarr;</span>
-              <div class="flow__core">Tu sistema</div>
-              <span class="flow__ar" aria-hidden="true">&rarr;</span>
-              <div class="flow__col"><span>Stock</span><span>Facturas</span></div>
-            </div>
-            <ul class="st__out">{stages[0].out.map((o) => <li>{o}</li>)}</ul>
-          </li>
-          <li class="st" data-stagelist>
-            <h3 class="st__h">{stages[1].name}</h3>
-            <p class="st__p">{stages[1].p}</p>
-            <div class="ui ui--table" data-ui>
-              <div class="row row--h"><span>Pedido</span><span>Producto</span><span>Stock</span><span></span></div>
-              <div class="row"><span>#1042</span><span>Harina 000</span><span class="low">4</span><span><span class="mini">Reponer</span></span></div>
-              <div class="row"><span>#1043</span><span>Aceite 1,5 L</span><span>28</span><span></span></div>
-              <div class="row"><span>#1044</span><span>Yerba 1 kg</span><span>61</span><span></span></div>
-            </div>
-            <ul class="st__out">{stages[1].out.map((o) => <li>{o}</li>)}</ul>
-          </li>
-          <li class="st" data-stagelist>
-            <h3 class="st__h">{stages[2].name}</h3>
-            <p class="st__p">{stages[2].p}</p>
-            <div class="ui ui--kpi" data-ui>
-              <div class="kpi__top"><span>Ventas del mes</span><span class="kpi__tag">Ejemplo</span></div>
-              <div class="kpi__n">$ 1.240.000</div>
-              <div class="kpi__bars" aria-hidden="true">{bars.map((h) => <i style={`height:${h}%`}></i>)}</div>
-            </div>
-            <ul class="st__out">{stages[2].out.map((o) => <li>{o}</li>)}</ul>
-          </li>
-          <li class="st" data-stagelist>
-            <h3 class="st__h">{stages[3].name}</h3>
-            <p class="st__p">{stages[3].p}</p>
-            <div class="ui ui--list" data-ui>
-              <div class="bk"><span>Copia de la base</span><span>Hoy 03:00</span><span class="ok">Guardada</span></div>
-              <div class="bk"><span>Copia de la base</span><span>Ayer 03:00</span><span class="ok">Guardada</span></div>
-              <div class="bk"><span>Copia de la base</span><span>Dom 03:00</span><span class="ok">Guardada</span></div>
-            </div>
-            <ul class="st__out">{stages[3].out.map((o) => <li>{o}</li>)}</ul>
-          </li>
-        </ol>
-        <a class="btn cta" href="#diagnostico">Contame cuál te falta</a>
-      </div>
+      <a class="more" href="#diagnostico">¿Por dónde empezar en tu empresa? Hacé el diagnóstico <span aria-hidden="true">→</span></a>
     </div>
   </div>
 </section>
 
 <style>
-  .cap-ciclo {
-    position: relative;
-    overflow: hidden;
-    isolation: isolate;
-  }
-  .bg { position: absolute; inset: 0; z-index: -1; overflow: hidden; }
-  .bg :global(.bg__v) { position: absolute; inset: 0; }
-  /* Neutral scrim so paper-coloured text holds contrast over the footage */
-  .bg__scrim { position: absolute; inset: 0; background: rgba(14, 17, 22, 0.8); }
-
+  .cap-ciclo { position: relative; overflow: hidden; }
   .stage { padding-block: clamp(4rem, 9vw, 7rem); }
-  .stage__in {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    gap: 2.5rem;
-  }
+  .stage__in { display: grid; gap: 2.5rem; }
 
+  /* Heading: mirrors "ASÍ se trabaja HOY" from Caos */
+  .head { display: grid; gap: 1rem; }
   .title {
     font-family: var(--font-display);
     font-weight: 600;
     text-transform: uppercase;
-    font-size: clamp(3rem, 1.5rem + 7vw, 8rem);
-    line-height: 0.92;
-    text-wrap: balance;
+    font-size: clamp(3.25rem, 1.5rem + 8vw, 7.5rem);
+    line-height: 0.9;
     margin: 0;
   }
   .title :global(small) {
     font-family: var(--font-sans);
     font-weight: 400;
     text-transform: none;
-    font-size: 0.4em;
-    letter-spacing: 0;
+    font-size: 0.36em;
+  }
+  .lead { font-size: var(--step-lead); line-height: 1.3; max-width: 30ch; margin: 0; opacity: 0.9; }
+
+  /* ---------- Flow: inputs → system → results ---------- */
+  .flow { display: grid; gap: 0.75rem; }
+  .col--in, .col--out { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; }
+  .col--lin, .col--lout { display: none; }
+
+  .card {
+    display: grid; gap: 0.2rem; align-content: start;
+    padding: 0.75rem 0.85rem;
+    background: var(--color-paper); color: var(--color-ink);
+    font-size: 0.9375rem; line-height: 1.25;
+  }
+  .card__src { display: flex; align-items: center; gap: 0.45rem; font-size: 0.8125rem; font-weight: 600; }
+  .card__src::before { content: ""; width: 0.55rem; height: 0.55rem; flex: none; background: var(--color-field-cornflower); }
+  .card--out .card__src::before { background: var(--color-field-night); }
+  .card--alert { background: var(--color-field-lime); }
+  .card__t { font-variant-numeric: tabular-nums; }
+
+  .core :global(.win) { font-size: 0.9375rem; }
+  /* The frame bar would vanish into the night field: lift it one step */
+  .core :global(.win__bar) { background: #262c38; }
+  .sku { display: grid; gap: 0.1rem; }
+  .sku__name { font-weight: 600; }
+  .sku__n { font-family: var(--font-display); font-weight: 600; font-size: clamp(2.75rem, 2rem + 2vw, 3.75rem); line-height: 1; font-variant-numeric: tabular-nums; }
+  .sku__note { font-size: 0.875rem; }
+  .log { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.35rem; }
+  .log__row {
+    display: grid; grid-template-columns: 6.5rem minmax(0, 1fr) auto; gap: 0.6rem; align-items: center;
+    padding: 0.45rem 0.55rem; background: var(--color-paper); font-variant-numeric: tabular-nums;
+  }
+  .log__row .chip { justify-self: start; }
+  .log__what { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .log__val { font-weight: 600; }
+
+  /* Connectors: a line with a lime square travelling along it while the chapter is on screen */
+  .link, .vlink { position: relative; display: block; overflow: hidden; }
+  /* The box is 8px thick so the travelling square is not clipped; the visible line is the 2px ::before */
+  .link { height: 8px; transform-origin: 0 50%; }
+  .vlink { width: 8px; height: 2.25rem; justify-self: center; }
+  .link::before, .vlink::before { content: ""; position: absolute; background: rgba(242, 241, 236, 0.35); }
+  .link::before { left: 0; right: 0; top: 3px; height: 2px; }
+  .vlink::before { top: 0; bottom: 0; left: 3px; width: 2px; }
+  .link__run, .vlink__run { position: absolute; inset: 0; display: block; }
+  .link__run b, .vlink__run b { position: absolute; width: 8px; height: 8px; background: var(--color-field-lime); }
+  .link__run b { right: 0; top: 0; }
+  .vlink__run b { bottom: 0; left: 0; }
+  .cap-ciclo.is-flowing .link__run { animation: run-x 1.6s linear infinite; }
+  .cap-ciclo.is-flowing .vlink__run { animation: run-y 1.4s linear infinite; }
+  .cap-ciclo.is-flowing [data-lin]:nth-child(2) .link__run,
+  .cap-ciclo.is-flowing [data-lout]:nth-child(2) .link__run { animation-delay: -0.5s; }
+  .cap-ciclo.is-flowing [data-lin]:nth-child(3) .link__run,
+  .cap-ciclo.is-flowing [data-lout]:nth-child(3) .link__run { animation-delay: -1.1s; }
+  .cap-ciclo.is-flowing [data-lin]:nth-child(4) .link__run,
+  .cap-ciclo.is-flowing [data-lout]:nth-child(4) .link__run { animation-delay: -0.8s; }
+  .link__run, .vlink__run { transform: translateX(-100%); }
+  .vlink__run { transform: translateY(-100%); }
+  @keyframes run-x { from { transform: translateX(-100%); } to { transform: translateX(0); } }
+  @keyframes run-y { from { transform: translateY(-100%); } to { transform: translateY(0); } }
+
+  /* ---------- Steps ---------- */
+  .steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 1.5rem; }
+  .step { position: relative; display: grid; gap: 0.35rem; padding-top: 0.9rem; }
+  .step__bar { position: absolute; top: 0; left: 0; width: 100%; height: 4px; background: var(--color-field-lime); transform-origin: 0 50%; }
+  .step__h { font-family: var(--font-display); font-weight: 600; font-size: clamp(1.75rem, 1.4rem + 1vw, 2.25rem); line-height: 1; margin: 0; }
+  .step__n { color: var(--color-field-lime); }
+  .step__p { margin: 0; font-size: 1rem; line-height: 1.4; max-width: 34ch; opacity: 0.85; }
+
+  .more { justify-self: start; color: var(--color-paper); font-weight: 500; text-decoration: underline; text-underline-offset: 0.25em; }
+  .more:hover { color: var(--color-field-lime); }
+  .more:focus-visible { outline: 3px solid var(--color-field-lime); outline-offset: 4px; }
+
+  @media (min-width: 700px) {
+    .steps { grid-template-columns: 1fr 1fr; gap: 2rem 2.5rem; }
   }
 
-  .loop { width: min(100%, 26rem); height: auto; justify-self: center; color: var(--color-paper); overflow: visible; }
-  .loop__node { fill: #0e1116; }
-  .loop__ico { color: var(--color-paper); }
-  .loop__t { fill: var(--color-paper); font-family: var(--font-sans); font-weight: 500; font-size: 28px; }
-  .loop__marker { display: none; stroke: #d7f25c; }
+  /* ---------- Desktop: one row, sources left, system centre, results right ---------- */
+  @media (min-width: 1024px) {
+    .stage__in { gap: clamp(1.75rem, 4svh, 2.75rem); }
+    .head { grid-template-columns: auto minmax(0, 1fr); align-items: end; gap: 3rem; }
+    .lead { justify-self: end; }
 
-  .panel { display: grid; gap: 5.5rem; }
-  .cta { justify-self: start; }
+    .flow {
+      grid-template-columns: minmax(0, 1fr) clamp(2.5rem, 5vw, 5rem) minmax(0, 1.3fr) clamp(2.5rem, 5vw, 5rem) minmax(0, 1fr);
+      grid-template-rows: repeat(4, auto);
+      gap: 0.6rem 0;
+      align-items: center;
+    }
+    .col { display: contents; }
+    .vlink { display: none; }
+    .col--in > :nth-child(1), .col--lin > :nth-child(1) { grid-row: 1; }
+    .col--in > :nth-child(2), .col--lin > :nth-child(2) { grid-row: 2; }
+    .col--in > :nth-child(3), .col--lin > :nth-child(3) { grid-row: 3; }
+    .col--in > :nth-child(4), .col--lin > :nth-child(4) { grid-row: 4; }
+    .col--out > :nth-child(1), .col--lout > :nth-child(1) { grid-row: 1; }
+    .col--out > :nth-child(2), .col--lout > :nth-child(2) { grid-row: 2; }
+    .col--out > :nth-child(3), .col--lout > :nth-child(3) { grid-row: 3; }
+    .col--out > :nth-child(4), .col--lout > :nth-child(4) { grid-row: 4; }
+    .col--in > * { grid-column: 1; }
+    .col--lin > * { grid-column: 2; }
+    .core { grid-column: 3; grid-row: 1 / span 4; }
+    .col--lout > * { grid-column: 4; }
+    .col--out > * { grid-column: 5; }
 
-  /* Stacked stages need clear air: a tight gap makes the last outcome read as a label of the next title */
-  .stages { list-style: none; margin: 0; padding: 0; display: grid; gap: 5.5rem; }
-  .st { display: grid; gap: 0.9rem; align-content: start; }
-  .st__h { font-family: var(--font-display); font-weight: 600; font-size: clamp(2.25rem, 1.6rem + 2.4vw, 3.5rem); line-height: 1; margin: 0; }
-  .st__p { font-size: var(--step-lead); line-height: 1.3; max-width: 34ch; margin: 0; }
-  .st__out { margin: 0.25rem 0 0; padding-left: 1.1rem; display: grid; gap: 0.35rem; font-size: var(--step-body); }
-
-  /* Mini interfaces: flat paper cards on the night field */
-  .ui { background: #f2f1ec; color: #0e1116; padding: 1rem; font-size: 1rem; max-width: 30rem; }
-  .ui--flow { display: grid; grid-template-columns: 1fr auto 1fr auto 1fr; gap: 0.4rem; align-items: center; text-align: center; }
-  .flow__col { display: grid; gap: 0.35rem; }
-  .flow__col span, .flow__core { background: #e3e9f6; padding: 0.4rem 0.25rem; font-size: 0.9rem; font-weight: 500; }
-  .flow__core { background: #0e1116; color: #f2f1ec; padding: 1.1rem 0.25rem; font-weight: 600; }
-  .flow__ar { font-weight: 600; }
-  .row { display: grid; grid-template-columns: 3.6rem 1fr 2.8rem 5.2rem; gap: 0.5rem; align-items: center; padding: 0.45rem 0.5rem; font-size: 0.95rem; }
-  .row--h { font-size: 0.9rem; font-weight: 600; }
-  .row:nth-child(odd):not(.row--h) { background: #e3e9f6; }
-  .low { font-weight: 700; color: #b42318; }
-  .mini { display: inline-block; font-size: 0.9rem; font-weight: 600; background: #0e1116; color: #f2f1ec; padding: 0.25rem 0.6rem; }
-  .kpi__top { display: flex; justify-content: space-between; font-weight: 600; }
-  .kpi__tag { font-weight: 500; font-size: 0.9rem; background: #e3e9f6; padding: 0 0.5rem; }
-  .kpi__n { font-family: var(--font-display); font-weight: 600; font-size: 2.4rem; line-height: 1.1; margin: 0.25rem 0 0.6rem; }
-  .kpi__bars { display: flex; align-items: flex-end; gap: 0.5rem; height: 4.5rem; }
-  .kpi__bars i { flex: 1; background: #5a9bfc; }
-  .kpi__bars i:last-child { background: #0e1116; }
-  .ui--list { display: grid; gap: 0.35rem; }
-  .bk { display: grid; grid-template-columns: 1fr auto auto; gap: 0.75rem; background: #e3e9f6; padding: 0.5rem 0.7rem; font-size: 0.95rem; }
-  .ok { font-weight: 700; color: #0a6b3a; }
-
-  /* Live (pinned) mode, enabled from JS at >= 768px */
-  .is-live .stage { height: 100svh; padding-block: 2rem; display: grid; align-items: center; }
-  .is-live .stage__in {
-    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
-    grid-template-areas: "title title" "loop panel";
-    gap: 1.5rem clamp(2rem, 5vw, 5rem);
-    align-items: center;
+    .steps { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 2rem; }
+    .step__p { font-size: 0.9375rem; }
   }
-  .is-live .title { grid-area: title; }
-  .is-live .loop { grid-area: loop; width: 100%; max-height: 52svh; justify-self: stretch; }
-  .is-live .loop__marker { display: block; }
-  .is-live .panel { grid-area: panel; gap: 1.5rem; }
-  .is-live .stages { display: grid; }
-  .is-live .st { grid-area: 1 / 1; gap: 0.6rem; }
-  .is-live .st__out { display: none; }
-  .is-live .st__h { font-size: clamp(2.5rem, 1.6rem + 2.4vw, 4rem); }
-  .is-live .st__p { font-size: 1.1rem; max-width: 40ch; }
+
+  /* Pinned mode (set from JS): everything framed in one screen */
+  .is-live .stage { min-height: 100svh; display: grid; align-items: center; padding-block: 2rem; }
+  .is-live .title { font-size: clamp(3rem, 1rem + 6vw, 6.5rem); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .link__run b, .vlink__run b { display: none; }
+  }
 </style>
 
 <script>
   import { gsap, ScrollTrigger, onPage, reduced } from "../../scripts/motion";
-  import { MotionPathPlugin } from "gsap/MotionPathPlugin";
-
-  gsap.registerPlugin(MotionPathPlugin);
 
   onPage(() => {
     const root = document.querySelector<HTMLElement>("#ciclo");
     if (!root) return;
 
-    const path = root.querySelector<SVGPathElement>("[data-path]")!;
-    const marker = root.querySelector<SVGCircleElement>("[data-marker]")!;
-    const nodes = gsap.utils.toArray<SVGCircleElement>("[data-node]", root);
-    const icos = gsap.utils.toArray<SVGGElement>("[data-ico]", root);
-    const items = gsap.utils.toArray<HTMLElement>("[data-stagelist]", root);
+    const q = <T extends Element = HTMLElement>(s: string) => gsap.utils.toArray<T>(s, root);
+    const ins = q("[data-in]");
+    const lins = q("[data-lin]");
+    const louts = q("[data-lout]");
+    const outs = q("[data-out]");
+    const rows = q("[data-log]");
+    const vlinks = q("[data-vlink]");
+    const bars = q("[data-stepbar]");
+    const steps = q("[data-step]");
+    const stock = root.querySelector<HTMLElement>("[data-stock]")!;
+    const FINAL = 137;
+    const START = 142;
+    const counter = { v: START };
+    const paint = () => (stock.textContent = String(Math.round(counter.v)));
+
+    // Connectors run only while the chapter is on screen
+    const flowing = ScrollTrigger.create({
+      trigger: root,
+      start: "top bottom",
+      end: "bottom top",
+      toggleClass: { targets: root, className: "is-flowing" },
+    });
+
+    if (reduced()) return () => flowing.kill();
+
     const mm = gsap.matchMedia();
-
     const ctx = gsap.context(() => {
-      // The loop draws itself on entry (all sizes)
-      if (!reduced()) {
-        gsap.fromTo(
-          path,
-          { strokeDashoffset: 1 },
-          {
-            strokeDashoffset: 0,
-            duration: 1.8,
-            ease: "power2.inOut",
-            scrollTrigger: { trigger: root, start: "top 60%", once: true },
-          }
-        );
-      }
-
-      mm.add("(min-width: 768px) and (prefers-reduced-motion: no-preference)", () => {
+      // Pinned, scroll-scrubbed walk through the four steps
+      mm.add("(min-width: 1024px) and (min-height: 700px)", () => {
         root.classList.add("is-live");
-        gsap.set(items.slice(1), { autoAlpha: 0 });
-        const lime = getComputedStyle(marker).stroke;
-
+        const tilt = [
+          { rotation: -7, x: -70, y: 26 },
+          { rotation: 5, x: -24, y: -18 },
+          { rotation: -4, x: -96, y: 14 },
+          { rotation: 8, x: -40, y: -26 },
+        ];
         const tl = gsap.timeline({
-          defaults: { ease: "none" },
-          scrollTrigger: {
-            trigger: root,
-            start: "top top",
-            end: "+=200%",
-            pin: true,
-            scrub: 0.6,
-            anticipatePin: 1,
-          },
+          defaults: { ease: "power2.out" },
+          scrollTrigger: { trigger: root, start: "top top", end: "+=240%", pin: true, scrub: 0.6, anticipatePin: 1 },
         });
-
-        tl.to(marker, { motionPath: { path, align: path, alignOrigin: [0.5, 0.5], start: 0, end: 0.75 }, duration: 3 }, 0);
-        tl.to({}, { duration: 1 }, 3); // hold on the last stage
-        const on = (i: number, at: number) => {
-          tl.fromTo(nodes[i], { fill: "#0e1116" }, { fill: lime, duration: 0.1 }, at);
-          tl.to(icos[i], { color: "#0e1116", duration: 0.1 }, at);
+        const stepOn = (i: number, at: number) => {
+          tl.fromTo(steps[i], { opacity: 0.35 }, { opacity: 1, duration: 0.2 }, at);
+          tl.fromTo(bars[i], { scaleX: 0 }, { scaleX: 1, duration: 0.8, ease: "none" }, at);
         };
-        on(0, 0);
 
-        for (let i = 1; i < items.length; i++) {
-          // Sequential, not a crossfade: two stage titles must never sit on top of each other mid-swap
-          tl.to(items[i - 1], { autoAlpha: 0, y: -24, duration: 0.15 }, i - 0.25);
-          tl.fromTo(items[i], { autoAlpha: 0, y: 24 }, { autoAlpha: 1, y: 0, duration: 0.2 }, i - 0.05);
-          on(i, i);
-        }
+        // 1 Conectar: the mess straightens and wires in
+        ins.forEach((el, i) => tl.fromTo(el, tilt[i], { rotation: 0, x: 0, y: 0, duration: 0.7 }, i * 0.08));
+        tl.fromTo(lins, { scaleX: 0, autoAlpha: 0 }, { scaleX: 1, autoAlpha: 1, duration: 0.4, stagger: 0.08 }, 0.45);
+        stepOn(0, 0);
 
+        // 2 Crear: the log fills and the stock settles on one number
+        tl.fromTo(rows, { autoAlpha: 0, x: -16 }, { autoAlpha: 1, x: 0, duration: 0.25, stagger: 0.18 }, 1);
+        tl.fromTo(counter, { v: START }, { v: FINAL, duration: 0.8, ease: "none", onUpdate: paint }, 1.1);
+        stepOn(1, 1);
+
+        // 3 Informar: results come out
+        tl.fromTo(louts.slice(0, 3), { scaleX: 0, autoAlpha: 0 }, { scaleX: 1, autoAlpha: 1, duration: 0.3, stagger: 0.1 }, 2);
+        tl.fromTo(outs.slice(0, 3), { autoAlpha: 0, x: -24 }, { autoAlpha: 1, x: 0, duration: 0.3, stagger: 0.12 }, 2.15);
+        stepOn(2, 2);
+
+        // 4 Respaldar
+        tl.fromTo(louts[3], { scaleX: 0, autoAlpha: 0 }, { scaleX: 1, autoAlpha: 1, duration: 0.3 }, 3);
+        tl.fromTo(outs[3], { autoAlpha: 0, x: -24 }, { autoAlpha: 1, x: 0, duration: 0.3 }, 3.15);
+        stepOn(3, 3);
+        tl.to({}, { duration: 0.6 }); // hold on the finished picture
+
+        ScrollTrigger.sort();
         return () => {
           root.classList.remove("is-live");
-          gsap.set([...items, marker, ...nodes, ...icos], { clearProps: "all" });
+          counter.v = FINAL;
+          paint();
+        };
+      });
+
+      // Everything else: the same story, played once on entry
+      mm.add("not all and (min-width: 1024px) and (min-height: 700px)", () => {
+        const tl = gsap.timeline({
+          defaults: { ease: "power2.out" },
+          scrollTrigger: { trigger: root.querySelector("[data-flow]"), start: "top 75%", once: true },
+        });
+        tl.from(ins, { rotation: (i) => [-6, 5, -4, 7][i], y: 18, duration: 0.6, stagger: 0.06 });
+        tl.from(vlinks[0], { scaleY: 0, transformOrigin: "50% 0", duration: 0.3 }, "-=0.2");
+        tl.from(rows, { autoAlpha: 0, x: -12, duration: 0.25, stagger: 0.12 });
+        tl.fromTo(counter, { v: START }, { v: FINAL, duration: 0.7, ease: "none", onUpdate: paint }, "<");
+        tl.from(vlinks[1], { scaleY: 0, transformOrigin: "50% 0", duration: 0.3 });
+        tl.from(outs, { autoAlpha: 0, y: 14, duration: 0.3, stagger: 0.1 });
+        tl.from(bars, { scaleX: 0, duration: 0.5, stagger: 0.12 }, "-=0.3");
+        return () => {
+          counter.v = FINAL;
+          paint();
         };
       });
     }, root);
 
     return () => {
+      flowing.kill();
       mm.revert();
       ctx.revert();
-      ScrollTrigger.refresh();
     };
   });
 </script>

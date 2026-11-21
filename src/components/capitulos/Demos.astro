@@ -1,298 +1,216 @@
 ---
+// Chapter "Sistemas que podés ver": three demo systems shown as drawn, live-looking interfaces.
+// They are demos, never client work; every figure inside a window is sample data.
 import demos from "../../data/demos.json";
-import { stock, stockGroup } from "../../lib/stock";
 import { getPublishedProjects } from "../../lib/content";
-import Video from "./Video.astro";
+import StockUI from "../demos-ui/StockUI.astro";
+import VentasUI from "../demos-ui/VentasUI.astro";
+import PedidosUI from "../demos-ui/PedidosUI.astro";
 
-// Demo id -> placeholder stock photo + sector label shown under the tile.
-const MAP: Record<string, { photo: string; sector: string }> = {
-  "inventario-distribuidora": { photo: "rubro-distribuidora", sector: "Distribución" },
-  "dashboard-ventas": { photo: "rubro-mayorista", sector: "Venta mayorista" },
-  "tracker-pedidos": { photo: "rubro-pedidos", sector: "Pedidos" },
-  "dashboard-cobranzas": { photo: "caos-ticket-mano", sector: "Cobranzas" },
-  "integracion-mercadolibre-erp": { photo: "ciclo-escaneo", sector: "Comercio online" },
-  "pos-mobile-pyme": { photo: "rubro-dietetica", sector: "Dietética" },
-  "automatizacion-crm-whatsapp": { photo: "rubro-clinica", sector: "Salud" },
-  "panel-reservas-restaurante": { photo: "rubro-restaurante", sector: "Gastronomía" },
-  "reservas-peluqueria": { photo: "rubro-peluqueria", sector: "Peluquería" },
-  "catalogo-ferreteria": { photo: "rubro-ferreteria", sector: "Ferretería" },
-  "ecommerce-marca": { photo: "rubro-muebles", sector: "Muebles" },
-  "checkout-artesanal": { photo: "rubro-panaderia", sector: "Panadería" },
-  "tienda-shopify-headless": { photo: "rubro-moda", sector: "Indumentaria" },
-  "auditoria-performance-ecommerce": { photo: "rubro-auditoria", sector: "Tienda online" },
-  "leads-inmobiliaria": { photo: "rubro-inmobiliaria", sector: "Inmobiliaria" },
-  "estudio-juridico-morales": { photo: "rubro-juridico", sector: "Servicios jurídicos" },
-  "landing-lanzamiento-producto": { photo: "rubro-lanzamiento", sector: "Lanzamiento" },
-  "blog-consultora": { photo: "rubro-consultora", sector: "Consultoría" },
-  "migracion-wordpress-editorial": { photo: "rubro-revista", sector: "Editorial" },
+// Demo id -> sector label.
+const SECTOR: Record<string, string> = {
+  "inventario-distribuidora": "Distribución",
+  "dashboard-ventas": "Venta mayorista",
+  "tracker-pedidos": "Pedidos",
+  "integracion-mercadolibre-erp": "Comercio online",
+  "automatizacion-crm-whatsapp": "Salud",
+  "catalogo-ferreteria": "Ferretería",
+  "ecommerce-marca": "Muebles",
+  "blog-consultora": "Consultoría",
 };
 
 const projects = await getPublishedProjects();
 const published = new Set(projects.map((p) => p.id));
-const lineOf = new Map(projects.map((p) => [p.id, p.data.descripcion]));
 
 // The home shows only three demos, all built end to end in-house (no third-party platform):
 // stock, sales KPIs and order tracking. The full list lives on /proyectos.
-const FEATURED = ["inventario-distribuidora", "dashboard-ventas", "tracker-pedidos"];
+const FEATURED = [
+  {
+    id: "inventario-distribuidora",
+    slot: "lead",
+    Ui: StockUI,
+    line: "Stock por depósito siempre al día, con aviso de reposición antes de que falte mercadería.",
+  },
+  {
+    id: "dashboard-ventas",
+    slot: "left",
+    Ui: VentasUI,
+    line: "Las ventas del mes, los productos que más salen y la comparación con el año anterior, en una sola pantalla.",
+  },
+  {
+    id: "tracker-pedidos",
+    slot: "right",
+    Ui: PedidosUI,
+    line: "Cada cliente mayorista sigue el estado de su pedido en tiempo real, sin llamar para preguntar.",
+  },
+];
 
-const tiles = FEATURED.map((id) => demos.find((d) => d.id === id))
-  .filter((d): d is (typeof demos)[number] => !!d && !!MAP[d.id])
-  .map((d, i) => ({
-    id: d.id,
-    nombre: d.nombre,
-    sector: MAP[d.id].sector,
-    line: lineOf.get(d.id) ?? "",
-    photo: stock(MAP[d.id].photo, 800),
-    href: published.has(d.id) ? `/proyectos/${d.id}` : null,
-    shape: i % 3 === 1 ? "tall" : i % 3 === 2 ? "short" : "mid",
-  }));
+const cards = FEATURED.flatMap((f) => {
+  const d = demos.find((x) => x.id === f.id);
+  if (!d) return [];
+  return [{ ...f, nombre: d.nombre, sector: SECTOR[d.id] ?? "", href: published.has(d.id) ? `/proyectos/${d.id}` : null }];
+});
 
-// Photo band: mixed placeholder photos + two short videos, varied ratios.
-const pool = [...stockGroup("rubro-", 640), ...stockGroup("caos-", 640), ...stockGroup("equipo-", 640)];
-const pick = [0, 7, 14, 3, 10, 17, 5, 12, 1, 8, 15, 4].map((i) => pool[i % pool.length]);
-const RATIOS = ["3-4", "1-1", "3-2", "1-1", "3-4", "3-2"];
-type Item =
-  | { kind: "img"; p: (typeof pool)[number]; r: string }
-  | { kind: "vid"; name: "local" | "reparto"; r: string };
-const band: Item[] = pick.map((p, i) => ({ kind: "img", p, r: RATIOS[i % RATIOS.length] }));
-band.splice(3, 0, { kind: "vid", name: "local", r: "3-2" });
-band.splice(9, 0, { kind: "vid", name: "reparto", r: "3-4" });
+// Text strip: the sectors of the remaining demos, each linking to its own page.
+const featuredIds = new Set(FEATURED.map((f) => f.id));
+const others = demos
+  .filter((d) => !featuredIds.has(d.id) && SECTOR[d.id] && published.has(d.id))
+  .map((d) => ({ sector: SECTOR[d.id], nombre: d.nombre, href: `/proyectos/${d.id}` }));
 ---
 
 <section id="demos" class="cap-demos" data-field="paper" aria-labelledby="demos-title">
-  <div class="cap-demos__inner">
-    <!-- Title first: under the strip, each tile's sector line would read as a label above it -->
-    <div class="cap-demos__foot wrap">
-      <h2 id="demos-title">PROYECTOS <small>de</small> DEMO</h2>
-      <div class="cap-demos__copy">
-        <p>Son demos que armé para mostrar cómo funciona cada solución. Ninguno es un cliente: los negocios y las cifras son escenarios de ejemplo.</p>
-        <a class="cap-demos__all" href="/proyectos">Ver todos los proyectos demo</a>
+  <div class="wrap cap-demos__inner">
+    <header class="head">
+      <h2 id="demos-title">SISTEMAS <small>que</small><br />PODÉS VER</h2>
+      <div class="head__copy">
+        <p class="head__lead">Stock, ventas y pedidos: tres sistemas de operación armados de punta a punta, para que veas el software antes de hablar.</p>
+        <p class="head__note">Son sistemas de demostración, no trabajos para clientes. Muestran el punto de partida que adapto a cada empresa.</p>
       </div>
-    </div>
-    <div class="cap-demos__carousel">
-      <ul class="cap-demos__strip" role="list" tabindex="0" aria-label="Proyectos demo">
-        {tiles.map((t) => {
-          const inner = (
-            <>
-              <span class="tile__photo">
-                <img src={t.photo.src} srcset={t.photo.srcset} sizes="(min-width: 768px) 33vw, 72vw" alt="" width={t.photo.width} height={t.photo.height} loading="lazy" decoding="async" draggable="false" />
-                <span class="tile__chip">Demo</span>
-              </span>
-              <span class="tile__name">{t.nombre}</span>
-              <span class="tile__sector">{t.sector}</span>
-              <span class="tile__line">{t.line}</span>
-            </>
-          );
-          return (
-            <li class={`tile tile--${t.shape}`}>
-              {t.href ? <a class="tile__link" href={t.href} draggable="false">{inner}</a> : <div class="tile__link">{inner}</div>}
-            </li>
-          );
-        })}
-      </ul>
-      <div class="cap-demos__controls wrap" data-controls hidden>
-        <div class="cap-demos__track" aria-hidden="true"><span class="cap-demos__thumb"></span></div>
-        <div class="cap-demos__btns">
-          <button type="button" class="cap-demos__btn" aria-label="Proyectos anteriores">
-            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="square" aria-hidden="true"><path d="M20 12H4M10 5l-7 7 7 7" /></svg>
-          </button>
-          <button type="button" class="cap-demos__btn" aria-label="Proyectos siguientes">
-            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="square" aria-hidden="true"><path d="M4 12h16M14 5l7 7-7 7" /></svg>
-          </button>
-        </div>
+    </header>
+
+    <ul class="cards" role="list">
+      {cards.map((c) => {
+        const Ui = c.Ui;
+        const inner = (
+          <>
+            <div class="card__ui"><Ui /></div>
+            <div class="card__cap">
+              <span class="card__sector">{c.sector}</span>
+              <span class="card__name">{c.nombre}</span>
+              <span class="card__line">{c.line}</span>
+              {c.href && <span class="card__go">Ver el sistema <span class="card__arr" aria-hidden="true">→</span></span>}
+            </div>
+          </>
+        );
+        return (
+          <li class={`card card--${c.slot}`}>
+            {c.href ? <a class="card__link" href={c.href}>{inner}</a> : <div class="card__link">{inner}</div>}
+          </li>
+        );
+      })}
+    </ul>
+
+    {others.length > 0 && (
+      <div class="more">
+        <p class="more__t">También hay demos para otros rubros</p>
+        <ul class="more__list" role="list">
+          {others.map((o) => <li><a href={o.href} title={o.nombre}>{o.sector}</a></li>)}
+        </ul>
+        <a class="more__all" href="/proyectos">Ver todos los proyectos demo</a>
       </div>
-    </div>
-    <div class="band" aria-hidden="true">
-      <div class="band__run">
-        {[0, 1].map(() => (
-          <ul class="band__set" role="presentation">
-            {band.map((b) => (
-              <li class={`band__item r-${b.r}`}>
-                {b.kind === "img" ? <img src={b.p.src} alt="" width={b.p.width} height={b.p.height} loading="lazy" decoding="async" draggable="false" /> : <Video name={b.name} />}
-              </li>
-            ))}
-          </ul>
-        ))}
-      </div>
-    </div>
+    )}
   </div>
 </section>
 
 <style>
-  .cap-demos { padding-block: clamp(4rem, 8vw, 6rem) clamp(3rem, 6vw, 5rem); overflow-x: clip; }
-  .cap-demos__inner { display: flex; flex-direction: column; gap: clamp(1.5rem, 3vw, 2.5rem); }
-
-  .cap-demos__strip {
-    list-style: none; margin: 0; padding: 0 var(--gutter);
-    display: flex; align-items: flex-start; gap: clamp(1rem, 2vw, 1.75rem);
-    overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding-inline: var(--gutter);
-    overscroll-behavior-x: contain; scrollbar-width: none;
-  }
-  .cap-demos__strip::-webkit-scrollbar { display: none; }
-  .cap-demos__strip:focus-visible { outline: 3px solid var(--color-accent); outline-offset: 4px; }
-  .cap-demos__strip.is-dragging { cursor: grabbing; scroll-snap-type: none; user-select: none; }
-  .cap-demos__strip.is-dragging :global(a) { pointer-events: none; }
-
-  .tile { flex: 0 0 72vw; scroll-snap-align: start; }
-  .tile__link { display: block; color: inherit; text-decoration: none; }
-  .tile__photo { position: relative; display: block; overflow: hidden; background: var(--color-field-mist); }
-  .tile img { display: block; width: 100%; object-fit: cover; aspect-ratio: 4 / 5; transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
-  .tile--tall img { aspect-ratio: 3 / 4; }
-  .tile--short img { aspect-ratio: 5 / 6; }
-  .tile__chip {
-    position: absolute; top: 0; left: 0; padding: 0.4rem 0.75rem;
-    background: var(--color-ink); color: var(--color-paper); font-size: 0.875rem; font-weight: 500; line-height: 1;
-  }
-  .tile__name { display: block; margin-top: 0.75rem; font-size: 1.0625rem; font-weight: 500; line-height: 1.25; }
-  .tile__sector { display: block; margin-top: 0.125rem; font-size: 1rem; color: var(--color-soft); }
-  /* Reserved height so the reveal never shifts the layout. */
-  .tile__line { display: block; margin-top: 0.25rem; min-height: 4.5em; font-size: 1rem; line-height: 1.5; }
-  a.tile__link:hover .tile__name, a.tile__link:focus-visible .tile__name { text-decoration: underline; text-underline-offset: 0.2em; }
-  @media (hover: hover) {
-    .tile__line { opacity: 0; transform: translateY(0.75rem); transition: opacity 0.35s, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
-    .tile__link:hover .tile__line, .tile__link:focus-visible .tile__line { opacity: 1; transform: none; }
-    .tile__link:hover img, .tile__link:focus-visible img { transform: scale(1.04); }
-  }
-
-  .cap-demos__controls { display: flex; align-items: center; gap: 1.5rem; }
-  .cap-demos__controls[hidden] { display: none; }
-  .cap-demos__track { position: relative; flex: 1; height: 4px; background: var(--color-field-mist); }
-  .cap-demos__thumb { position: absolute; inset: 0 auto 0 0; width: 20%; background: var(--color-ink); will-change: transform; }
-  .cap-demos__btns { display: flex; gap: 0.5rem; }
-  .cap-demos__btn {
-    width: 3rem; height: 3rem; display: grid; place-items: center; cursor: pointer;
-    background: var(--color-ink); color: var(--color-paper); border: 0; border-radius: 0;
-  }
-  .cap-demos__btn:hover:not(:disabled) { background: var(--color-accent); color: #fff; }
-  .cap-demos__btn:focus-visible { outline: 3px solid var(--color-accent); outline-offset: 3px; }
-  .cap-demos__btn:disabled { opacity: 0.35; cursor: default; }
+  .cap-demos { padding-block: clamp(4rem, 8vw, 6rem); overflow-x: clip; }
+  .cap-demos__inner { display: grid; gap: clamp(2.5rem, 5vw, 4.5rem); }
 
   h2 {
     margin: 0; font-family: var(--font-display); font-weight: 600; line-height: 0.9;
     font-size: clamp(3.25rem, 15vw, 5rem); text-transform: uppercase; letter-spacing: -0.01em;
   }
   h2 small { font-family: var(--font-sans); font-weight: 400; font-size: 0.4em; text-transform: none; letter-spacing: 0; }
-  .cap-demos__foot { display: grid; gap: 1.25rem; align-items: end; }
-  .cap-demos__copy p { margin: 0 0 0.75rem; font-size: var(--step-body); max-width: 44ch; }
-  .cap-demos__all { color: var(--color-ink); font-weight: 500; text-underline-offset: 0.25em; }
+  .head { display: grid; gap: 1.5rem; }
+  .head__copy { display: grid; gap: 0.75rem; max-width: 34rem; }
+  .head__copy p { margin: 0; }
+  .head__lead { font-size: var(--step-lead); line-height: 1.3; }
+  .head__note { font-size: var(--step-body); color: var(--color-soft); }
 
-  /* Photo band: two identical sets, the run slides by exactly one set width. */
-  .band { --bh: 120px; overflow: hidden; margin-top: clamp(0.5rem, 2vw, 1.5rem); }
-  .band__run { display: flex; width: max-content; animation: band-drift 70s linear infinite; }
-  .band:hover .band__run { animation-play-state: paused; }
-  .band__set { list-style: none; margin: 0; padding: 0 0.75rem 0 0; display: flex; gap: 0.75rem; }
-  .band__item { flex: none; height: var(--bh); overflow: hidden; background: var(--color-field-mist); }
-  .band__item.r-3-4 { aspect-ratio: 3 / 4; }
-  .band__item.r-1-1 { aspect-ratio: 1 / 1; }
-  .band__item.r-3-2 { aspect-ratio: 3 / 2; }
-  .band__item img, .band__item :global(.vslot) { width: 100%; height: 100%; object-fit: cover; display: block; }
-  @keyframes band-drift { to { transform: translateX(-50%); } }
-  @media (prefers-reduced-motion: reduce) { .band__run { animation: none; } }
+  .cards { list-style: none; margin: 0; padding: 0; display: grid; gap: 3.5rem; }
+  .card { min-width: 0; }
+  .card__link { display: grid; gap: 1.1rem; color: inherit; text-decoration: none; }
+  .card__ui { min-width: 0; transition: transform 0.5s var(--ease-out-expo); }
+  .card__cap { display: grid; gap: 0.3rem; justify-items: start; }
+  .card__sector { font-size: 1rem; color: var(--color-soft); }
+  .card__name { font-family: var(--font-display); font-weight: 600; font-size: clamp(1.75rem, 1.4rem + 1.4vw, 2.5rem); line-height: 1; }
+  .card__line { font-size: var(--step-body); line-height: 1.45; max-width: 38ch; }
+  .card__go { margin-top: 0.4rem; font-weight: 500; text-decoration: underline; text-underline-offset: 0.25em; }
+  .card__arr { display: inline-block; transition: transform 0.35s var(--ease-out-expo); }
+  a.card__link:focus-visible { outline: 3px solid var(--color-accent); outline-offset: 6px; }
+  @media (hover: hover) {
+    a.card__link:hover .card__ui { transform: translateY(-6px); }
+    a.card__link:hover .card__arr { transform: translateX(0.4rem); }
+    a.card__link:hover .card__go { color: var(--color-accent); }
+  }
 
-  @media (min-width: 768px) {
-    /* Three demos share the content width: no carousel, every description visible */
-    .cap-demos__strip {
-      display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); overflow: visible;
-      max-width: var(--content-max); margin-inline: auto; width: 100%; box-sizing: border-box;
-    }
-    .tile:nth-child(even) { margin-top: clamp(1rem, 3vw, 3rem); }
-    .tile__line { opacity: 1 !important; transform: none !important; }
-    .cap-demos__foot { gap: 1rem; }
-    .cap-demos__copy { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.5rem 2.5rem; padding-bottom: 0.6em; }
-    .cap-demos__copy p { margin: 0; }
-    h2 { font-size: clamp(5rem, 9.5vw, 10rem); white-space: nowrap; }
-    .band { --bh: 180px; }
-    .tile__line { min-height: 3em; }
+  .more { display: grid; gap: 0.9rem; justify-items: start; }
+  .more__t { margin: 0; font-size: var(--step-body); font-weight: 500; }
+  .more__list { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .more__list a {
+    display: block; padding: 0.5rem 0.8rem; background: var(--color-field-mist); color: var(--color-ink);
+    font-size: 1rem; font-weight: 500; text-decoration: none; transition: background-color 0.18s, color 0.18s;
+  }
+  .more__list a:hover, .more__list a:focus-visible { background: var(--color-field-night); color: var(--color-paper); }
+  .more__all { color: var(--color-ink); font-weight: 500; text-underline-offset: 0.25em; }
+
+  @media (min-width: 900px) {
+    h2 { font-size: clamp(5rem, 9vw, 9rem); }
+    .head { grid-template-columns: auto minmax(0, 1fr); align-items: end; gap: 3rem; }
+    .head__copy { justify-self: end; padding-bottom: 0.5rem; }
+
+    /* One large lead interface with its caption beside it, then two smaller ones on offset rows */
+    .cards { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 2rem; row-gap: 5rem; align-items: start; }
+    .card--lead { grid-column: 1 / -1; }
+    .card--lead .card__link { grid-template-columns: minmax(0, 8fr) minmax(0, 4fr); column-gap: 2rem; align-items: end; }
+    .card--left { grid-column: 1 / span 5; }
+    .card--right { grid-column: 7 / -1; margin-top: 6rem; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .card__ui, .card__arr { transition: none; }
   }
 </style>
 
 <script>
-  import { onPage } from "../../scripts/motion";
+  import { gsap, ScrollTrigger, onPage, reduced } from "../../scripts/motion";
 
   onPage(() => {
-    const root = document.querySelector<HTMLElement>("#demos");
-    const strip = root?.querySelector<HTMLElement>(".cap-demos__strip");
-    const controls = root?.querySelector<HTMLElement>("[data-controls]");
-    const thumb = root?.querySelector<HTMLElement>(".cap-demos__thumb");
-    if (!root || !strip || !controls || !thumb) return;
-    controls.hidden = false;
-    const [prev, next] = Array.from(controls.querySelectorAll<HTMLButtonElement>(".cap-demos__btn"));
-    const ac = new AbortController();
-    const { signal } = ac;
+    const root = document.getElementById("demos");
+    // Reduced motion: each screen stays in its static, fully drawn state.
+    if (!root || reduced()) return;
+    const fmt = new Intl.NumberFormat("es-AR");
 
-    const update = () => {
-      const max = strip.scrollWidth - strip.clientWidth;
-      const ratio = strip.scrollWidth ? strip.clientWidth / strip.scrollWidth : 1;
-      const w = Math.max(0.12, Math.min(1, ratio));
-      thumb.style.width = `${w * 100}%`;
-      const p = max > 0 ? strip.scrollLeft / max : 0;
-      thumb.style.transform = `translateX(${p * (1 / w - 1) * 100}%)`;
-      // Three tiles fit on desktop: the controls only appear when the row really scrolls.
-      controls.hidden = max <= 2;
-      prev.disabled = strip.scrollLeft <= 2;
-      next.disabled = strip.scrollLeft >= max - 2;
-    };
-    const go = (dir: number) =>
-      strip.scrollBy({ left: dir * Math.max(240, strip.clientWidth * 0.7), behavior: "smooth" });
-    prev.addEventListener("click", () => go(-1), { signal });
-    next.addEventListener("click", () => go(1), { signal });
-    strip.addEventListener("scroll", update, { passive: true, signal });
-    window.addEventListener("resize", update, { signal });
-    strip.addEventListener(
-      "keydown",
-      (e) => {
-        if (e.target !== strip) return;
-        if (e.key === "ArrowRight") { e.preventDefault(); go(1); }
-        else if (e.key === "ArrowLeft") { e.preventDefault(); go(-1); }
-        else if (e.key === "Home") { e.preventDefault(); strip.scrollTo({ left: 0, behavior: "smooth" }); }
-        else if (e.key === "End") { e.preventDefault(); strip.scrollTo({ left: strip.scrollWidth, behavior: "smooth" }); }
-      },
-      { signal },
-    );
+    const ctx = gsap.context(() => {
+      root.querySelectorAll<HTMLElement>("[data-ui]").forEach((ui) => {
+        const all = (sel: string) => Array.from(ui.querySelectorAll<HTMLElement>(sel));
 
-    // Mouse drag-to-scroll; a drag never counts as a click on a tile.
-    let down = false, moved = false, startX = 0, startLeft = 0;
-    strip.addEventListener(
-      "pointerdown",
-      (e) => {
-        if (e.pointerType !== "mouse" || e.button !== 0) return;
-        down = true; moved = false; startX = e.clientX; startLeft = strip.scrollLeft;
-      },
-      { signal },
-    );
-    window.addEventListener(
-      "pointermove",
-      (e) => {
-        if (!down) return;
-        const dx = e.clientX - startX;
-        if (!moved && Math.abs(dx) > 5) { moved = true; strip.classList.add("is-dragging"); }
-        if (moved) strip.scrollLeft = startLeft - dx;
-      },
-      { signal },
-    );
-    const end = () => {
-      if (!down) return;
-      down = false;
-      if (!moved) return;
-      strip.classList.remove("is-dragging");
-      // Re-snap to the nearest tile after releasing.
-      const items = Array.from(strip.children) as HTMLElement[];
-      const pad = parseFloat(getComputedStyle(strip).paddingLeft);
-      const target = items.reduce((a, b) =>
-        Math.abs(b.offsetLeft - pad - strip.scrollLeft) < Math.abs(a.offsetLeft - pad - strip.scrollLeft) ? b : a,
-      );
-      strip.scrollTo({ left: target.offsetLeft - pad, behavior: "smooth" });
-    };
-    window.addEventListener("pointerup", end, { signal });
-    window.addEventListener("pointercancel", end, { signal });
-    strip.addEventListener(
-      "click",
-      (e) => { if (moved) { e.preventDefault(); e.stopPropagation(); moved = false; } },
-      { capture: true, signal },
-    );
-    strip.addEventListener("dragstart", (e) => e.preventDefault(), { signal });
+        // 1. Assemble once on scroll: rows in, bars growing, figures counting up.
+        const intro = gsap.timeline({ paused: true, defaults: { ease: "power3.out" } });
+        intro.from(all("[data-row]"), { opacity: 0, y: 14, duration: 0.5, stagger: 0.06 }, 0);
+        const gx = all("[data-grow-x]");
+        if (gx.length) intro.from(gx, { scaleX: 0, transformOrigin: "0% 50%", duration: 0.8, stagger: 0.04 }, 0.2);
+        const gy = all("[data-grow-y]");
+        if (gy.length) intro.from(gy, { scaleY: 0, transformOrigin: "50% 100%", duration: 0.8, stagger: 0.04 }, 0.2);
+        all("[data-count]").forEach((el) => {
+          const to = Number(el.dataset.count);
+          const pre = el.dataset.pre ?? "";
+          const o = { v: 0 };
+          intro.to(o, { v: to, duration: 1.1, ease: "power2.out", onUpdate: () => { el.textContent = pre + fmt.format(Math.round(o.v)); } }, 0.15);
+        });
 
-    update();
-    return () => ac.abort();
+        // 2. One small state change, played forwards and back for as long as the screen is visible.
+        const loop = gsap.timeline({ paused: true, repeat: -1, yoyo: true, repeatDelay: 2.6, delay: 1.2, defaults: { ease: "power2.out" } });
+        const off = all("[data-off]"), on = all("[data-on]"), fill = all("[data-fill]"), bump = all("[data-bump]");
+        if (off.length) loop.to(off, { opacity: 0, duration: 0.3 }, 0);
+        if (on.length) loop.to(on, { opacity: 1, duration: 0.4 }, 0.2);
+        if (fill.length) loop.to(fill, { scaleX: 1, duration: 0.7 }, 0.2);
+        if (bump.length) loop.to(bump, { scaleY: 1.03, transformOrigin: "50% 100%", duration: 0.6 }, 0.2);
+
+        let visible = false, ready = false;
+        intro.eventCallback("onComplete", () => { ready = true; if (visible) loop.play(); });
+        ScrollTrigger.create({ trigger: ui, start: "top 82%", once: true, onEnter: () => intro.play() });
+        // Paused while off-screen.
+        ScrollTrigger.create({
+          trigger: ui, start: "top bottom", end: "bottom top",
+          onToggle: (self) => {
+            visible = self.isActive;
+            if (!ready) return;
+            if (visible) loop.play(); else loop.pause();
+          },
+        });
+      });
+    }, root);
+    return () => ctx.revert();
   });
 </script>

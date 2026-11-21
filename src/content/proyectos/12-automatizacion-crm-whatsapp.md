@@ -10,7 +10,7 @@ stack: ["Node.js", "WhatsApp Business API", "HubSpot API", "PostgreSQL"]
 fecha: 2025-12-20
 duracion: "4 semanas"
 role: "Integración + automatización"
-repo: "https://github.com/MarcialFantini/clinica-whatsapp-crm"
+repo: "https://github.com/MarcialFantini/clinica-san-martin"
 tags: ["whatsapp", "crm", "automatizacion", "salud"]
 featured: false
 metricas:

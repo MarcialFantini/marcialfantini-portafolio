@@ -1,219 +1,217 @@
 ---
-/* Chapter: a held title with photos flying past it (desktop pin), then the three steps. */
+/* Chapter: how the work goes. The three steps are the star: big numerals, big type, one CTA.
+   Desktop (>= 1024px wide, >= 680px tall): the stage pins for one viewport and scroll reveals the steps in order;
+   at the settled state title, steps and CTA sit together in one viewport.
+   Mobile / short viewports / no JS / reduced motion: a plain vertical sequence, nothing pinned. */
 import { stock } from "../../lib/stock";
-import Video from "./Video.astro";
 
-const fotos = [
-  { k: "a", img: stock("proceso-charla", 700) },
-  { k: "b", img: stock("proceso-cuaderno", 600) },
-  { k: "c", img: stock("proceso-entrega", 700) },
-  { k: "d", img: stock("equipo-mesa", 600) },
-];
+const foto = stock("proceso-cuaderno", 800);
 const pasos = [
-  { k: "cal", t: "Me contás el problema.", d: "Una charla de 30 minutos, gratis." },
-  { k: "doc", t: "Te paso un precio cerrado.", d: "Por escrito y por etapas. Sin sorpresas." },
-  { k: "app", t: "Lo usás desde la primera etapa.", d: "Te enseño a usarlo y queda a tu nombre." },
+  { t: "Me contás el problema.", d: "Una charla de 30 minutos, gratis." },
+  { t: "Te paso un precio cerrado.", d: "Por escrito y por etapas. Sin sorpresas." },
+  { t: "Lo usás desde la primera etapa.", d: "Te enseño a usarlo y queda a tu nombre." },
 ];
+// Same destination as the header action (src/components/Header.astro)
+const cta = { href: "/contacto?servicio=Diagn%C3%B3stico%20gratis", label: "Agendar diagnóstico de 30 minutos" };
 ---
 
 <section id="proceso" class="pr" data-field="mist" aria-labelledby="proceso-title">
-  <div class="pr__stage">
-    <h2 id="proceso-title" class="pr__title">CÓMO <small>se</small><br />TRABAJA</h2>
-    <div class="pr__photos">
-      {
-        fotos.map((f) => (
-          <img
-            class={`pr__ph pr__ph--${f.k}`}
-            data-fly={f.k}
-            src={f.img.src}
-            srcset={f.img.srcset}
-            sizes="(min-width: 768px) 24vw, 44vw"
-            alt={f.img.alt}
-            width={f.img.width}
-            height={f.img.height}
-            loading="lazy"
-            decoding="async"
-          />
-        ))
-      }
-      <div class="pr__ph pr__ph--e" data-fly="e"><Video name="equipo" /></div>
-    </div>
-  </div>
+  <div class="pr__stage" data-stage>
+    <div class="wrap pr__in">
+      <h2 id="proceso-title" class="pr__title">CÓMO <small>se</small> TRABAJA</h2>
 
-  <div class="wrap">
-    <ol class="pr__steps">
-      {
-        pasos.map((p) => (
-          <li data-step>
-            <div class={`pr__art pr__art--${p.k}`} data-ui data-art>
-              {p.k === "cal" && (
-                <>
-                  <p class="a-head">Charla de 30 minutos</p>
-                  <p class="a-meta">Videollamada · Gratis</p>
-                  <div class="a-slots">
-                    <span class="a-slot">Mar 10:00</span>
-                    <span class="a-slot a-slot--on">Jue 16:30</span>
-                  </div>
-                </>
-              )}
-              {p.k === "doc" && (
-                <>
-                  <p class="a-head">Propuesta</p>
-                  <p class="a-meta">Precio cerrado</p>
-                  <ul class="a-stages">
-                    <li>Etapa 1</li>
-                    <li>Etapa 2</li>
-                    <li>Etapa 3</li>
-                  </ul>
-                </>
-              )}
-              {p.k === "app" && (
-                <p class="a-head">Tu sistema</p>
-                  <ul class="a-checks">
-                  {["Etapa 1 en uso", "Capacitación", "Código a tu nombre"].map((c) => (
-                    <li>
-                      <svg viewBox="0 0 20 20" width="22" height="22" aria-hidden="true"><path d="M4 10.5l4 4 8-9" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="square" /></svg>
-                      <span>{c}</span>
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </div>
-            <h3>{p.t}</h3>
-            <p>{p.d}</p>
-          </li>
-        ))
-      }
-    </ol>
+      <div class="pr__ph" data-ph>
+        <img
+          src={foto.src}
+          srcset={foto.srcset}
+          sizes="(min-width: 1024px) 30vw, 100vw"
+          alt={foto.alt}
+          width={foto.width}
+          height={foto.height}
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
+
+      <div class="pr__body">
+        <ol class="pr__steps">
+          {
+            pasos.map((p, i) => (
+              <li data-step>
+                <span class="pr__n" data-n aria-hidden="true">{i + 1}</span>
+                <div class="pr__txt" data-txt>
+                  <h3>{p.t}</h3>
+                  <p>{p.d}</p>
+                </div>
+              </li>
+            ))
+          }
+        </ol>
+        <a class="btn pr__cta" data-cta href={cta.href}>{cta.label}</a>
+      </div>
+    </div>
   </div>
 </section>
 
 <script>
-  import { gsap, ScrollTrigger, onPage, reduced } from "../../scripts/motion";
+  import { gsap, ScrollTrigger, onPage } from "../../scripts/motion";
 
   onPage(() => {
     const root = document.querySelector<HTMLElement>("#proceso");
     if (!root) return;
     const ctx = gsap.context(() => {
       const mm = gsap.matchMedia();
-      const stage = root.querySelector<HTMLElement>(".pr__stage")!;
-      const ph = (k: string) => root.querySelector<HTMLElement>(`[data-fly="${k}"]`)!;
+      const stage = root.querySelector<HTMLElement>("[data-stage]")!;
+      const steps = gsap.utils.toArray<HTMLElement>("[data-step]", root);
+      const photo = root.querySelector<HTMLElement>("[data-ph]")!;
+      const cta = root.querySelector<HTMLElement>("[data-cta]")!;
+      const motion = "(prefers-reduced-motion: no-preference)";
 
-      mm.add("(min-width: 768px) and (prefers-reduced-motion: no-preference)", () => {
+      // Desktop: pin for one viewport; the reveal starts a little before the pin so step 1 is never missing on arrival.
+      mm.add(`(min-width: 1024px) and (min-height: 680px) and ${motion}`, () => {
+        root.classList.add("is-live");
+
+        ScrollTrigger.create({ trigger: stage, start: "top top", end: "+=100%", pin: true, anticipatePin: 1 });
+
+        // 1.45 timeline units = 1.45 viewports of scroll: 0.45 on the way in, 1 while pinned.
         const tl = gsap.timeline({
-          defaults: { ease: "none" },
-          scrollTrigger: { trigger: stage, start: "top top", end: "+=150%", pin: true, scrub: 0.6 },
+          defaults: { ease: "power3.out" },
+          scrollTrigger: { trigger: stage, start: "top 45%", end: "+=145%", scrub: 0.6 },
         });
-        // Side columns only: x travel enters from the edges, y drift passes the clear centre zone
-        tl.fromTo(ph("a"), { xPercent: -140, yPercent: 40 }, { xPercent: 0, yPercent: -30, duration: 1 }, 0)
-          .fromTo(ph("b"), { xPercent: 140, yPercent: 120 }, { xPercent: 0, yPercent: -40, duration: 1 }, 0.1)
-          .fromTo(ph("c"), { xPercent: -140, yPercent: 160 }, { xPercent: 0, yPercent: -60, duration: 1 }, 0.25)
-          .fromTo(ph("d"), { xPercent: -140, yPercent: 200 }, { xPercent: 0, yPercent: -40, duration: 1 }, 0.4)
-          .fromTo(ph("e"), { xPercent: 140, yPercent: 200 }, { xPercent: 0, yPercent: -70, duration: 1 }, 0.35);
+        tl.fromTo(photo, { clipPath: "inset(0 0 100% 0)" }, { clipPath: "inset(0 0 0% 0)", duration: 0.45, ease: "power2.inOut" }, 0);
+        tl.fromTo(photo.querySelector("img"), { scale: 1.15 }, { scale: 1, duration: 0.6, ease: "none" }, 0);
+
+        const starts = [0.1, 0.55, 0.9];
+        steps.forEach((li, i) => {
+          const at = starts[i] ?? 0.9;
+          tl.fromTo(li.querySelector("[data-n]"), { scale: 0.4, autoAlpha: 0 }, { scale: 1, autoAlpha: 1, duration: 0.2, ease: "back.out(1.6)" }, at);
+          tl.fromTo(li.querySelector("[data-txt]"), { y: 40, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 0.28 }, at + 0.03);
+          // Connector down to the next step grows once this one has landed
+          if (i < steps.length - 1) tl.fromTo(li, { "--k": 0 }, { "--k": 1, duration: 0.2, ease: "none" }, at + 0.22);
+        });
+        tl.fromTo(cta, { y: 24, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 0.15 }, 1.2);
+        tl.to({}, { duration: 0.1 }, 1.35); // hold on the settled state
+
+        return () => root.classList.remove("is-live");
       });
 
-      mm.add("(max-width: 767px) and (prefers-reduced-motion: no-preference)", () => {
-        gsap.from(root.querySelectorAll(".pr__ph"), {
-          y: 28,
-          opacity: 0,
-          duration: 0.9,
-          ease: "power4.out",
-          stagger: 0.075,
-          scrollTrigger: { trigger: ".pr__photos", start: "top 80%", once: true },
+      // Everything else with motion allowed: each step rises as it enters, no pin.
+      mm.add(`${motion} and (max-width: 1023px), ${motion} and (max-height: 679px)`, () => {
+        steps.forEach((li) => {
+          const st = { trigger: li, start: "top 85%", once: true };
+          gsap.from(li.querySelector("[data-n]"), { scale: 0.4, autoAlpha: 0, duration: 0.6, ease: "back.out(1.6)", scrollTrigger: st });
+          gsap.from(li.querySelector("[data-txt]"), { y: 28, autoAlpha: 0, duration: 0.8, ease: "power4.out", delay: 0.08, scrollTrigger: st });
+          gsap.fromTo(li, { "--k": 0 }, { "--k": 1, duration: 0.6, ease: "power2.out", delay: 0.3, scrollTrigger: st });
         });
+        gsap.from(cta, { y: 20, autoAlpha: 0, duration: 0.7, ease: "power4.out", scrollTrigger: { trigger: cta, start: "top 92%", once: true } });
       });
 
-      if (!reduced()) {
-        gsap.from(root.querySelectorAll("[data-step]"), {
-          y: 28,
-          opacity: 0,
-          duration: 0.9,
-          ease: "power4.out",
-          stagger: 0.18,
-          scrollTrigger: { trigger: ".pr__steps", start: "top 80%", once: true },
-        });
-        // Artefacts arrive tilted and settle to their resting angle
-        root.querySelectorAll<HTMLElement>("[data-art]").forEach((el, i) => {
-          gsap.fromTo(el, { rotate: i % 2 ? 6 : -6, y: 36 }, {
-            rotate: 0, y: 0, duration: 1.1, ease: "back.out(1.4)", delay: 0.15 + i * 0.18,
-            scrollTrigger: { trigger: ".pr__steps", start: "top 80%", once: true },
-          });
-        });
-      }
+      // Chapters can be created out of DOM order; keep refresh order by position so earlier pins are measured first.
+      ScrollTrigger.sort();
     }, root);
     return () => ctx.revert();
   });
 </script>
 
 <style>
-  .pr { overflow-x: clip; padding-bottom: clamp(4rem, 9vw, 8rem); }
+  .pr {
+    --tile: clamp(3.5rem, 2.5rem + 3vw, 5.5rem);
+    --gap: clamp(1.75rem, 1.2rem + 1.6vw, 2.25rem);
+    overflow-x: clip;
+  }
 
-  .pr__stage { padding: clamp(4rem, 9vw, 6rem) var(--gutter) 2rem; }
+  .pr__stage { padding-block: clamp(4rem, 9vw, 6rem); }
+  .pr__in { display: grid; grid-template-columns: minmax(0, 1fr); gap: 2rem; }
+
   .pr__title {
     font-family: var(--font-display);
     font-weight: 600;
-    font-size: clamp(4rem, 15vw, 9.5rem);
-    line-height: 0.88;
+    font-size: clamp(3.25rem, 1.4rem + 8.4vw, 8rem);
+    line-height: 0.9;
     letter-spacing: -0.01em;
     text-transform: uppercase;
-    margin: 0 auto;
-    max-width: 1200px;
+    margin: 0;
   }
   .pr__title small { font-family: var(--font-sans); font-weight: 400; font-size: 0.32em; text-transform: none; letter-spacing: 0; }
 
-  /* Mobile: loose two-column offset arrangement */
-  .pr__photos { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 2.5rem; align-items: start; }
-  .pr__ph { width: 100%; height: auto; display: block; object-fit: cover; }
-  .pr__ph--a { aspect-ratio: 4 / 5; }
-  .pr__ph--b { aspect-ratio: 1 / 1; margin-top: 3rem; }
-  .pr__ph--c { aspect-ratio: 1 / 1; }
-  .pr__ph--d { aspect-ratio: 4 / 5; margin-top: 3rem; }
-  .pr__ph--e { aspect-ratio: 4 / 5; grid-column: 1 / -1; }
-  .pr__ph--e :global(.vslot) { width: 100%; height: 100%; }
+  .pr__ph { position: relative; overflow: hidden; aspect-ratio: 3 / 2; }
+  .pr__ph img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
 
-  .pr__steps { list-style: none; margin: 3rem 0 0; padding: 0; display: grid; gap: 3rem; }
-  .pr__steps h3 { font-family: var(--font-display); font-weight: 500; font-size: clamp(2rem, 1.3rem + 3vw, 3.5rem); line-height: 1; margin: 0 0 0.4rem; }
-  .pr__steps p { margin: 0; font-size: var(--step-lead); line-height: 1.3; max-width: 36ch; }
-  .pr__art { background: var(--color-paper); color: var(--color-ink); padding: 1.25rem; min-height: 13.5rem; margin-bottom: 1.5rem; max-width: 22rem; transform-origin: 50% 100%; }
-  .pr__art p { margin: 0; }
-  .pr__art--cal { rotate: -1.5deg; }
-  .pr__art--doc { rotate: 1.2deg; }
-  .pr__art--app { rotate: -1deg; max-width: 16rem; min-height: 20rem; background: var(--color-field-night); color: var(--color-paper); border-radius: 0; }
-  .a-head { font-family: var(--font-display); font-weight: 600; font-size: 1.75rem; line-height: 1; }
-  .a-meta { font-size: 1rem; margin-top: 0.35rem !important; }
-  .a-slots { display: grid; gap: 0.5rem; margin-top: 1.25rem; }
-  .a-slot { display: block; padding: 0.7rem 0.9rem; background: var(--color-field-mist); font-size: 1rem; font-weight: 500; }
-  .a-slot--on { background: var(--color-accent); color: #fff; }
-  .a-stages { list-style: none; margin: 1.1rem 0 0; padding: 0; display: grid; gap: 0.5rem; }
-  .a-stages li { padding: 0.7rem 0.9rem; background: var(--color-field-lime); font-size: 1rem; font-weight: 500; }
-  .a-stages li:nth-child(2) { background: var(--color-field-mist); }
-  .a-stages li:nth-child(3) { background: var(--color-field-cornflower); }
-  .a-checks { list-style: none; margin: 1.5rem 0 0; padding: 0; display: grid; gap: 0.9rem; }
-  .a-checks li { display: flex; align-items: center; gap: 0.75rem; font-size: 1.0625rem; font-weight: 500; }
-  .a-checks svg { flex: none; color: var(--color-field-lime); }
-  /* Three columns only when each step title fits in two lines */
-  @media (min-width: 1100px) {
-    .pr__steps { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .pr__body { display: grid; gap: var(--gap); justify-items: start; }
+
+  .pr__steps { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--gap); width: 100%; }
+  .pr__steps li {
+    --k: 1;
+    position: relative;
+    display: grid;
+    grid-template-columns: var(--tile) minmax(0, 1fr);
+    gap: clamp(1rem, 2vw, 1.5rem);
+    align-items: start;
+  }
+  /* Thick connector between numerals: the steps read as one sequence */
+  .pr__steps li:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    left: calc(var(--tile) / 2 - 3px);
+    top: var(--tile);
+    bottom: calc(-1 * var(--gap));
+    width: 6px;
+    background: var(--color-ink);
+    transform: scaleY(var(--k));
+    transform-origin: 50% 0;
   }
 
-  @media (min-width: 768px) {
-    .pr__stage {
-      position: relative;
-      height: 100svh;
-      padding: 0;
-      display: grid;
-      place-items: center;
-      overflow: hidden;
+  .pr__n {
+    display: grid;
+    place-items: center;
+    width: var(--tile);
+    aspect-ratio: 1 / 1;
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: calc(var(--tile) * 0.66);
+    line-height: 1;
+    background: var(--color-field-lime);
+    color: var(--color-ink);
+  }
+  .pr__steps li:nth-child(2) .pr__n { background: var(--color-field-cornflower); }
+  .pr__steps li:nth-child(3) .pr__n { background: var(--color-field-night); color: var(--color-paper); }
+
+  .pr__txt { min-height: var(--tile); display: grid; align-content: center; gap: 0.35rem; }
+  .pr__txt h3 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(2rem, 1.3rem + 3vw, 3.5rem);
+    line-height: 0.98;
+    margin: 0;
+    text-wrap: balance;
+  }
+  .pr__txt p { margin: 0; font-size: var(--step-lead); line-height: 1.3; }
+
+  .pr__cta { width: 100%; min-height: 3.5rem; padding-block: 0.75rem; text-align: center; }
+
+  @media (min-width: 640px) {
+    .pr__cta { width: auto; margin-left: calc(var(--tile) + clamp(1rem, 2vw, 1.5rem)); }
+  }
+
+  /* Wide: title across the top, the notebook on the left, the steps on the right */
+  @media (min-width: 1024px) {
+    .pr__in {
+      grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
+      grid-template-areas: "title title" "photo body";
+      column-gap: clamp(2rem, 4vw, 3.5rem);
+      row-gap: clamp(1.5rem, 3vw, 2.5rem);
+      width: 100%;
     }
-    .pr__title { text-align: center; margin: 0; position: relative; z-index: 1; }
-    .pr__photos { position: absolute; inset: 0; display: block; margin: 0; pointer-events: none; }
-    .pr__ph { position: absolute; margin: 0 !important; }
-    /* Outer 27% on each side stay free of the title column */
-    .pr__ph--a { left: 3vw; top: 14vh; width: 20vw; aspect-ratio: 4 / 5; }
-    .pr__ph--b { right: 3vw; top: 8vh; width: 17vw; aspect-ratio: 1 / 1; }
-    .pr__ph--c { left: 8vw; top: 52vh; width: 15vw; aspect-ratio: 1 / 1; }
-    .pr__ph--d { left: 24vw; top: 74vh; width: 12vw; aspect-ratio: 4 / 3; }
-    .pr__ph--e { right: 6vw; top: 50vh; width: 21vw; aspect-ratio: 4 / 3; grid-column: auto; }
-    .pr__steps { gap: var(--gutter); margin-top: clamp(3rem, 6vw, 5rem); }
+    .pr__title { grid-area: title; }
+    .pr__ph { grid-area: photo; aspect-ratio: auto; min-height: 18rem; }
+    .pr__body { grid-area: body; }
   }
+
+  /* Live (pinned) mode, enabled from JS: everything is sized against the viewport height so it frames whole */
+  .is-live { --tile: min(5.5rem, 11svh); --gap: min(2.25rem, 3.6svh); }
+  .is-live .pr__stage { height: 100svh; padding-block: 2rem; display: grid; align-items: center; }
+  .is-live .pr__in { row-gap: min(2.5rem, 4svh); }
+  .is-live .pr__title { font-size: min(8rem, 9vw, 15svh); }
+  .is-live .pr__ph { min-height: 0; }
+  .is-live .pr__txt h3 { font-size: min(3.5rem, 3.6vw, 6.2svh); }
 </style>

@@ -1,192 +1,265 @@
 ---
 import Layout from "../../layouts/Layout.astro";
+import SubHero from "../../components/sub/SubHero.astro";
+import Field from "../../components/sub/Field.astro";
+import CapUI from "../../components/servicios/CapUI.astro";
+import Navegador from "../../components/servicios/Navegador.astro";
 import servicios from "../../data/servicios.json";
 import site from "../../data/site.json";
 
 const sistema = servicios.find((s) => s.grupo === "sistema")!;
 const canales = servicios.filter((s) => s.grupo === "canal");
 
-type Cifra = { v: number; suf?: string };
-const cifra = (c: Cifra) => `${c.v.toLocaleString("es-AR")}${c.suf ?? ""}`;
-const ejemplo = (g: { label: string; antes: Cifra; ahora: Cifra }) =>
-  `Ejemplo: de ${cifra(g.antes)} a ${cifra(g.ahora)}. ${g.label}.`;
+const diagnostico = "/contacto?servicio=Diagn%C3%B3stico%20gratis";
 
-const faqsGenerales = [
-  {
-    q: "¿Cuánto cuesta?",
-    a: "Cada proyecto se cotiza aparte, porque depende del problema y del alcance. Después del diagnóstico gratis de 30 minutos te pasamos una propuesta cerrada por escrito: alcance, etapas, plazos y precio. Si algo cambia en el camino, se cotiza antes de hacerlo.",
-  },
-  {
-    q: "¿Puedo empezar por la web y sumar el sistema después?",
-    a: "Sí. La página o la tienda se construyen pensando en conectarse después con pedidos, stock o facturación, así no hay que rehacer nada cuando des el siguiente paso.",
-  },
-  {
-    q: "¿Cuánto tarda?",
-    a: "Las webs tienen un plazo orientativo en cada servicio. El software a medida se entrega por etapas: cada parte entra en uso antes de empezar la siguiente. Te confirmamos fechas en la propuesta.",
-  },
-  {
-    q: "¿Y si no estoy seguro de qué necesito?",
-    a: "Escribinos igual. En el diagnóstico gratis de 30 minutos vemos dónde se traba tu operación y te orientamos hacia la opción que mejor te sirve, aunque sea la más chica.",
-  },
-];
+// The four capabilities of the custom-software line, each with its drawn screen.
+const capacidades = [
+  { kind: "inventario", name: "Inventario y pedidos", out: "Sabés qué hay, qué falta y en qué estado está cada pedido, sin preguntar." },
+  { kind: "automatizaciones", name: "Automatizaciones", out: "Las tareas que se repiten todos los días se hacen solas y sin errores de tipeo." },
+  { kind: "kpis", name: "Tableros de KPIs", out: "Los números de la empresa a la vista, sin armar informes a mano." },
+  { kind: "integraciones", name: "Integraciones", out: "Tienda, planillas y facturación cargan en un mismo lugar: cada dato, una sola vez." },
+] as const;
 
-const incluyeTodos = [
-  "Diagnóstico gratis de 30 minutos",
-  "Propuesta cerrada por escrito antes de arrancar",
-  "Una persona real que te responde en 24 horas hábiles",
-  "Entregas que podés ver y probar mientras se arma",
+const tipoWeb: Record<string, "web" | "empresa" | "tienda"> = {
+  "web-productos-servicios": "web",
+  "web-empresarial": "empresa",
+  ecommerce: "tienda",
+};
+
+// Same three proof claims as the home hero (src/components/capitulos/Hero.astro).
+const garantias = [
+  { t: "Precio cerrado por escrito", d: "Después del diagnóstico te paso una propuesta con alcance, etapas, plazos y precio. Si algo cambia, se cotiza antes de hacerlo." },
+  { t: "Código, datos y accesos a nombre de tu empresa", d: "No quedás atado a mí: todo lo que se construye es de tu empresa desde el primer día." },
+  { t: "En uso desde la primera etapa", d: "Cada parte entra en uso antes de empezar la siguiente, así se ajusta el rumbo a tiempo." },
 ];
 
 const noIncluye = [
-  "Hosting ni dominio: se contratan aparte y te ayudamos a elegirlos",
-  "Promesas de resultados que dependen de cosas que no controlamos",
+  "Hosting ni dominio: se contratan aparte y te ayudo a elegirlos",
+  "Promesas de resultados que dependen de cosas que no controlo",
   "Empezar sin propuesta escrita",
 ];
 
-const contactoHref = (titulo: string) => `/contacto?servicio=${encodeURIComponent(titulo)}`;
+const faqs = [
+  {
+    q: "¿Cuánto cuesta?",
+    a: "Cada proyecto se cotiza aparte, porque depende del problema y del alcance. Después del diagnóstico de 30 minutos te paso una propuesta cerrada por escrito.",
+  },
+  {
+    q: "¿Cuánto tarda?",
+    a: "El software a medida se entrega por etapas: cada parte entra en uso antes de empezar la siguiente. Las webs tienen un plazo orientativo en cada servicio. Las fechas quedan en la propuesta.",
+  },
+  {
+    q: "¿Puedo empezar por la web y sumar el sistema después?",
+    a: "Sí. La página o la tienda se construyen pensando en conectarse después con pedidos, stock o facturación, así no hay que rehacer nada.",
+  },
+  {
+    q: "¿Y si no sé bien qué necesito?",
+    a: "Escribime igual. En el diagnóstico vemos dónde se traba tu operación y te oriento hacia la opción que mejor te sirve, aunque sea la más chica.",
+  },
+];
 ---
 
 <Layout
   title={`Servicios — ${site.name}`}
-  description="Software a medida para PyMEs (inventario, procesos, automatizaciones, KPIs e informes) y canales digitales conectados: página web, sitio institucional y tienda online. Propuesta cerrada después de un diagnóstico gratis."
+  description="Software a medida para empresas: inventario y pedidos, automatizaciones, tableros de KPIs e integraciones. También la web o la tienda que alimentan el sistema. Precio cerrado por escrito después de un diagnóstico de 30 minutos."
+  bleed
 >
-  <section class="sv-hero wrap" aria-labelledby="svc-title">
-    <h1 id="svc-title" class="sv-hero__h1" data-split>Un sistema para tu operación.</h1>
-    <div class="sv-hero__row">
-      <p class="sv-hero__lead" data-rise style="--i:1">
-        Software a medida para ordenar tu PyME, y los canales digitales que lo alimentan: página, sitio institucional o tienda online.
-      </p>
-      <a href={contactoHref("Diagnóstico gratis")} class="btn" data-rise style="--i:2">Contanos el problema</a>
-    </div>
-  </section>
+  <SubHero
+    field="paper"
+    lead="Software a medida para empresas que crecieron con planillas, mensajes y sistemas que no se hablan. Lo construyo a cómo ya trabaja tu equipo."
+  >
+    <Fragment slot="title">Software <small>para</small> tu operación</Fragment>
+    <Fragment slot="actions">
+      <a href={diagnostico} class="btn">Agendar diagnóstico de 30 minutos</a>
+      <a href="#sistema" class="sv-link">Ver qué resuelvo</a>
+    </Fragment>
+  </SubHero>
 
-  <section id={sistema.id} class="sv-core" aria-labelledby="sistema-title">
-    <div class="sv-core__in wrap">
-      <h2 id="sistema-title" class="sv-core__h" data-split>{sistema.titulo}</h2>
-      <div class="sv-core__body">
-        <p class="sv-core__lead" data-rise>{sistema.descripcion}</p>
-        <p data-rise style="--i:1"><strong>Para quién.</strong> {sistema.idealPara}</p>
-        <p class="sv-core__ej" data-rise style="--i:2">{ejemplo(sistema.grafico)}</p>
-        <div class="sv-core__inc" data-rise style="--i:2">
-          <p><strong>Qué incluye</strong></p>
-          <ul>{sistema.queIncluye.map((t) => <li>{t}</li>)}</ul>
-        </div>
-        <div class="sv-core__actions" data-rise style="--i:3">
-          <a href={contactoHref(sistema.titulo)} class="btn sv-core__btn">{sistema.cta}</a>
-          <a href={`/servicios/${sistema.id}`}>Ver el detalle</a>
-        </div>
-      </div>
-    </div>
-  </section>
+  <Field field="cornflower" id="sistema" lead={sistema.descripcion}>
+    <Fragment slot="title">A medida <small>de tu</small> empresa</Fragment>
 
-  <section class="sv-ch wrap" aria-labelledby="canales-title">
-    <h2 id="canales-title" class="sv-ch__h" data-split>La puerta de entrada</h2>
-    <p class="sv-ch__lead" data-rise style="--i:1">
-      Por acá te encuentran, te consultan y te compran. Lo que entra queda ordenado y listo para pasar al sistema cuando lo sumes.
-    </p>
-    <ul class="sv-ch__list">
+    <ol class="sv-caps">
       {
-        canales.map((s) => (
-          <li id={s.id} class="sv-ch__item" data-rise>
-            <a href={`/servicios/${s.id}`} class="sv-ch__name">{s.titulo}</a>
-            <div class="sv-ch__info">
-              <p class="sv-ch__sub">{s.subtitulo}. {s.conecta} <a href={contactoHref(s.titulo)}>{s.cta}</a></p>
-              <p class="soft">{s.duracion}. {ejemplo(s.grafico)}</p>
+        capacidades.map((c, i) => (
+          <li class:list={["sv-cap", `sv-cap--${i + 1}`]}>
+            <div class="sv-cap__text" data-reveal>
+              <span class="sv-cap__n" aria-hidden="true">0{i + 1}</span>
+              <h3 class="sv-cap__name">{c.name}</h3>
+              <p class="sv-cap__out">{c.out}</p>
+            </div>
+            <div class="sv-cap__ui" data-reveal={i % 2 ? "left" : "right"}>
+              <CapUI kind={c.kind} />
             </div>
           </li>
         ))
       }
-    </ul>
-  </section>
+    </ol>
 
-  <section class="sv-terms wrap" aria-label="Qué incluye siempre">
-    <div data-rise>
-      <h2 class="sv-terms__h">Siempre incluye</h2>
-      <ul>{incluyeTodos.map((t) => <li>{t}</li>)}</ul>
+    <div class="sv-caps__end" data-reveal>
+      <a href={`/servicios/${sistema.id}`} class="btn sv-btn-ink">Ver el detalle del software a medida <span aria-hidden="true">→</span></a>
+      <p>{sistema.conecta}</p>
     </div>
-    <div data-rise style="--i:1">
-      <h2 class="sv-terms__h">No incluye</h2>
-      <ul>{noIncluye.map((t) => <li>{t}</li>)}</ul>
-    </div>
-  </section>
+  </Field>
 
-  <section class="sv-faq wrap" aria-labelledby="sv-faq-title">
-    <h2 id="sv-faq-title" class="sv-faq__h" data-split>Antes de firmar</h2>
-    <div class="sv-faq__text">
-      {faqsGenerales.map((f, i) => <p data-rise style={`--i:${i}`}><strong>{f.q}</strong> {f.a}</p>)}
+  <Field field="bone" id="canales" pad="s">
+    <div class="sv-ch">
+      <div class="sv-ch__head" data-reveal>
+        <h2 class="sv-ch__h">También armo la parte digital que alimenta el sistema</h2>
+        <p>Por la web o la tienda entran consultas y pedidos ordenados, listos para pasar al sistema cuando lo sumes.</p>
+      </div>
+      <ul class="sv-ch__list" data-stagger>
+        {
+          canales.map((s) => (
+            <li id={s.id}>
+              <a href={`/servicios/${s.id}`} class="sv-ch__card">
+                <Navegador tipo={tipoWeb[s.id] ?? "web"} mini />
+                <span class="sv-ch__name">{s.titulo}</span>
+                <span class="sv-ch__sub">{s.subtitulo}. {s.duracion}.</span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
     </div>
-  </section>
+  </Field>
 
-  <section class="sv-end wrap" aria-labelledby="sv-end-title">
-    <h2 id="sv-end-title" class="sv-end__h" data-split>¿Dónde se traba tu operación?</h2>
-    <p class="sv-end__p" data-rise style="--i:1">
-      Empezá por el diagnóstico gratis de 30 minutos. Si tu caso no se resuelve con nada de esto, te lo decimos y te orientamos hacia otra opción.
-    </p>
-    <a href={contactoHref("Quiero hablar de mi proyecto")} class="btn" data-rise style="--i:2">Contanos qué necesitás</a>
-  </section>
+  <Field field="lime" id="garantias">
+    <Fragment slot="title">Así <small>se</small> trabaja</Fragment>
+    <div class="sv-g">
+      <ol class="sv-g__list" data-stagger>
+        {
+          garantias.map((g, i) => (
+            <li>
+              <span class="sv-g__n" aria-hidden="true">{i + 1}</span>
+              <div>
+                <h3 class="sv-g__t">{g.t}</h3>
+                <p>{g.d}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+      <div class="sv-doc" role="img" aria-label="Ejemplo de propuesta escrita: alcance, etapas, plazos y precio cerrado, firmada antes de arrancar" data-reveal="right">
+        <div class="sv-doc__top">
+          <b>Propuesta</b>
+          <span class="sv-doc__chip">Ejemplo</span>
+        </div>
+        <div class="sv-doc__row"><span>Alcance</span><i style="width:72%"></i></div>
+        <div class="sv-doc__row"><span>Etapa 1</span><i style="width:58%"></i></div>
+        <div class="sv-doc__row"><span>Etapa 2</span><i style="width:44%"></i></div>
+        <div class="sv-doc__row"><span>Plazos</span><i style="width:50%"></i></div>
+        <div class="sv-doc__row sv-doc__row--key"><span>Precio</span><b>Cerrado</b></div>
+        <div class="sv-doc__sign"><span data-grow></span>Firma antes de arrancar</div>
+      </div>
+    </div>
+    <p class="sv-g__no" data-reveal><strong>No incluye:</strong> {noIncluye.join("; ")}.</p>
+  </Field>
+
+  <Field field="mist" id="preguntas">
+    <Fragment slot="title">Antes <small>de</small> firmar</Fragment>
+    <dl class="sv-faq" data-stagger>
+      {
+        faqs.map((f) => (
+          <div>
+            <dt>{f.q}</dt>
+            <dd>{f.a}</dd>
+          </div>
+        ))
+      }
+    </dl>
+  </Field>
+
+  <Field field="night" id="empezar" class="sv-end">
+    <Fragment slot="title">Contame <small>dónde se</small> traba</Fragment>
+    <div class="sv-end__row" data-reveal>
+      <p>El primer paso es un diagnóstico de 30 minutos, sin costo. Si tu caso no se resuelve con nada de esto, te lo digo y te oriento hacia otra opción.</p>
+      <a href={diagnostico} class="btn">Agendar diagnóstico de 30 minutos</a>
+    </div>
+  </Field>
 </Layout>
 
 <style>
-  .sv-hero { padding-top: clamp(3rem, 8vw, 6rem); }
-  .sv-hero__h1 { font-size: clamp(3.5rem, 9vw, 9.375rem); line-height: 0.9; letter-spacing: -0.03em; max-width: 12ch; }
-  .sv-hero__row { display: grid; gap: 1.5rem; margin-top: 2.5rem; justify-items: start; }
-  .sv-hero__lead { font-size: var(--step-lead); line-height: 1.3; max-width: 34ch; }
+  .sv-link { color: inherit; font-weight: 500; text-decoration: underline; text-underline-offset: 0.25em; padding-block: 0.5rem; }
+  .sv-link:hover { color: var(--color-accent); }
 
-  .sv-core { margin-top: var(--section-gap); background: var(--color-accent); color: var(--color-accent-ink); }
-  .sv-core__in { display: grid; gap: 2.5rem; padding-block: clamp(4rem, 8vw, 7rem); }
-  .sv-core__h { font-size: clamp(3.5rem, 9vw, 9.375rem); line-height: 0.9; letter-spacing: -0.03em; color: var(--color-accent-ink); max-width: 9ch; }
-  .sv-core__body { display: grid; gap: 1.5rem; max-width: 60ch; }
-  .sv-core__lead { font-size: var(--step-lead); line-height: 1.3; }
-  .sv-core strong { font-weight: 500; }
-  .sv-core__inc ul { margin: 0.5rem 0 0; padding-left: 1.2em; display: grid; gap: 0.35rem; }
-  .sv-core__actions { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem 1.75rem; }
-  .sv-core__actions a:not(.btn) { display: inline-block; padding-block: 0.5rem; }
-  .sv-core__btn { background: var(--color-accent-ink); color: var(--color-fg); }
-  .sv-core__btn:hover { background: var(--color-surface); color: var(--color-fg); }
-
-  .sv-ch { margin-top: var(--section-gap); }
-  .sv-ch__lead { margin-top: 1.5rem; font-size: var(--step-lead); line-height: 1.3; max-width: 40ch; }
-  .sv-ch__list { list-style: none; margin: 4rem 0 0; padding: 0; display: grid; gap: 5.5rem; }
-  .sv-ch__item { display: grid; gap: 1rem; }
-  .sv-ch__name {
-    font-family: var(--font-display);
-    font-size: clamp(2rem, 4vw, 4rem);
-    line-height: 0.95;
-    letter-spacing: -0.02em;
-    text-decoration: none;
-    transition: color 200ms var(--ease-out-quart);
+  /* Capabilities: staggered rows, screen side alternates on desktop */
+  .sv-caps { list-style: none; margin: 0; padding: 0; display: grid; gap: clamp(3rem, 7vw, 5.5rem); }
+  .sv-cap { display: grid; gap: 1.5rem; align-items: center; }
+  .sv-cap__text { container-type: inline-size; display: grid; gap: 0.75rem; align-content: start; }
+  .sv-cap__n { font-family: var(--font-display); font-weight: 600; font-size: 1.5rem; line-height: 1; }
+  .sv-cap__name {
+    margin: 0; font-family: var(--font-display); font-weight: 600; text-transform: uppercase;
+    font-size: clamp(2rem, 12cqi, 3.75rem); line-height: 0.92; letter-spacing: 0;
   }
-  .sv-ch__name:hover { color: var(--color-accent); }
-  .sv-ch__info { display: grid; gap: 0.5rem; max-width: 52ch; }
-  .sv-ch__info a { display: inline-block; padding-block: 0.4rem; }
+  .sv-cap__out { margin: 0; font-size: var(--step-lead); line-height: 1.3; max-width: 30ch; }
+  .sv-cap__ui { min-width: 0; }
 
-  .sv-terms { margin-top: var(--section-gap); display: grid; gap: 3rem; }
-  .sv-terms__h { font-family: var(--font-sans); font-size: var(--step-lead); font-weight: 500; letter-spacing: 0; line-height: 1.2; }
-  .sv-terms ul { margin: 1rem 0 0; padding-left: 1.2em; display: grid; gap: 0.5rem; max-width: 46ch; }
+  .sv-caps__end { display: grid; gap: 1.25rem; justify-items: start; padding-top: 2rem; border-top: 3px solid var(--color-ink); }
+  .sv-caps__end p { margin: 0; max-width: 52ch; }
+  .sv-btn-ink { background: var(--color-field-night); color: var(--color-paper); }
+  .sv-btn-ink:hover { background: var(--color-ink); color: var(--color-field-lime); }
 
-  .sv-faq { margin-top: var(--section-gap); display: grid; gap: 2.5rem; }
-  .sv-faq__text p { margin-bottom: 1.25rem; break-inside: avoid; }
-  .sv-faq__text strong { font-weight: 500; }
+  /* Secondary band: web services */
+  .sv-ch { display: grid; gap: 2rem; }
+  .sv-ch__head { display: grid; gap: 0.75rem; max-width: 46ch; }
+  .sv-ch__h { margin: 0; font-family: var(--font-sans); font-weight: 500; font-size: var(--step-lead); line-height: 1.2; letter-spacing: 0; }
+  .sv-ch__head p { margin: 0; }
+  .sv-ch__list { list-style: none; margin: 0; padding: 0; display: grid; gap: 1.5rem; }
+  .sv-ch__card { display: grid; gap: 0.6rem; color: inherit; text-decoration: none; }
+  .sv-ch__name { font-family: var(--font-display); font-weight: 600; font-size: 1.75rem; line-height: 1; text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 0.2em; }
+  .sv-ch__card:hover .sv-ch__name { color: var(--color-accent); }
+  .sv-ch__sub { color: var(--color-soft); }
 
-  .sv-end { margin-top: var(--section-gap); display: grid; gap: 1.5rem; justify-items: start; }
-  .sv-end__h { max-width: 16ch; }
-  .sv-end__p { max-width: 52ch; }
+  /* Guarantees: numbered claims + drawn proposal */
+  .sv-g { display: grid; gap: 3rem; align-items: start; }
+  .sv-g__list { list-style: none; margin: 0; padding: 0; display: grid; gap: 2rem; }
+  .sv-g__list li { display: grid; grid-template-columns: 3rem minmax(0, 1fr); gap: 1rem; padding-top: 1.25rem; border-top: 3px solid var(--color-ink); }
+  .sv-g__n { font-family: var(--font-display); font-weight: 600; font-size: 3rem; line-height: 0.85; }
+  .sv-g__t { margin: 0 0 0.5rem; font-family: var(--font-display); font-weight: 600; text-transform: uppercase; font-size: clamp(1.75rem, 1.2rem + 1.8vw, 2.75rem); line-height: 0.95; letter-spacing: 0; }
+  .sv-g__list p { margin: 0; max-width: 46ch; }
+  .sv-g__no { margin: 0; max-width: 70ch; }
+  .sv-g__no strong { font-weight: 600; }
+
+  .sv-doc { display: grid; gap: 0.7rem; padding: 1.25rem; background: #fff; font-size: 0.9375rem; max-width: 26rem; }
+  .sv-doc__top { display: flex; justify-content: space-between; align-items: center; padding-bottom: 0.6rem; border-bottom: 3px solid var(--color-ink); }
+  .sv-doc__top b { font-family: var(--font-display); font-size: 1.75rem; font-weight: 600; line-height: 1; }
+  .sv-doc__chip { padding: 0.15rem 0.5rem; font-size: 0.8125rem; font-weight: 500; background: var(--color-field-lime); }
+  .sv-doc__row { display: grid; grid-template-columns: 5rem minmax(0, 1fr); align-items: center; gap: 0.75rem; }
+  .sv-doc__row i { display: block; height: 0.55rem; background: var(--color-surface-2); }
+  .sv-doc__row--key { padding: 0.5rem 0.6rem; background: var(--color-field-night); color: var(--color-paper); font-weight: 500; }
+  .sv-doc__row--key b { font-family: var(--font-display); font-size: 1.5rem; font-weight: 600; line-height: 1; }
+  .sv-doc__sign { display: grid; gap: 0.35rem; margin-top: 0.6rem; color: var(--color-soft); }
+  .sv-doc__sign span { display: block; width: 60%; height: 2px; background: var(--color-ink); }
+
+  /* FAQ */
+  .sv-faq { margin: 0; display: grid; gap: 2rem; }
+  .sv-faq dt { font-weight: 600; font-size: var(--step-lead); line-height: 1.2; }
+  .sv-faq dd { margin: 0.5rem 0 0; max-width: 52ch; }
+
+  /* Closing field meets the footer directly (footer keeps a --section-gap top margin) */
+  :global(.sv-end) { margin-bottom: calc(-1 * var(--section-gap)); }
+  .sv-end__row { display: grid; gap: 1.5rem; justify-items: start; }
+  .sv-end__row p { margin: 0; font-size: var(--step-lead); line-height: 1.3; max-width: 40ch; }
+
+  @media (min-width: 720px) {
+    .sv-ch__list { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .sv-faq { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 3.5rem; }
+  }
 
   @media (min-width: 1024px) {
-    .sv-hero__row { grid-template-columns: 1fr auto; align-items: end; }
-    .sv-core__in { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gutter); }
-    .sv-core__h { grid-column: 1 / span 6; }
-    .sv-core__body { grid-column: 7 / span 6; align-self: end; }
-    .sv-ch__item { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gutter); align-items: baseline; }
-    .sv-ch__name { grid-column: 1 / span 7; }
-    .sv-ch__info { grid-column: 8 / span 5; }
-    .sv-ch__list { margin-left: 0; }
-    .sv-ch__h, .sv-ch__lead { margin-left: calc((100% - 11 * var(--gutter)) / 12 * 7 + 7 * var(--gutter)); }
-    .sv-terms { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gutter); }
-    .sv-terms > div:first-child { grid-column: 1 / span 5; }
-    .sv-terms > div:last-child { grid-column: 7 / span 5; }
-    .sv-faq { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gutter); }
-    .sv-faq__h { grid-column: 1 / span 4; align-self: start; }
-    .sv-faq__text { grid-column: 5 / -1; columns: 2; column-gap: 3.5rem; }
+    .sv-cap { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 4rem; }
+    .sv-cap:nth-child(even) .sv-cap__text { order: 2; }
+    .sv-cap:nth-child(even) { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); }
+    /* Break the rhythm: the KPI row runs the screen narrow and offset */
+    .sv-cap--3 .sv-cap__ui { max-width: 30rem; }
+    .sv-caps__end { grid-template-columns: auto minmax(0, 1fr); align-items: center; column-gap: 3rem; }
+
+    /* Heading on top, the three browser cards across the full width (side by side they did not fit) */
+    .sv-ch { gap: 2.5rem; }
+
+    .sv-g { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: 5rem; }
+    .sv-doc { justify-self: end; width: 100%; position: sticky; top: 6rem; }
+
+    .sv-end__row { grid-template-columns: minmax(0, 1fr) auto; align-items: end; column-gap: 4rem; }
   }
 </style>

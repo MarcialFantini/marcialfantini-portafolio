@@ -1,0 +1,54 @@
+---
+// Typographic panel for demos without a drawn interface: the sector set large and the key features
+// as rows, inside the same window frame as the drawn UIs. Motion hooks: data-row, data-grow-x.
+import Ventana from "../demos-ui/Ventana.astro";
+import type { Field } from "./catalogo";
+
+interface Props {
+  rubro: string;
+  group: string;
+  features: string[];
+  field: Field;
+}
+const { rubro, group, features, field } = Astro.props;
+// Bar lengths are decorative, not data.
+const widths = ["86%", "64%", "74%"];
+---
+
+<Ventana ui="ficha" title={group} where={rubro} label={`Ficha del proyecto demo (${rubro}): ${features.join(", ")}`}>
+  <div class:list={["fi", `fi--${field}`]}>
+    <p class="fi__rubro" data-row>{rubro}</p>
+    <ol class="fi__list" role="list">
+      {features.map((f, i) => (
+        <li class="fi__row" data-row>
+          <span class="fi__n">{String(i + 1).padStart(2, "0")}</span>
+          <span class="fi__t">{f}</span>
+          <span class="fi__bar" style={`width:${widths[i % widths.length]}`} data-grow-x></span>
+        </li>
+      ))}
+    </ol>
+  </div>
+</Ventana>
+
+<style>
+  .fi { --mark: var(--color-ink); --mark-ink: var(--color-paper); display: grid; gap: 1.1rem; }
+  .fi--cornflower { --mark: var(--color-field-cornflower); --mark-ink: var(--color-ink); }
+  .fi--lime { --mark: var(--color-field-lime); --mark-ink: var(--color-ink); }
+  .fi--mist { --mark: var(--color-accent); --mark-ink: var(--color-accent-ink); }
+
+  .fi__rubro {
+    margin: 0; font-family: var(--font-display); font-weight: 600; text-transform: uppercase;
+    font-size: clamp(2.25rem, 1.6rem + 2.6vw, 3.75rem); line-height: 0.9; overflow-wrap: anywhere;
+  }
+  .fi__list { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.6rem; }
+  .fi__row {
+    display: grid; grid-template-columns: auto minmax(0, 1fr); column-gap: 0.8rem; row-gap: 0.45rem;
+    align-items: center; padding: 0.7rem 0.8rem; background: var(--color-paper);
+  }
+  .fi__n {
+    display: grid; place-items: center; width: 2.1rem; height: 2.1rem;
+    background: var(--mark); color: var(--mark-ink); font-weight: 500; font-size: 0.875rem;
+  }
+  .fi__t { font-size: 1rem; font-weight: 500; line-height: 1.25; }
+  .fi__bar { grid-column: 2; display: block; height: 0.375rem; background: var(--mark); }
+</style>

@@ -1,0 +1,120 @@
+---
+// Drawn stock screen: per-warehouse table with low-stock rows flagged and an incoming movement being registered.
+import Ventana from "./Ventana.astro";
+
+const rows = [
+  { p: "Caja 30x40 reforzada", stock: 47, min: 60 },
+  { p: "Caja 20x25", stock: 312, min: 120 },
+  { p: "Cinta de embalar 48 mm", stock: 86, min: 40 },
+  { p: "Film stretch 50 cm", stock: 12, min: 30, after: 60 },
+  { p: "Esquinero de cartón 1 m", stock: 540, min: 200 },
+  { p: "Bolsa burbuja 30x40", stock: 158, min: 100 },
+];
+// Level bar: stock against three times the minimum, capped.
+const level = (stock: number, min: number) => `${Math.round(Math.min(stock / (min * 3), 1) * 100)}%`;
+---
+
+<Ventana ui="stock" title="Inventario" where="Depósito Central" label="Pantalla de ejemplo del sistema de inventario: tabla de stock con productos bajo mínimo y un ingreso de mercadería en registro">
+  <div class="top">
+    <div class="tabs">
+      <span class="tab is-on">Central</span><span class="tab">Norte</span><span class="tab tab--wide">En tránsito</span>
+    </div>
+    <div class="sum">
+      <span><b data-count="1284">1.284</b> productos</span>
+      <span class="swap">
+        <span data-off><b>2</b> bajo mínimo</span>
+        <span data-on><b>1</b> bajo mínimo</span>
+      </span>
+    </div>
+  </div>
+
+  <div class="table">
+    <div class="tr th">
+      <span>Producto</span><span class="c-bar">Nivel</span><span class="r">Stock</span><span class="r c-min">Mínimo</span><span>Estado</span>
+    </div>
+    {rows.map((r, i) => {
+      const low = r.stock < r.min;
+      return (
+        <div class={`tr${i === rows.length - 1 ? " tr--last" : ""}`} data-row>
+          <span class="name">{r.p}</span>
+          <span class="c-bar">
+            <span class="track">
+              <span class={`fill${low ? " fill--low" : ""}`} style={`width:${level(r.stock, r.min)}`} data-grow-x></span>
+              {r.after && <span class="fill fill--after" style={`width:${level(r.after, r.min)}`} data-fill></span>}
+            </span>
+          </span>
+          <span class="r num">
+            {r.after ? (
+              <span class="swap"><b data-off>{r.stock}</b><b data-on>{r.after}</b></span>
+            ) : (
+              <b>{r.stock}</b>
+            )}
+          </span>
+          <span class="r c-min soft">{r.min}</span>
+          <span>
+            {r.after ? (
+              <span class="swap"><span class="chip chip--low" data-off>Bajo mínimo</span><span class="chip chip--new" data-on>Repuesto</span></span>
+            ) : low ? (
+              <span class="chip chip--low">Bajo mínimo</span>
+            ) : (
+              <span class="soft">En stock</span>
+            )}
+          </span>
+        </div>
+      );
+    })}
+  </div>
+
+  <div class="move" data-row>
+    <span class="move__t">Registrar movimiento</span>
+    <span class="field"><small>Tipo</small>Ingreso</span>
+    <span class="field field--grow"><small>Producto</small>Film stretch 50 cm</span>
+    <span class="field"><small>Cantidad</small>+48</span>
+    <span class="field c-rem"><small>Remito</small>R-0231</span>
+    <span class="swap move__btn">
+      <span class="chip chip--ink" data-off>Registrar</span>
+      <span class="chip chip--new" data-on>Registrado</span>
+    </span>
+  </div>
+</Ventana>
+
+<style>
+  .top { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.6rem 1.5rem; }
+  .tabs { display: flex; gap: 2px; background: var(--color-field-mist); padding: 2px; }
+  .tab { padding: 0.35rem 0.7rem; font-weight: 500; }
+  .tab.is-on { background: var(--color-field-night); color: var(--color-paper); }
+  .sum { display: flex; gap: 1.25rem; }
+  .sum b { font-weight: 600; }
+
+  .table { display: grid; gap: 2px; }
+  .tr {
+    display: grid; grid-template-columns: minmax(0, 1fr) 3.25rem 6.5rem; align-items: center; gap: 0.75rem;
+    padding: 0.55rem 0.7rem; background: var(--color-paper);
+  }
+  .th { background: var(--color-field-mist); font-weight: 500; padding-block: 0.4rem; }
+  .r { text-align: right; }
+  .num b { font-weight: 600; }
+  .name { font-weight: 500; }
+  .c-bar, .c-min, .move .c-rem, .tab--wide, .tr--last { display: none; }
+  .track { position: relative; display: block; height: 0.5rem; background: var(--color-surface-2); overflow: hidden; }
+  .fill { position: absolute; inset: 0 auto 0 0; background: var(--color-field-night); transform-origin: 0 50%; }
+  .fill--low { background: var(--color-accent); }
+  .fill--after { background: var(--color-field-night); }
+
+  .move { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 0.6rem; padding: 0.7rem; background: var(--color-field-mist); }
+  .move__t { flex: 1 0 100%; font-weight: 600; }
+  .field { display: grid; gap: 0.1rem; padding: 0.3rem 0.55rem; background: #fff; font-weight: 500; }
+  .field small { font-size: 0.8125rem; font-weight: 400; color: var(--color-soft); }
+  .field--grow { flex: 1 1 9rem; }
+  .move__btn { margin-left: auto; }
+  .move__btn .chip { padding: 0.55rem 0.9rem; font-size: 0.875rem; text-align: center; }
+
+  @media (min-width: 640px) {
+    .tr { grid-template-columns: minmax(0, 1fr) 5.5rem 3.5rem 4rem 6.5rem; gap: 1rem; }
+    .c-bar, .c-min { display: block; }
+    .move .c-rem { display: grid; }
+    .tab--wide { display: inline; }
+    .tr--last { display: grid; }
+    .move__t { flex: none; margin-right: 0.4rem; }
+  }
+</style>

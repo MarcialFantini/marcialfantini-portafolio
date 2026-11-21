@@ -3,40 +3,49 @@ import { stock } from "../../lib/stock";
 import Video from "./Video.astro";
 import servicios from "../../data/servicios.json";
 
-// Slides of the changing image: video or photo, caption, and an illustrative UI card.
+// Slides of the changing image: business-operations scenes only (warehouse, orders, wholesale, delivery).
+// Each has a caption and an illustrative UI card.
 const slides = [
   { kind: "video", name: "hero", caption: "Depósito", card: ["Pedido 1042", "Despachado"] },
-  { kind: "photo", photo: stock("hero-deposito", 2000), caption: "Depósito", card: ["Stock 30x40", "142 u."] },
-  { kind: "photo", photo: stock("rubro-dietetica", 2000), caption: "Dietética", card: ["Frutos secos", "Reponer 12 kg"] },
-  { kind: "photo", photo: stock("rubro-restaurante", 2000), caption: "Restaurante", card: ["Mesa 4", "Cobrada"] },
-  { kind: "video", name: "local", caption: "Local de ropa", card: ["Remera talle M", "Quedan 6"] },
+  { kind: "photo", photo: stock("hero-deposito", 2000), caption: "Armado de pedidos", card: ["Stock 30x40", "142 u."] },
+  { kind: "photo", photo: stock("rubro-mayorista", 2000), caption: "Mayorista", card: ["Cobranza pendiente", "3 facturas"] },
   { kind: "photo", photo: stock("rubro-distribuidora", 2000), caption: "Distribuidora", card: ["Ruta Córdoba Norte", "18 entregas"] },
+  { kind: "photo", photo: stock("hero-alt-autoelevador", 2000), caption: "Recepción de mercadería", card: ["Ingreso de mercadería", "Controlado"] },
 ] as const;
 
-const tileField = ["cornflower", "lime", "mist", "night"];
-const tilePhoto = ["ciclo-escaneo", "rubro-moda", "equipo-mesa", "ciclo-cajas"];
-const tiles = servicios.map((s, i) => ({
-  href: `/servicios/${s.id}`,
-  titulo: s.titulo,
-  field: tileField[i % 4],
-  photo: stock(tilePhoto[i % 4], 800),
-}));
+const proof = ["Precio cerrado por escrito", "Código, datos y accesos a nombre de tu empresa", "En uso desde la primera etapa"];
+
+// The four operations capabilities all belong to the custom-software service page;
+// fall back to the services index if that slug ever disappears.
+const softwareHref = servicios.some((s) => s.id === "software-a-medida") ? "/servicios/software-a-medida" : "/servicios";
+const tiles = [
+  { titulo: "Inventario y pedidos", texto: "Control de stock y pedidos en un mismo sistema.", field: "cornflower", photo: "ciclo-estanterias" },
+  { titulo: "Automatizaciones", texto: "Las tareas repetitivas dejan de hacerse a mano.", field: "lime", photo: "ciclo-escaneo" },
+  { titulo: "Tableros de KPIs", texto: "Indicadores e informes automáticos.", field: "mist", photo: "equipo-mesa" },
+  { titulo: "Integraciones", texto: "Conectado con las herramientas que ya usás.", field: "night", photo: "equipo-reunion" },
+].map((t) => ({ ...t, href: softwareHref, photo: stock(t.photo, 800) }));
 ---
 
 <section id="hero" class="cap-hero" data-field="paper" aria-labelledby="hero-title">
   <div class="cap-hero__pin" data-pin>
     <div class="cap-hero__top wrap">
-      <h1 id="hero-title">TU PYME <small>en</small> ORDEN</h1>
+      {/* Line breaks are explicit (3 lines on phones, 2 from 600px) so the block height never depends on the font that is loaded. */}
+      <h1 id="hero-title">
+        TU OPERACIÓN{" "}<br class="br-s" /><small>en</small>{" "}<br class="br-l" />UN SOLO{" "}<br class="br-s" />SISTEMA
+      </h1>
 
       <div class="cap-hero__row">
         <p class="cap-hero__lead">
-          Conecto lo que ya usás, construyo lo que falta, te muestro los números y dejo todo con respaldo.
+          Software a medida para empresas que operan con planillas, WhatsApp y sistemas que no se hablan entre sí. Stock, pedidos,
+          cobranzas y tableros en un solo lugar, integrado con lo que ya usás.
         </p>
         <div class="cap-hero__actions">
-          <a class="btn" href="/contacto?servicio=Diagn%C3%B3stico%20gratis">Contame tu problema</a>
+          <a class="btn" href="/contacto?servicio=Diagn%C3%B3stico%20gratis">Agendar diagnóstico de 30 minutos</a>
           <a class="cap-hero__link" href="#diagnostico">Ver cómo diagnostico</a>
         </div>
-        <p class="cap-hero__note">La primera charla es gratis y dura 30 minutos.</p>
+        <ul class="cap-hero__proof">
+          {proof.map((p) => <li>{p}</li>)}
+        </ul>
       </div>
     </div>
 
@@ -96,7 +105,7 @@ const tiles = servicios.map((s, i) => ({
     </div>
   </div>
 
-  <ul class="cap-hero__tiles wrap" aria-label="Servicios">
+  <ul class="cap-hero__tiles wrap" aria-label="Qué resuelve el software a medida">
     {
       tiles.map((t) => (
         <li>
@@ -105,7 +114,10 @@ const tiles = servicios.map((s, i) => ({
               <img src={t.photo.src} srcset={t.photo.srcset} sizes="(min-width: 900px) 25vw, 50vw" alt="" width={t.photo.width} height={t.photo.height} loading="lazy" decoding="async" />
             </span>
             <span class="tile__body">
-              <span class="tile__title">{t.titulo}</span>
+              <span class="tile__txt">
+                <span class="tile__title">{t.titulo}</span>
+                <span class="tile__desc">{t.texto}</span>
+              </span>
               <span class="tile__arrow" aria-hidden="true">
                 <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M4 12h15M13 6l6 6-6 6" /></svg>
               </span>
@@ -191,6 +203,8 @@ const tiles = servicios.map((s, i) => ({
           scrollTrigger: { trigger: pin, start: "top top", end: "+=90%", scrub: 0.6, pin: true, anticipatePin: 1 },
         });
         tl.fromTo(stage, { clipPath: SHAPE_FROM }, { clipPath: SHAPE_TO, ease: "power2.inOut" }, 0);
+        // The closed mask hides the outer 20% on each side: keep the status card inside the visible part.
+        tl.fromTo(stage, { "--hero-inset": "20%" }, { "--hero-inset": "0%", ease: "power2.inOut" }, 0);
         tl.fromTo(slidesEl, { scale: 1.12 }, { scale: 1, ease: "none" }, 0);
       });
       mm.add("(max-width: 767px)", () => {
@@ -198,6 +212,7 @@ const tiles = servicios.map((s, i) => ({
           scrollTrigger: { trigger: stage, start: "top 85%", end: "center 45%", scrub: 0.6 },
         });
         tl.fromTo(stage, { clipPath: SHAPE_FROM }, { clipPath: SHAPE_TO, ease: "power2.inOut" }, 0);
+        tl.fromTo(stage, { "--hero-inset": "20%" }, { "--hero-inset": "0%", ease: "power2.inOut" }, 0);
         tl.fromTo(slidesEl, { scale: 1.1 }, { scale: 1, ease: "none" }, 0);
       });
     }, root);
@@ -218,14 +233,23 @@ const tiles = servicios.map((s, i) => ({
     min-height: calc(100svh - 4.5rem);
   }
   .cap-hero__top { width: 100%; padding-top: 0.5rem; }
+  /* Width-matched stand-in while the display face loads, so the headline does not jump or clip. */
+  @font-face {
+    font-family: "MF Hero Fallback";
+    src: local("Arial Narrow Bold"), local("Arial Bold"), local("Arial");
+    size-adjust: 64%;
+  }
   h1 {
-    font-family: var(--font-display);
+    font-family: "Barlow Condensed", "MF Hero Fallback", var(--font-display);
     font-weight: 600;
-    font-size: clamp(3.4rem, 13.2vw, 12.5rem);
+    /* Phones: three lines, sized so the longest one ("TU OPERACIÓN", 5.06em) fills the column. */
+    font-size: 17vw;
     line-height: 0.88;
     letter-spacing: -0.015em;
     max-width: none;
+    white-space: nowrap;
   }
+  h1 .br-l { display: none; }
   h1 small {
     font-family: var(--font-sans);
     font-weight: 400;
@@ -239,10 +263,13 @@ const tiles = servicios.map((s, i) => ({
     padding-block: 1.25rem 1.5rem;
     align-items: start;
   }
-  .cap-hero__lead { font-size: var(--step-body); line-height: 1.4; max-width: 34ch; }
-  .cap-hero__actions { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem 1.5rem; }
+  .cap-hero__lead { font-size: var(--step-body); line-height: 1.4; max-width: 52ch; }
+  .cap-hero__actions { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 1.5rem; }
   .cap-hero__link { color: var(--color-ink); text-decoration: underline; text-underline-offset: 0.2em; min-height: 2.75rem; display: inline-flex; align-items: center; }
-  .cap-hero__note { font-size: var(--step-body); }
+  /* Proof strip: plain text, one square marker each */
+  .cap-hero__proof { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0.4rem 1.75rem; font-size: 1rem; font-weight: 500; line-height: 1.35; }
+  .cap-hero__proof li { position: relative; padding-left: 1.1rem; }
+  .cap-hero__proof li::before { content: ""; position: absolute; left: 0; top: 0.42em; width: 0.55rem; height: 0.55rem; background: var(--color-accent); }
 
   .cap-hero__stage {
     flex: 1;
@@ -272,7 +299,8 @@ const tiles = servicios.map((s, i) => ({
     position: absolute;
     z-index: 3;
     top: 1rem;
-    right: 1rem;
+    /* --hero-inset follows the scroll mask (set from JS), so the card is visible while the mask is closed */
+    right: calc(var(--hero-inset, 0%) + 1rem);
     display: grid;
     min-width: 11.5rem;
     padding: 0.75rem 1rem 0.65rem;
@@ -327,7 +355,9 @@ const tiles = servicios.map((s, i) => ({
   .tile__img { display: block; overflow: hidden; aspect-ratio: 4 / 3; }
   .tile__img img { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s var(--ease-out-quart, ease); }
   .tile__body { display: flex; align-items: start; justify-content: space-between; gap: 0.5rem; padding: 0.75rem 0.85rem 1rem; }
+  .tile__txt { display: grid; gap: 0.3rem; }
   .tile__title { font-family: var(--font-display); font-weight: 600; font-size: 1.3rem; line-height: 1.1; }
+  .tile__desc { font-size: 1rem; line-height: 1.3; }
   .tile__arrow { flex: none; transform: translateX(-0.6rem); opacity: 0; transition: transform 0.35s var(--ease-out-quart, ease), opacity 0.35s; }
   .tile:hover .tile__img img,
   .tile:focus-visible .tile__img img { transform: scale(1.06); }
@@ -336,11 +366,17 @@ const tiles = servicios.map((s, i) => ({
   .tile:focus-visible { outline: 3px solid var(--color-accent); outline-offset: 2px; }
   @media (hover: none) { .tile__arrow { transform: none; opacity: 1; } }
 
+  @media (min-width: 600px) {
+    /* Two lines; the longest ("UN SOLO SISTEMA", 6.14em) stays inside the 1200px column and the first screen. */
+    h1 { font-size: clamp(4.5rem, min(14.6vw, 21svh), 10.5rem); }
+    h1 .br-s { display: none; }
+    h1 .br-l { display: inline; }
+  }
   @media (min-width: 768px) {
-    .cap-hero__row { grid-template-columns: 1fr 1.5fr 0.9fr; align-items: center; gap: 2rem; }
-    .cap-hero__note { text-align: right; }
+    .cap-hero__row { grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 1rem 3rem; }
+    .cap-hero__proof { grid-column: 1 / -1; }
     .cap-hero__stage { min-height: max(34rem, 75svh); }
-    .cap-hero__card { top: 1.5rem; right: 1.5rem; }
+    .cap-hero__card { top: 1.5rem; right: calc(var(--hero-inset, 0%) + 1.5rem); }
     .cap-hero__ui { left: 1.5rem; right: 1.5rem; bottom: 1.5rem; }
   }
   @media (min-width: 900px) {
