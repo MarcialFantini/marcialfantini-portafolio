@@ -1,10 +1,10 @@
 [
-  { "id": "inventario-distribuidora", "nombre": "Inventario para distribuidora", "captura": "" },
-  { "id": "dashboard-ventas", "nombre": "Tablero de ventas mayoristas", "captura": "" },
-  { "id": "tracker-pedidos", "nombre": "Seguimiento de pedidos mayoristas", "captura": "" },
-  { "id": "integracion-mercadolibre-erp", "nombre": "Integración de MercadoLibre con ERP", "captura": "" },
-  { "id": "automatizacion-crm-whatsapp", "nombre": "Automatización de WhatsApp para clínica", "captura": "" },
-  { "id": "catalogo-ferreteria", "nombre": "Catálogo para ferretería", "captura": "" },
-  { "id": "ecommerce-marca", "nombre": "Tienda online de muebles", "captura": "" },
-  { "id": "blog-consultora", "nombre": "Blog para consultora", "captura": "" }
+  { "id": "inventario-distribuidora", "nombre": "Inventario para distribuidora" },
+  { "id": "dashboard-ventas", "nombre": "Tablero de ventas mayoristas" },
+  { "id": "tracker-pedidos", "nombre": "Seguimiento de pedidos mayoristas" },
+  { "id": "integracion-mercadolibre-erp", "nombre": "Integración de MercadoLibre con ERP" },
+  { "id": "automatizacion-crm-whatsapp", "nombre": "Automatización de WhatsApp para clínica" },
+  { "id": "catalogo-ferreteria", "nombre": "Catálogo para ferretería" },
+  { "id": "ecommerce-marca", "nombre": "Tienda online de muebles" },
+  { "id": "blog-consultora", "nombre": "Blog para consultora" }
 ]

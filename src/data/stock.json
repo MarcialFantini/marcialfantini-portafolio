@@ -493,21 +493,7 @@
     "license": "CC0",
     "page": "https://www.rawpixel.com/image/3306948/free-photo-image-warehouse-store",
     "placeholder": true,
-    "local": "/src/assets/stock/rubro-pedidos.jpg",
-    "unsplash": {
-      "id": "gthSas4oYC0",
-      "query": "packing orders",
-      "src": "https://images.unsplash.com/photo-1700165644892-3dd6b67b25bc?ixid=M3wxMTM4MDY4fDB8MXxzZWFyY2h8MXx8cGFja2luZyUyMG9yZGVyc3xlbnwxfDB8fHwxNzk1MDM0NTk0fDA&ixlib=rb-4.1.0&w=2400&q=80&auto=format&fit=crop",
-      "width": 6720,
-      "height": 4480,
-      "description": "a lot of brown boxes that are open",
-      "photographer": "Luke Heibert",
-      "photographerUrl": "https://unsplash.com/@lukeheibert?utm_source=marcial_fantini_portfolio&utm_medium=referral",
-      "page": "https://unsplash.com/photos/a-lot-of-brown-boxes-that-are-open-gthSas4oYC0?utm_source=marcial_fantini_portfolio&utm_medium=referral",
-      "credit": "Foto de Luke Heibert en Unsplash",
-      "downloadLocation": "https://api.unsplash.com/photos/gthSas4oYC0/download?ixid=M3wxMTM4MDY4fDB8MXxzZWFyY2h8MXx8cGFja2luZyUyMG9yZGVyc3xlbnwxfDB8fHwxNzk1MDM0NTk0fDA",
-      "downloadTracked": false
-    }
+    "local": "/src/assets/stock/rubro-pedidos.jpg"
   },
   {
     "file": "rubro-clinica.jpg",

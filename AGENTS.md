@@ -12,12 +12,12 @@ Landing personal de **Marcial Fantini**, desarrollador freelance full-stack arge
 - `src/data/site.json` — nombre, tagline, email, redes
 - `src/data/servicios.json` — 4 servicios con precio orientativo
 - `src/data/metricas.json` — KPIs destacados del home
-- `src/data/demos.json` — nombre por rubro, orden y captura de cada proyecto demo
+- `src/data/demos.json` — nombre por rubro y orden de cada proyecto demo (las capturas viven en `src/assets/capturas/{id}.jpg`)
 - `src/data/sobre.json` — foto, frase y stack de "Sobre mí"
 
 **Contenido en colecciones**:
 - `src/content/blog/*.md` — 14 posts en 5 categorías (`desarrollo`, `productos`, `carrera`, `escritura`, `ia`)
-- `src/content/proyectos/*.md` — 19 proyectos demo (nunca presentarlos como clientes)
+- `src/content/proyectos/*.md` — 8 proyectos demo (nunca presentarlos como clientes)
 - Schemas validados con Zod en `src/content.config.ts`
 
 **Páginas (`src/pages/`)**:
