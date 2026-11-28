@@ -1,27 +1,22 @@
 ---
-/* Chapter: who builds it. Interactive stack (list + media panel), rotating line, honest team block. */
+/* Chapter: who builds it. Interactive stack (list + media panel), optional real portrait, solo-with-collaborators block. */
 import { stock } from "../../lib/stock";
+import site from "../../data/site.json";
 import sobre from "../../data/sobre.json";
 import Video from "./Video.astro";
+import { cta, ctaTarget } from "../../lib/cta";
 
-const main = stock("marcial-placeholder", 1000);
-const t1 = stock("equipo-reunion", 800);
-const t2 = stock("equipo-mesa", 800);
+// Real portrait only: set `foto` in src/data/sobre.json (or `aboutPhoto` in site.json) to a path under public/,
+// e.g. "/media/marcial-retrato.jpg". Same resolution as src/pages/sobre-mi.astro. Never a stock photo.
+const foto = sobre.foto || site.aboutPhoto || "";
 
 // One media panel per stack area, in the same order as sobre.json -> stack.
 const panels = [
   { kind: "video", name: "teclado" },
   { kind: "photo", photo: stock("ciclo-estanterias", 1400) },
   { kind: "photo", photo: stock("caos-celular", 1400) },
-  { kind: "video", name: "equipo" },
+  { kind: "video", name: "ciclo" },
 ] as const;
-
-const examples = [
-  "un tablero de cobranzas",
-  "el stock de una distribuidora",
-  "turnos por WhatsApp para una clínica",
-  "pedidos que llegan solos al taller",
-];
 ---
 
 <section id="sobre-mi" class="sm" data-field="cornflower" aria-labelledby="sobre-mi-title">
@@ -30,15 +25,8 @@ const examples = [
       <div class="sm__text">
         <h2 id="sobre-mi-title" class="sm__title" data-sm>QUIÉN <small>lo</small><br />ARMA</h2>
 
-        <p class="sm__now" data-sm>
-          <span>Esta semana estoy armando:</span>
-          <span class="sm__rot" data-rot>
-            {examples.map((e) => <span class="sm__rot-i">{e}</span>)}
-          </span>
-        </p>
-
         <p class="sm__lead" data-sm>
-          Cada sistema que ves acá lo diseño y lo construyo yo. Y después de la puesta en marcha, respondo yo.
+          Soy el responsable de cada sistema: lo diseño, lo construyo y respondo por él después de la puesta en marcha.
         </p>
 
         <ul class="sm__stack" data-sm data-stack>
@@ -88,58 +76,38 @@ const examples = [
       </div>
     </div>
 
-    <div class="sm__bottom">
-      <div class="sm__portrait" data-sm>
-        <img
-          class="sm__main"
-          data-par="-6"
-          src={main.src}
-          srcset={main.srcset}
-          sizes="(min-width: 900px) 34vw, 90vw"
-          alt={main.alt}
-          width={main.width}
-          height={main.height}
-          loading="lazy"
-          decoding="async"
-        />
-      </div>
+    <div class:list={["sm__bottom", foto ? "has-photo" : "no-photo"]}>
+      {
+        foto && (
+          /* PHOTO SLOT: real portrait (4:5), rendered only when sobre.json `foto` or site.json `aboutPhoto` is set. */
+          <div class="sm__portrait" data-sm>
+            <img
+              class="sm__main"
+              data-par="-6"
+              src={foto}
+              alt={`Retrato de ${site.name}`}
+              width="1000"
+              height="1250"
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
+        )
+      }
 
       <div class="sm__team">
         <div class="sm__team-text" data-sm>
-          <h3>Trabajo con un equipo chico de colaboradores; vos hablás conmigo.</h3>
-          <p>Yo coordino y respondo. Quien te escribe, te escucha y te entrega es la misma persona.</p>
-          <a class="sm__btn" href="/contacto?servicio=Diagn%C3%B3stico%20gratis">
-            <span>Contame tu problema</span>
+          <h3>Trabajo por mi cuenta. Si el proyecto lo pide, sumo colaboradores puntuales.</h3>
+          <p>
+            Cuando una parte necesita a un especialista, lo convoco para esa parte y lo coordino yo. Vos hablás siempre
+            conmigo: quien te escucha, te entrega y responde después es la misma persona.
+          </p>
+          <a class="sm__btn" href={cta.href} {...ctaTarget}>
+            <span>{cta.label}</span>
             <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
               <path d="M4 12h15M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" />
             </svg>
           </a>
-        </div>
-        <div class="sm__duo">
-          <img
-            class="sm__t1"
-            data-par="-10"
-            src={t1.src}
-            srcset={t1.srcset}
-            sizes="(min-width: 900px) 24vw, 60vw"
-            alt={t1.alt}
-            width={t1.width}
-            height={t1.height}
-            loading="lazy"
-            decoding="async"
-          />
-          <img
-            class="sm__t2"
-            data-par="14"
-            src={t2.src}
-            srcset={t2.srcset}
-            sizes="(min-width: 900px) 22vw, 55vw"
-            alt={t2.alt}
-            width={t2.width}
-            height={t2.height}
-            loading="lazy"
-            decoding="async"
-          />
         </div>
       </div>
     </div>
@@ -190,30 +158,6 @@ const examples = [
       timers.push(auto);
     }
 
-    // --- Rotating line ---
-    const rot = root.querySelector<HTMLElement>("[data-rot]");
-    const items = rot ? Array.from(rot.querySelectorAll<HTMLElement>(".sm__rot-i")) : [];
-    if (rot && items.length > 1) {
-      rot.classList.add("is-live");
-      items.forEach((el, i) => el.classList.toggle("is-on", i === 0));
-      if (!calm) {
-        let k = 0;
-        const t = window.setInterval(() => {
-          const out = items[k];
-          k = (k + 1) % items.length;
-          const inn = items[k];
-          gsap.set(inn, { yPercent: 100 });
-          inn.classList.add("is-on");
-          gsap.to(out, {
-            yPercent: -100, duration: 0.6, ease: "power3.inOut",
-            onComplete: () => { out.classList.remove("is-on"); gsap.set(out, { clearProps: "transform" }); },
-          });
-          gsap.to(inn, { yPercent: 0, duration: 0.6, ease: "power3.inOut" });
-        }, 2500);
-        timers.push(t);
-      }
-    }
-
     const ctx = gsap.context(() => {
       if (calm) return;
       gsap.from(gsap.utils.toArray<HTMLElement>("[data-sm]", root), {
@@ -251,14 +195,6 @@ const examples = [
     margin: 0;
   }
   .sm__title small { font-family: var(--font-sans); font-weight: 400; font-size: 0.32em; text-transform: none; letter-spacing: 0; }
-
-  .sm__now { margin: 0; display: flex; flex-wrap: wrap; gap: 0.25rem 0.6ch; font-size: var(--step-lead); line-height: 1.3; font-weight: 500; }
-  .sm__rot { display: inline-grid; }
-  .sm__rot-i { grid-area: 1 / 1; font-weight: 600; }
-  .sm__rot:not(.is-live) .sm__rot-i:not(:first-child) { display: none; }
-  .sm__rot.is-live { overflow: hidden; }
-  .sm__rot.is-live .sm__rot-i { visibility: hidden; }
-  .sm__rot.is-live .sm__rot-i.is-on { visibility: visible; }
 
   .sm__lead { margin: 0; max-width: 44ch; font-size: var(--step-body); line-height: 1.55; }
 
@@ -309,10 +245,9 @@ const examples = [
   .sm__team-text h3 { margin: 0; font-family: var(--font-display); font-weight: 600; font-size: clamp(1.4rem, 2.7vw, 2.4rem); line-height: 1.02; text-wrap: balance; text-transform: uppercase; }
   .sm__team-text p { margin: 0; max-width: 44ch; font-size: var(--step-body); line-height: 1.55; }
 
-  .sm__duo { position: relative; height: clamp(15rem, 62vw, 22rem); }
-  .sm__duo img { position: absolute; object-fit: cover; display: block; }
-  .sm__t1 { left: 0; top: 0; width: 62%; aspect-ratio: 4 / 3; height: auto; }
-  .sm__t2 { right: 0; bottom: 0; width: 55%; aspect-ratio: 4 / 3; height: auto; }
+  /* No portrait yet: the statement takes the full width, opened by a deliberate 3px rule instead of an empty slot. */
+  .sm__bottom.no-photo { border-top: 3px solid var(--color-ink); padding-top: clamp(1.75rem, 4vw, 3rem); }
+  .no-photo .sm__team-text h3 { font-size: clamp(2rem, 4.4vw, 3.75rem); line-height: 0.95; max-width: 22ch; }
 
   .sm__btn {
     display: inline-flex; align-items: center; gap: 0.7rem; min-height: 3rem; padding: 0.7rem 1.5rem;
@@ -324,7 +259,16 @@ const examples = [
   @media (min-width: 900px) {
     .sm__top { grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); column-gap: clamp(2rem, 5vw, 5rem); align-items: start; }
     .sm__media { order: 0; aspect-ratio: 4 / 5; position: sticky; top: 6rem; }
-    .sm__bottom { grid-template-columns: minmax(0, 3fr) minmax(0, 8fr); column-gap: clamp(2rem, 5vw, 5rem); align-items: center; }
-    .sm__duo { height: 26rem; }
+    .sm__bottom.has-photo { grid-template-columns: minmax(0, 4fr) minmax(0, 7fr); column-gap: clamp(2rem, 5vw, 5rem); align-items: center; }
+    /* Heading left, paragraph + action right, bottoms aligned. */
+    .no-photo .sm__team-text {
+      grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+      grid-template-rows: auto auto;
+      column-gap: clamp(2rem, 5vw, 5rem);
+      align-items: end;
+    }
+    .no-photo .sm__team-text h3 { grid-column: 1; grid-row: 1 / span 2; align-self: end; }
+    .no-photo .sm__team-text p,
+    .no-photo .sm__team-text .sm__btn { grid-column: 2; }
   }
 </style>

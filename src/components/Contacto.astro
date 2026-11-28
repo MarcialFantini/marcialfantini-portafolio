@@ -1,12 +1,9 @@
 ---
 import site from "../data/site.json";
-import servicios from "../data/servicios.json";
-
 import diagnostico from "../data/diagnostico.json";
 
 // The site is static, so the query string is never available here: ?servicio= and the
 // quiz answers are read by the inline script below (progressive enhancement).
-const GENERIC_OPTION = "Quiero hablar de mi proyecto";
 const AUDIT_OPTION = "Diagnóstico gratis";
 const initialSubject = "Consulta desde marcialfantini.site";
 // Quiz question ids and texts, to turn ?tiempo=...&sistema=... into a prefilled message.
@@ -54,57 +51,20 @@ const whatsappUrl = site.whatsapp
     </div>
 
     <div class="ct__field">
-      <label for="email">Tu email</label>
-      <input type="email" id="email" name="email" required autocomplete="email" aria-describedby="email-error" />
-      <p id="email-error" class="ct__err hidden" role="alert"></p>
-    </div>
-
-    <div class="ct__pair">
-      <div class="ct__field">
-        <label for="empresa">Empresa</label>
-        <input type="text" id="empresa" name="empresa" required maxlength="160" autocomplete="organization" aria-describedby="empresa-error" />
-        <p id="empresa-error" class="ct__err hidden" role="alert"></p>
-      </div>
-      <div class="ct__field">
-        <label for="cargo">Cargo (opcional)</label>
-        <input type="text" id="cargo" name="cargo" maxlength="120" autocomplete="organization-title" />
-      </div>
-    </div>
-
-    <div class="ct__pair">
-      <div class="ct__field">
-        <label for="telefono">Teléfono (opcional)</label>
-        <input type="tel" id="telefono" name="telefono" maxlength="40" autocomplete="tel" aria-describedby="telefono-error" />
-        <p id="telefono-error" class="ct__err hidden" role="alert"></p>
-      </div>
-      <div class="ct__field">
-        <label for="servicio">Servicio (opcional)</label>
-        <select id="servicio" name="servicio">
-          <option value="">Elegí uno</option>
-          {servicios.map((s) => <option value={s.titulo}>{s.titulo}</option>)}
-          <option value={AUDIT_OPTION}>Diagnóstico gratis de 30 minutos</option>
-          <option value={GENERIC_OPTION}>{GENERIC_OPTION}</option>
-          <option value="Otro">Otro</option>
-        </select>
-      </div>
+      <label for="contacto">Email o WhatsApp</label>
+      <input type="text" id="contacto" name="contacto" required maxlength="200" autocomplete="email" aria-describedby="contacto-hint contacto-error" />
+      <p id="contacto-hint" class="ct__hint">Te respondo por donde prefieras.</p>
+      <p id="contacto-error" class="ct__err hidden" role="alert"></p>
     </div>
 
     <div class="ct__field">
-      <label for="alcance">¿Qué tan definido está el proyecto? (opcional)</label>
-      <select id="alcance" name="alcance">
-        <option value="">Elegí una opción</option>
-        <option value="Tengo el problema, no la solución">Tengo el problema, no la solución</option>
-        <option value="Sé qué necesito y quiero un presupuesto">Sé qué necesito y quiero un presupuesto</option>
-        <option value="Ya tengo un sistema y hay que mejorarlo">Ya tengo un sistema y hay que mejorarlo</option>
-      </select>
-    </div>
-
-    <div class="ct__field">
-      <label for="message">Contame brevemente qué necesitás</label>
+      <label for="message">¿Qué problema querés resolver?</label>
       <textarea id="message" name="message" required rows={5} aria-describedby="message-error"></textarea>
       <p id="message-error" class="ct__err hidden" role="alert"></p>
     </div>
 
+    <!-- Filled from ?servicio= by the script below; feeds the subject line -->
+    <input type="hidden" id="servicio" name="servicio" value="" />
     <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true" class="hidden" />
 
     <button type="submit" id="contact-submit" class="btn ct__submit">
@@ -129,7 +89,6 @@ const whatsappUrl = site.whatsapp
     initialSubject,
     endpoint,
     quiz,
-    genericOption: GENERIC_OPTION,
     auditOption: AUDIT_OPTION,
   }}
 >
@@ -137,14 +96,11 @@ const whatsappUrl = site.whatsapp
     // Static site: the query string only exists in the browser.
     const params = new URLSearchParams(window.location.search);
 
-    // ?servicio= preselects the subject. "Auditoría gratis" is kept for old links;
-    // any other unknown value falls back to the generic option.
-    const select = document.getElementById('servicio');
-    const rawParam = params.get('servicio');
-    if (select instanceof HTMLSelectElement && rawParam) {
-      const param = rawParam === 'Auditoría gratis' ? auditOption : rawParam;
-      const known = Array.from(select.options).some((o) => o.value === param);
-      select.value = known ? param : genericOption;
+    // ?servicio= travels as a hidden field and sets the subject. "Auditoría gratis" is kept for old links.
+    const servicioEl = document.getElementById('servicio');
+    const rawParam = (params.get('servicio') || '').trim().slice(0, 120);
+    if (servicioEl instanceof HTMLInputElement && rawParam) {
+      servicioEl.value = rawParam === 'Auditoría gratis' ? auditOption : rawParam;
     }
 
     // Quiz answers (?tiempo=...&sistema=...) arrive from the diagnostic chapter, with or
@@ -186,22 +142,22 @@ const whatsappUrl = site.whatsapp
       if (input) input.setAttribute('aria-invalid', text ? 'true' : 'false');
     };
 
+    // Same rules as api/contact.ts: the contact field takes an email or a phone (6 to 15 digits).
+    const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const isPhone = (value) => {
+      const digits = value.replace(/\D/g, '').length;
+      return /^\+?[\d\s().-]+$/.test(value) && digits >= 6 && digits <= 15;
+    };
+
     const validate = (data) => {
       const name = String(data.get('name') ?? '').trim();
-      const mail = String(data.get('email') ?? '').trim();
-      const empresa = String(data.get('empresa') ?? '').trim();
-      const telefono = String(data.get('telefono') ?? '').trim();
+      const contacto = String(data.get('contacto') ?? '').trim();
       const message = String(data.get('message') ?? '').trim();
-      const okMail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(mail);
-      // Same rule as api/contact.ts: optional, 6 to 15 digits, only + ( ) . - and spaces besides.
-      const digits = telefono.replace(/\D/g, '').length;
-      const okPhone = !telefono || (/^\+?[\d\s().-]+$/.test(telefono) && digits >= 6 && digits <= 15);
+      const okContact = EMAIL_RE.test(contacto) || isPhone(contacto);
       fieldError('name', name ? '' : 'Decime tu nombre.');
-      fieldError('email', okMail ? '' : 'Ingresá un email válido.');
-      fieldError('empresa', empresa ? '' : 'Decime de qué empresa me escribís.');
-      fieldError('telefono', okPhone ? '' : 'Revisá el teléfono: solo números, espacios y el signo +.');
-      fieldError('message', message ? '' : 'Contame brevemente qué necesitás.');
-      return Boolean(name && okMail && empresa && okPhone && message);
+      fieldError('contacto', okContact ? '' : 'Dejame un email o un número de WhatsApp válido.');
+      fieldError('message', message ? '' : 'Contame qué problema querés resolver.');
+      return Boolean(name && okContact && message);
     };
 
     if (form instanceof HTMLFormElement) {
@@ -213,7 +169,7 @@ const whatsappUrl = site.whatsapp
         if (String(data.get('_gotcha') ?? '')) return;
 
         const name = String(data.get('name')).trim();
-        const fromEmail = String(data.get('email')).trim();
+        const contacto = String(data.get('contacto')).trim();
         const servicio = String(data.get('servicio') ?? '');
         const message = String(data.get('message')).trim();
         const subject = servicio
@@ -223,7 +179,9 @@ const whatsappUrl = site.whatsapp
         if (!endpoint) {
           // Sin endpoint configurado: abrimos la app de email, sin simular un envío.
           const body =
-            `${message}\n\n---\nNombre: ${name}\nEmail: ${fromEmail}\nEmpresa: ${String(data.get('empresa') ?? '').trim()}\nCargo: ${String(data.get('cargo') ?? '').trim() || 'no especificado'}\nTeléfono: ${String(data.get('telefono') ?? '').trim() || 'no especificado'}\nServicio: ${servicio || 'no especificado'}\nDefinición del proyecto: ${String(data.get('alcance') ?? '') || 'no especificado'}\n`;
+            `${message}\n\n---\nNombre: ${name}\nContacto: ${contacto}\nServicio: ${servicio || 'no especificado'}\n`;
+          // Analytics hook: no-op unless the cookieless script is loaded (see Layout.astro).
+          window.plausible?.('Form sent', { props: { via: 'mailto' } });
           setStatus('info', 'Se abrió tu app de email. Tenés que enviar el mensaje desde ahí.');
           window.location.href =
             `mailto:${toEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
@@ -242,7 +200,9 @@ const whatsappUrl = site.whatsapp
           });
           if (!res.ok) throw new Error('HTTP ' + res.status);
           setStatus('success', 'Recibí tu mensaje. Te respondo en 24 h hábiles.');
+          window.plausible?.('Form sent', { props: { via: 'endpoint' } });
           form.reset();
+          // reset() does not clear hidden inputs, so the service from the URL stays for a second message.
         } catch (e) {
           setStatus('error', `No se pudo enviar el mensaje. Probá de nuevo o escribime a ${toEmail}.`);
         } finally {
@@ -301,11 +261,9 @@ const whatsappUrl = site.whatsapp
   .ct__side .ct__small a { color: inherit; }
 
   .ct__form { display: grid; gap: 1.5rem; padding: clamp(1.25rem, 4vw, 2.5rem); background: var(--color-paper); min-width: 0; }
-  .ct__pair { display: grid; gap: 1.5rem; }
   .ct__field { min-width: 0; }
   .ct__field label { display: block; margin-bottom: 0.5rem; font-weight: 500; }
   .ct__field input,
-  .ct__field select,
   .ct__field textarea {
     display: block;
     width: 100%;
@@ -319,24 +277,15 @@ const whatsappUrl = site.whatsapp
     transition: background-color 160ms var(--ease-out-quart);
   }
   .ct__field textarea { min-height: 9rem; resize: vertical; }
-  .ct__field select {
-    appearance: none;
-    padding-right: 2.5rem;
-    text-overflow: ellipsis;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5 6 6.5l5-5' stroke='%230E1116' stroke-width='2' stroke-linecap='square'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 1rem center;
-  }
-  .ct__field option { background: var(--color-surface); color: var(--color-fg); }
-  .ct__field input:hover, .ct__field select:hover, .ct__field textarea:hover { background: var(--color-surface-2); }
-  .ct__field input:focus-visible, .ct__field select:focus-visible, .ct__field textarea:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 0; }
+  .ct__field input:hover, .ct__field textarea:hover { background: var(--color-surface-2); }
+  .ct__field input:focus-visible, .ct__field textarea:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 0; }
   .ct__field [aria-invalid="true"] { outline: 2px solid var(--color-err-line); outline-offset: 0; }
+  .ct__hint { margin-top: 0.4rem; font-size: var(--step-small); }
   .ct__err { margin-top: 0.4rem; font-size: var(--step-small); color: var(--color-err-ink); }
   .ct__submit { justify-self: stretch; min-height: 3.75rem; }
   #contact-status { padding: 0.75rem 1rem; }
 
   @media (min-width: 640px) {
-    .ct__pair { grid-template-columns: 1fr 1fr; }
     .ct__submit { justify-self: start; }
   }
   @media (min-width: 1024px) {

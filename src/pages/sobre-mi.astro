@@ -43,7 +43,7 @@ const noHago = [
   "No construyo de más: si algo no resuelve tu problema, te lo digo.",
 ];
 
-const diagnostico = "/contacto?servicio=Diagn%C3%B3stico%20gratis";
+import { cta, ctaTarget } from "../lib/cta";
 ---
 
 <Layout
@@ -57,7 +57,7 @@ const diagnostico = "/contacto?servicio=Diagn%C3%B3stico%20gratis";
   >
     <Fragment slot="title">Software <small>con</small> nombre y apellido</Fragment>
     <Fragment slot="actions">
-      <a class="btn" href={diagnostico}>Agendar diagnóstico de 30 minutos</a>
+      <a class="btn" href={cta.href} {...ctaTarget}>{cta.label}</a>
     </Fragment>
     <div slot="aside" class="sm-card">
       <div class="sm-card__face">
@@ -151,7 +151,7 @@ const diagnostico = "/contacto?servicio=Diagn%C3%B3stico%20gratis";
         Contame dónde se traba tu operación y te respondo en 24 h hábiles. Son 30 minutos y es gratis.
       </p>
       <div class="sm-cta__actions" data-reveal>
-        <a class="btn sm-cta__btn" href={diagnostico}>Agendar diagnóstico de 30 minutos</a>
+        <a class="btn sm-cta__btn" href={cta.href} {...ctaTarget}>{cta.label}</a>
         <a class="sm-cta__alt" href="/servicios">Ver servicios</a>
       </div>
     </div>

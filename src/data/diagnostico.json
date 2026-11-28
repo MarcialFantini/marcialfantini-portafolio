@@ -22,8 +22,8 @@
         {
           "label": "Seguir pedidos y clientes por WhatsApp",
           "pesos": {
-            "ecommerce": 3,
-            "software-a-medida": 1
+            "software-a-medida": 3,
+            "ecommerce": 1
           },
           "foto": "rubro-pedidos"
         },
@@ -33,6 +33,21 @@
             "software-a-medida": 3
           },
           "foto": "ciclo-escaneo"
+        },
+        {
+          "label": "Explicar qué vendemos: no tenemos web o no nos encuentran",
+          "pesos": {
+            "web-productos-servicios": 7,
+            "web-empresarial": 5
+          },
+          "foto": "rubro-dietetica"
+        },
+        {
+          "label": "Vender de a un mensaje: queremos vender online",
+          "pesos": {
+            "ecommerce": 7
+          },
+          "foto": "caos-celular"
         }
       ]
     },
@@ -129,7 +144,7 @@
           "label": "Más de 50",
           "pesos": {
             "software-a-medida": 2,
-            "web-empresarial": 1
+            "web-empresarial": 3
           },
           "foto": "rubro-distribuidora"
         }

@@ -6,6 +6,7 @@ import StockUI from "../../components/demos-ui/StockUI.astro";
 import Navegador from "../../components/servicios/Navegador.astro";
 import servicios from "../../data/servicios.json";
 import site from "../../data/site.json";
+import { precioDesde } from "../../lib/precio";
 import type { GetStaticPaths } from "astro";
 
 export const getStaticPaths = (async () => {
@@ -102,7 +103,7 @@ const faqsPorServicio: Record<string, { pregunta: string; respuesta: string }[]>
 
 const faqItems = faqsPorServicio[servicio.id] ?? [];
 const contactoHref = `/contacto?servicio=${encodeURIComponent(servicio.titulo)}`;
-const diagnostico = "/contacto?servicio=Diagn%C3%B3stico%20gratis";
+import { cta, ctaTarget } from "../../lib/cta";
 
 const noIncluye = [
   "hosting ni dominio: se contratan aparte y te ayudo a elegirlos",
@@ -114,6 +115,10 @@ type Cifra = { v: number; suf?: string };
 const g = servicio.grafico;
 const pct = (c: Cifra) => `${Math.max(Math.round((c.v / Math.max(g.antes.v, g.ahora.v)) * 100), 6)}%`;
 const otros = servicios.filter((s) => s.id !== servicio.id);
+// Custom software is the main offer; the web services are listed apart as the secondary group.
+const sistemaOtro = otros.find((s) => s.grupo === "sistema");
+const websOtras = otros.filter((s) => s.grupo === "canal");
+const precio = precioDesde(servicio);
 ---
 
 <Layout title={`${servicio.titulo} — ${site.name}`} description={servicio.descripcion} bleed>
@@ -129,7 +134,10 @@ const otros = servicios.filter((s) => s.id !== servicio.id);
         </div>
         <div>
           <dt>Cómo se cotiza</dt>
-          <dd><b>Precio cerrado</b><span>por escrito, después del diagnóstico de 30 minutos</span></dd>
+          <dd>
+            <b>Precio cerrado</b><span>por escrito, después del diagnóstico de 30 minutos</span>
+            {precio && <span class="sd-facts__price">{precio}</span>}
+          </dd>
         </div>
       </dl>
       <a href={contactoHref} class="btn">{servicio.cta}</a>
@@ -147,6 +155,7 @@ const otros = servicios.filter((s) => s.id !== servicio.id);
         <p>{servicio.descripcion}</p>
       </div>
       <figure class="sd-ex" data-reveal="right">
+        <span class="sd-ex__note">Ejemplo ilustrativo</span>
         <p class="sd-ex__statement">{servicio.resultadoCuantificado}</p>
         <div class="sd-ex__bars">
           <div class="sd-ex__row">
@@ -160,7 +169,7 @@ const otros = servicios.filter((s) => s.id !== servicio.id);
             <b><span data-count={g.ahora.v}>{g.ahora.v}</span>{g.ahora.suf}</b>
           </div>
         </div>
-        <figcaption>Ejemplo ilustrativo: {g.label.toLowerCase()}.</figcaption>
+        <figcaption>Ejemplo ilustrativo, no es un resultado medido: {g.label.toLowerCase()}.</figcaption>
       </figure>
     </div>
   </Field>
@@ -201,12 +210,18 @@ const otros = servicios.filter((s) => s.id !== servicio.id);
     <Fragment slot="title">¿Te <small>sirve</small> esto?</Fragment>
     <div class="sd-end__row" data-reveal>
       <p>El primer paso es un diagnóstico de 30 minutos, sin costo. Si no es lo que te conviene, te lo digo y te oriento.</p>
-      <a href={diagnostico} class="btn">Agendar diagnóstico de 30 minutos</a>
+      <a href={cta.href} class="btn" {...ctaTarget}>{cta.label}</a>
     </div>
     <nav class="sd-more" aria-label="Otros servicios">
-      <p>Otros servicios</p>
+      {sistemaOtro && (
+        <>
+          <p>Lo principal que hago</p>
+          <ul><li><a href={`/servicios/${sistemaOtro.id}`}>{sistemaOtro.titulo}</a></li></ul>
+        </>
+      )}
+      <p>{servicio.grupo === "sistema" ? "También hago, si lo que necesitás es una web" : "Otras webs"}</p>
       <ul data-stagger>
-        {otros.map((o) => <li><a href={`/servicios/${o.id}`}>{o.titulo}</a></li>)}
+        {websOtras.map((o) => <li><a href={`/servicios/${o.id}`}>{o.titulo}</a></li>)}
       </ul>
     </nav>
   </Field>
@@ -237,6 +252,8 @@ const otros = servicios.filter((s) => s.id !== servicio.id);
   .sd-ex__row--now .sd-ex__track i { background: var(--color-accent); }
   .sd-ex__row--now b { color: var(--color-accent); }
   .sd-ex figcaption { color: var(--color-soft); font-size: var(--step-small); }
+  .sd-ex__note { justify-self: start; padding: 0.15rem 0.5rem; font-size: 0.8125rem; font-weight: 500; background: var(--color-field-lime); color: var(--color-ink); }
+  .sd-facts__price { font-weight: 600; }
 
   /* Qué incluye */
   .sd-inc { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; }
