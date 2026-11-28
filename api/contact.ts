@@ -28,7 +28,7 @@ const line = (data: FormData, key: string, max: number) =>
   String(data.get(key) ?? "").replace(/[\u0000-\u001f\u007f]+/g, " ").replace(/\s+/g, " ").trim().slice(0, max);
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-// Optional phone: digits, spaces and + ( ) . - only, with 6 to 15 digits.
+// Phone: digits, spaces and + ( ) . - only, with 6 to 15 digits.
 const validPhone = (value: string) => {
   const digits = value.replace(/\D/g, "").length;
   return /^\+?[\d\s().-]+$/.test(value) && digits >= 6 && digits <= 15;
@@ -53,32 +53,29 @@ export async function POST(request: Request): Promise<Response> {
   if (field(data, "_gotcha", 200)) return json({ ok: true });
 
   const name = line(data, "name", 120);
-  const email = line(data, "email", 200);
-  const empresa = line(data, "empresa", 160);
-  const cargo = line(data, "cargo", 120);
-  const telefono = line(data, "telefono", 40);
+  // One contact field: an email or a WhatsApp/phone number.
+  // "email" / "telefono" are still read so a cached copy of the old form keeps working.
+  const contacto = line(data, "contacto", 200) || line(data, "email", 200) || line(data, "telefono", 40);
   const message = field(data, "message", 5000);
   const servicio = line(data, "servicio", 120);
-  // "alcance" (how defined the project is) replaced the old budget select.
-  // "presupuesto" is still read so a cached copy of the old form keeps working.
-  const alcance = line(data, "alcance", 120);
-  const presupuesto = line(data, "presupuesto", 120);
   const subject = line(data, "_subject", 200) || `Mensaje de ${name}`;
 
-  if (!name || !empresa || !message || !EMAIL_RE.test(email) || (telefono && !validPhone(telefono))) {
+  const isEmail = EMAIL_RE.test(contacto);
+  if (!name || !message || !(isEmail || validPhone(contacto))) {
     return json({ ok: false, error: "invalid_fields" }, 400);
   }
+
+  // wa.me link so a phone contact is one tap away from the inbox.
+  const waDigits = contacto.replace(/\D/g, "");
+  const contactoHtml = isEmail
+    ? `<a href="mailto:${escapeHtml(contacto)}">${escapeHtml(contacto)}</a>`
+    : `${escapeHtml(contacto)} (<a href="https://wa.me/${waDigits}">abrir en WhatsApp</a>)`;
 
   const html = `
     <h2>Nuevo mensaje desde el sitio</h2>
     <p><strong>Nombre:</strong> ${escapeHtml(name)}</p>
-    <p><strong>Email:</strong> ${escapeHtml(email)}</p>
-    <p><strong>Empresa:</strong> ${escapeHtml(empresa)}</p>
-    <p><strong>Cargo:</strong> ${escapeHtml(cargo || "no especificado")}</p>
-    <p><strong>Teléfono:</strong> ${escapeHtml(telefono || "no especificado")}</p>
+    <p><strong>Contacto:</strong> ${contactoHtml}</p>
     <p><strong>Servicio:</strong> ${escapeHtml(servicio || "no especificado")}</p>
-    <p><strong>Definición del proyecto:</strong> ${escapeHtml(alcance || "no especificado")}</p>
-    ${presupuesto ? `<p><strong>Presupuesto (formulario anterior):</strong> ${escapeHtml(presupuesto)}</p>` : ""}
     <p style="white-space:pre-wrap">${escapeHtml(message)}</p>
   `;
 
@@ -91,7 +88,8 @@ export async function POST(request: Request): Promise<Response> {
     body: JSON.stringify({
       from,
       to: [to],
-      reply_to: email,
+      // Reply-To only when the visitor left an email; a phone contact is answered by WhatsApp.
+      ...(isEmail ? { reply_to: contacto } : {}),
       subject,
       html,
     }),

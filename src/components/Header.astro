@@ -2,7 +2,7 @@
 import site from "../data/site.json";
 import { hasPublishedPosts, hasPublishedProjects } from "../lib/content";
 
-const action = { href: "/contacto?servicio=Diagn%C3%B3stico%20gratis", label: "Agendar diagnóstico de 30 minutos", short: "Agendar diagnóstico" };
+import { cta as action, ctaTarget } from "../lib/cta";
 const navItems = [
   { href: "/servicios", label: "Servicios" },
   ...((await hasPublishedProjects()) ? [{ href: "/proyectos", label: "Proyectos" }] : []),
@@ -28,7 +28,7 @@ const isActive = (href: string) => pathname === href || pathname.startsWith(href
     }
   </nav>
 
-  <a href={action.href} class="btn sh__cta">
+  <a href={action.href} class="btn sh__cta" {...ctaTarget}>
     <span class="sh__cta-short">{action.short}</span>
     <span class="sh__cta-full">{action.label}</span>
   </a>
@@ -40,7 +40,7 @@ const isActive = (href: string) => pathname === href || pathname.startsWith(href
   <div class="sh__sheet" id="sh-sheet" hidden>
     <nav aria-label="Móvil">
       {navItems.map((item) => <a href={item.href}>{item.label}</a>)}
-      <a href={action.href}>{action.short}</a>
+      <a href={action.href} {...ctaTarget}>{action.short}</a>
     </nav>
   </div>
  </div>

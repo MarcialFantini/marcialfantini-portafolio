@@ -1,6 +1,7 @@
 ---
 import { stock } from "../../lib/stock";
 import Video from "./Video.astro";
+import { cta, ctaTarget } from "../../lib/cta";
 import servicios from "../../data/servicios.json";
 
 // Slides of the changing image: business-operations scenes only (warehouse, orders, wholesale, delivery).
@@ -40,7 +41,7 @@ const tiles = [
           cobranzas y tableros en un solo lugar, integrado con lo que ya usás.
         </p>
         <div class="cap-hero__actions">
-          <a class="btn" href="/contacto?servicio=Diagn%C3%B3stico%20gratis">Agendar diagnóstico de 30 minutos</a>
+          <a class="btn" href={cta.href} {...ctaTarget}>{cta.label}</a>
           <a class="cap-hero__link" href="#diagnostico">Ver cómo diagnostico</a>
         </div>
         <ul class="cap-hero__proof">

@@ -5,6 +5,7 @@ import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import site from "../data/site.json";
 import { hasPublishedPosts } from "../lib/content";
+import { cta } from "../lib/cta";
 
 interface Props {
   title?: string;
@@ -26,6 +27,11 @@ const {
 } = Astro.props;
 
 const showRss = await hasPublishedPosts();
+
+// Cookieless analytics (Plausible-compatible). Off until all three fields are set in site.json:
+// with any of them empty no script is rendered and no third-party request is made.
+const analytics = site.analytics ?? { provider: "", domain: "", src: "" };
+const analyticsOn = Boolean(analytics.provider && analytics.domain && analytics.src);
 
 const siteURL = Astro.site ?? new URL("https://www.marcialfantini.site");
 const canonicalURL = new URL(Astro.url.pathname, siteURL);
@@ -74,11 +80,23 @@ const professionalService = {
   "hasOfferCatalog": {
     "@type": "OfferCatalog",
     "name": "Servicios",
-    "itemListElement": servicios.map((s) => ({
-      "@type": "Offer",
-      "url": new URL(`/servicios/${s.id}`, siteURL).toString(),
-      "itemOffered": { "@type": "Service", "name": s.titulo, "description": s.descripcion },
-    })),
+    // Custom software first as the main offer; the web services nested as a secondary catalog.
+    "itemListElement": [
+      ...servicios.filter((s) => s.grupo === "sistema").map((s) => ({
+        "@type": "Offer",
+        "url": new URL(`/servicios/${s.id}`, siteURL).toString(),
+        "itemOffered": { "@type": "Service", "name": s.titulo, "description": s.descripcion },
+      })),
+      {
+        "@type": "OfferCatalog",
+        "name": "Páginas web y tienda online",
+        "itemListElement": servicios.filter((s) => s.grupo === "canal").map((s) => ({
+          "@type": "Offer",
+          "url": new URL(`/servicios/${s.id}`, siteURL).toString(),
+          "itemOffered": { "@type": "Service", "name": s.titulo, "description": s.descripcion },
+        })),
+      },
+    ],
   },
 };
 ---
@@ -130,6 +148,8 @@ const professionalService = {
 
     <ClientRouter />
 
+    {analyticsOn && <script is:inline defer data-domain={analytics.domain} src={analytics.src}></script>}
+
     <!-- ProfessionalService structured data -->
     <script type="application/ld+json" is:inline set:html={JSON.stringify(professionalService)} />
 
@@ -154,5 +174,27 @@ const professionalService = {
       import "../scripts/robots.ts";
       import "../scripts/vivo.ts";
     </script>
+
+    {analyticsOn && (
+      <script is:inline define:vars={{ ctaHref: cta.href }}>
+        // Delegated click hooks, bound once (ClientRouter re-runs inline scripts on each navigation).
+        if (!window.__mfTrackBound) {
+          window.__mfTrackBound = true;
+          const send = (name) => { try { window.plausible?.(name); } catch (e) {} };
+          document.addEventListener("click", (e) => {
+            const a = e.target instanceof Element ? e.target.closest("a[href]") : null;
+            if (!a) return;
+            const href = a.getAttribute("href") || "";
+            if (href === ctaHref) send("CTA click");
+            else if (href.includes("wa.me/")) send("WhatsApp click");
+          }, true);
+          // WhatsApp forms (GET to wa.me, e.g. the closing chapter)
+          document.addEventListener("submit", (e) => {
+            const f = e.target;
+            if (f instanceof HTMLFormElement && (f.getAttribute("action") || "").includes("wa.me/")) send("WhatsApp click");
+          }, true);
+        }
+      </script>
+    )}
   </body>
 </html>

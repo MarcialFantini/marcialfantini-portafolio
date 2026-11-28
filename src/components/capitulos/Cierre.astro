@@ -4,8 +4,8 @@ import Video from "./Video.astro";
 
 // One field: the text travels to WhatsApp as ?text= (works without JS).
 const waAction = site.whatsapp ? `https://wa.me/${site.whatsapp}` : "/contacto";
-// Primary action: same destination as the header action (src/components/Header.astro)
-const diagnostico = "/contacto?servicio=Diagn%C3%B3stico%20gratis";
+// Primary action: shared with the header and every other diagnosis button
+import { cta, ctaTarget } from "../../lib/cta";
 ---
 
 <section id="cierre" class="cap-cierre" data-field="night" aria-labelledby="cierre-title">
@@ -18,7 +18,7 @@ const diagnostico = "/contacto?servicio=Diagn%C3%B3stico%20gratis";
   <div class="cap-cierre__close wrap">
     <div class="cap-cierre__main">
       <p class="cap-cierre__lead">El primer paso es un diagnóstico de 30 minutos, sin costo.</p>
-      <a class="btn cap-cierre__cta" href={diagnostico}>Agendar diagnóstico de 30 minutos</a>
+      <a class="btn cap-cierre__cta" href={cta.href} {...ctaTarget}>{cta.label}</a>
       <p class="cap-cierre__note">Te respondo en 24 h hábiles.</p>
     </div>
 

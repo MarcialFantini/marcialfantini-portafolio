@@ -4,6 +4,7 @@
    at the settled state title, steps and CTA sit together in one viewport.
    Mobile / short viewports / no JS / reduced motion: a plain vertical sequence, nothing pinned. */
 import { stock } from "../../lib/stock";
+import { cta, ctaTarget } from "../../lib/cta";
 
 const foto = stock("proceso-cuaderno", 800);
 const pasos = [
@@ -11,8 +12,6 @@ const pasos = [
   { t: "Te paso un precio cerrado.", d: "Por escrito y por etapas. Sin sorpresas." },
   { t: "Lo usás desde la primera etapa.", d: "Te enseño a usarlo y queda a tu nombre." },
 ];
-// Same destination as the header action (src/components/Header.astro)
-const cta = { href: "/contacto?servicio=Diagn%C3%B3stico%20gratis", label: "Agendar diagnóstico de 30 minutos" };
 ---
 
 <section id="proceso" class="pr" data-field="mist" aria-labelledby="proceso-title">
@@ -47,7 +46,7 @@ const cta = { href: "/contacto?servicio=Diagn%C3%B3stico%20gratis", label: "Agen
             ))
           }
         </ol>
-        <a class="btn pr__cta" data-cta href={cta.href}>{cta.label}</a>
+        <a class="btn pr__cta" data-cta href={cta.href} {...ctaTarget}>{cta.label}</a>
       </div>
     </div>
   </div>
