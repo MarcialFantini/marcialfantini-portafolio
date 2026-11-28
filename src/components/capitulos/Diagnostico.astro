@@ -298,6 +298,7 @@ const payload = {
 
 <script>
   import { gsap, ScrollTrigger, onPage, reduced } from "../../scripts/motion";
+  import { track } from "../../lib/analytics";
 
   onPage(() => {
     const root = document.getElementById("diagnostico");
@@ -422,12 +423,17 @@ const payload = {
       show(0);
       panel.focus({ preventScroll: true });
     };
-    const onStartClick = () => onStart(false);
+    const onStartClick = () => {
+      if (!started) track("Quiz started");
+      onStart(false);
+    };
 
     const onNext = () => {
       if (!picked(cur)) return;
-      if (cur === steps.length - 1) recommend();
-      else show(cur + 1, 1);
+      if (cur === steps.length - 1) {
+        recommend();
+        track("Quiz finished");
+      } else show(cur + 1, 1);
     };
     const onBack = () => { if (cur > 0) show(cur - 1, -1); };
     const onRestart = () => {

@@ -23,6 +23,7 @@
     ],
     "idealPara": "Empresas que operan con planillas, tareas manuales o sistemas que no se comunican, y necesitan una herramienta que se adapte a su forma de trabajar.",
     "duracion": "Por etapas, según el alcance",
+    "precioDesde": "",
     "cta": "Contame el problema",
     "badge": "FOCO PRINCIPAL"
   },
@@ -50,6 +51,7 @@
     ],
     "idealPara": "Empresas y profesionales que ofrecen productos o servicios y todavía no tienen una página propia (o la que tienen no los representa).",
     "duracion": "1 a 3 semanas (orientativo)",
+    "precioDesde": "",
     "cta": "Quiero mi página web",
     "badge": "PARA ARRANCAR"
   },
@@ -77,6 +79,7 @@
     ],
     "idealPara": "Empresas, estudios, consultoras e instituciones que necesitan un sitio profesional para presentarse y generar confianza.",
     "duracion": "2 a 4 semanas (orientativo)",
+    "precioDesde": "",
     "cta": "Quiero la web de mi empresa",
     "badge": null
   },
@@ -104,6 +107,7 @@
     ],
     "idealPara": "Marcas y comercios que quieren vender online o dejar de gestionar cada pedido a mano por WhatsApp o redes.",
     "duracion": "4 a 8 semanas (orientativo)",
+    "precioDesde": "",
     "cta": "Quiero mi tienda online",
     "badge": "VENDÉ ONLINE"
   }

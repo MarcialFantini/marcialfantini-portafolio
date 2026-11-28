@@ -6,11 +6,13 @@ import CapUI from "../../components/servicios/CapUI.astro";
 import Navegador from "../../components/servicios/Navegador.astro";
 import servicios from "../../data/servicios.json";
 import site from "../../data/site.json";
+import { precioDesde } from "../../lib/precio";
 
 const sistema = servicios.find((s) => s.grupo === "sistema")!;
 const canales = servicios.filter((s) => s.grupo === "canal");
+const precioSistema = precioDesde(sistema);
 
-const diagnostico = "/contacto?servicio=Diagn%C3%B3stico%20gratis";
+import { cta, ctaTarget } from "../../lib/cta";
 
 // The four capabilities of the custom-software line, each with its drawn screen.
 const capacidades = [
@@ -70,7 +72,7 @@ const faqs = [
   >
     <Fragment slot="title">Software <small>para</small> tu operación</Fragment>
     <Fragment slot="actions">
-      <a href={diagnostico} class="btn">Agendar diagnóstico de 30 minutos</a>
+      <a href={cta.href} class="btn" {...ctaTarget}>{cta.label}</a>
       <a href="#sistema" class="sv-link">Ver qué resuelvo</a>
     </Fragment>
   </SubHero>
@@ -98,14 +100,17 @@ const faqs = [
     <div class="sv-caps__end" data-reveal>
       <a href={`/servicios/${sistema.id}`} class="btn sv-btn-ink">Ver el detalle del software a medida <span aria-hidden="true">→</span></a>
       <p>{sistema.conecta}</p>
+      {precioSistema && <p class="sv-price">{precioSistema}</p>}
     </div>
   </Field>
 
+  <!-- Secondary offer: the three web services, quieter than the custom-software field above -->
   <Field field="bone" id="canales" pad="s">
     <div class="sv-ch">
       <div class="sv-ch__head" data-reveal>
-        <h2 class="sv-ch__h">También armo la parte digital que alimenta el sistema</h2>
-        <p>Por la web o la tienda entran consultas y pedidos ordenados, listos para pasar al sistema cuando lo sumes.</p>
+        <p class="sv-ch__eyebrow">También hago</p>
+        <h2 class="sv-ch__h">Si lo que necesitás es una web</h2>
+        <p>Para que te encuentren, mostrar lo que vendés o vender online. Quedan listas para conectarse con el sistema si después lo sumás.</p>
       </div>
       <ul class="sv-ch__list" data-stagger>
         {
@@ -115,6 +120,7 @@ const faqs = [
                 <Navegador tipo={tipoWeb[s.id] ?? "web"} mini />
                 <span class="sv-ch__name">{s.titulo}</span>
                 <span class="sv-ch__sub">{s.subtitulo}. {s.duracion}.</span>
+                {precioDesde(s) && <span class="sv-ch__price">{precioDesde(s)}</span>}
               </a>
             </li>
           ))
@@ -173,7 +179,7 @@ const faqs = [
     <Fragment slot="title">Contame <small>dónde se</small> traba</Fragment>
     <div class="sv-end__row" data-reveal>
       <p>El primer paso es un diagnóstico de 30 minutos, sin costo. Si tu caso no se resuelve con nada de esto, te lo digo y te oriento hacia otra opción.</p>
-      <a href={diagnostico} class="btn">Agendar diagnóstico de 30 minutos</a>
+      <a href={cta.href} class="btn" {...ctaTarget}>{cta.label}</a>
     </div>
   </Field>
 </Layout>
@@ -209,6 +215,9 @@ const faqs = [
   .sv-ch__name { font-family: var(--font-display); font-weight: 600; font-size: 1.75rem; line-height: 1; text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 0.2em; }
   .sv-ch__card:hover .sv-ch__name { color: var(--color-accent); }
   .sv-ch__sub { color: var(--color-soft); }
+  .sv-ch__eyebrow { margin: 0; font-weight: 600; }
+  .sv-ch__price { font-weight: 500; }
+  .sv-price { margin: 0; font-weight: 600; grid-column: 1 / -1; }
 
   /* Guarantees: numbered claims + drawn proposal */
   .sv-g { display: grid; gap: 3rem; align-items: start; }
